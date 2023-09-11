@@ -1,9 +1,9 @@
 PODS:
   - AARatingBar (1.2)
   - Alamofire (5.8.0)
-  - Apollo (1.5.0):
-    - Apollo/Core (= 1.5.0)
-  - Apollo/Core (1.5.0)
+  - Apollo (0.10.1):
+    - Apollo/Core (= 0.10.1)
+  - Apollo/Core (0.10.1)
   - AppAuth (1.6.2):
     - AppAuth/Core (= 1.6.2)
     - AppAuth/ExternalUserAgent (= 1.6.2)
@@ -130,7 +130,7 @@ PODS:
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesSwift (~> 2.1)
   - FlexiblePageControl (1.0.8)
-  - FTPopOverMenu_Swift (0.4.3)
+  - FTPopOverMenu_Swift (0.1.4)
   - GoogleAppMeasurement (10.14.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.14.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
@@ -262,42 +262,36 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
-  - PayPalCheckout (1.1.0)
+  - PayPalCheckout (0.110.0)
   - PromisesObjC (2.3.1)
   - PromisesSwift (2.3.1):
     - PromisesObjC (= 2.3.1)
   - RangeSeekSlider (1.8.0)
   - SCPageControl (0.4.0)
-  - SDWebImage (5.18.0):
-    - SDWebImage/Core (= 5.18.0)
-  - SDWebImage/Core (5.18.0)
+  - SDWebImage (5.12.6):
+    - SDWebImage/Core (= 5.12.6)
+  - SDWebImage/Core (5.12.6)
   - Shimmer (1.0.2)
   - ShimmerEffect-iOS (1.3)
   - ShimmerSwift (2.1.1)
-  - Siren (6.1.2)
+  - Siren (5.5.1)
   - SkeletonView (1.30.4)
   - SKPhotoBrowser (7.1.0)
   - SnapKit (5.6.0)
-  - Stripe (23.15.0):
-    - StripeApplePay (= 23.15.0)
-    - StripeCore (= 23.15.0)
-    - StripePayments (= 23.15.0)
-    - StripePaymentsUI (= 23.15.0)
-    - StripeUICore (= 23.15.0)
-  - StripeApplePay (23.15.0):
-    - StripeCore (= 23.15.0)
-  - StripeCore (23.15.0)
-  - StripePayments (23.15.0):
-    - StripeCore (= 23.15.0)
-    - StripePayments/Stripe3DS2 (= 23.15.0)
-  - StripePayments/Stripe3DS2 (23.15.0):
-    - StripeCore (= 23.15.0)
-  - StripePaymentsUI (23.15.0):
-    - StripeCore (= 23.15.0)
-    - StripePayments (= 23.15.0)
-    - StripeUICore (= 23.15.0)
-  - StripeUICore (23.15.0):
-    - StripeCore (= 23.15.0)
+  - Stripe (22.8.4):
+    - Stripe/Stripe3DS2 (= 22.8.4)
+    - StripeApplePay (= 22.8.4)
+    - StripeCore (= 22.8.4)
+    - StripeUICore (= 22.8.4)
+  - Stripe/Stripe3DS2 (22.8.4):
+    - StripeApplePay (= 22.8.4)
+    - StripeCore (= 22.8.4)
+    - StripeUICore (= 22.8.4)
+  - StripeApplePay (22.8.4):
+    - StripeCore (= 22.8.4)
+  - StripeCore (22.8.4)
+  - StripeUICore (22.8.4):
+    - StripeCore (= 22.8.4)
   - STTabbar (0.1.0)
   - SwiftMessages (9.0.6):
     - SwiftMessages/App (= 9.0.6)
@@ -309,7 +303,7 @@ PODS:
 DEPENDENCIES:
   - AARatingBar
   - Alamofire
-  - Apollo
+  - Apollo (~> 0.10.1)
   - AssetsPickerViewController
   - Braintree
   - BraintreeDropIn
@@ -322,14 +316,14 @@ DEPENDENCIES:
   - Firebase/Crashlytics
   - Firebase/Messaging
   - FlexiblePageControl
-  - FTPopOverMenu_Swift
+  - FTPopOverMenu_Swift (~> 0.1.4)
   - GoogleMaps
   - GooglePlacePicker
   - GooglePlaces
   - GoogleSignIn
   - GrowingTextView
   - IQKeyboardManagerSwift
-  - ISPageControl
+  - ISPageControl (~> 0.1.0)
   - JJFloatingActionButton
   - JXPageControl
   - lottie-ios
@@ -338,11 +332,11 @@ DEPENDENCIES:
   - PayPalCheckout
   - RangeSeekSlider
   - SCPageControl
-  - SDWebImage
-  - Shimmer
+  - SDWebImage (~> 5.12.0)
+  - Shimmer (~> 1.0.2)
   - ShimmerEffect-iOS
   - ShimmerSwift
-  - Siren
+  - Siren (~> 5.5.1)
   - SkeletonView
   - SKPhotoBrowser
   - Stripe
@@ -413,8 +407,6 @@ SPEC REPOS:
     - Stripe
     - StripeApplePay
     - StripeCore
-    - StripePayments
-    - StripePaymentsUI
     - StripeUICore
     - STTabbar
     - SwiftMessages
@@ -425,7 +417,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   AARatingBar: dc54d24687ae97688ffdb29738332d0bc5c0c09f
   Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
-  Apollo: 1e0ce95366a1c408fd7d053456c9dc048a6d7334
+  Apollo: 4d690a9b2e48e8820182df4b988d7a253e1ee589
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   AssetsPickerViewController: 4343e10ace86e425097043c17efa145c1ec868ce
   Braintree: fcbdb324318cdf0562719c4d5629cdf71f29c220
@@ -445,7 +437,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 1077a4499f0c0a140b9a2e34fe08a1acc806b36d
   FirebaseSessions: f145e7365d36bec0d724c4574a8750e6f82fa6c8
   FlexiblePageControl: 07f7765054f16b3f0bc3f14dfd95ab5f45817ea4
-  FTPopOverMenu_Swift: 85ac1c04b04f6b4ac394414602c6a71ef3f66cc2
+  FTPopOverMenu_Swift: e4cafd1085d8125339c710fa9e53477fd615b1e2
   GoogleAppMeasurement: 7fee012a868315d418f365fbc8d394d8e020e749
   GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
   GoogleMaps: 5c13302e6fe6bb6e686b267196586b91cd594225
@@ -466,31 +458,29 @@ SPEC CHECKSUMS:
   MDFTextAccessibility: f4bb4cc2194286651b59a215fdeaa0e05dc90ba5
   MKToolTip: 69509b1cada10f96bd9f4ab559a768e7c6557933
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  PayPalCheckout: ec442f9026c4ec6eee58f768b3cfd81c0ff569bf
+  PayPalCheckout: 91b3b728e2bfff22ecffcafcf374574b760f52f9
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
   RangeSeekSlider: 650b11fa1edcb92e1e0ede797669d98622570fb5
   SCPageControl: 8a8dfbba7d7d8c66487a317cb4c4578a7e4af27a
-  SDWebImage: 182830bcddc30cde95fbc60dfe4badc3553d94ba
+  SDWebImage: a47aea9e3d8816015db4e523daff50cfd294499d
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
   ShimmerEffect-iOS: b07f4b6c5d5653a69491366a1d4667f109208f9e
   ShimmerSwift: f7ed2daf9c246de8299dfd9e12c6ab465cba9842
-  Siren: c951ae243b57160629fb2e4d2f630cbfc5d5452b
+  Siren: 645909bdb55ace938ea73a85942acb5a88494284
   SkeletonView: 5a050f6411e697abd4cda0a8d767013399dccd69
   SKPhotoBrowser: cd95b95a6f352fc2a50992721299f75ead77f9ab
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
-  Stripe: 04a77d66ea24646b438079d64e28e856408a3966
-  StripeApplePay: 25018ddbd381d23c4a6afe776c6495b6690e2036
-  StripeCore: d18d981490314b875319020fb25055e528677dcc
-  StripePayments: 3c0bf055692bcbc420779bd2e2119e5b6049c8b9
-  StripePaymentsUI: 0c9413c07110770da2abc0ebd5766470374e3565
-  StripeUICore: c85381f005c7ee585ec4032858fc22baa7bae4ec
+  Stripe: 59f6659e8ea413def19c97c57e23f5ec6ea48cf8
+  StripeApplePay: 6e9aebd3d248464836e9fbdaef6e5fb1817d56a6
+  StripeCore: 193f27552fb98108ebfe0df11651fe5f38948305
+  StripeUICore: 6a5bbea0164d63bd91000f001903e7901859e1a4
   STTabbar: fe93da755010233b348b2d0147c43bb1bef290fa
   SwiftMessages: f0c7ef4705a570ad6c5e208b611f4333e660ed92
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   WHTabbar: add14cb164535a8e5db2068c85a6c523345b681f
 
-PODFILE CHECKSUM: 214812201621c5712fa7206ba00173c3ba24d17a
+PODFILE CHECKSUM: 88dc9da801ef22836b3c863c96710903e77c852e
 
 COCOAPODS: 1.12.1

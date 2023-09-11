@@ -105,24 +105,25 @@ class WelcomePageVC: UIViewController  {
                 HTTPCookieStorage.shared.deleteCookie(cookie)
             }
         }
+
         GIDSignIn.sharedInstance.signOut()
-        GIDSignIn.sharedInstance.signIn(with: GIDConfiguration.init(clientID: GOOGLE_CLIENT_ID), presenting: self) { [self] user, error in
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { result, error in
             guard error == nil else { return }
 
                
-            let name = user?.profile?.givenName
-            let fname = user?.profile?.familyName
-            let email = user?.profile?.email
-            let userImageURL = user?.profile?.imageURL(withDimension: 200)!
+            let name = result?.user.profile?.givenName
+            let fname = result?.user.profile?.familyName
+            let email = result?.user.profile?.email
+            let userImageURL = result?.user.profile?.imageURL(withDimension: 200)!
             self.lottieWholeView.isHidden = false
                 
                 self.lottieWholeView.frame = CGRect(x: 0, y: 0, width: FULLWIDTH, height: FULLHEIGHT)
             self.lottieWholeView.backgroundColor =  UIColor.black.withAlphaComponent(0.5)
-            self.view.addSubview(lottieWholeView)
+            self.view.addSubview(self.lottieWholeView)
             self.lottieView.isHidden = false
             self.lottieView.frame = CGRect(x:self.view.frame.size.width/2-40, y: self.view.frame.size.height/2-40, width: 80, height: 80)
             self.lottieWholeView.addSubview(self.lottieView)
-                self.view.bringSubviewToFront(lottieWholeView)
+            self.view.bringSubviewToFront(self.lottieWholeView)
             self.lottieView.backgroundColor = UIColor(named: "lottie-bg")
             self.lottieView.layer.cornerRadius = 6.0
             self.lottieView.clipsToBounds = true

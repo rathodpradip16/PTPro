@@ -1,43 +1,57 @@
-final class DataLoader<Key: Hashable, Value> {
-  public typealias BatchLoad = (Set<Key>) throws -> [Key: Value]
+import Dispatch
+
+public final class DataLoader<Key: Hashable, Value> {
+  public typealias BatchLoad = ([Key]) -> Promise<[Value]>
+  typealias Load = (key: Key, fulfill: (Value) -> Void, reject: (Error) -> Void)
+  
+  private let queue: DispatchQueue
+  
   private var batchLoad: BatchLoad
-
-  private var cache: [Key: Result<Value?, Error>] = [:]
-  private var pendingLoads: Set<Key> = []
-
+  
+  private var cache: [Key: Promise<Value>] = [:]
+  private var loads: [Load] = []
+  
   public init(_ batchLoad: @escaping BatchLoad) {
+    queue = DispatchQueue(label: "com.apollographql.DataLoader")
+    
     self.batchLoad = batchLoad
   }
-
-  subscript(key: Key) -> PossiblyDeferred<Value?> {
-    if let cachedResult = cache[key] {
-      return .immediate(cachedResult)
+  
+  subscript(key: Key) -> Promise<Value> {
+    if let promise = cache[key] {
+      return promise
     }
     
-    pendingLoads.insert(key)
-
-    return .deferred { try self.load(key) }
+    let promise = Promise<Value> { fulfill, reject in
+      enqueue(load: (key, fulfill, reject))
+    }
+    
+    cache[key] = promise
+    
+    return promise
   }
   
-  private func load(_ key: Key) throws -> Value? {
-    if let cachedResult = cache[key] {
-      return try cachedResult.get()
+  private func enqueue(load: Load) {
+    queue.async {
+      self.loads.append(load)
     }
-    
-    assert(pendingLoads.contains(key))
-    
-    let values = try batchLoad(pendingLoads)
-    
-    for key in pendingLoads {
-      cache[key] = .success(values[key])
-    }
-    
-    pendingLoads.removeAll()
+  }
+  
+  func dispatch() {
+    queue.async {
+      let loads = self.loads
+      
+      if loads.isEmpty { return }
         
-    return values[key]
-  }
-  
-  func removeAll() {
-    cache.removeAll()
+      self.loads = []
+      
+      let keys = loads.map { $0.key }
+      
+      self.batchLoad(keys).andThen { values in
+        for (load, value) in zip(loads, values) {
+          load.fulfill(value)
+        }
+      }
+    }
   }
 }

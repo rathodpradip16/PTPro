@@ -22,21 +22,16 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var topView: UIView!
     
     @IBOutlet weak var titleLAbel: UILabel!
-    var apollo_headerClient: ApolloClient = {
-        let cache = InMemoryNormalizedCache()
-        let store1 = ApolloStore(cache: cache)
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        let url = URL(string:graphQLEndpoint)!
-        let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-        let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-        let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                 endpointURL: url)
-        return ApolloClient(networkTransport: requestChainTransport,
-                            store: store1)
-    }()
+    let apollo_headerClient: ApolloClient = {
+    let configuration = URLSessionConfiguration.default
+    // Add additional headers as needed
+    configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
     
+    let url = URL(string:graphQLEndpoint)!
+    
+    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+    
+}()
     var lottieViewbtn: LottieAnimationView!
     var google_btn_title = String()
     var facebook_btn_title = String()
@@ -217,7 +212,7 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
                         }
                     }
                     GIDSignIn.sharedInstance.signOut()
-                    GIDSignIn.sharedInstance.signIn(with: GIDConfiguration.init(clientID: GOOGLE_CLIENT_ID), presenting: self) { user, error in
+                    GIDSignIn.sharedInstance.signIn(withPresenting: self) { user, error in
                         guard error == nil else { return }
 
                         self.googleAPICall()
@@ -236,26 +231,19 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
     func emailAPICall(sender : UIButton)
     {
         let resendAPIquery = ResendConfirmEmailQuery()
-        apollo_headerClient.fetch(query: resendAPIquery,cachePolicy: .fetchIgnoringCacheData){ response in
-            switch response {
-            case .success(let result):
-                if let data = result.data?,let status = data.resendConfirmEmail?.status,status == 200 {
-                    
-                    sender.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"verifyemail"))!)", for: .normal)
-                    self.view.makeToast(result?.data?.resendConfirmEmail?.errorMessage)
-                    self.lottieViewbtn.isHidden = true
-                    //self.VerificationTableView.reloadData()
-                } else {
-                    self.view.makeToast(result?.data?.resendConfirmEmail?.errorMessage != nil ? result?.data?.resendConfirmEmail?.errorMessage! : "")
-                    self.lottieViewbtn.isHidden = true
-                }
-                
-                
-            case .failure(let error):
-                if let errors = error.errors {
-                    self.view.makeToast(result?.data?.resendConfirmEmail?.errorMessage != nil ? result?.data?.resendConfirmEmail?.errorMessage! : "")
-                    self.lottieViewbtn.isHidden = true
-                }
+        apollo_headerClient.fetch(query: resendAPIquery,cachePolicy: .fetchIgnoringCacheData){(result,error) in
+            if(result?.data?.resendConfirmEmail?.status == 200)
+            {
+               
+                sender.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"verifyemail"))!)", for: .normal)
+                self.view.makeToast(result?.data?.resendConfirmEmail?.errorMessage)
+                self.lottieViewbtn.isHidden = true
+                //self.VerificationTableView.reloadData()
+            }
+            else
+            {
+                self.view.makeToast(result?.data?.resendConfirmEmail?.errorMessage != nil ? result?.data?.resendConfirmEmail?.errorMessage! : "")
+                self.lottieViewbtn.isHidden = true
             }
         }
     }
@@ -269,19 +257,7 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
             actiontype = "false"
         }
         let socialloginverifyMutation = SocialLoginVerifyMutation(verificationType:"google", actionType:actiontype)
-        apollo_headerClient.perform(mutation:socialloginverifyMutation){ response in
-            switch response {
-            case .success(let result):
-                if let data = result.data?.socialVerification?.status, data == 200 {
-               
-                } else {
-                    return
-                }
-            case .failure(let error):
-                return
-            }
-}
-
+        apollo_headerClient.perform(mutation:socialloginverifyMutation){(result,error) in
             if(result?.data?.socialVerification?.status == 200)
             {
                 print("success")

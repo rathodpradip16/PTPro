@@ -83,46 +83,24 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     //MARK: - This Property
     
     var apollo_headerClient: ApolloClient = {
-        
-        let cache = InMemoryNormalizedCache()
-        let store1 = ApolloStore(cache: cache)
         let configuration = URLSessionConfiguration.default
         // Add additional headers as needed
         configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
         
         let url = URL(string:graphQLEndpoint)!
         
-        let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-        
-        let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-        
-        let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                 endpointURL: url)
-        
-        return ApolloClient(networkTransport: requestChainTransport,
-                            store: store1)
+        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
     }()
-    
     var getListSettingsArray = GetListingSettingQuery.Data.GetListingSetting.Result()
     var ProfileAPIArray = GetProfileQuery.Data.UserAccount.Result()
     var apollo_client: ApolloClient = {
-        let cache = InMemoryNormalizedCache()
-        let store1 = ApolloStore(cache: cache)
         let configuration = URLSessionConfiguration.default
         // Add additional headers as needed
         configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
         
         let url = URL(string:graphQLEndpoint)!
         
-        let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-        
-        let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-        
-        let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                 endpointURL: url)
-        
-        return ApolloClient(networkTransport: requestChainTransport,
-                            store: store1)
+        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
     }()
     var itemNameArray = [String]()
     var guestArrayCount = Int()
@@ -191,41 +169,27 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     func GetListSettingAPICall()
     {
         let getlistsettingsquery = GetListingSettingQuery()
-        apollo_headerClient.fetch(query: getlistsettingsquery, cachePolicy: .fetchIgnoringCacheData){
-            response in
-            switch response {
-            case .success(let result):
-                if let list = result.data?.getListingSettings.results {
-                    self.getListSettingsArray = list
-                    self.lottieView.isHidden = true
-                    self.lottieView.stop()
-                } else {
-                    return
-                }
-            case .failure(let error):
+        apollo_headerClient.fetch(query: getlistsettingsquery,cachePolicy: .fetchIgnoringCacheData){(result,error) in
+            
+            guard (result?.data?.getListingSettings?.results) != nil else{
                 return
             }
+            self.getListSettingsArray = (result?.data?.getListingSettings?.results)!
+            
+            self.lottieView.isHidden = true
+            self.lottieView.stop()
         }
     }
     //MARK: - CALL COUNTRYLIST API
     func CountryAPICAll()
     {
         let getcountrycodeQuery = GetCountrycodeQuery()
-        
-        apollo_headerClient.fetch(query: getcountrycodeQuery,cachePolicy: .fetchIgnoringCacheData){
-            response in
-            switch response {
-            case .success(let result):
-                if let countries = result.data?.getCountries?.results {
-                    self.getListSettingsArray = countries
-                    self.lottieView.isHidden = true
-                    self.lottieView.stop()
-                } else {
-                    return
-                }
-            case .failure(let error):
+        apollo.fetch(query: getcountrycodeQuery,cachePolicy: .fetchIgnoringCacheData){(result,error) in
+            guard (result?.data?.getCountries?.results) != nil else{
+//                self.view.makeToast("Missing Data")
                 return
             }
+            Utility.shared.countrylist =  ((result?.data?.getCountries?.results)!) as! [GetCountrycodeQuery.Data.GetCountry.Result]
         }
     }
     
@@ -335,53 +299,49 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
         monthlyDiscount:Int(monthprice),
         bookingType: "\(Utility.shared.step3ValuesInfo["bookingType"] ?? "")",
         cancellationPolicy: Utility.shared.step3ValuesInfo["cancellationPolicy"] as? Int)
-        apollo_headerClient.perform(mutation: updatelist) { response in
+    apollo_headerClient.perform(mutation: updatelist){ (result,error) in
+        
+        if(result?.data?.updateListingStep3?.status == 200)
+        {
+            self.lottieView.isHidden = true
+
+            self.manageListingStepsvalue(listId: "\(Utility.shared.step3ValuesInfo["id"]!)", currentStep: 3)
             
-            switch response {
-            case .success(let result):
-                if let status = result?.data?.updateListingStep3?.status, status == 200{
-                    self.lottieView.isHidden = true
-                    self.manageListingStepsvalue(listId: "\(Utility.shared.step3ValuesInfo["id"]!)", currentStep: 3)
-                    
-                } else if let errors = result.errors {
-                    self.view.makeToast(result?.data?.updateListingStep3?.errorMessage)
-                    return
-                }else {
-                    return
-                }
-            case .failure(let error):
-                self.view.makeToast(response?.data?.updateListingStep3?.errorMessage)
-                return
-            }
+            
         }
+        else{
+            self.view.makeToast(result?.data?.updateListingStep3?.errorMessage)
+        }
+        
+        
     }
+    }
+              
+
+    
     
     func manageListingStepsvalue(listId:String,currentStep:Int)
     {
         let manageListingStepsMutation = ManageListingStepsMutation(listId:listId, currentStep:currentStep)
-        apollo_headerClient.perform(mutation: manageListingStepsMutation){ response in
+        apollo_headerClient.perform(mutation: manageListingStepsMutation){ (result,error) in
             
-            switch response {
-            case .success(let result):
-                if let status = result?.data?.manageListingSteps?.status, status == 200{
-                    let becomeHost = BecomeHostVC()
-                    becomeHost.listID = "\(Utility.shared.createId)"
-                    becomeHost.showListingStepsAPICall(listID:"\(Utility.shared.createId)")
-                    //  self.view.window!.layer.add(presentrightAnimation()!, forKey: kCATransition)
-                    becomeHost.modalPresentationStyle = .fullScreen
-                    self.present(becomeHost, animated:false, completion: nil)
-                } else if let errors = result.errors {
-                    self.view.makeToast(result?.data?.manageListingSteps?.errorMessage)
-                    return
-                }else {
-                    return
-                }
-            case .failure(let error):
-                self.view.makeToast(response?.data?.manageListingSteps?.errorMessage)
-                return
+            if(result?.data?.manageListingSteps?.status == 200)
+            {
+                let becomeHost = BecomeHostVC()
+                becomeHost.listID = "\(Utility.shared.createId)"
+                becomeHost.showListingStepsAPICall(listID:"\(Utility.shared.createId)")
+              //  self.view.window!.layer.add(presentrightAnimation()!, forKey: kCATransition)
+                becomeHost.modalPresentationStyle = .fullScreen
+                self.present(becomeHost, animated:false, completion: nil)
+                
+            }
+            else {
+                self.view.makeToast(result?.data?.manageListingSteps?.errorMessage)
             }
         }
     }
+    
+    
     
     
     //MARK: - Update Listing Step 1
@@ -569,19 +529,15 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
             if (Utility.shared.getCurrentUserID() != nil){
                 
                 let profileQuery = GetProfileQuery()
-                apollo_headerClient = {
-                    let cache = InMemoryNormalizedCache()
-                    let store1 = ApolloStore(cache: cache)
+                apollo_client = {
                     let configuration = URLSessionConfiguration.default
                     // Add additional headers as needed
                     configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
+                    
                     let url = URL(string:graphQLEndpoint)!
-                    let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-                    let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-                    let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                             endpointURL: url)
-                    return ApolloClient(networkTransport: requestChainTransport,
-                                        store: store1)
+                    
+                    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+                    
                 }()
                 
                 apollo_client.fetch(query: profileQuery, cachePolicy: .fetchIgnoringCacheData){ [self]  (result, error) in

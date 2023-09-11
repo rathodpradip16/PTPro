@@ -42,18 +42,13 @@ class WhishlistPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
     }
     
     let apollo_headerClient: ApolloClient = {
-        let cache = InMemoryNormalizedCache()
-        let store1 = ApolloStore(cache: cache)
         let configuration = URLSessionConfiguration.default
         // Add additional headers as needed
         configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
+        
         let url = URL(string:graphQLEndpoint)!
-        let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-        let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-        let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                 endpointURL: url)
-        return ApolloClient(networkTransport: requestChainTransport,
-                            store: store1)
+        
+        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
     }()
     var whishlistarray = [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]()
     var whishlistarrayReverse = [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]()
@@ -253,7 +248,7 @@ class WhishlistPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
          if Utility().isConnectedToNetwork(){
         let cell = view.viewWithTag(indexPath.item + 2000) as? WhishlistCell
-           cell?.lottieAnimationView()
+           cell?.lottieLottieAnimationView()
         // Timer.scheduledTimer(timeInterval:0.3, target: self, selector: #selector(cell?.autoscroll), userInfo: nil, repeats: true)
             //cell?.likeImage.isHidden = false
             

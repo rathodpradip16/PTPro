@@ -32,15 +32,11 @@ somtimes I want to customer every cell, so I seperate the global setting, and ce
 
 `FTPopOverMenu_Swift` is available through [CocoaPods](https://cocoapods.org/pods/FTPopOverMenu_Swift). To install it, simply add the following line to your `Podfile`:
 
-* For Swift 4, please use version <= 0.1.4
-* For Swift 5, please use version >= 0.2.0
-* Big API change at 0.3.0, update at your own risk. 
-* version >= 0.4.1 [![Version](https://img.shields.io/cocoapods/v/FTPopOverMenu_Swift.svg?style=flat)](http://cocoapods.org/pods/FTPopOverMenu_Swift), changed the name of framework, from `FTPopOverMenu_Swift` to `FTPopOverMenu`
-
+* Please use version >= [![Version](https://img.shields.io/cocoapods/v/FTPopOverMenu_Swift.svg?style=flat)](http://cocoapods.org/pods/FTPopOverMenu_Swift)
 
 ```ruby
 target 'MyApp' do
-    pod 'FTPopOverMenu_Swift', '~> 0.1.4'
+    pod 'FTPopOverMenu_Swift', '~> 0.0.6'
 end
 ```
 Then run a pod install inside your terminal, or from CocoaPods.app.

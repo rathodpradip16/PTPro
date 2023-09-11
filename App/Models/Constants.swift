@@ -29,18 +29,21 @@ enum Environment: String {
     case localhost = "localhost"
 }
 
-
+#if DEBUG
+let environment = Environment.development
+#else
 let environment = Environment.production
+#endif
 
 var BASE_URL : String {
     get {
         switch environment {
         case .development:
-            return "<development_baseurl>"
+            return "http://ptpro.paperbirdtech.com:3000"
         case .production:
-            return "<production_baseurl>"
+            return "http://ptpro.paperbirdtech.com:3000"
         case .localhost:
-            return "<local_baseurl>"
+            return "http://ptpro.paperbirdtech.com:3000"
         }
     }
 }
@@ -94,11 +97,11 @@ var GOOGLE_API_KEY : String{
     get{
         switch environment{
         case .development:
-            return "<map_key>"
+            return "AIzaSyCahMFhT2mZ5sytEjAJo2YbTV14UoOkMq4"
         case .production:
-            return "<map_key>"
+            return "AIzaSyCahMFhT2mZ5sytEjAJo2YbTV14UoOkMq4"
         case .localhost:
-            return ""
+            return "AIzaSyCahMFhT2mZ5sytEjAJo2YbTV14UoOkMq4"
         }
     }
 }
@@ -107,11 +110,11 @@ var STRIPE_PUBLISHABLE_KEY : String{
     get{
         switch environment{
         case .development:
-            return "<test_stripekey>"
+            return "pk_test_C5ukBJM7qr5P1F8dY4XKhdyp"
         case .production:
-            return "<live_stripekey>"
+            return "pk_test_C5ukBJM7qr5P1F8dY4XKhdyp"
         case .localhost:
-            return "<test_stripekey>"
+            return "pk_test_C5ukBJM7qr5P1F8dY4XKhdyp"
         }
     }
 }
@@ -133,18 +136,17 @@ var graphQLEndpoint : String {
     get {
         switch environment {
         case .development:
-            return "<development_graphQLEndpoint>"
+            return "http://ptpro.paperbirdtech.com:4000/graphql"
         case .production:
-            return "<production_graphQLEndpoint>"
+            return "http://ptpro.paperbirdtech.com:4000/graphql"
         case .localhost:
-            return "<local_graphQLEndpoint>"
+            return "http://ptpro.paperbirdtech.com:4000/graphql"
         }
     }
 }
 
-let GOOGLE_CLIENT_ID = "<google_client_id>"
+let GOOGLE_CLIENT_ID = "1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at.apps.googleusercontent.com"
 let apollo = ApolloClient(url: URL(string:graphQLEndpoint)!)
-
 
 func convertToDictionary(text: String) -> [[String: Any]]? {
     if let data = text.data(using: .utf8) {

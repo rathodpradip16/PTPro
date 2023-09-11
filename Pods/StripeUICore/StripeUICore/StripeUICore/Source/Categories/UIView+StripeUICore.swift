@@ -3,7 +3,6 @@
 //  StripeUICore
 //
 //  Created by Mel Ludowise on 9/16/21.
-//  Copyright © 2021 Stripe, Inc. All rights reserved.
 //
 
 import Foundation
@@ -16,15 +15,15 @@ import UIKit
         self.directionalLayoutMargins = directionalLayoutMargins
         view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(view)
-
+        
         NSLayoutConstraint.activate([
             view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            view.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
         ])
     }
-
+    
     func addAndPinSubview(_ view: UIView, insets: NSDirectionalEdgeInsets = .zero) {
         view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(view)
@@ -74,21 +73,5 @@ import UIKit
             animations()
         }
         animator.startAnimation()
-    }
-
-    // Don't set isHidden redundantly or you might hit a bug: http://www.openradar.me/25087688
-    func setHiddenIfNecessary(_ shouldHide: Bool) {
-        if isHidden != shouldHide {
-            isHidden = shouldHide
-        }
-    }
-
-    func firstResponder() -> UIView? {
-        for subview in subviews {
-            if let firstResponder = subview.firstResponder() {
-                return firstResponder
-            }
-        }
-        return isFirstResponder ? self : nil
     }
 }

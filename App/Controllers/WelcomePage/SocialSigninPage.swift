@@ -231,13 +231,13 @@ class SocialSigninPage: UIViewController {
             }
         }
         GIDSignIn.sharedInstance.signOut()
-        GIDSignIn.sharedInstance.signIn(with: GIDConfiguration.init(clientID: GOOGLE_CLIENT_ID), presenting: self) { user, error in
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { result, error in
             guard error == nil else { return }
 
                
-            let name = user?.profile?.name
-            let email = user?.profile?.email
-            let userImageURL = user?.profile?.imageURL(withDimension: 200)!
+            let name = result?.user.profile?.name
+            let email = result?.user.profile?.email
+            let userImageURL = result?.user.profile?.imageURL(withDimension: 200)!
 
                 
             

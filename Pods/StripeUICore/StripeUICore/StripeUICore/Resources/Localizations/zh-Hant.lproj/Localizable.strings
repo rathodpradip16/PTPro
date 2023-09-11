@@ -18,8 +18,6 @@
 
 "City" = "城市";
 
-"Code field" = "驗證碼欄位";
-
 "Company" = "公司";
 
 "Continue" = "繼續";
@@ -30,8 +28,6 @@
 
 "County" = "縣";
 
-"Date is empty." = "日期為空值。";
-
 "Department" = "部門";
 
 "District" = "地區";
@@ -39,10 +35,6 @@
 "Do Si" = "道/縣";
 
 "Done" = "完成";
-
-"Double tap to edit" = "按兩下可編輯";
-
-"Edit" = "編輯";
 
 "Eircode" = "愛爾蘭郵遞區號";
 
@@ -57,8 +49,6 @@
 "Full name" = "全名";
 
 "Incomplete phone number" = "電話號碼不完整";
-
-"Invalid UPI ID" = "UPI ID 無效";
 
 "Island" = "島";
 
@@ -90,8 +80,6 @@
 
 "Remove bank account ending in %@" = "移除尾號為 %@ 的銀行帳戶";
 
-"Search" = "搜尋";
-
 "State" = "州";
 
 "Suburb" = "郊區";
@@ -105,8 +93,6 @@
 "The account number you entered is incomplete." = "您輸入的帳號不完整。";
 
 "Town or city" = "城鎮或城市";
-
-"UPI ID" = "UPI ID";
 
 "Unable to parse phone number" = "無法粘貼手機號碼";
 

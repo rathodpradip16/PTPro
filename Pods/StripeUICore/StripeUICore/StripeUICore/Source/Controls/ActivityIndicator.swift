@@ -117,7 +117,7 @@ import UIKit
         setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         updateVisibility()
-        updateColor()
+        updatecolor()
 
         NotificationCenter.default.addObserver(
             self,
@@ -137,12 +137,12 @@ import UIKit
 
     public override func tintColorDidChange() {
         super.tintColorDidChange()
-        updateColor()
+        updatecolor()
     }
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        updateColor()
+        updatecolor()
     }
 
     public override func layoutSubviews() {
@@ -209,11 +209,11 @@ public extension ActivityIndicator {
 
 private extension ActivityIndicator {
 
-    func updateColor() {
+    func updatecolor() {
         // Tint color gradient from 0% to 100% alpha
         cometLayer.colors = [
             tintColor.withAlphaComponent(0).cgColor,
-            tintColor.cgColor,
+            tintColor.cgColor
         ]
     }
 

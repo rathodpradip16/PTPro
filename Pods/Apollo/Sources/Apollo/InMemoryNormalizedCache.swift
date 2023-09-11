@@ -5,25 +5,17 @@ public final class InMemoryNormalizedCache: NormalizedCache {
     self.records = records
   }
 
-  public func loadRecords(forKeys keys: Set<CacheKey>) throws -> [CacheKey: Record] {
-    return keys.reduce(into: [:]) { result, key in
-      result[key] = records[key]
-    }
+  public func loadRecords(forKeys keys: [CacheKey]) -> Promise<[Record?]> {
+    let records = keys.map { self.records[$0] }
+    return Promise(fulfilled: records)
   }
 
-  public func removeRecord(for key: CacheKey) throws {
-    records.removeRecord(for: key)
-  }
-  
-  public func merge(records newRecords: RecordSet) throws -> Set<CacheKey> {
-    return records.merge(records: newRecords)
+  public func merge(records: RecordSet) -> Promise<Set<CacheKey>> {
+    return Promise(fulfilled: self.records.merge(records: records))
   }
 
-  public func removeRecords(matching pattern: CacheKey) throws {
-    records.removeRecords(matching: pattern)
-  }
-
-  public func clear() {
+  public func clear() -> Promise<Void> {
     records.clear()
+    return Promise(fulfilled: ())
   }
 }

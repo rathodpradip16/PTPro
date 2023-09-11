@@ -95,20 +95,14 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
 
     
     var apollo_headerClient: ApolloClient = {
-        let cache = InMemoryNormalizedCache()
-        let store1 = ApolloStore(cache: cache)
         let configuration = URLSessionConfiguration.default
         // Add additional headers as needed
         configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
+        
         let url = URL(string:graphQLEndpoint)!
-        let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-        let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-        let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                 endpointURL: url)
-        return ApolloClient(networkTransport: requestChainTransport,
-                            store: store1)
+        
+        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
     }()
-    
     var isnewMessage:Bool = false
     
     override func viewDidLoad() {
@@ -2251,18 +2245,13 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
         {
             let profileQuery = GetProfileQuery()
             apollo_headerClient = {
-                let cache = InMemoryNormalizedCache()
-                let store1 = ApolloStore(cache: cache)
                 let configuration = URLSessionConfiguration.default
                 // Add additional headers as needed
                 configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
+                
                 let url = URL(string:graphQLEndpoint)!
-                let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-                let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-                let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                         endpointURL: url)
-                return ApolloClient(networkTransport: requestChainTransport,
-                                    store: store1)
+                
+                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
             }()
             apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
                 

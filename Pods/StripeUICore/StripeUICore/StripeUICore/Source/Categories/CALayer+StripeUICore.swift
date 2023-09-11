@@ -3,7 +3,6 @@
 //  StripeUICore
 //
 //  Created by Nick Porter on 3/16/22.
-//  Copyright © 2022 Stripe, Inc. All rights reserved.
 //
 import Foundation
 import QuartzCore
@@ -16,7 +15,7 @@ import UIKit
             shadowOpacity = 0
             return
         }
-
+        
         shadowColor = shadow.color.cgColor
         shadowOpacity = Float(shadow.opacity)
         shadowOffset = shadow.offset

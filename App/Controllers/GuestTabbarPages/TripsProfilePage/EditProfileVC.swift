@@ -76,18 +76,14 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     var DatePickerSender: Bool = false
     
     let apollo_headerClient: ApolloClient = {
-        let cache = InMemoryNormalizedCache()
-        let store1 = ApolloStore(cache: cache)
-        let configuration = URLSessionConfiguration.default
+    let configuration = URLSessionConfiguration.default
         // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        let url = URL(string:graphQLEndpoint)!
-        let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-        let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-        let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                 endpointURL: url)
-        return ApolloClient(networkTransport: requestChainTransport,
-                            store: store1)
+    configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
+        
+    let url = URL(string:graphQLEndpoint)!
+        
+    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+        
     }()
     
      var EditProfileArray = GetProfileQuery.Data.UserAccount.Result()
@@ -1113,7 +1109,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                         }
                     }
                     GIDSignIn.sharedInstance.signOut()
-                    GIDSignIn.sharedInstance.signIn(with: GIDConfiguration.init(clientID: GOOGLE_CLIENT_ID), presenting: self) { user, error in
+                    GIDSignIn.sharedInstance.signIn(withPresenting: self) { user, error in
                         guard error == nil else { return }
 
                         self.googleAPICall()
@@ -1315,7 +1311,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                         }
                     }
                     GIDSignIn.sharedInstance.signOut()
-                    GIDSignIn.sharedInstance.signIn(with: GIDConfiguration.init(clientID: GOOGLE_CLIENT_ID), presenting: self) { user, error in
+                    GIDSignIn.sharedInstance.signIn(withPresenting: self){ user, error in
                         guard error == nil else { return }
 
                         self.googleAPICall()

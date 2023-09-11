@@ -23,18 +23,13 @@ class VerificationSuccessVC: UIViewController {
     @IBOutlet var Offline_button: UIButton!
     
     var apollo_headerClient: ApolloClient = {
-        let cache = InMemoryNormalizedCache()
-        let store1 = ApolloStore(cache: cache)
         let configuration = URLSessionConfiguration.default
         // Add additional headers as needed
         configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
+        
         let url = URL(string:graphQLEndpoint)!
-        let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-        let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-        let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                 endpointURL: url)
-        return ApolloClient(networkTransport: requestChainTransport,
-                            store: store1)
+        
+        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
     }()
     
     override func viewDidLoad() {
@@ -159,45 +154,31 @@ class VerificationSuccessVC: UIViewController {
         if Utility.shared.isConnectedToNetwork(){
             
             let verifyEmail = EmailVerificationMutation(token: Utility.shared.ConfirmEmailToken, email: Utility.shared.ConfirmEmailString)
-            apollo_headerClient.perform(mutation: verifyEmail){ response in
-                switch response {
-                case .success(let result):
-                    if let data = result.data?.emailVerification?.status,data == 200 {
-                        self.SetIntitalSetup()
-                    } else {
-                        let alert = UIAlertController(title: "\((Utility.shared.getLanguage()?.value(forKey: "oops"))!)", message: result?.data?.emailVerification?.errorMessage, preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "\((Utility.shared.getLanguage()?.value(forKey: "okay"))!)", style: .default, handler: { (action) in
-                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                            Utility.shared.setTab(index: 0)
-                            appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
-                        }))
-                        self.present(alert, animated: true) {
-                            
-                        }
-                    }
-                    break
-                case .failure(let error):
+            apollo_headerClient.perform(mutation: verifyEmail){ (result,error) in
+                
+                if result?.data?.emailVerification?.status == 200 {
+                    print(result?.data?.emailVerification?.resultMap)
+                    self.SetIntitalSetup()
+                }else{
                     //self.view.makeToast("Something Went wrong")
                     
-                    let alert = UIAlertController(title: "\((Utility.shared.getLanguage()?.value(forKey: "oops"))!)", message: error.errorMessage, preferredStyle: .alert)
+                    let alert = UIAlertController(title: "\((Utility.shared.getLanguage()?.value(forKey: "oops"))!)", message: result?.data?.emailVerification?.errorMessage, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "\((Utility.shared.getLanguage()?.value(forKey: "okay"))!)", style: .default, handler: { (action) in
                         let appDelegate = UIApplication.shared.delegate as! AppDelegate
                         Utility.shared.setTab(index: 0)
                         appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
                     }))
                     self.present(alert, animated: true) {
-                        
+                       
                     }
-                    break
                 }
             }
-            
         } else {
             lottieView.isHidden = true
             Success_Validation.isHidden = true
             self.offlineView()
         }
-        
+
     }
 
 }

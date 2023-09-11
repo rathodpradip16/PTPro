@@ -3,7 +3,6 @@
 //  StripeUICore
 //
 //  Created by Mel Ludowise on 9/10/21.
-//  Copyright © 2021 Stripe, Inc. All rights reserved.
 //
 
 import Foundation
@@ -17,7 +16,7 @@ import Foundation
     // Icons/symbols
     case icon_chevron_down = "icon_chevron_down"
     case icon_clear = "icon_clear"
-
+    
     // Brand Icons
     case brand_stripe = "brand_stripe"
     case icon_error = "form_error_icon"

@@ -39,18 +39,13 @@ class WebviewVC: UIViewController,WKNavigationDelegate {
     @IBOutlet var textContent: UITextView!
     
     var apollo_headerClient: ApolloClient = {
-        let cache = InMemoryNormalizedCache()
-        let store1 = ApolloStore(cache: cache)
         let configuration = URLSessionConfiguration.default
         // Add additional headers as needed
         configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
+        
         let url = URL(string:graphQLEndpoint)!
-        let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-        let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-        let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                 endpointURL: url)
-        return ApolloClient(networkTransport: requestChainTransport,
-                            store: store1)
+        
+        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
     }()
     
    
@@ -210,7 +205,7 @@ class WebviewVC: UIViewController,WKNavigationDelegate {
 //                         _ = self.dismiss(animated: true, completion: nil)
                       }))
                       self.present(alert, animated: true) {
-                       // self.AnimationView.stop()
+                       // self.LottieAnimationView.stop()
                       }
                    
                   

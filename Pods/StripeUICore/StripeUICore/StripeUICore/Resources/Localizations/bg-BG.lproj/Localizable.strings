@@ -18,8 +18,6 @@
 
 "City" = "Град";
 
-"Code field" = "Поле за код";
-
 "Company" = "Компания";
 
 "Continue" = "Продължаване";
@@ -30,8 +28,6 @@
 
 "County" = "Окръг";
 
-"Date is empty." = "Датата е празна.";
-
 "Department" = "Отдел";
 
 "District" = "Окръг";
@@ -39,10 +35,6 @@
 "Do Si" = "Do Si";
 
 "Done" = "Готово";
-
-"Double tap to edit" = "Докоснете два пъти, за да редактирате";
-
-"Edit" = "Редактиране";
 
 "Eircode" = "Eircode";
 
@@ -57,8 +49,6 @@
 "Full name" = "Трите имена";
 
 "Incomplete phone number" = "Непълен телефонен номер";
-
-"Invalid UPI ID" = "Невалиден идентификационен номер на UPI";
 
 "Island" = "Остров";
 
@@ -90,8 +80,6 @@
 
 "Remove bank account ending in %@" = "Премахване на банкова сметка, завършваща на %@";
 
-"Search" = "Търсене";
-
 "State" = "Щат";
 
 "Suburb" = "Предградие";
@@ -105,8 +93,6 @@
 "The account number you entered is incomplete." = "Въведеният от Вас номер на сметката е невалиден.";
 
 "Town or city" = "Град";
-
-"UPI ID" = "UPI ID";
 
 "Unable to parse phone number" = "Неуспешно анализиране на телефонния номер";
 

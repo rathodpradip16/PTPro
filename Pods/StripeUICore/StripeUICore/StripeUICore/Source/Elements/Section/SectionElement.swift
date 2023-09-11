@@ -54,30 +54,33 @@ import UIKit
     var subLabel: String? {
         elements.compactMap({ $0.subLabelText }).first
     }
-
+    
     let theme: ElementsUITheme
 
-    // MARK: - ViewModel
 
+    // MARK: - ViewModel
+    
     struct ViewModel {
         let views: [UIView]
         let title: String?
         let errorText: String?
-        var subLabel: String?
+        var subLabel: String? = nil
         let theme: ElementsUITheme
     }
 
     // MARK: - Initializers
-
+    
     public init(title: String? = nil, elements: [Element], theme: ElementsUITheme = .default) {
         self.title = title
         self.elements = elements
         self.theme = theme
-        elements.forEach {
-            $0.delegate = self
+        defer {
+            elements.forEach {
+                $0.delegate = self
+            }
         }
     }
-
+    
     public convenience init(_ element: Element, theme: ElementsUITheme = .default) {
         self.init(title: nil, elements: [element], theme: theme)
     }

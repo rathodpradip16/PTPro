@@ -42,7 +42,7 @@ class BookingStepFourVC: UIViewController,UITableViewDataSource,UITableViewDeleg
     var attdList : JSON = [:]
     var JSON_obj = [GetBillingCalculationQuery.Data.GetBillingCalculation.Result.SpecialPricing]()
     var lottieWholeView = UIView()
-    var lottieView =  AnimationView()
+    var lottieView =  LottieAnimationView()
     var array = NSMutableArray()
     
     

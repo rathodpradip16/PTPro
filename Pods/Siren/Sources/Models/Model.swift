@@ -11,6 +11,7 @@ import Foundation
 /// The validated and unwrapped `APIModel`.
 /// This model is presented to the end user in Siren's completion handler.
 public struct Model {
+
     /// The app's App ID.
     public let appID: Int
 
@@ -45,4 +46,5 @@ public struct Model {
         self.releaseNotes = releaseNotes
         self.version = version
     }
+
 }

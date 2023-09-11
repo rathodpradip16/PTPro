@@ -23,21 +23,15 @@ class BookingsteptwoVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var nextBtn: UIButton!
     var viewListingArray = ViewListingDetailsQuery.Data.ViewListing.Result()
-    var apollo_headerClient: ApolloClient = {
-        let cache = InMemoryNormalizedCache()
-        let store1 = ApolloStore(cache: cache)
+    var apollo_client: ApolloClient = {
         let configuration = URLSessionConfiguration.default
         // Add additional headers as needed
         configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
+        
         let url = URL(string:graphQLEndpoint)!
-        let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-        let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-        let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                 endpointURL: url)
-        return ApolloClient(networkTransport: requestChainTransport,
-                            store: store1)
+        
+        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
     }()
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -188,19 +182,15 @@ class BookingsteptwoVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             if (Utility.shared.getCurrentUserID() != nil){
                 
                 let profileQuery = GetProfileQuery()
-                apollo_headerClient = {
-                    let cache = InMemoryNormalizedCache()
-                    let store1 = ApolloStore(cache: cache)
+                apollo_client = {
                     let configuration = URLSessionConfiguration.default
                     // Add additional headers as needed
                     configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
+                    
                     let url = URL(string:graphQLEndpoint)!
-                    let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-                    let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-                    let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                             endpointURL: url)
-                    return ApolloClient(networkTransport: requestChainTransport,
-                                        store: store1)
+                    
+                    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+                    
                 }()
                 
                 apollo_client.fetch(query: profileQuery, cachePolicy: .fetchIgnoringCacheData){ (result, error) in

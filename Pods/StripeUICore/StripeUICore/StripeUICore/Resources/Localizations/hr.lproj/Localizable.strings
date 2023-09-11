@@ -18,8 +18,6 @@
 
 "City" = "Grad";
 
-"Code field" = "Polje za kod";
-
 "Company" = "Poduzeće";
 
 "Continue" = "Nastavi";
@@ -30,8 +28,6 @@
 
 "County" = "Grofovija";
 
-"Date is empty." = "Datum je prazan.";
-
 "Department" = "Administrativna jedinica";
 
 "District" = "Okrug";
@@ -39,10 +35,6 @@
 "Do Si" = "Do Si";
 
 "Done" = "Gotovo";
-
-"Double tap to edit" = "Dodirnite dva puta za uređivanje";
-
-"Edit" = "Uredi";
 
 "Eircode" = "Eircode";
 
@@ -57,8 +49,6 @@
 "Full name" = "Puno ime";
 
 "Incomplete phone number" = "Nepotpuni telefonski broj";
-
-"Invalid UPI ID" = "Nevažeći UPI ID";
 
 "Island" = "Otok";
 
@@ -90,8 +80,6 @@
 
 "Remove bank account ending in %@" = "Ukloni bankovni račun koji završava na %@";
 
-"Search" = "Pretraži";
-
 "State" = "Država";
 
 "Suburb" = "Predgrađe";
@@ -105,8 +93,6 @@
 "The account number you entered is incomplete." = "Uneseni broj računa je nepotpun.";
 
 "Town or city" = "Gradić ili grad";
-
-"UPI ID" = "UPI ID";
 
 "Unable to parse phone number" = "Broj telefona nije moguće pročitati";
 

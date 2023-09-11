@@ -82,11 +82,7 @@ private extension Bundle {
     ///
     /// - Returns: The bundle's path or `nil`.
     final class func sirenBundlePath() -> String? {
-        #if SWIFT_PACKAGE
-        return Bundle.module.path(forResource: "\(Siren.self)", ofType: Constants.bundleExtension)
-        #else
         return Bundle(for: Siren.self).path(forResource: "\(Siren.self)", ofType: Constants.bundleExtension)
-        #endif
     }
 
     /// The path for a particular language localizationin Siren's localization `Bundle`.

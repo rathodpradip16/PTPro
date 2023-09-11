@@ -1,13 +1,11 @@
 # Uncomment the next line to define a global platform for your project
- platform :ios, '13.0'
+# platform :ios, '11.0'
 
 target 'App' do
-  # Comment the next line if you don't want to use dynamic frameworks
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
-
-  # Pods for App
 pod 'lottie-ios'
-pod 'SDWebImage'
+pod 'SDWebImage', '~> 5.12.0'
 pod 'MaterialComponents/Buttons'
 pod 'IQKeyboardManagerSwift'
 pod 'FBSDKCoreKit/Swift'
@@ -21,10 +19,10 @@ pod 'GoogleMaps'
 pod 'GooglePlacePicker'
 pod 'RangeSeekSlider'
 pod 'Toast-Swift'
-pod 'Apollo'
+pod 'Apollo', '~> 0.10.1'
 pod 'Cosmos'
 pod 'SwiftyJSON'
-pod 'ISPageControl'
+pod 'ISPageControl', '~> 0.1.0'
 pod 'GrowingTextView'
 pod 'Firebase/Core'
 pod 'MKToolTip'
@@ -32,7 +30,7 @@ pod 'Firebase/Messaging'
 pod 'Firebase/Crashlytics'
 pod 'Cheers'
 pod 'SwiftMessages'
-pod 'Siren'
+pod 'Siren','~> 5.5.1'
 pod 'SCPageControl'
 pod 'PayPalCheckout'
 pod 'Alamofire'
@@ -40,33 +38,24 @@ pod 'AssetsPickerViewController'
 pod 'STTabbar'
 pod 'WHTabbar'
 pod 'SKPhotoBrowser'
-pod 'FTPopOverMenu_Swift'
+pod 'FTPopOverMenu_Swift', '~> 0.1.4'
 pod 'Braintree'
 pod 'BraintreeDropIn'
 pod 'Stripe'
 pod 'ShimmerSwift'
 pod 'ShimmerEffect-iOS'
-pod 'Shimmer'
+pod 'Shimmer', '~> 1.0.2'
 pod 'SkeletonView'
 pod 'JXPageControl'
-pod 'FlexiblePageControl'
-
-  target 'AppTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'AppUITests' do
-    # Pods for testing
-  end
-
+pod "FlexiblePageControl"
 end
 
-
 post_install do |installer|
- installer.pods_project.targets.each do |target|
-  target.build_configurations.each do |config|
-   config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
-  end
- end
+    installer.generated_projects.each do |project|
+          project.targets.each do |target|
+              target.build_configurations.each do |config|
+                  config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+               end
+          end
+   end
 end

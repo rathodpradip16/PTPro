@@ -298,23 +298,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         }else{
             if((Utility.shared.getCurrentUserToken()) != nil)
             {
+
                 apollo_headerClient = {
-                    let cache = InMemoryNormalizedCache()
-                    let store1 = ApolloStore(cache: cache)
                     let configuration = URLSessionConfiguration.default
                     // Add additional headers as needed
                     configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
+
                     let url = URL(string:graphQLEndpoint)!
-                    let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-                    let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-                    let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                             endpointURL: url)
-                    return ApolloClient(networkTransport: requestChainTransport,
-                                        store: store1)
+
+                    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
                 }()
-                
                 self.UserBanStatus()
-                
+
             }
 
             else{
@@ -385,16 +380,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         let getStripeKey = GetPaymentSettingsQuery()
         
-        apollo.fetch(query: getStripeKey){ response in
-            switch response {
-            case .success(let result):
-                STPPaymentConfiguration.shared.publishableKey = result?.data?.getPaymentSettings?.result?.publishableKey
-                STPPaymentConfiguration.shared.requiredBillingAddressFields = .none
-                break
-            case .failure(let error):
+        apollo.fetch(query: getStripeKey){(result,error) in
+            
+            if result == nil{
                 STPPaymentConfiguration.shared.publishableKey = STRIPE_PUBLISHABLE_KEY
-                break
+            }else{
+                STPPaymentConfiguration.shared.publishableKey = result?.data?.getPaymentSettings?.result?.publishableKey
+                
+                  STPPaymentConfiguration.shared.requiredBillingAddressFields = .none
             }
+            
         }
     }
 
@@ -709,191 +704,154 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     func sendMessageAPICall(threadid:Int,message:String)
     {
         var apollo_headerClient: ApolloClient = {
-            let cache = InMemoryNormalizedCache()
-            let store1 = ApolloStore(cache: cache)
             let configuration = URLSessionConfiguration.default
             // Add additional headers as needed
             configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
+            
             let url = URL(string:graphQLEndpoint)!
-            let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-            let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-            let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                     endpointURL: url)
-            return ApolloClient(networkTransport: requestChainTransport,
-                                store: store1)
+            
+            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
         }()
-        
         let sendMsgMutation = SendMessageMutation(threadId:threadid,content:message, type: "message")
         
-        apollo_headerClient.perform(mutation: sendMsgMutation){ response in
-            switch response {
-            case .success(let result):
-                if let data = result?.data?.sendMessage?.results {
-                    let appstatechecker = UIApplication.shared.applicationState
-                    if(appstatechecker == UIApplication.State.inactive)
-                    {
-                        if #available(iOS 10.0, *) {
-                            let center = UNUserNotificationCenter.current()
-                            center.removeAllPendingNotificationRequests() // To remove all pending notifications which are not delivered yet but scheduled.
-                            center.removeAllDeliveredNotifications() // To remove all delivered notifications
-                        } else {
-                            UIApplication.shared.cancelAllLocalNotifications()
-                        }
-                    } else {
-                        print("Missing Data")
-                        return
-                    }
-                case .failure(let error):
-                    return
+        apollo_headerClient.perform(mutation: sendMsgMutation){(result,error) in
+            guard (result?.data?.sendMessage?.results) != nil else{
+                print("Missing Data")
+                return
+            }
+            print("sent")
+            let appstatechecker = UIApplication.shared.applicationState
+            if(appstatechecker == UIApplication.State.inactive)
+            {
+                if #available(iOS 10.0, *) {
+                    let center = UNUserNotificationCenter.current()
+                    center.removeAllPendingNotificationRequests() // To remove all pending notifications which are not delivered yet but scheduled.
+                    center.removeAllDeliveredNotifications() // To remove all delivered notifications
+                } else {
+                    UIApplication.shared.cancelAllLocalNotifications()
                 }
             }
+            
+            
         }
     }
     func GetDefaultSettingAPICall()
     {
         if(Utility.shared.getCurrentUserToken() != nil)
         {
-            apollo_headerClient = {
-                let cache = InMemoryNormalizedCache()
-                let store1 = ApolloStore(cache: cache)
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                let url = URL(string:graphQLEndpoint)!
-                let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-                let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-                let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                         endpointURL: url)
-                return ApolloClient(networkTransport: requestChainTransport,
-                                    store: store1)
-            }()
+        apollo_headerClient = {
+            let configuration = URLSessionConfiguration.default
+            // Add additional headers as needed
+            configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
             
+            let url = URL(string:graphQLEndpoint)!
+            
+            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+        }()
             let mostlistingquery = GetDefaultSettingQuery()
-            apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){ response in
-                switch response {
-                case .success(let result):
-                    if let data = result?.data?.currency?.result {
-                        Utility.shared.currencyvalue_from_API_base = (result?.data?.currency?.result?.base)!
-                        let currency_value = result?.data?.currency?.result?.rates
-                        Utility.shared.currency_Dict = self.convertToDictionary(text: currency_value!)! as NSDictionary
-                        
-                        if let value = result?.data?.siteSettings?.results{
-                            for i in value{
-                                if (i?.name == "phoneNumberStatus"){
-                                    Utility.shared.phoneNumberStatus = i?.value ?? ""
-                                }
-                            }
-                        }
-                    } else {
-                        return
-                    }
-                case .failure(let error):
+            apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
+                //RecommendedListing
+                guard (result?.data?.currency?.result) != nil else {
+                    print("Missing data")
                     return
                 }
-            }
+                Utility.shared.currencyvalue_from_API_base = (result?.data?.currency?.result?.base)!
+                let currency_value = result?.data?.currency?.result?.rates
+                Utility.shared.currency_Dict = self.convertToDictionary(text: currency_value!)! as NSDictionary
+                
+                if let value = result?.data?.siteSettings?.results{
+                    for i in value{
+                        if (i?.name == "phoneNumberStatus"){
+                            Utility.shared.phoneNumberStatus = i?.value ?? ""
+                        }
+                    }
+                }
+        }
         }
     }
     
     func profileAPICall()
     {
         if Utility().isConnectedToNetwork(){
-            if(Utility.shared.getCurrentUserToken() != nil)
-            {
-                let profileQuery = GetProfileQuery()
-                apollo_headerClient = {
-                    let cache = InMemoryNormalizedCache()
-                    let store1 = ApolloStore(cache: cache)
-                    let configuration = URLSessionConfiguration.default
-                    // Add additional headers as needed
-                    configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                    let url = URL(string:graphQLEndpoint)!
-                    let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-                    let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-                    let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                             endpointURL: url)
-                    return ApolloClient(networkTransport: requestChainTransport,
-                                        store: store1)
-                }()
-                apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
-                    switch response {
-                    case .success(let result):
-                        if let data = result?.data?.userAccount?.result {
-                            Utility.shared.ProfileAPIArray = ((result?.data?.userAccount?.result)!)
-                            Utility.shared.userName  = "\(Utility.shared.ProfileAPIArray.firstName != nil ? Utility.shared.ProfileAPIArray.firstName! : "User")!"
-                            
-                            
-                            
-                            if let theme = result?.data?.userAccount?.result?.appTheme {
-                                Utility.shared.setAppTheme(Language:theme)
-                                Utility.shared.selectedAppearance = theme
-                            }
-                            else {
-                                Utility.shared.setAppTheme(Language:"auto")
-                                Utility.shared.selectedAppearance = "auto"
-                            }
-                            
-                            self.themeInitialSetUp()
-                            
-                            
-                            if let profImage = Utility.shared.ProfileAPIArray.picture{
-                                Utility.shared.pickedimageString = "\(IMAGE_AVATAR_MEDIUM)\(profImage)"
-                            }
-                            else {
-                                Utility.shared.pickedimageString = "avatar"
-                            }
-                            
-                            
-                            Utility.shared.setEmail(email:(result?.data?.userAccount?.result?.email as AnyObject)as! NSString)
-                            
-                            
-                        } else {
-                            Utility.shared.setUserToken(userID: "")
-                            return
-                        }
-                    case .failure(let error):
-                        Utility.shared.setUserToken(userID: "")
-                        return
-                    }
-                }
+        if(Utility.shared.getCurrentUserToken() != nil)
+        {
+        let profileQuery = GetProfileQuery()
+            apollo_headerClient = {
+                let configuration = URLSessionConfiguration.default
+                // Add additional headers as needed
+                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
                 
+                let url = URL(string:graphQLEndpoint)!
+                
+                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+            }()
+        apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
+            
+            guard (result?.data?.userAccount?.result) != nil else
+            {
+                print("Missing Data")
+                Utility.shared.setUserToken(userID: "")
+                return
+            }
+            
+            
+            Utility.shared.ProfileAPIArray = ((result?.data?.userAccount?.result)!)
+            Utility.shared.userName  = "\(Utility.shared.ProfileAPIArray.firstName != nil ? Utility.shared.ProfileAPIArray.firstName! : "User")!"
+            
+            
+            
+            if let theme = result?.data?.userAccount?.result?.appTheme {
+                Utility.shared.setAppTheme(Language:theme)
+                Utility.shared.selectedAppearance = theme
+            }
+            else {
+                Utility.shared.setAppTheme(Language:"auto")
+                Utility.shared.selectedAppearance = "auto"
+            }
+            
+            self.themeInitialSetUp()
+          
+            
+            if let profImage = Utility.shared.ProfileAPIArray.picture{
+                Utility.shared.pickedimageString = "\(IMAGE_AVATAR_MEDIUM)\(profImage)"
+            }
+            else {
+                Utility.shared.pickedimageString = "avatar"
+            }
+            
+            
+            Utility.shared.setEmail(email:(result?.data?.userAccount?.result?.email as AnyObject)as! NSString)
+         
+           
             }
         }
-    }
+            
+        }
+        }
         
     
     func getcurrencyAPICall()
     {
         if(Utility.shared.getCurrentUserToken() != nil)
         {
-            apollo_headerClient = {
-                let cache = InMemoryNormalizedCache()
-                let store1 = ApolloStore(cache: cache)
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                let url = URL(string:graphQLEndpoint)!
-                let client1 = URLSessionClient(sessionConfiguration: configuration, callbackQueue: nil)
-                let provider = DefaultInterceptorProvider(client: client1, shouldInvalidateClientOnDeinit: true, store: store1)
-                let requestChainTransport = RequestChainNetworkTransport(interceptorProvider: provider,
-                                                                         endpointURL: url)
-                return ApolloClient(networkTransport: requestChainTransport,
-                                    store: store1)
-            }()
+        apollo_headerClient = {
+            let configuration = URLSessionConfiguration.default
+            // Add additional headers as needed
+            configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
             
-            let currencyQuery = GetCurrenciesListQuery()
-            apollo_headerClient.fetch(query: currencyQuery){ response in
-                switch response {
-                case .success(let result):
-                    if let data = result?.data?.getCurrencies?.results {
-                        Utility.shared.currencyDataArray = ((result?.data?.getCurrencies?.results)!) as! [GetCurrenciesListQuery.Data.GetCurrency.Result]
-                        Utility.shared.currencyvalue = Utility.shared.currencyDataArray.first!.symbol!
-                    } else {
-                        return
-                    }
-                case .failure(let error):
-                    return
-                }
+            let url = URL(string:graphQLEndpoint)!
+            
+            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+        }()
+        let currencyQuery = GetCurrenciesListQuery()
+        apollo_headerClient.fetch(query: currencyQuery){(result,error) in
+            guard (result?.data?.getCurrencies?.results) != nil else{
+                print("Missing Data")
+                return
             }
+            Utility.shared.currencyDataArray = ((result?.data?.getCurrencies?.results)!) as! [GetCurrenciesListQuery.Data.GetCurrency.Result]
+            Utility.shared.currencyvalue = Utility.shared.currencyDataArray.first!.symbol!
+        }
         }
     }
 
@@ -902,81 +860,65 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     {
         let UserbanstatusQuery = UserBanStatusQuery()
         
-        apollo_headerClient.fetch(query: UserbanstatusQuery){ response in
-            switch response {
-            case .success(let result):
-                if(result?.data?.getUserBanStatus?.status == 200)
-                {
-                    if(((Utility.shared.getTabbar()) != nil) && Utility.shared.getTabbar() == true)
-                    {
-                        Utility.shared.host_message_isfromHost = true
-                        self.addingElementsToObjects()
-                        //                    self.settingRootViewControllerFunction()
-                        Utility.shared.setHostTab(index: 0)
-                        self.HostTabbarInitialize(initialView: CustomHostTabbar())
-                    }
-                    else
-                    {
-                        Utility.shared.setTab(index: 0)
-                        self.GuestTabbarInitialize(initialView: CustomTabbar())
-                    }
-                    
-                    
-                    
-                }
-                else if(result?.data?.getUserBanStatus == nil)
-                {
-                    
-                    if(Utility.shared.getTabbar() != nil && Utility.shared.getTabbar() == true)
-                    {
-                        Utility.shared.host_message_isfromHost = true
-                        self.addingElementsToObjects()
-                        //                    self.settingRootViewControllerFunction()
-                        Utility.shared.setHostTab(index: 0)
-                        self.HostTabbarInitialize(initialView: CustomHostTabbar())
-                    }
-                    else
-                    {
-                        Utility.shared.setTab(index: 0)
-                        
-                        self.GuestTabbarInitialize(initialView: CustomTabbar())
-                    }
-                }
-                else
-                {
-                    
-                    if(Utility.shared.getTabbar() != nil && Utility.shared.getTabbar() == true)
-                    {
-                        Utility.shared.host_message_isfromHost = true
-                        self.addingElementsToObjects()
-                        //                    self.settingRootViewControllerFunction()
-                        Utility.shared.setHostTab(index: 0)
-                        self.HostTabbarInitialize(initialView: CustomHostTabbar())
-                    }
-                    else
-                    {
-                        Utility.shared.setTab(index: 0)
-                        
-                        self.GuestTabbarInitialize(initialView: CustomTabbar())
-                    }
-                }
-            case .failure(let error):
-                if(Utility.shared.getTabbar() != nil && Utility.shared.getTabbar() == true)
+        apollo_headerClient.fetch(query: UserbanstatusQuery){(result,error) in
+            
+            if(result?.data?.getUserBanStatus?.status == 200)
+            {
+                if(((Utility.shared.getTabbar()) != nil) && Utility.shared.getTabbar() == true)
                 {
                     Utility.shared.host_message_isfromHost = true
                     self.addingElementsToObjects()
-                    //                    self.settingRootViewControllerFunction()
+//                    self.settingRootViewControllerFunction()
                     Utility.shared.setHostTab(index: 0)
                     self.HostTabbarInitialize(initialView: CustomHostTabbar())
                 }
                 else
                 {
-                    Utility.shared.setTab(index: 0)
-                    
-                    self.GuestTabbarInitialize(initialView: CustomTabbar())
+                Utility.shared.setTab(index: 0)
+                self.GuestTabbarInitialize(initialView: CustomTabbar())
                 }
-                return
+                
+
+                
             }
+            else if(result?.data?.getUserBanStatus == nil)
+            {
+            
+                 if(Utility.shared.getTabbar() != nil && Utility.shared.getTabbar() == true)
+                {
+                    Utility.shared.host_message_isfromHost = true
+                    self.addingElementsToObjects()
+//                    self.settingRootViewControllerFunction()
+                     Utility.shared.setHostTab(index: 0)
+                     self.HostTabbarInitialize(initialView: CustomHostTabbar())
+                }
+                else
+                {
+            Utility.shared.setTab(index: 0)
+
+            self.GuestTabbarInitialize(initialView: CustomTabbar())
+                }
+            }
+            else
+            {
+           
+                if(Utility.shared.getTabbar() != nil && Utility.shared.getTabbar() == true)
+                {
+                    Utility.shared.host_message_isfromHost = true
+                    self.addingElementsToObjects()
+//                    self.settingRootViewControllerFunction()
+                    Utility.shared.setHostTab(index: 0)
+                    self.HostTabbarInitialize(initialView: CustomHostTabbar())
+                }
+                else
+                {
+            Utility.shared.setTab(index: 0)
+
+            self.GuestTabbarInitialize(initialView: CustomTabbar())
+                }
+            }
+            
+            
         }
         
     }

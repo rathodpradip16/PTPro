@@ -18,8 +18,6 @@
 
 "City" = "Pilsēta";
 
-"Code field" = "Koda lauks";
-
 "Company" = "Uzņēmums";
 
 "Continue" = "Turpināt";
@@ -30,8 +28,6 @@
 
 "County" = "Apriņķis";
 
-"Date is empty." = "Datums ir tukšs.";
-
 "Department" = "Departaments";
 
 "District" = "Rajons";
@@ -39,10 +35,6 @@
 "Do Si" = "Province un pilsēta (Do Si)";
 
 "Done" = "Gatavs";
-
-"Double tap to edit" = "Pieskarieties divreiz, lai rediģētu";
-
-"Edit" = "Rediģēt";
 
 "Eircode" = "Pasta indekss (Eirkods)";
 
@@ -57,8 +49,6 @@
 "Full name" = "Vārds, uzvārds";
 
 "Incomplete phone number" = "Nepilnīgs tālruņa numurs";
-
-"Invalid UPI ID" = "Nederīgs UPI ID";
 
 "Island" = "Sala";
 
@@ -90,8 +80,6 @@
 
 "Remove bank account ending in %@" = "Noņemt bankas kontu, kas beidzas ar %@";
 
-"Search" = "Meklēšana";
-
 "State" = "Novads/štats";
 
 "Suburb" = "Priekšpilsēta";
@@ -105,8 +93,6 @@
 "The account number you entered is incomplete." = "Jūsu ievadītais konta numurs nav pilnīgs.";
 
 "Town or city" = "Ciems vai pilsēta";
-
-"UPI ID" = "UPI ID";
 
 "Unable to parse phone number" = "Neizdevās parsēt tālruņa numuru";
 

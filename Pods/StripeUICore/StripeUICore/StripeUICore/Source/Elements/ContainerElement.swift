@@ -3,7 +3,6 @@
 //  StripeUICore
 //
 //  Created by Yuki Tokuhiro on 3/25/22.
-//  Copyright © 2022 Stripe, Inc. All rights reserved.
 //
 
 import Foundation
@@ -21,7 +20,7 @@ import UIKit
 
 extension ContainerElement {
     // MARK: - Element
-
+    
     public func beginEditing() -> Bool {
         guard !view.isHidden else {
             // Prevent focusing on a child element if the container is hidden.
@@ -30,7 +29,7 @@ extension ContainerElement {
 
         return elements.first?.beginEditing() ?? false
     }
-
+    
     public var validationState: ElementValidationState {
         elements.first {
             if case .valid = $0.validationState {
@@ -39,14 +38,14 @@ extension ContainerElement {
             return true
         }?.validationState ?? .valid
     }
-
+    
     // MARK: - ElementDelegate
-
+    
     public func didUpdate(element: Element) {
         // Glue: Update the view and our delegate
         delegate?.didUpdate(element: self)
     }
-
+    
     public func continueToNextField(element: Element) {
         let remainingElements = elements
             .drop { $0 !== element } // Drop elements (starting from the first) until we find `element`

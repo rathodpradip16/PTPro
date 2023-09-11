@@ -27,7 +27,7 @@ class WhishlistCell: UICollectionViewCell {
         self.whishImage.layer.cornerRadius = 15
         self.whishImage.layer.masksToBounds = true
     }
-    func lottieAnimationView(){
+    func lottieLottieAnimationView(){
         lottieView1 = LottieAnimationView.init(name:"animation")
         lottieView1.isHidden = false
         self.lottieView1.frame = CGRect(x:(self.whishImage.frame.size.width)/2-45, y:(self.whishImage.frame.size.height)/2-45, width:100, height:100)
