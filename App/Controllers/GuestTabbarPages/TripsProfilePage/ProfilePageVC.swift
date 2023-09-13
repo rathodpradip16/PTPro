@@ -313,7 +313,7 @@ class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,
         case 0:
             return 1
         case 1:
-            return 1
+            return 2
         case 2:
             if(Utility.shared.host_message_isfromHost)
             {
@@ -353,6 +353,7 @@ class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,
             let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchtohostCell", for: indexPath) as! SwitchtohostCell
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
             
+            if indexPath.row == 0{
             if(Utility.shared.host_message_isfromHost && !Utility.shared.getTabbar()!)
             {
               if Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification || Utility.shared.isfromBackroundBooking || Utility.shared.isfromOfflineBooking
@@ -394,7 +395,10 @@ class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,
                 }
                
             }
-            
+            }else if indexPath.row == 1 {
+                cell.profileSettingLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"BecomeAffiliateMarketer") ?? "Become a Affiliate Marketer")"
+                cell.iconImage.image =  #imageLiteral(resourceName: "switch-to-travelling-25")
+            }
             
             
             return cell
