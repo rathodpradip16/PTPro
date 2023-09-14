@@ -31,7 +31,7 @@ class SettingsPageVC: UIViewController,LanguageVCDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor =   UIColor(named: "colorController")
-        var apollo_headerClient: ApolloClient = {
+         apollo_headerClient = {
             let configuration = URLSessionConfiguration.default
             // Add additional headers as needed
             configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
