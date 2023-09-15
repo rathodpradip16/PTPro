@@ -18,6 +18,7 @@ import SwiftMessages
 import Shimmer
 import SkeletonView
 import FlexiblePageControl
+import PTProAPI
 
 class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,AirbnbDatePickerDelegate,AirbnbOccupantFilterControllerDelegate,UIScrollViewDelegate,WhishlistPageVCProtocol, SkeletonCollectionViewDataSource, ListVCProtocol {
     func UpdateWhishlistCall(listId: Int, status: Bool) {

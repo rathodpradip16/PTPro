@@ -9,6 +9,7 @@
 import UIKit
 import Apollo
 import Lottie
+import PTProAPI
 
 class PaymentMethodVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     @IBOutlet weak var retryBtn: UIButton!

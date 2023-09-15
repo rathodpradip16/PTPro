@@ -9,6 +9,7 @@ import UIKit
 import Apollo
 import Lottie
 import SwiftMessages
+import PTProAPI
 
 class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate,PlaceListingViewControllerDelegate{
     

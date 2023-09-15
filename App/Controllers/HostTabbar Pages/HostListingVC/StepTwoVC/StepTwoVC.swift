@@ -12,6 +12,7 @@ import Photos
 import Alamofire
 import Apollo
 import Lottie
+import PTProAPI
 
 class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollectionViewDataSource,AssetsPickerViewControllerDelegate{
     

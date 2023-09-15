@@ -8,6 +8,7 @@
 
 import UIKit
 import Lottie
+import PTProAPI
 
 class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     

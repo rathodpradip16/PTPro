@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 import PDFKit
 import MKToolTip
+import PTProAPI
 
 @available(iOS 11.0, *)
 class ReceiptVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIDocumentInteractionControllerDelegate,UIPrintInteractionControllerDelegate{

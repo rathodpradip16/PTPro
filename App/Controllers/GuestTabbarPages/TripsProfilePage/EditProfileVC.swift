@@ -17,6 +17,7 @@ import SwiftMessages
 import GoogleSignIn
 import Apollo
 import FBSDKLoginKit
+import PTProAPI
 
 class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDataSource,UIPickerViewDelegate{
    

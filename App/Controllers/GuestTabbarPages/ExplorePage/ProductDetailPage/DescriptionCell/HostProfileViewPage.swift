@@ -9,6 +9,7 @@
 import UIKit
 import Apollo
 import Lottie
+import PTProAPI
 
 class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataSource{
 

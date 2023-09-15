@@ -9,6 +9,7 @@
 import UIKit
 import Lottie
 import SwiftMessages
+import PTProAPI
 
 class AmenitiesViewController: BaseHostTableviewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
 

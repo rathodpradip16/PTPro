@@ -1,9 +1,6 @@
 PODS:
   - AARatingBar (1.2)
   - Alamofire (5.8.0)
-  - Apollo (0.10.1):
-    - Apollo/Core (= 0.10.1)
-  - Apollo/Core (0.10.1)
   - AppAuth (1.6.2):
     - AppAuth/Core (= 1.6.2)
     - AppAuth/ExternalUserAgent (= 1.6.2)
@@ -205,7 +202,7 @@ PODS:
     - JXPageControl/Common
   - JXPageControl/Transform (0.1.5):
     - JXPageControl/Common
-  - lottie-ios (4.2.0)
+  - lottie-ios (4.3.0)
   - MaterialComponents/AnimationTiming (124.2.0)
   - MaterialComponents/Availability (124.2.0)
   - MaterialComponents/Buttons (124.2.0):
@@ -303,7 +300,6 @@ PODS:
 DEPENDENCIES:
   - AARatingBar
   - Alamofire
-  - Apollo (~> 0.10.1)
   - AssetsPickerViewController
   - Braintree
   - BraintreeDropIn
@@ -350,7 +346,6 @@ SPEC REPOS:
   trunk:
     - AARatingBar
     - Alamofire
-    - Apollo
     - AppAuth
     - AssetsPickerViewController
     - Braintree
@@ -417,7 +412,6 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   AARatingBar: dc54d24687ae97688ffdb29738332d0bc5c0c09f
   Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
-  Apollo: 4d690a9b2e48e8820182df4b988d7a253e1ee589
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   AssetsPickerViewController: 4343e10ace86e425097043c17efa145c1ec868ce
   Braintree: fcbdb324318cdf0562719c4d5629cdf71f29c220
@@ -452,7 +446,7 @@ SPEC CHECKSUMS:
   ISPageControl: cadeb38e9ecdf05540c69ea1132612521b3caa2a
   JJFloatingActionButton: fdc3aefb0f28f04d0f988fa25d5fac97028a9ea7
   JXPageControl: e9487b39e2e58fc17790833214f3b8e935bef98b
-  lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
+  lottie-ios: c69214a487e1a1465a231c1918c6ce174e2d45bc
   MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
   MDFInternationalization: d697c55307816222a55685c4ccb1044ffb030c12
   MDFTextAccessibility: f4bb4cc2194286651b59a215fdeaa0e05dc90ba5
@@ -481,6 +475,6 @@ SPEC CHECKSUMS:
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   WHTabbar: add14cb164535a8e5db2068c85a6c523345b681f
 
-PODFILE CHECKSUM: 513bdcf93265dac82e642a5f568a214e6a1a8532
+PODFILE CHECKSUM: bb110ca80485b1718e043774306510e584be2730
 
 COCOAPODS: 1.12.1

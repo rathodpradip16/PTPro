@@ -10,6 +10,8 @@ import UIKit
 import Cheers
 import Apollo
 import Lottie
+import PTProAPI
+
 class VerificationSuccessVC: UIViewController {
 
     

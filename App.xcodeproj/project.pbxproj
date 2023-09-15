@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -87,6 +87,10 @@
 		764276AA2AB1CA68005FA2A5 /* AffiliateRegistrationDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764276A82AB1CA68005FA2A5 /* AffiliateRegistrationDocument.swift */; };
 		764276AB2AB1CA68005FA2A5 /* AffiliateRegistrationDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 764276A92AB1CA68005FA2A5 /* AffiliateRegistrationDocument.xib */; };
 		767ACB0E2AB301BB00B27B60 /* getAffiliateUserStep.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 767ACB0D2AB301BB00B27B60 /* getAffiliateUserStep.graphql */; };
+		76DE9F6B2AB4A5F7003191ED /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 76DE9F6A2AB4A5F7003191ED /* Apollo */; };
+		76DE9F6D2AB4A716003191ED /* schema.graphqls in Resources */ = {isa = PBXBuildFile; fileRef = 76DE9F6C2AB4A716003191ED /* schema.graphqls */; };
+		76DE9F702AB4AA42003191ED /* PTProAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 76DE9F6F2AB4AA42003191ED /* PTProAPI */; };
+		76DE9F782AB4BA98003191ED /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE9F772AB4BA98003191ED /* Network.swift */; };
 		B50087AF22B76E4500DBC9A0 /* WebviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50087AD22B76E4500DBC9A0 /* WebviewVC.swift */; };
 		B50087B022B76E4500DBC9A0 /* WebviewVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = B50087AE22B76E4500DBC9A0 /* WebviewVC.xib */; };
 		B500D64E22F9533A0050EFDA /* ReservationUpcomingHostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B500D64C22F9533A0050EFDA /* ReservationUpcomingHostCell.swift */; };
@@ -118,7 +122,6 @@
 		B502241D22A1234A00E0A34A /* Reservsation.graphql in Resources */ = {isa = PBXBuildFile; fileRef = B502241C22A1234A00E0A34A /* Reservsation.graphql */; };
 		B50841B0289908D300D458E4 /* GuestListingNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50841AE289908D300D458E4 /* GuestListingNew.swift */; };
 		B50841B1289908D300D458E4 /* GuestListingNew.xib in Resources */ = {isa = PBXBuildFile; fileRef = B50841AF289908D300D458E4 /* GuestListingNew.xib */; };
-		B51207B928E48176001BA260 /* schema.json in Resources */ = {isa = PBXBuildFile; fileRef = B51207B828E48176001BA260 /* schema.json */; };
 		B51207BB28E48226001BA260 /* versionUpdate.graphql in Resources */ = {isa = PBXBuildFile; fileRef = B51207BA28E48226001BA260 /* versionUpdate.graphql */; };
 		B51207BF28E493D4001BA260 /* ForceUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51207BD28E493D4001BA260 /* ForceUpdateViewController.swift */; };
 		B51207C028E493D4001BA260 /* ForceUpdateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B51207BE28E493D4001BA260 /* ForceUpdateViewController.xib */; };
@@ -137,7 +140,6 @@
 		B51F94112828F8B30074F793 /* HostVerifiedInfoCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B51F940F2828F8B30074F793 /* HostVerifiedInfoCellTableViewCell.xib */; };
 		B521407228054E4C00BDE3CA /* UpdatedSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B521407028054E4C00BDE3CA /* UpdatedSearchCell.swift */; };
 		B521407328054E4C00BDE3CA /* UpdatedSearchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B521407128054E4C00BDE3CA /* UpdatedSearchCell.xib */; };
-		B5263BF8225F1F8D003B3DE2 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5263BF7225F1F8D003B3DE2 /* API.swift */; };
 		B5263BFA225F2048003B3DE2 /* login.graphql in Resources */ = {isa = PBXBuildFile; fileRef = B5263BF9225F2048003B3DE2 /* login.graphql */; };
 		B5263BFD225F2379003B3DE2 /* signup.graphql in Resources */ = {isa = PBXBuildFile; fileRef = B5263BFC225F2379003B3DE2 /* signup.graphql */; };
 		B5263BFF225F3480003B3DE2 /* checkemail.graphql in Resources */ = {isa = PBXBuildFile; fileRef = B5263BFE225F3480003B3DE2 /* checkemail.graphql */; };
@@ -722,6 +724,8 @@
 		764276A82AB1CA68005FA2A5 /* AffiliateRegistrationDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateRegistrationDocument.swift; sourceTree = "<group>"; };
 		764276A92AB1CA68005FA2A5 /* AffiliateRegistrationDocument.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AffiliateRegistrationDocument.xib; sourceTree = "<group>"; };
 		767ACB0D2AB301BB00B27B60 /* getAffiliateUserStep.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = getAffiliateUserStep.graphql; sourceTree = "<group>"; };
+		76DE9F6C2AB4A716003191ED /* schema.graphqls */ = {isa = PBXFileReference; lastKnownFileType = file; path = schema.graphqls; sourceTree = SOURCE_ROOT; };
+		76DE9F772AB4BA98003191ED /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		B50087AD22B76E4500DBC9A0 /* WebviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewVC.swift; sourceTree = "<group>"; };
 		B50087AE22B76E4500DBC9A0 /* WebviewVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WebviewVC.xib; sourceTree = "<group>"; };
 		B500D64C22F9533A0050EFDA /* ReservationUpcomingHostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationUpcomingHostCell.swift; sourceTree = "<group>"; };
@@ -753,7 +757,6 @@
 		B502241C22A1234A00E0A34A /* Reservsation.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = Reservsation.graphql; sourceTree = "<group>"; };
 		B50841AE289908D300D458E4 /* GuestListingNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestListingNew.swift; sourceTree = "<group>"; };
 		B50841AF289908D300D458E4 /* GuestListingNew.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GuestListingNew.xib; sourceTree = "<group>"; };
-		B51207B828E48176001BA260 /* schema.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schema.json; sourceTree = "<group>"; };
 		B51207BA28E48226001BA260 /* versionUpdate.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = versionUpdate.graphql; sourceTree = "<group>"; };
 		B51207BD28E493D4001BA260 /* ForceUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateViewController.swift; sourceTree = "<group>"; };
 		B51207BE28E493D4001BA260 /* ForceUpdateViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ForceUpdateViewController.xib; sourceTree = "<group>"; };
@@ -772,7 +775,6 @@
 		B51F940F2828F8B30074F793 /* HostVerifiedInfoCellTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HostVerifiedInfoCellTableViewCell.xib; sourceTree = "<group>"; };
 		B521407028054E4C00BDE3CA /* UpdatedSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatedSearchCell.swift; sourceTree = "<group>"; };
 		B521407128054E4C00BDE3CA /* UpdatedSearchCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UpdatedSearchCell.xib; sourceTree = "<group>"; };
-		B5263BF7225F1F8D003B3DE2 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		B5263BF9225F2048003B3DE2 /* login.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = login.graphql; sourceTree = "<group>"; };
 		B5263BFC225F2379003B3DE2 /* signup.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = signup.graphql; sourceTree = "<group>"; };
 		B5263BFE225F3480003B3DE2 /* checkemail.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = checkemail.graphql; sourceTree = "<group>"; };
@@ -1257,7 +1259,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B54017D4282D4D9E006ECE28 /* PassKit.framework in Frameworks */,
+				76DE9F6B2AB4A5F7003191ED /* Apollo in Frameworks */,
 				C702F1BA2A38782F0A1B4075 /* Pods_App.framework in Frameworks */,
+				76DE9F702AB4AA42003191ED /* PTProAPI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1679,11 +1683,11 @@
 		B54D90FF223F9316003A4589 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				76DE9F772AB4BA98003191ED /* Network.swift */,
+				76DE9F6C2AB4A716003191ED /* schema.graphqls */,
 				B5FB65FE297A4EC700F36A5E /* style.json */,
 				B5EB004529310EAF00E9FC11 /* CurrencyDict */,
 				B5D61CEF22606CFA00152DB4 /* App.entitlements */,
-				B51207B828E48176001BA260 /* schema.json */,
-				B5263BF7225F1F8D003B3DE2 /* API.swift */,
 				B55BFE8E22C4A8CE002FDC3F /* GoogleService-Info.plist */,
 				B5263BFB225F2347003B3DE2 /* GrpahQL_Query */,
 				B5AD7DB92242630300E10420 /* LottieJson */,
@@ -2909,7 +2913,6 @@
 				B54D90FB223F9316003A4589 /* Resources */,
 				68E1364C009D2C1889F0EBFA /* [CP] Embed Pods Frameworks */,
 				52DA1F391870BCB9A1B5E957 /* [CP] Copy Pods Resources */,
-				B5263BF4225F1B79003B3DE2 /* Generate Apollo GraphQL API */,
 				2CF3265A234331E50025A532 /* Embed App Extensions */,
 				B5B79B5A2499F52400547B81 /* ShellScript */,
 			);
@@ -2918,6 +2921,10 @@
 			dependencies = (
 			);
 			name = App;
+			packageProductDependencies = (
+				76DE9F6A2AB4A5F7003191ED /* Apollo */,
+				76DE9F6F2AB4AA42003191ED /* PTProAPI */,
+			);
 			productName = Rent_All;
 			productReference = B54D90FD223F9316003A4589 /* App.app */;
 			productType = "com.apple.product-type.application";
@@ -3001,6 +3008,10 @@
 				Base,
 			);
 			mainGroup = B54D90F4223F9316003A4589;
+			packageReferences = (
+				76DE9F692AB4A5F7003191ED /* XCRemoteSwiftPackageReference "apollo-ios" */,
+				76DE9F6E2AB4AA42003191ED /* XCLocalSwiftPackageReference "PTProAPI" */,
+			);
 			productRefGroup = B54D90FE223F9316003A4589 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -3093,6 +3104,7 @@
 				B5EE962E225784CA004E4A2D /* ShareProductCell.xib in Resources */,
 				B5E9E1DB22A51D5000B91B5B /* RentpaymentReceiptCell.xib in Resources */,
 				B5676E5E26662D450005E046 /* ישראל.json in Resources */,
+				76DE9F6D2AB4A716003191ED /* schema.graphqls in Resources */,
 				B5FB65FF297A4EC700F36A5E /* style.json in Resources */,
 				B537ED4D28111FBB00E5434B /* UpdatedViewListing.xib in Resources */,
 				B53852132283EBDE00F9248E /* CountrycodeVC.xib in Resources */,
@@ -3139,7 +3151,6 @@
 				B55A7CFF22EAC0410051B62F /* BecomeHostVC.xib in Resources */,
 				B552B53622F0128E0072E170 /* ListingDescriptionVC.xib in Resources */,
 				B56E0BF9282934E70038348E /* CancellationPolicyCell1.xib in Resources */,
-				B51207B928E48176001BA260 /* schema.json in Resources */,
 				B5408EE322FAD2310031E783 /* BlockCalendarCell.xib in Resources */,
 				B54BA46B22730E1900F6035B /* FacilitiesCell.xib in Resources */,
 				B532C3E12601DD46007AADF1 /* getPropertyReviews.graphql in Resources */,
@@ -3401,24 +3412,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-App/Pods-App-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B5263BF4225F1B79003B3DE2 /* Generate Apollo GraphQL API */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Generate Apollo GraphQL API";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "APOLLO_FRAMEWORK_PATH=\"$(eval find $FRAMEWORK_SEARCH_PATHS -name \"Apollo.framework\" -maxdepth 1)\"\n\nif [ -z \"$APOLLO_FRAMEWORK_PATH\" ]; then\necho \"error: Couldn't find Apollo.framework in FRAMEWORK_SEARCH_PATHS; make sure to add the framework to your project.\"\nexit 1\nfi\n\ncd \"${SRCROOT}/${TARGET_NAME}\"\n$APOLLO_FRAMEWORK_PATH/check-and-run-apollo-cli.sh codegen:generate --queries=\"$(find . -name '*.graphql')\" --schema=schema.json API.swift\n\n";
-		};
 		B5B79B5A2499F52400547B81 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3496,6 +3489,7 @@
 				2C024E5D22F1B0B300217EBE /* AmenitiesViewController.swift in Sources */,
 				B5EAE9B5229FAC5600EFAAC3 /* BookingStepFourVC.swift in Sources */,
 				B56945ED22F3FA4000595CA8 /* String+Timepiece.swift in Sources */,
+				76DE9F782AB4BA98003191ED /* Network.swift in Sources */,
 				B574A0D9281A65F000D20E5B /* EditFirstLastName.swift in Sources */,
 				B5713812261F309C006DE6AD /* PaymentSelectionPage.swift in Sources */,
 				B56303CE22B20B4600ABAE78 /* ReceiverMessageonlyCell.swift in Sources */,
@@ -3561,7 +3555,6 @@
 				B521407228054E4C00BDE3CA /* UpdatedSearchCell.swift in Sources */,
 				B5B91A6A24208EFE008AC5CB /* popularcollectionCell.swift in Sources */,
 				B54BA46E22730E9600F6035B /* HouseRulesCell.swift in Sources */,
-				B5263BF8225F1F8D003B3DE2 /* API.swift in Sources */,
 				B58EAF4924B82DC400AF87BD /* ReviewShowVC.swift in Sources */,
 				B50087AF22B76E4500DBC9A0 /* WebviewVC.swift in Sources */,
 				B54ED843241B80FD00487C20 /* CCSwipBackPresentationController.swift in Sources */,
@@ -4109,6 +4102,36 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		76DE9F6E2AB4AA42003191ED /* XCLocalSwiftPackageReference "PTProAPI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = PTProAPI;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		76DE9F692AB4A5F7003191ED /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apollographql/apollo-ios";
+			requirement = {
+				kind = exactVersion;
+				version = 1.0.5;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		76DE9F6A2AB4A5F7003191ED /* Apollo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76DE9F692AB4A5F7003191ED /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = Apollo;
+		};
+		76DE9F6F2AB4AA42003191ED /* PTProAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PTProAPI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B54D90F5223F9316003A4589 /* Project object */;
 }

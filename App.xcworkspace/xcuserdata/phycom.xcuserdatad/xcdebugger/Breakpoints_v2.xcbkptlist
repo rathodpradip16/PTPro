@@ -14,8 +14,8 @@
             filePath = "App/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "752"
-            endingLineNumber = "752"
+            startingLineNumber = "745"
+            endingLineNumber = "745"
             landmarkName = "GetDefaultSettingAPICall()"
             landmarkType = "7">
             <Locations>
@@ -55,22 +55,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6155D6FB-7DA9-4FC2-85FE-903387A2D422"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "App/AppDelegate/AppDelegate.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "307"
-            endingLineNumber = "307"
-            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "D96F1E38-B064-4796-A48B-136489FA663D"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -78,8 +62,8 @@
             filePath = "App/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "790"
-            endingLineNumber = "790"
+            startingLineNumber = "783"
+            endingLineNumber = "783"
             landmarkName = "profileAPICall()"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +78,8 @@
             filePath = "App/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "788"
-            endingLineNumber = "788"
+            startingLineNumber = "781"
+            endingLineNumber = "781"
             landmarkName = "profileAPICall()"
             landmarkType = "7">
             <Locations>
@@ -142,8 +126,8 @@
             filePath = "App/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "847"
-            endingLineNumber = "847"
+            startingLineNumber = "840"
+            endingLineNumber = "840"
             landmarkName = "getcurrencyAPICall()"
             landmarkType = "7">
             <Locations>
@@ -190,8 +174,8 @@
             filePath = "App/Controllers/Verifications/VerificationSuccess/VerificationSuccessVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "157"
-            endingLineNumber = "157"
+            startingLineNumber = "159"
+            endingLineNumber = "159"
             landmarkName = "EmailVerification()"
             landmarkType = "7">
             <Locations>
@@ -238,8 +222,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/BecomeHostVC/BecomeHostVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "apollo_headerClient"
             landmarkType = "24">
          </BreakpointContent>
@@ -254,8 +238,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/HostListingVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "309"
-            endingLineNumber = "309"
+            startingLineNumber = "310"
+            endingLineNumber = "310"
             landmarkName = "GetListSettingAPICall()"
             landmarkType = "7">
             <Locations>
@@ -302,8 +286,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostCalendarVC/CalendarListingVC/CalendarListingVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
             landmarkName = "apollo_headerClient"
             landmarkType = "24">
             <Locations>
@@ -425,8 +409,8 @@
             filePath = "App/Controllers/GuestTabbarPages/TripsProfilePage/SettingsPage/SettingsPageVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
             landmarkName = "EdiprofileAPICall()"
             landmarkType = "7">
             <Locations>
@@ -473,8 +457,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/BecomeHostVC/BecomeHostVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
             landmarkName = "showListingStepsAPICall(listID:)"
             landmarkType = "7">
             <Locations>
@@ -521,8 +505,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/BecomeHostVC/BecomeHostVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
             landmarkName = "getStep3ListingDetails()"
             landmarkType = "7">
             <Locations>
@@ -569,8 +553,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/BecomeHostVC/BecomeHostVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "287"
-            endingLineNumber = "287"
+            startingLineNumber = "288"
+            endingLineNumber = "288"
             landmarkName = "siteSettingsAPICall()"
             landmarkType = "7">
             <Locations>
@@ -617,8 +601,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/BecomeHostVC/BecomeHostVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "754"
-            endingLineNumber = "754"
+            startingLineNumber = "755"
+            endingLineNumber = "755"
             landmarkName = "getListingDetailsStep2()"
             landmarkType = "7">
             <Locations>
@@ -665,8 +649,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostCalendarVC/CalendarListingVC/CalendarListingVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
             landmarkName = "manageListingAPICall()"
             landmarkType = "7">
             <Locations>
@@ -713,8 +697,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostCalendarVC/HostCalendarVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "336"
-            endingLineNumber = "336"
+            startingLineNumber = "337"
+            endingLineNumber = "337"
             landmarkName = "manageListingAPICall()"
             landmarkType = "7">
             <Locations>
@@ -761,8 +745,8 @@
             filePath = "App/Controllers/GuestTabbarPages/SavedPAge/WhishlistPageVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "127"
-            endingLineNumber = "127"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
             landmarkName = "WhishlistAPICall()"
             landmarkType = "7">
             <Locations>
@@ -809,8 +793,8 @@
             filePath = "App/Controllers/GuestTabbarPages/TripsProfilePage/EditProfileVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "254"
-            endingLineNumber = "254"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
             landmarkName = "EdiprofileAPICall()"
             landmarkType = "7">
             <Locations>
@@ -857,8 +841,8 @@
             filePath = "App/Controllers/LoginPage/LoginPageVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "328"
-            endingLineNumber = "328"
+            startingLineNumber = "329"
+            endingLineNumber = "329"
             landmarkName = "checkLoginAPI()"
             landmarkType = "7">
             <Locations>

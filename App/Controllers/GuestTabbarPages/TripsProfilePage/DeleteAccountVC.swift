@@ -8,6 +8,7 @@
 
 import UIKit
 import Apollo
+import PTProAPI
 
 class DeleteAccountVC: UIViewController {
    

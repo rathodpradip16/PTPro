@@ -10,6 +10,7 @@ import UIKit
 import Apollo
 import Lottie
 import SwiftMessages
+import PTProAPI
 
 class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarListingVCProtocol,AvailabilityHostVCDelegate,CalendarDetailVCDelegate{
 

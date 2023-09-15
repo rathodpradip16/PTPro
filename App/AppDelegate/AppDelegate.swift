@@ -21,6 +21,7 @@ import FirebaseMessaging
 import Siren
 import Braintree
 import PayPalCheckout
+import PTProAPI
 
 //#import "PayPalMobile.h"
 
@@ -299,15 +300,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
             if((Utility.shared.getCurrentUserToken()) != nil)
             {
 
-                apollo_headerClient = {
-                    let configuration = URLSessionConfiguration.default
-                    // Add additional headers as needed
-                    configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-
-                    let url = URL(string:graphQLEndpoint)!
-
-                    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-                }()
+                
                 self.UserBanStatus()
 
             }

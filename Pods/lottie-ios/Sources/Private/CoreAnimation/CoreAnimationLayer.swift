@@ -17,7 +17,7 @@ final class CoreAnimationLayer: BaseAnimationLayer {
   init(
     animation: LottieAnimation,
     imageProvider: AnimationImageProvider,
-    textProvider: AnimationTextProvider,
+    textProvider: AnimationKeypathTextProvider,
     fontProvider: AnimationFontProvider,
     maskAnimationToBounds: Bool,
     compatibilityTrackerMode: CompatibilityTracker.Mode,
@@ -94,8 +94,8 @@ final class CoreAnimationLayer: BaseAnimationLayer {
     }
   }
 
-  /// The parent `LottieAnimationView` that manages this layer
-  weak var animationView: LottieAnimationView?
+  /// The parent `LottieAnimationLayer` that manages this layer
+  weak var lottieAnimationLayer: LottieAnimationLayer?
 
   /// A closure that is called after this layer sets up its animation.
   /// If the animation setup was unsuccessful and encountered compatibility issues,
@@ -108,9 +108,9 @@ final class CoreAnimationLayer: BaseAnimationLayer {
     didSet { reloadImages() }
   }
 
-  /// The `AnimationTextProvider` that `TextLayer`'s use to retrieve texts,
+  /// The `AnimationKeypathTextProvider` that `TextLayer`'s use to retrieve texts,
   /// that they should use to render their text context
-  var textProvider: AnimationTextProvider {
+  var textProvider: AnimationKeypathTextProvider {
     didSet {
       // We need to rebuild the current animation after updating the text provider,
       // since this is used in `TextLayer.setupAnimations(context:)`
@@ -316,7 +316,7 @@ final class CoreAnimationLayer: BaseAnimationLayer {
     else { return }
 
     if isAnimationPlaying == true {
-      animationView?.updateInFlightAnimation()
+      lottieAnimationLayer?.updateInFlightAnimation()
     } else {
       let currentFrame = currentFrame
       removeAnimations()
@@ -449,7 +449,7 @@ extension CoreAnimationLayer: RootAnimationLayer {
   }
 
   func forceDisplayUpdate() {
-    // Unimplemented / unused
+    display()
   }
 
   func logHierarchyKeypaths() {

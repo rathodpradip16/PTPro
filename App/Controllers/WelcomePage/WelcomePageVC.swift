@@ -13,6 +13,7 @@ import GoogleSignIn
 import AuthenticationServices
 import Lottie
 import Apollo
+import PTProAPI
 
 class WelcomePageVC: UIViewController  {
     

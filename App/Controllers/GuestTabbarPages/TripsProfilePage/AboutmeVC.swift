@@ -10,6 +10,7 @@ import UIKit
 import IQKeyboardManagerSwift
 import Apollo
 import Lottie
+import PTProAPI
 
 class AboutmeVC: UIViewController,UITextViewDelegate{
     

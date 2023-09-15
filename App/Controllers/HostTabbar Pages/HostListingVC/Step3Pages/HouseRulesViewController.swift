@@ -8,6 +8,7 @@
 
 import UIKit
 import Lottie
+import PTProAPI
 
 class HouseRulesViewController: BaseHostTableviewController {
     @IBOutlet var progressViewWidth: NSLayoutConstraint!

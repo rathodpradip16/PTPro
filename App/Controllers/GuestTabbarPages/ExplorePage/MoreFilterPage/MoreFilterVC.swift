@@ -11,6 +11,7 @@ import Lottie
 import RangeSeekSlider
 import Apollo
 import SwiftMessages
+import PTProAPI
 
 class MoreFilterVC: UIViewController,UITableViewDelegate,UITableViewDataSource,RangeSeekSliderDelegate,AirbnbDatePickerDelegate {
    

@@ -9,6 +9,7 @@
 import UIKit
 import SystemConfiguration
 import SwiftMessages
+import PTProAPI
 
 
 public class Utility: NSObject {

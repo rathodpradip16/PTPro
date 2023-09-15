@@ -9,6 +9,7 @@
 import UIKit
 import Apollo
 import Lottie
+import PTProAPI
 
 protocol WhishlistPageVCProtocol
 {

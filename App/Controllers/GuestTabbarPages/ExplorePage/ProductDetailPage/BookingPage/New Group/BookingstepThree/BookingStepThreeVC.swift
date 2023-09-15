@@ -12,6 +12,7 @@ import Alamofire
 import SwiftyJSON
 import AVFoundation
 import Apollo
+import PTProAPI
 
 class BookingStepThreeVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate  {
     

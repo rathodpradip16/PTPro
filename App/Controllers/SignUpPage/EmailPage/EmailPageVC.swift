@@ -9,6 +9,7 @@
 import UIKit
 import IQKeyboardManagerSwift
 import Lottie
+import PTProAPI
 
 class EmailPageVC: UIViewController {
     

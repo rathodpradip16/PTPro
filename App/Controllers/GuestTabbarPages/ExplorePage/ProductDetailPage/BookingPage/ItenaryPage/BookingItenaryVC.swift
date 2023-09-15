@@ -9,6 +9,7 @@
 import UIKit
 import Apollo
 import Lottie
+import PTProAPI
 
 @available(iOS 11.0, *)
 @available(iOS 11.0, *)

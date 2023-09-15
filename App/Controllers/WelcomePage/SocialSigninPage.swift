@@ -11,6 +11,8 @@ import FBSDKLoginKit
 import GoogleSignIn
 import Lottie
 import AuthenticationServices
+import PTProAPI
+
 class SocialSigninPage: UIViewController {
     
     @IBOutlet var welcomeLabel: UILabel!

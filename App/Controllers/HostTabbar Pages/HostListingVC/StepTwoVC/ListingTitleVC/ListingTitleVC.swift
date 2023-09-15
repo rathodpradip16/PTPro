@@ -9,6 +9,7 @@
 import UIKit
 import IQKeyboardManagerSwift
 import Apollo
+import PTProAPI
 
 class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
     

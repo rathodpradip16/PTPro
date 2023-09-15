@@ -11,6 +11,7 @@ import GoogleSignIn
 import Apollo
 import FBSDKLoginKit
 import Lottie
+import PTProAPI
 
 class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     

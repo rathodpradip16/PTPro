@@ -11,6 +11,7 @@ import Apollo
 import Lottie
 import MKToolTip
 import SwiftMessages
+import PTProAPI
 
 class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSource,WebviewVCDelegate  ,CountryDelegate {
     func onSuccessPayPalPayment(isSuccess: Bool,toastermsg: String,successURL: URL?) {

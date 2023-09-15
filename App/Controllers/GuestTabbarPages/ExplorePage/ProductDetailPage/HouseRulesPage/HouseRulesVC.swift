@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PTProAPI
 
 class HouseRulesVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     

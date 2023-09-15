@@ -9,6 +9,7 @@
 import UIKit
 import SwiftMessages
 import Apollo
+import PTProAPI
 
 class SettingsPageVC: UIViewController,LanguageVCDelegate {
     func getcurrencycode(code: String) {
