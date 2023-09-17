@@ -40,15 +40,6 @@ class CreateListVC: UIViewController {
     var title_data = ""
     var isFromSave  = false
     var lottieView: LottieAnimationView!
-    let apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         offlineView.backgroundColor =  UIColor(named: "Button_Grey_Color")
@@ -141,69 +132,70 @@ class CreateListVC: UIViewController {
     
     func createWhishlistAPICalls(listId:Int,wishListGroupId:Int,eventKey:Bool)
     {
-        let createWhishlistMutation = CreateWishListMutation(listId: listId, wishListGroupId: wishListGroupId, eventKey: eventKey)
-        apollo_headerClient.perform(mutation: createWhishlistMutation){ (result,error) in
-            if(result?.data?.createWishList?.status == 200) {
-                self.createBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"create"))!)", for: .normal)
-                //self.view.makeToast("Your message sent to the host")
-                 self.lottieView.isHidden = true
-                
-                self.dismiss(animated: true, completion: nil)
-                return
-            }
-            else{
-                self.view.makeToast(result?.data?.createWishList?.errorMessage)
-                let seconds = 2.0
-                DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+        let createWhishlistMutation = CreateWishListMutation(listId: listId, wishListGroupId: .some(wishListGroupId), eventKey:.some(eventKey))
+        Network.shared.apollo_headerClient.perform(mutation: createWhishlistMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createWishList?.status,data == 200 {
+                    self.createBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"create"))!)", for: .normal)
+                    //self.view.makeToast("Your message sent to the host")
+                    self.lottieView.isHidden = true
+                    
                     self.dismiss(animated: true, completion: nil)
+                    return
+                } else {
+                    self.view.makeToast(result.data?.createWishList?.errorMessage)
+                    let seconds = 2.0
+                    DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-    }
+            
+        }
     }
     
     func createWhishlistAPICall()
-    {
-         if Utility().isConnectedToNetwork(){
-            let createWhishlistMutation = CreateWishListGroupMutation(name:titleTF.text!)
-            apollo_headerClient.perform(mutation: createWhishlistMutation){(result,error) in
-                
-                if(result?.data?.createWishListGroup?.status == 200)
-                {
-                    self.createWhishlistAPICalls(listId: self.listID, wishListGroupId: (result?.data?.createWishListGroup?.results?.id)!, eventKey: true)
+{
+    if Utility.shared.isConnectedToNetwork(){
+        let createWhishlistMutation = CreateWishListGroupMutation(name: titleTF.text!, isPublic: .none, id: .none)
+        Network.shared.apollo_headerClient.perform(mutation: createWhishlistMutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createWishListGroup?.status,data == 200 {
+                    self.createWhishlistAPICalls(listId: self.listID, wishListGroupId: (result.data?.createWishListGroup?.results?.id)!, eventKey: true)
                     
-                    self.delegate?.updateWhishlistStatus(status:true , title: (result?.data?.createWishListGroup?.results?.name)!)
+                    self.delegate?.updateWhishlistStatus(status:true , title: (result.data?.createWishListGroup?.results?.name)!)
+                } else {
+                    self.view.makeToast(result.data?.createWishListGroup?.errorMessage)
                 }
-                else
-                {
-                    
-                    
-                    self.view.makeToast(result?.data?.createWishListGroup?.errorMessage)
-                }
-            
-        }
-         }
-        else
-         {
-            self.lottieView.isHidden = true
-            self.offlineView.isHidden = false
-            let shadowSize2 : CGFloat = 3.0
-            let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
-                                                        y: -shadowSize2 / 2,
-                                                        width: self.offlineView.frame.size.width + shadowSize2,
-                                                        height: self.offlineView.frame.size.height + shadowSize2))
-            
-            self.offlineView.layer.masksToBounds = false
-            self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
-            self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-            self.offlineView.layer.shadowOpacity = 0.3
-            self.offlineView.layer.shadowPath = shadowPath2.cgPath
-            if IS_IPHONE_X || IS_IPHONE_XR{
-                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-130, width: FULLWIDTH, height: 55)
-            }else{
-                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: FULLWIDTH, height: 55)
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
+    }else{
+        self.lottieView.isHidden = true
+        self.offlineView.isHidden = false
+        let shadowSize2 : CGFloat = 3.0
+        let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
+                                                    y: -shadowSize2 / 2,
+                                                    width: self.offlineView.frame.size.width + shadowSize2,
+                                                    height: self.offlineView.frame.size.height + shadowSize2))
+        
+        self.offlineView.layer.masksToBounds = false
+        self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
+        self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        self.offlineView.layer.shadowOpacity = 0.3
+        self.offlineView.layer.shadowPath = shadowPath2.cgPath
+        if IS_IPHONE_X || IS_IPHONE_XR{
+            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-130, width: FULLWIDTH, height: 55)
+        }else{
+            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: FULLWIDTH, height: 55)
+        }
     }
+}
     //Mark: ************************************ Keyboard show/Hide **********************************************>
     
     
@@ -240,29 +232,26 @@ class CreateListVC: UIViewController {
     
     func createWhishlistAPICalls()
     {
-         if Utility().isConnectedToNetwork(){
-             let createWhishlistMutation = CreateWishListGroupMutation(name:titleTF.text! , id: self.groupID)
-             apollo_headerClient.perform(mutation: createWhishlistMutation){ [self](result,error) in
-                 self.lottieView.isHidden = true
-                if(result?.data?.createWishListGroup?.status == 200)
-                {
-                   
-                   
-                    self.delegate?.updateWhishlistStatus(status:true , title: (result?.data?.createWishListGroup?.results?.name)!)
-                    self.dismiss(animated: true)
-
+        if Utility.shared.isConnectedToNetwork(){
+            let createWhishlistMutation = CreateWishListGroupMutation(name:titleTF.text!, isPublic: .none , id: .some(self.groupID))
+            Network.shared.apollo_headerClient.perform(mutation: createWhishlistMutation){ [self] response in
+                self.lottieView.isHidden = true
+                
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.createWishListGroup?.status,data == 200 {
+                        self.delegate?.updateWhishlistStatus(status:true , title: (result.data?.createWishListGroup?.results?.name)!)
+                        self.dismiss(animated: true)
+                        
+                    } else {
+                        self.view.makeToast(result.data?.createWishListGroup?.errorMessage)
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-                else
-                {
-
-
-                    self.view.makeToast(result?.data?.createWishListGroup?.errorMessage)
-                }
-
-        }
-         }
-        else
-         {
+            }
+        }else
+        {
             self.lottieView.isHidden = true
             self.offlineView.isHidden = false
             let shadowSize2 : CGFloat = 3.0
@@ -270,7 +259,7 @@ class CreateListVC: UIViewController {
                                                         y: -shadowSize2 / 2,
                                                         width: self.offlineView.frame.size.width + shadowSize2,
                                                         height: self.offlineView.frame.size.height + shadowSize2))
-
+            
             self.offlineView.layer.masksToBounds = false
             self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
             self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
@@ -286,7 +275,7 @@ class CreateListVC: UIViewController {
 
     
     @IBAction func createBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         titleTF.resignFirstResponder()
             if(titleTF.text!.isBlank)
         {

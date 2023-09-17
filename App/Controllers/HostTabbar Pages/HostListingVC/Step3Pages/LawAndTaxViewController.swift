@@ -31,11 +31,11 @@ class LawAndTaxViewController: BaseHostTableviewController {
     @IBOutlet weak var labelOne: UILabel!
     @IBOutlet weak var labelTwo: UILabel!
     var lottieView1: LottieAnimationView!
-    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrency.Result]()
+    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrencies.Result]()
     
     var weeklydiscountvalue = ""
     var monthlydiscountvalue = ""
-    var updateResults = UpdateListingStep3Mutation.Data.UpdateListingStep3.Result()
+    var updateResults : UpdateListingStep3Mutation.Data.UpdateListingStep3.Results?
     
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
     @IBOutlet weak var stepTitleHeightConstraint: NSLayoutConstraint!
@@ -142,47 +142,44 @@ class LawAndTaxViewController: BaseHostTableviewController {
     
     func updateListingAPI()
     {
-        let updatelist = UpdateListingStep3Mutation(id: Utility.shared.step3ValuesInfo["id"] as? Int,
-                                                   houseRules: Utility.shared.step3ValuesInfo["houseRules"] as! [Int],
-                                                   bookingNoticeTime: "\(Utility.shared.step3ValuesInfo["bookingNoticeTime"] ?? "")",
-                                                   checkInStart: "\(Utility.shared.step3ValuesInfo["checkInStart"] ?? "")",
-                                                   checkInEnd: "\(Utility.shared.step3ValuesInfo["checkInEnd"] ?? "")",
-                                                   maxDaysNotice: "\(Utility.shared.step3ValuesInfo["maxDaysNotice"] ?? "")",
-                                                   minNight: Utility.shared.step3ValuesInfo["minNight"] as? Int,
-                                                   maxNight: Utility.shared.step3ValuesInfo["maxNight"] as? Int,
-                                                   basePrice: Utility.shared.step3ValuesInfo["basePrice"] as? Double,
-                                                   cleaningPrice: Utility.shared.step3ValuesInfo["cleaningPrice"] as? Double,
-                                                   currency: "\(Utility.shared.step3ValuesInfo["currency"] ?? "")",
-                                                   weeklyDiscount: Utility.shared.step3ValuesInfo["weeklyDiscount"] as? Int,
-                                                   monthlyDiscount: Utility.shared.step3ValuesInfo["monthlyDiscount"] as? Int,
-                                                   bookingType: "\(Utility.shared.step3ValuesInfo["bookingType"] ?? "")",
-                                                   cancellationPolicy: Utility.shared.step3ValuesInfo["cancellationPolicy"] as? Int)
-        apollo_headerClient.perform(mutation: updatelist){ (result,error) in
-            
-            if(result?.data?.updateListingStep3?.status == 200)
-            {
-               
-                self.lottieView.isHidden = true
-                if(result?.data?.updateListingStep3?.results != nil)
+        let updatelist = UpdateListingStep3Mutation(id: .some(Utility.shared.step3ValuesInfo["id"] as! Int),
+                                                    houseRules: .some(Utility.shared.step3ValuesInfo["houseRules"] as! [Int]),
+                                                    bookingNoticeTime: .some("\(Utility.shared.step3ValuesInfo["bookingNoticeTime"] ?? "")"),
+                                                    checkInStart: .some("\(Utility.shared.step3ValuesInfo["checkInStart"] ?? "")"),
+                                                    checkInEnd: .some("\(Utility.shared.step3ValuesInfo["checkInEnd"] ?? "")"),
+                                                    maxDaysNotice: .some("\(Utility.shared.step3ValuesInfo["maxDaysNotice"] ?? "")"),
+                                                    minNight: .some(Utility.shared.step3ValuesInfo["minNight"] as! Int),
+                                                    maxNight: .some(Utility.shared.step3ValuesInfo["maxNight"] as! Int),
+                                                    basePrice: .some(Utility.shared.step3ValuesInfo["basePrice"] as! Double),
+                                                    cleaningPrice: .some(Utility.shared.step3ValuesInfo["cleaningPrice"] as! Double),
+                                                    currency: .some("\(Utility.shared.step3ValuesInfo["currency"] ?? "")"),
+                                                    weeklyDiscount: .some(Utility.shared.step3ValuesInfo["weeklyDiscount"] as! Int),
+                                                    monthlyDiscount: .some(Utility.shared.step3ValuesInfo["monthlyDiscount"] as! Int), blockedDates: .some([]) ,
+                                                    bookingType: "\(Utility.shared.step3ValuesInfo["bookingType"] ?? "")",
+                                                    cancellationPolicy: .some(Utility.shared.step3ValuesInfo["cancellationPolicy"] as! Int))
+        Network.shared.apollo_headerClient.perform(mutation: updatelist){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.updateListingStep3?.status,data == 200 {
+                    self.lottieView.isHidden = true
+                    if(result.data?.updateListingStep3?.results != nil)
                     {
-                self.updateResults = (result?.data?.updateListingStep3?.results)!
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    // code to remove your view
-                    let becomeHostObj = BecomeHostVC()
-                    becomeHostObj.listID = "\(Utility.shared.step3ValuesInfo["id"]!)"
-                    becomeHostObj.showListingStepsAPICall(listID:"\(Utility.shared.step3ValuesInfo["id"]!)")
-                  becomeHostObj.modalPresentationStyle = .fullScreen
-                    self.present(becomeHostObj, animated:false, completion: nil)
+                        self.updateResults = (result.data?.updateListingStep3?.results)!
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            // code to remove your view
+                            let becomeHostObj = BecomeHostVC()
+                            becomeHostObj.listID = "\(Utility.shared.step3ValuesInfo["id"]!)"
+                            becomeHostObj.showListingStepsAPICall(listID:"\(Utility.shared.step3ValuesInfo["id"]!)")
+                            becomeHostObj.modalPresentationStyle = .fullScreen
+                            self.present(becomeHostObj, animated:false, completion: nil)
+                        }
+                    }
+                } else {
+                    self.view.makeToast(result.data?.updateListingStep3?.errorMessage)
                 }
-                }
-                
-                
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            else{
-                self.view.makeToast(result?.data?.updateListingStep3?.errorMessage)
-            }
-            
-            
         }
     }
     //MARK: - Progress Indicator
@@ -246,7 +243,7 @@ class LawAndTaxViewController: BaseHostTableviewController {
     }
     
     @IBAction func RedirectNextPage(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.lottieViewnextanimation()
             super.updateStep3ListingAPICall{ (success) -> Void in
                     if success {
@@ -264,12 +261,12 @@ class LawAndTaxViewController: BaseHostTableviewController {
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
     }
     @IBAction func backBtnPressed(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             //self.view.layer.add(dismissrightAnimation()!, forKey: kCATransition)
             //self.view.window!.layer.add(dismissrightAnimation()!, forKey: kCATransition)
             if(Utility.shared.step3_Edit)
@@ -298,7 +295,7 @@ class LawAndTaxViewController: BaseHostTableviewController {
         self.present(becomeHost, animated:false, completion: nil)
     }
     @IBAction func saveandexitAction(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.lottieViewanimation()
             Utility.shared.step3ValuesInfo.updateValue(Utility.shared.selectedRules, forKey: "houseRules")
                        Utility.shared.step3ValuesInfo.updateValue(Utility.shared.createId, forKey: "id")

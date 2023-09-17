@@ -34,7 +34,7 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
     var spaces = ""
     var spacesList = [[String : Any]]()
     //var selectedAmenityIdList = [Int]()
-    var updateResultsStep1 = CreateListingMutation.Data.CreateListing.Result()
+    var updateResultsStep1 : CreateListingMutation.Data.CreateListing.Results?
      var lottieView1: LottieAnimationView!
         
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
@@ -129,7 +129,7 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
     
     override func setDropdownList() {
          //Utility.shared.selectedspaceAmenityIdList.removeAllObjects()
-        let spaceList = (Utility.shared.getListSettingsArray.spaces?.listSettings!)!
+        let spaceList = (Utility.shared.getListSettingsArray?.spaces?.listSettings!)!
         for i in 0..<spaceList.count
         {
             var amenityInfo = [String : Any]()
@@ -141,7 +141,7 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
         {
             for i in 0..<typeInfo.count
             {
-                if let usertypes = typeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetail.Result.UserSpace
+                if let usertypes = typeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserSpace
                 {
                     if spacesList.contains(where: { (item) -> Bool in
                         (item["itemName"] as? String == (usertypes.itemName!))
@@ -170,46 +170,45 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
     //MARK: - Update Listing Step 1
     func updateListingAPICallAfterCreate()
     {
-        let createlist = CreateListingMutation(listId: Utility.shared.createId,
-                                               roomType: "\(Utility.shared.step1ValuesInfo["roomType"] ?? "")",
-            houseType: "\(Utility.shared.step1ValuesInfo["houseType"] ?? "")" ,
-            residenceType: "\(Utility.shared.step1ValuesInfo["residenceType"] ?? "")",
-            bedrooms: "\(Utility.shared.step1ValuesInfo["bedrooms"] ?? "")" ,
-            buildingSize: "\(Utility.shared.step1ValuesInfo["buildingSize"] ?? "")",
-            bedType: "\(Utility.shared.step1ValuesInfo["bedType"] ?? "")" ,
-            beds: Utility.shared.step1ValuesInfo["beds"] as? Int,
-            personCapacity: Utility.shared.step1ValuesInfo["personCapacity"] as? Int,
-            bathrooms:(Utility.shared.step1ValuesInfo["bathrooms"] as? Double),
-            bathroomType: "\(Utility.shared.step1ValuesInfo["bathroomType"] ?? "")",
-            country: "\(Utility.shared.step1ValuesInfo["country"] ?? "")",
-            street: "\(Utility.shared.step1ValuesInfo["street"] ?? "")",
-            buildingName: "\(Utility.shared.step1ValuesInfo["buildingName"] ?? "")",
-            city: "\(Utility.shared.step1ValuesInfo["city"] ?? "")",
-            state: "\(Utility.shared.step1ValuesInfo["state"] ?? "")",
-            zipcode: "\(Utility.shared.step1ValuesInfo["zipcode"] ?? "")",
-            lat: (Utility.shared.step1ValuesInfo["lat"] as! Double),
-            lng: (Utility.shared.step1ValuesInfo["lng"] as! Double),
-            bedTypes: "\(Utility.shared.step1ValuesInfo["bedTypes"] ?? "")" ,
-            isMapTouched: Utility.shared.step1ValuesInfo["isMapTouched"] as? Bool,
-            amenities: Utility.shared.step1ValuesInfo["amenities"] as? [Int?] ,
-            safetyAmenities: Utility.shared.step1ValuesInfo["safetyAmenities"] as? [Int?],
-            spaces: Utility.shared.step1ValuesInfo["spaces"] as? [Int?])
-        apollo_headerClient.perform(mutation: createlist){ (result,error) in
-            
-            if(result?.data?.createListing?.status == 200)
-            {
-                
-                self.updateResultsStep1 = (result?.data?.createListing?.results)!
-                Utility.shared.createId = (result?.data?.createListing?.id)!
-                self.manageListingSteps(listId: "\((result?.data?.createListing?.id)!)", currentStep: 1)
-            }
-            else{
-                self.lottieView1.isHidden = true
-                self.nextBtn.setTitle("Next", for:.normal)
-               
-                
-                print("\(result?.data?.createListing?.errorMessage ?? "")")
-                
+        let createlist = CreateListingMutation(listId: .some(Utility.shared.createId),
+                                               roomType: .some("\(Utility.shared.step1ValuesInfo["roomType"] ?? "")"),
+                                               houseType: .some("\(Utility.shared.step1ValuesInfo["houseType"] ?? "")") ,
+                                               residenceType: .some("\(Utility.shared.step1ValuesInfo["residenceType"] ?? "")"),
+                                               bedrooms: .some("\(Utility.shared.step1ValuesInfo["bedrooms"] ?? "")") ,
+                                               buildingSize: .some("\(Utility.shared.step1ValuesInfo["buildingSize"] ?? "")"),
+                                               bedType: .some("\(Utility.shared.step1ValuesInfo["bedType"] ?? "")") ,
+                                               beds: .some(Utility.shared.step1ValuesInfo["beds"] as! Int),
+                                               personCapacity: .some(Utility.shared.step1ValuesInfo["personCapacity"] as! Int),
+                                               bathrooms:.some(Utility.shared.step1ValuesInfo["bathrooms"] as! Double),
+                                               bathroomType: .some("\(Utility.shared.step1ValuesInfo["bathroomType"] ?? "")"),
+                                               country: .some("\(Utility.shared.step1ValuesInfo["country"] ?? "")"),
+                                               street: .some("\(Utility.shared.step1ValuesInfo["street"] ?? "")"),
+                                               buildingName: .some("\(Utility.shared.step1ValuesInfo["buildingName"] ?? "")"),
+                                               city: .some("\(Utility.shared.step1ValuesInfo["city"] ?? "")"),
+                                               state: .some("\(Utility.shared.step1ValuesInfo["state"] ?? "")"),
+                                               zipcode: .some("\(Utility.shared.step1ValuesInfo["zipcode"] ?? "")"),
+                                               lat: .some(Utility.shared.step1ValuesInfo["lat"] as! Double),
+                                               lng: .some(Utility.shared.step1ValuesInfo["lng"] as! Double),
+                                               bedTypes: .some("\(Utility.shared.step1ValuesInfo["bedTypes"] ?? "")") ,
+                                               isMapTouched: .some(Utility.shared.step1ValuesInfo["isMapTouched"] as! Bool),
+                                               amenities: .some(Utility.shared.step1ValuesInfo["amenities"] as? [Int?] ?? []),
+                                               safetyAmenities: .some(Utility.shared.step1ValuesInfo["safetyAmenities"] as? [Int?] ?? []),
+                                               spaces:.some( Utility.shared.step1ValuesInfo["spaces"] as? [Int?] ?? []))
+        Network.shared.apollo_headerClient.perform(mutation: createlist){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createListing?.status,data == 200 {
+                    
+                    self.updateResultsStep1 = (result.data?.createListing?.results)!
+                    Utility.shared.createId = (result.data?.createListing?.id)!
+                    self.manageListingSteps(listId: "\((result.data?.createListing?.id)!)", currentStep: 1)
+                } else {
+                    self.lottieView1.isHidden = true
+                    self.nextBtn.setTitle("Next", for:.normal)
+                    print("\(result.data?.createListing?.errorMessage ?? "")")
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
@@ -217,21 +216,23 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
     func manageListingSteps(listId:String,currentStep:Int)
     {
         let manageListingStepsMutation = ManageListingStepsMutation(listId:listId, currentStep:currentStep)
-        apollo_headerClient.perform(mutation: manageListingStepsMutation){ (result,error) in
-            
-            if(result?.data?.manageListingSteps?.status == 200)
-            {
-                let becomeHost = BecomeHostVC()
-                becomeHost.listID = "\(Utility.shared.createId)"
-                Utility.shared.step1_inactivestatus = ((result?.data?.manageListingSteps?.results?.step3!)!)
-                becomeHost.showListingStepsAPICall(listID:"\(Utility.shared.createId)")
-               // self.view.window!.layer.add(presentrightAnimation()!, forKey: kCATransition)
-                becomeHost.modalPresentationStyle = .fullScreen
-                self.present(becomeHost, animated:false,completion: nil)
-
-            }
-            else {
-                self.view.makeToast(result?.data?.manageListingSteps?.errorMessage)
+        Network.shared.apollo_headerClient.perform(mutation: manageListingStepsMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.manageListingSteps?.status,data == 200 {
+                    let becomeHost = BecomeHostVC()
+                    becomeHost.listID = "\(Utility.shared.createId)"
+                    Utility.shared.step1_inactivestatus = ((result.data?.manageListingSteps?.results?.step3!)!)
+                    becomeHost.showListingStepsAPICall(listID:"\(Utility.shared.createId)")
+                    // self.view.window!.layer.add(presentrightAnimation()!, forKey: kCATransition)
+                    becomeHost.modalPresentationStyle = .fullScreen
+                    self.present(becomeHost, animated:false,completion: nil)
+                    
+                } else {
+                    self.view.makeToast(result.data?.manageListingSteps?.errorMessage)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
@@ -268,7 +269,7 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
     //IBActions
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
     }
@@ -307,7 +308,7 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
         self.lottieView1.play()
     }
     @IBAction func saveandExitTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         self.lottieViewanimation()
         Utility.shared.step1ValuesInfo.updateValue(Utility.shared.selectedspaceAmenityIdList, forKey: "spaces")
         super.updateListingAPICall{ (success) -> Void in
@@ -324,7 +325,7 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
         }
     }
     @IBAction func RedirectNextPage(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
          self.lottienextanimation()
         Utility.shared.step1ValuesInfo.updateValue(Utility.shared.selectedspaceAmenityIdList, forKey: "spaces")
             super.updateListingAPICall{ (success) -> Void in

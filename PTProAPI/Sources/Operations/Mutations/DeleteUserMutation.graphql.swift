@@ -5,27 +5,19 @@
 
 public class DeleteUserMutation: GraphQLMutation {
   public static let operationName: String = "deleteUser"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation deleteUser {
-        deleteUser {
-          __typename
-          status
-          errorMessage
-        }
-      }
-      """
+      #"mutation deleteUser { deleteUser { __typename status errorMessage } }"#
     ))
 
   public init() {}
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("deleteUser", DeleteUser?.self),
     ] }
 
@@ -36,10 +28,11 @@ public class DeleteUserMutation: GraphQLMutation {
     /// Parent Type: `UserCommon`
     public struct DeleteUser: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.UserCommon }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserCommon }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
       ] }

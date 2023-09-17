@@ -5,70 +5,9 @@
 
 public class CreateListingMutation: GraphQLMutation {
   public static let operationName: String = "createListing"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation createListing($listId: Int, $roomType: String, $houseType: String, $residenceType: String, $bedrooms: String, $buildingSize: String, $bedType: String, $beds: Int, $personCapacity: Int, $bathrooms: Float, $bathroomType: String, $country: String, $street: String, $buildingName: String, $city: String, $state: String, $zipcode: String, $lat: Float, $lng: Float, $bedTypes: String, $isMapTouched: Boolean, $amenities: [Int], $safetyAmenities: [Int], $spaces: [Int]) {
-        createListing(
-          listId: $listId
-          roomType: $roomType
-          houseType: $houseType
-          residenceType: $residenceType
-          bedrooms: $bedrooms
-          buildingSize: $buildingSize
-          bedType: $bedType
-          beds: $beds
-          personCapacity: $personCapacity
-          bathrooms: $bathrooms
-          bathroomType: $bathroomType
-          country: $country
-          street: $street
-          buildingName: $buildingName
-          city: $city
-          state: $state
-          zipcode: $zipcode
-          lat: $lat
-          lng: $lng
-          bedTypes: $bedTypes
-          isMapTouched: $isMapTouched
-          amenities: $amenities
-          safetyAmenities: $safetyAmenities
-          spaces: $spaces
-        ) {
-          __typename
-          id
-          results {
-            __typename
-            roomType
-            houseType
-            residenceType
-            bedrooms
-            buildingSize
-            bedType
-            beds
-            personCapacity
-            bathrooms
-            bathroomType
-            country
-            street
-            buildingName
-            city
-            state
-            zipcode
-            lat
-            lng
-            bedTypes
-            isMapTouched
-            amenities
-            safetyAmenities
-            spaces
-          }
-          status
-          errorMessage
-          actionType
-        }
-      }
-      """
+      #"mutation createListing($listId: Int, $roomType: String, $houseType: String, $residenceType: String, $bedrooms: String, $buildingSize: String, $bedType: String, $beds: Int, $personCapacity: Int, $bathrooms: Float, $bathroomType: String, $country: String, $street: String, $buildingName: String, $city: String, $state: String, $zipcode: String, $lat: Float, $lng: Float, $bedTypes: String, $isMapTouched: Boolean, $amenities: [Int], $safetyAmenities: [Int], $spaces: [Int]) { createListing( listId: $listId roomType: $roomType houseType: $houseType residenceType: $residenceType bedrooms: $bedrooms buildingSize: $buildingSize bedType: $bedType beds: $beds personCapacity: $personCapacity bathrooms: $bathrooms bathroomType: $bathroomType country: $country street: $street buildingName: $buildingName city: $city state: $state zipcode: $zipcode lat: $lat lng: $lng bedTypes: $bedTypes isMapTouched: $isMapTouched amenities: $amenities safetyAmenities: $safetyAmenities spaces: $spaces ) { __typename id results { __typename roomType houseType residenceType bedrooms buildingSize bedType beds personCapacity bathrooms bathroomType country street buildingName city state zipcode lat lng bedTypes isMapTouched amenities safetyAmenities spaces } status errorMessage actionType } }"#
     ))
 
   public var listId: GraphQLNullable<Int>
@@ -177,10 +116,10 @@ public class CreateListingMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("createListing", CreateListing?.self, arguments: [
         "listId": .variable("listId"),
         "roomType": .variable("roomType"),
@@ -216,10 +155,11 @@ public class CreateListingMutation: GraphQLMutation {
     /// Parent Type: `ListingResponse`
     public struct CreateListing: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.ListingResponse }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ListingResponse }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("id", Int?.self),
         .field("results", Results?.self),
         .field("status", Int?.self),
@@ -238,10 +178,11 @@ public class CreateListingMutation: GraphQLMutation {
       /// Parent Type: `CreateListing`
       public struct Results: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.CreateListing }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.CreateListing }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("roomType", String?.self),
           .field("houseType", String?.self),
           .field("residenceType", String?.self),

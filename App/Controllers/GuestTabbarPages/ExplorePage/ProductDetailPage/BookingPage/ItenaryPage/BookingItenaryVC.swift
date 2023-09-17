@@ -20,7 +20,7 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     func didupdateWhishlistStatus(status: Bool) {
        
-            getReservationArray.listData?.wishListStatus = status
+//        getReservationArray?.listData?.wishListStatus = status
        
         iterationTable.reloadSections([1], with:.none)
     }
@@ -33,18 +33,9 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     @IBOutlet weak var iterationTable: UITableView!
     var wishlistIndex:Int = -1
     var lottieView: LottieAnimationView!
-    let apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
-    var getReservationArray = GetReservationQuery.Data.GetReservation.Result()
-    var getReservation_currencyArray = GetReservationQuery.Data.GetReservation()
-    var getbillingArray = GetBillingCalculationQuery.Data.GetBillingCalculation.Result()
+    var getReservationArray : GetReservationQuery.Data.GetReservation.Results?
+    var getReservation_currencyArray : GetReservationQuery.Data.GetReservation?
+    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     var currencyvalue_from_API_base = String()
     var isFromReviewPage = false
     var reservID = 0
@@ -81,42 +72,48 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     func getReservationAPICall(reservationid:Int)
     {
-         if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.lottieAnimation()
-        let createReservationquery = GetReservationQuery(reservationId: reservationid)
-        apollo_headerClient.fetch(query: createReservationquery){(result,error) in
-            self.lottieView.isHidden = true
-            self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
-            guard (result?.data?.getReservation?.results) != nil else{
-                print("Missing Data")
-               
-                self.view.makeToast(result?.data?.getReservation?.errorMessage)
-                return
-            }
-            self.getReservationArray = (result?.data?.getReservation?.results)!
-            self.getReservation_currencyArray = (result?.data?.getReservation!)!
-            
-            if self.getReservationArray.listData != nil{
-                self.iterationTable.isHidden = false
-                self.ErrorView.isHidden = true
+            let createReservationquery = GetReservationQuery(reservationId: reservationid, convertCurrency: .none)
+            Network.shared.apollo_headerClient.fetch(query: createReservationquery){ response in
+                self.lottieView.isHidden = true
+                self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
                 
-                self.iterationTable.reloadData()
-            }else{
-                self.iterationTable.isHidden = true
-                self.ErrorView.isHidden = false
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getReservation?.results) != nil else{
+                        print("Missing Data")
+                        
+                        self.view.makeToast(result.data?.getReservation?.errorMessage)
+                        return
+                    }
+                    self.getReservationArray = (result.data?.getReservation?.results)!
+                    self.getReservation_currencyArray = (result.data?.getReservation!)!
+                    
+                    if self.getReservationArray?.listData != nil{
+                        self.iterationTable.isHidden = false
+                        self.ErrorView.isHidden = true
+                        
+                        self.iterationTable.reloadData()
+                    }else{
+                        self.iterationTable.isHidden = true
+                        self.ErrorView.isHidden = false
+                    }
+                    //            if #available(iOS 11.0, *) {
+                    //                let receiptPageObj = BookingItenaryVC()
+                    //                receiptPageObj.getReservation_currencyArray = self.getReservation_currencyArray
+                    //                receiptPageObj.getReservationArray = self.getReservationArray
+                    //                  receiptPageObj.modalPresentationStyle = .fullScreen
+                    //                self.present(receiptPageObj, animated: true, completion: nil)
+                    //            } else {
+                    //                // Fallback on earlier versions
+                    //            }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
             }
-//            if #available(iOS 11.0, *) {
-//                let receiptPageObj = BookingItenaryVC()
-//                receiptPageObj.getReservation_currencyArray = self.getReservation_currencyArray
-//                receiptPageObj.getReservationArray = self.getReservationArray
-//                  receiptPageObj.modalPresentationStyle = .fullScreen
-//                self.present(receiptPageObj, animated: true, completion: nil)
-//            } else {
-//                // Fallback on earlier versions
-//            }
         }
-        }
-         else{
+        else{
             
         }
     }
@@ -200,23 +197,27 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             currency = Utility.shared.currencyvalue_from_API_base
         }
         self.lottieAnimation()
-     let createReservationquery = GetReservationQuery(reservationId: reservationid,convertCurrency:currency)
-        apollo_headerClient.fetch(query: createReservationquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
+        let createReservationquery = GetReservationQuery(reservationId: reservationid,convertCurrency:.some(currency))
+        Network.shared.apollo_headerClient.fetch(query: createReservationquery,cachePolicy:.fetchIgnoringCacheData){ response in
             self.lottieView.isHidden = true
             self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
-            guard (result?.data?.getReservation?.results) != nil else{
-                self.view.makeToast(result?.data?.getReservation?.errorMessage)
-                return
+            switch response {
+            case .success(let result):
+                guard (result.data?.getReservation?.results) != nil else{
+                    self.view.makeToast(result.data?.getReservation?.errorMessage)
+                    return
+                }
+                self.getReservationArray = (result.data?.getReservation?.results)!
+                self.getReservation_currencyArray = (result.data?.getReservation!)!
+                
+                self.iterationTable.reloadData()
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            self.getReservationArray = (result?.data?.getReservation?.results)!
-            self.getReservation_currencyArray = (result?.data?.getReservation!)!
-            
-            self.iterationTable.reloadData()
-        
-    }
+        }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        if(getReservationArray.listData?.city != nil)
+        if(getReservationArray?.listData?.city != nil)
         {
         return 6
         }
@@ -249,7 +250,7 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
         }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(getReservationArray.listData?.city != nil)
+        if(getReservationArray?.listData?.city != nil)
         {
         return 1
         }
@@ -260,8 +261,8 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
         if(indexPath.section == 0)
         {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ItenaryListCell", for: indexPath)as! ItenaryListCell
-            cell.locationLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"yougoing"))!) \(getReservationArray.listData?.city != nil ? ((getReservationArray.listData?.city!)!) : "")!"
-            cell.reservationCodeLAbel.text = " \((Utility.shared.getLanguage()?.value(forKey:"reservationcode"))!)  #\(getReservationArray.confirmationCode != nil ? getReservationArray.confirmationCode! : 0 )"
+            cell.locationLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"yougoing"))!) \(getReservationArray?.listData?.city != nil ? ((getReservationArray?.listData?.city!)!) : "")!"
+            cell.reservationCodeLAbel.text = " \((Utility.shared.getLanguage()?.value(forKey:"reservationcode"))!)  #\(getReservationArray?.confirmationCode != nil ? getReservationArray?.confirmationCode! : 0 )"
             cell.selectionStyle = .none
             return cell
         }
@@ -270,26 +271,26 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             let cell = tableView.dequeueReusableCell(withIdentifier: "ItenaryImageCell", for: indexPath)as! ItenaryImageCell
             cell.selectionStyle = .none
             
-            if let listimage = (getReservationArray.listData?.listPhotoName) {
+            if let listimage = (getReservationArray?.listData?.listPhotoName) {
             cell.listImage.sd_setImage(with: URL(string: "\(IMAGE_LISTING_MEDIUM)\(String(describing: listimage))"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
             } else {
                 cell.listImage.image = #imageLiteral(resourceName: "placeholderimg")
             }
             cell.heightConstant.constant = 22
             cell.topConstant.constant = 18
-            cell.listTitleLabel.text = getReservationArray.listData?.title ?? ""
+            cell.listTitleLabel.text = getReservationArray?.listData?.title ?? ""
             
-            cell.listLocationLabel.text = "\(getReservationArray.listData?.city ?? ""), \(getReservationArray.listData?.state ?? ""), \(getReservationArray.listData?.country ?? "")"
+            cell.listLocationLabel.text = "\(getReservationArray?.listData?.city ?? ""), \(getReservationArray?.listData?.state ?? ""), \(getReservationArray?.listData?.country ?? "")"
             
-            if(((getReservationArray.listData?.reviewsCount!)! > 0) && ((getReservationArray.listData?.reviewsStarRating!)! > 0) ) {
+            if(((getReservationArray?.listData?.reviewsCount!)! > 0) && ((getReservationArray?.listData?.reviewsStarRating!)! > 0) ) {
             
-            if((getReservationArray.listData?.reviewsCount!)! > 0)
+            if((getReservationArray?.listData?.reviewsCount!)! > 0)
             {
-                if((getReservationArray.listData?.reviewsCount!)! == 1) {
-                    cell.ratingLabel.text = " \(getReservationArray.listData?.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)"
+                if((getReservationArray?.listData?.reviewsCount!)! == 1) {
+                    cell.ratingLabel.text = " \(getReservationArray?.listData?.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)"
                 }
                 else {
-                cell.ratingLabel.text = "\(getReservationArray.listData?.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"reviews"))!)"
+                cell.ratingLabel.text = "\(getReservationArray?.listData?.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"reviews"))!)"
                 }
             }
             else
@@ -298,16 +299,16 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
                 
             }
             
-//            if((getReservationArray.listData?.reviewsStarRating!)! > 0) {
-//                cell.ratingCountLabel.text = "\(getReservationArray.listData?.reviewsStarRating ?? 0) \u{2022}"
+//            if((getReservationArray?.listData?.reviewsStarRating!)! > 0) {
+//                cell.ratingCountLabel.text = "\(getReservationArray?.listData?.reviewsStarRating ?? 0) \u{2022}"
 //            }
 //            else {
-//                cell.ratingCountLabel.text = "\(getReservationArray.listData?.reviewsStarRating ?? 0) \u{2022}"
+//                cell.ratingCountLabel.text = "\(getReservationArray?.listData?.reviewsStarRating ?? 0) \u{2022}"
 //            }
                 
                 
-                let reviewsCount = getReservationArray.listData?.reviewsCount ?? 0
-                let ratings = getReservationArray.listData?.reviewsStarRating ?? 0
+                let reviewsCount = getReservationArray?.listData?.reviewsCount ?? 0
+                let ratings = getReservationArray?.listData?.reviewsStarRating ?? 0
                 
                 let value1 = Float("\(reviewsCount)") ?? 0.0
                 let value2 = Float("\(ratings)") ?? 0.0
@@ -333,9 +334,9 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             }
             
            
-            if let listowner = getReservationArray.listData?.isListOwner {
+            if let listowner = getReservationArray?.listData?.isListOwner {
 //                if(listowner == false){
-                    if(getReservationArray.listData?.wishListStatus == false){
+                    if(getReservationArray?.listData?.wishListStatus == false){
                         cell.likeBtn.setImage(#imageLiteral(resourceName: "Heart"), for: .normal)
                     }else{
                         cell.likeBtn.setImage(#imageLiteral(resourceName: "like"), for: .normal)
@@ -356,11 +357,11 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             ]
                 
             var listTypeString = ""
-            listTypeString = "\(getReservationArray.listData?.roomType ?? "")"
-            if ((getReservationArray.listData?.beds ?? 0) > 1){
-                listTypeString = listTypeString + " / " + "\(getReservationArray.listData?.beds ?? 0)" + " Beds"
-            }else if ((getReservationArray.listData?.beds ?? 0) == 1){
-                listTypeString = listTypeString + " / " + "\(getReservationArray.listData?.beds ?? 0)" + " Bed"
+            listTypeString = "\(getReservationArray?.listData?.roomType ?? "")"
+            if ((getReservationArray?.listData?.beds ?? 0) > 1){
+                listTypeString = listTypeString + " / " + "\(getReservationArray?.listData?.beds ?? 0)" + " Beds"
+            }else if ((getReservationArray?.listData?.beds ?? 0) == 1){
+                listTypeString = listTypeString + " / " + "\(getReservationArray?.listData?.beds ?? 0)" + " Bed"
             }
             cell.listLocationLabel.textColor = UIColor(named: "searchPlaces_TextColor")
             
@@ -371,12 +372,12 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
         {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ItenarycheckCell", for: indexPath)as! ItenarycheckCell
             cell.selectionStyle = .none
-            if(getReservationArray.checkIn != nil)
+            if(getReservationArray?.checkIn != nil)
             {
-                let day = getdayValue(timestamp:(getReservationArray.checkIn!))
-                let date = getdateValue(timestamp:(getReservationArray.checkIn!))
-                let endDay = getdayValue(timestamp:(getReservationArray.checkOut!))
-                let endDate = getdateValue(timestamp:(getReservationArray.checkOut!))
+                let day = getdayValue(timestamp:(getReservationArray?.checkIn!)!)
+                let date = getdateValue(timestamp:(getReservationArray?.checkIn!)!)
+                let endDay = getdayValue(timestamp:(getReservationArray?.checkOut!)!)
+                let endDate = getdateValue(timestamp:(getReservationArray?.checkOut!)!)
                
             cell.checkinLabel.text = "\(day), \(date) "
             cell.checkoutLabel.text = "\(endDay), \(endDate)"
@@ -386,47 +387,47 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
                 cell.checkinLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"flexible"))!)"
                 cell.checkoutLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"flexible"))!)"
             }
-//            if(getReservationArray.listData?.listingData?.checkInStart != "Flexible")
+//            if(getReservationArray?.listData?.listingData?.checkInStart != "Flexible")
 //            {
-//               // let day = getdayValue(timestamp:(getReservationArray.listData?.listingData?.checkInStart!)!)
-//                let date = conversionRailwaytime(time:(getReservationArray.listData?.listingData?.checkInStart!)!)
+//               // let day = getdayValue(timestamp:(getReservationArray?.listData?.listingData?.checkInStart!)!)
+//                let date = conversionRailwaytime(time:(getReservationArray?.listData?.listingData?.checkInStart!)!)
 //                cell.checkinTimeLabel.text = "\(date)"
 //
 //            }
 //            else
 //            {
-//                cell.checkinTimeLabel.text = getReservationArray.listData?.listingData?.checkInStart!
+//                cell.checkinTimeLabel.text = getReservationArray?.listData?.listingData?.checkInStart!
 //            }
-            if(getReservationArray.checkInStart != "" && getReservationArray.checkInStart != ""){
-            if (getReservationArray.checkInStart == "Flexible" && getReservationArray.checkInEnd == "Flexible") {
+            if(getReservationArray?.checkInStart != "" && getReservationArray?.checkInStart != ""){
+            if (getReservationArray?.checkInStart == "Flexible" && getReservationArray?.checkInEnd == "Flexible") {
                        
                                           cell.checkinTimeLabel.text = "\((Utility.shared.getLanguage()?.value(forKey: "checkintimesmal"))!)"
                            
-                       } else if (getReservationArray.checkInStart != "Flexible" && getReservationArray.checkInEnd == "Flexible") {
-                           let date = conversionRailwaytime(time:(getReservationArray.checkInStart!))
+                       } else if (getReservationArray?.checkInStart != "Flexible" && getReservationArray?.checkInEnd == "Flexible") {
+                           let date = conversionRailwaytime(time:(getReservationArray?.checkInStart!)!)
                 
                            cell.checkinTimeLabel.text = "\((Utility.shared.getLanguage()?.value(forKey: "from"))!) \(date)"
                            
-                       } else if (getReservationArray.checkInStart == "Flexible" && getReservationArray.checkInEnd != "Flexible") {
-                           let date = conversionRailwaytime(time:(getReservationArray.checkInEnd!))
+                       } else if (getReservationArray?.checkInStart == "Flexible" && getReservationArray?.checkInEnd != "Flexible") {
+                           let date = conversionRailwaytime(time:(getReservationArray?.checkInEnd!)!)
                                           cell.checkinTimeLabel.text = "\((Utility.shared.getLanguage()?.value(forKey: "upto"))!) \(date)"
                            
-                       } else if (getReservationArray.checkInStart != "Flexible" && getReservationArray.checkInEnd != "Flexible") {
-                           let date = conversionRailwaytime(time:(getReservationArray.checkInStart!))
-                           let date1 = conversionRailwaytime(time:(getReservationArray.checkInEnd!))
+                       } else if (getReservationArray?.checkInStart != "Flexible" && getReservationArray?.checkInEnd != "Flexible") {
+                           let date = conversionRailwaytime(time:(getReservationArray?.checkInStart!)!)
+                           let date1 = conversionRailwaytime(time:(getReservationArray?.checkInEnd!)!)
                            cell.checkinTimeLabel.text = "\(date) - \(date1)"
                 }}else{
                 cell.checkinTimeLabel.text = ""
             }
-//            if(getReservationArray.listData?.listingData?.checkInEnd != "Flexible")
+//            if(getReservationArray?.listData?.listingData?.checkInEnd != "Flexible")
 //            {
-//               // let day = getdayValue(timestamp:(getReservationArray.listData?.listingData?.checkInEnd!)!)
-//                let date = conversionRailwaytime(time:(getReservationArray.listData?.listingData?.checkInEnd!)!)
+//               // let day = getdayValue(timestamp:(getReservationArray?.listData?.listingData?.checkInEnd!)!)
+//                let date = conversionRailwaytime(time:(getReservationArray?.listData?.listingData?.checkInEnd!)!)
 //                cell.checkouttimeLabel.text = "\(date)"
 //            }
 //            else
 //            {
-//                cell.checkouttimeLabel.text = getReservationArray.listData?.listingData?.checkInEnd!
+//                cell.checkouttimeLabel.text = getReservationArray?.listData?.listingData?.checkInEnd!
 //            }
             cell.checkouttimeLabel.text = ""
             return cell
@@ -438,7 +439,8 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             {
                 let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)
                 
-                let price_value = Utility.shared.getCurrencyRate(basecurrency:Utility.shared.currencyvalue_from_API_base, fromCurrency:getReservationArray.currency!, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:getReservationArray.totalWithGuestServiceFee != nil ? getReservationArray.totalWithGuestServiceFee! : 0)
+                
+                let price_value = Utility.shared.getCurrencyRate(basecurrency:Utility.shared.currencyvalue_from_API_base, fromCurrency:getReservationArray?.currency! ?? "", toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:getReservationArray?.totalWithGuestServiceFee != nil ? (getReservationArray?.totalWithGuestServiceFee!)! : 0)
                 let restricted_price =  Double(String(format: "%.2f",price_value))
                 
                 cell.priceLabel.text = "\(currencysymbol!)\(restricted_price!.clean)"
@@ -450,16 +452,16 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             {
                 let currencysymbol = Utility.shared.getSymbol(forCurrencyCode:Utility.shared.currencyvalue_from_API_base)
                 
-                let price_value = Utility.shared.getCurrencyRate(basecurrency:Utility.shared.currencyvalue_from_API_base, fromCurrency:getReservationArray.currency!, toCurrency:Utility.shared.currencyvalue_from_API_base, CurrencyRate: Utility.shared.currency_Dict, amount:getReservationArray.totalWithGuestServiceFee != nil ? getReservationArray.totalWithGuestServiceFee! : 0)
+                let price_value = Utility.shared.getCurrencyRate(basecurrency:Utility.shared.currencyvalue_from_API_base, fromCurrency:getReservationArray?.currency! ?? "", toCurrency:Utility.shared.currencyvalue_from_API_base, CurrencyRate: Utility.shared.currency_Dict, amount:getReservationArray?.totalWithGuestServiceFee != nil ? (getReservationArray?.totalWithGuestServiceFee!)! : 0)
                 let restricted_price =  Double(String(format: "%.2f",price_value))
                 cell.priceLabel.text = "\(currencysymbol!)\(restricted_price!.clean)"
             }
             
             
-            if getReservationArray.nights ?? 0 > 1{
-                cell.stayLabel.text = "\(getReservationArray.nights!) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+            if getReservationArray?.nights ?? 0 > 1{
+                cell.stayLabel.text = "\(getReservationArray?.nights!) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
             }else{
-                cell.stayLabel.text = "\(getReservationArray.nights!) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                cell.stayLabel.text = "\(getReservationArray?.nights!) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
             }
         
             
@@ -484,7 +486,7 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
         {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ItenaryaddressCell", for: indexPath)as! ItenaryaddressCell
             cell.selectionStyle = .none
-            cell.addressLabel.text = "\(getReservationArray.listData?.street != nil ? ((getReservationArray.listData?.street!)!) : ""), \(getReservationArray.listData?.city != nil ? ((getReservationArray.listData?.city!)!) : ""), \(getReservationArray.listData?.state != nil ? ((getReservationArray.listData?.state!)!) : "")-\(getReservationArray.listData?.zipcode != nil ? ((getReservationArray.listData?.zipcode!)!) : ""), \(getReservationArray.listData?.country != nil ? ((getReservationArray.listData?.country!)!) : "")"
+            cell.addressLabel.text = "\(getReservationArray?.listData?.street != nil ? ((getReservationArray?.listData?.street!)!) : ""), \(getReservationArray?.listData?.city != nil ? ((getReservationArray?.listData?.city!)!) : ""), \(getReservationArray?.listData?.state != nil ? ((getReservationArray?.listData?.state!)!) : "")-\(getReservationArray?.listData?.zipcode != nil ? ((getReservationArray?.listData?.zipcode!)!) : ""), \(getReservationArray?.listData?.country != nil ? ((getReservationArray?.listData?.country!)!) : "")"
             cell.viewListingBtn.tag = indexPath.row
             cell.viewListingBtn.addTarget(self, action: #selector(viewListingBtnTapped), for: .touchUpInside)
             
@@ -493,16 +495,16 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
         else
         {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ItenaryHostCell", for: indexPath)as! ItenaryHostCell
-            if(getReservationArray.hostData?.picture != nil)
+            if(getReservationArray?.hostData?.picture != nil)
             {
-            let listimage = (getReservationArray.hostData?.picture!)!
+            let listimage = (getReservationArray?.hostData?.picture!)!
             cell.hostImage.sd_setImage(with: URL(string: "\(IMAGE_AVATAR_MEDIUM)\(String(describing: listimage))"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
             }
-            cell.hostNameLabel.text = (getReservationArray.hostData?.firstName != nil ? getReservationArray.hostData?.firstName! : "")
+            cell.hostNameLabel.text = (getReservationArray?.hostData?.firstName != nil ? getReservationArray?.hostData?.firstName! : "")
             cell.selectionStyle = .none
             cell.messageHostBtn.tag = indexPath.row
            
-                if Utility.shared.getCurrentUserID()! as String == getReservationArray.hostData?.userId {
+                if Utility.shared.getCurrentUserID()! as String == getReservationArray?.hostData?.userId {
                 cell.messageHostBtn.isHidden = true
             }
             else {
@@ -559,7 +561,7 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             
             Utility.shared.unpublish_preview_check = false
             }
-            viewListing.listID = getReservationArray.listId ?? 0
+            viewListing.listID = getReservationArray?.listId ?? 0
             viewListing.modalPresentationStyle = .fullScreen
             self.present(viewListing, animated: true, completion: nil)
         }
@@ -609,7 +611,7 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
        
         Utility.shared.unpublish_preview_check = false
         }
-        viewListing.listID = getReservationArray.listId ?? 0
+        viewListing.listID = getReservationArray?.listId ?? 0
         viewListing.modalPresentationStyle = .fullScreen
         self.present(viewListing, animated: true, completion: nil)
     }
@@ -635,7 +637,7 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     @objc func likeBtnTapped(_ sender: UIButton!)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
             {
                 let welcomeObj = WelcomePageVC()
@@ -647,8 +649,8 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
                
                     wishlistIndex = sender.tag
                     let headerView = WhishlistPageVC()
-                    headerView.listID = getReservationArray.id ?? 0
-                headerView.listimage = getReservationArray.listData?.listPhotoName ?? "-"
+                    headerView.listID = getReservationArray?.id ?? 0
+                headerView.listimage = getReservationArray?.listData?.listPhotoName ?? "-"
                     headerView.senderID = sender.tag
                     headerView.delegate = self
                     headerView.modalPresentationStyle = .overFullScreen
@@ -663,14 +665,14 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     @objc func hostBtnTapped(_ sender: UIButton)
     {
-            if Utility().isConnectedToNetwork(){
-            if(getReservationArray.messageData?.id != nil)
+            if Utility.shared.isConnectedToNetwork(){
+            if(getReservationArray?.messageData?.id != nil)
             {
             let InboxListingObj = InboxListingVC()
-            Utility.shared.ListID = "\(getReservationArray.listId!)"
-            InboxListingObj.threadId = (getReservationArray.messageData?.id!)!
+            Utility.shared.ListID = "\(getReservationArray?.listId!)"
+            InboxListingObj.threadId = (getReservationArray?.messageData?.id!)!
                 InboxListingObj.isFromItinerary = true
-            InboxListingObj.getMessageListAPICall(threadId:(getReservationArray.messageData?.id!)!)
+            InboxListingObj.getMessageListAPICall(threadId:(getReservationArray?.messageData?.id!)!)
               InboxListingObj.modalPresentationStyle = .fullScreen
             self.present(InboxListingObj, animated: true, completion: nil)
             }

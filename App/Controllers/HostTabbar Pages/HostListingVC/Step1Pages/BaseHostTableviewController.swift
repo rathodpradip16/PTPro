@@ -12,14 +12,11 @@ import SwiftMessages
 import PTProAPI
 
 class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate,PlaceListingViewControllerDelegate{
-    
-    
-   
     // Function are here
     
     func total_guest_change(guestcount: String) {
-         let listSettings = (Utility.shared.getListSettingsArray.roomType?.listSettings!)!
-        _ = listSettings.filter({ (item) -> Bool in
+        let listSettings = Utility.shared.getListSettingsArray?.roomType?.listSettings
+        _ = listSettings?.filter({ (item) -> Bool in
             if (Utility.shared.step1ValuesInfo["roomType"]! as? Int) == item?.id
             {
                 placeLabel = (item?.itemName!)!
@@ -83,26 +80,8 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     
     //MARK: - This Property
     
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
-    var getListSettingsArray = GetListingSettingQuery.Data.GetListingSetting.Result()
-    var ProfileAPIArray = GetProfileQuery.Data.UserAccount.Result()
-    var apollo_client: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
+    var getListSettingsArray : GetListingSettingQuery.Data.GetListingSettings.Results?
+    var ProfileAPIArray : GetProfileQuery.Data.UserAccount.Result?
     var itemNameArray = [String]()
     var guestArrayCount = Int()
     var guestsDropdownArray = [String]()
@@ -170,27 +149,36 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     func GetListSettingAPICall()
     {
         let getlistsettingsquery = GetListingSettingQuery()
-        apollo_headerClient.fetch(query: getlistsettingsquery,cachePolicy: .fetchIgnoringCacheData){(result,error) in
-            
-            guard (result?.data?.getListingSettings?.results) != nil else{
-                return
+        Network.shared.apollo_headerClient.fetch(query: getlistsettingsquery,cachePolicy: .fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getListingSettings?.results) != nil else{
+                    return
+                }
+                self.getListSettingsArray = (result.data?.getListingSettings?.results)!
+                
+                self.lottieView.isHidden = true
+                self.lottieView.stop()
+            case .failure(let error): break
             }
-            self.getListSettingsArray = (result?.data?.getListingSettings?.results)!
-            
-            self.lottieView.isHidden = true
-            self.lottieView.stop()
         }
+        
     }
     //MARK: - CALL COUNTRYLIST API
     func CountryAPICAll()
     {
         let getcountrycodeQuery = GetCountrycodeQuery()
-        apollo.fetch(query: getcountrycodeQuery,cachePolicy: .fetchIgnoringCacheData){(result,error) in
-            guard (result?.data?.getCountries?.results) != nil else{
-//                self.view.makeToast("Missing Data")
-                return
+        apollo.fetch(query: getcountrycodeQuery,cachePolicy: .fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getCountries?.results) != nil else{
+                    //                self.view.makeToast("Missing Data")
+                    return
+                }
+                Utility.shared.countrylist =  ((result.data?.getCountries?.results)!) as! [GetCountrycodeQuery.Data.GetCountries.Result]
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            Utility.shared.countrylist =  ((result?.data?.getCountries?.results)!) as! [GetCountrycodeQuery.Data.GetCountry.Result]
         }
     }
     
@@ -205,211 +193,191 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     
     func updateStep3ListingAPICall(completion: (_ success:Bool) -> Void)
     {
-             
-                    let minNight:Int  = (Utility.shared.step3ValuesInfo["minNight"] as? Int) != nil ? (Utility.shared.step3ValuesInfo["minNight"] as? Int)! : 0
-                    let maxNight:Int = (Utility.shared.step3ValuesInfo["maxNight"] as? Int) != nil ? (Utility.shared.step3ValuesInfo["maxNight"] as? Int)! : 0
+        
+        let minNight:Int  = (Utility.shared.step3ValuesInfo["minNight"] as? Int) != nil ? (Utility.shared.step3ValuesInfo["minNight"] as? Int)! : 0
+        let maxNight:Int = (Utility.shared.step3ValuesInfo["maxNight"] as? Int) != nil ? (Utility.shared.step3ValuesInfo["maxNight"] as? Int)! : 0
         let from:Int = Utility.shared.step3ValuesInfo["checkInStart"] != nil && ((Utility.shared.step3ValuesInfo["checkInStart"]as? String) != "Flexible") ? Int("\(Utility.shared.step3ValuesInfo["checkInStart"]!)")! : 0
         let to:Int = Utility.shared.step3ValuesInfo["checkInEnd"] != nil && ((Utility.shared.step3ValuesInfo["checkInEnd"]as? String) != "Flexible") ? Int("\(Utility.shared.step3ValuesInfo["checkInEnd"]!)")! : 0
-                       if (maxNight != 0 && minNight > maxNight)
-                       {
-                           self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "min_nights_Greaterthan_max"))!)")
-                        completion(true)
-                           return
-                       }
-                       
-                      if (Utility.shared.step3ValuesInfo["basePrice"] != nil &&  Utility.shared.step3ValuesInfo["basePrice"] as? String == "." || Utility.shared.host_basePrice < 1)
-                       {
-                           self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "invalid_basePrice"))!)")
-                        completion(true)
-                           return
-                       }
-//        if(Utility.shared.host_basePrice == 0) {
-//            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "baseprice_require"))!)")
-//                                   completion(true)
-//                                      return
-//        }
-                      if (Utility.shared.step3ValuesInfo["cleaningPrice"] != nil &&  Utility.shared.step3ValuesInfo["cleaningPrice"] as? String == "0" || Utility.shared.step3ValuesInfo["cleaningPrice"] as? String == ".")
-                           
-                       {
-                           self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "invalid_cleaningPrice"))!)")
-                        completion(true)
-                           return
-                       }
-                        if(from >= to && from != 0 && to != 0)
-                        {
-                               self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "fromtimealert"))!)")
-                            completion(true)
-                             return
-                        }
-                       
+        if (maxNight != 0 && minNight > maxNight)
+        {
+            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "min_nights_Greaterthan_max"))!)")
+            completion(true)
+            return
+        }
+        
+        if (Utility.shared.step3ValuesInfo["basePrice"] != nil &&  Utility.shared.step3ValuesInfo["basePrice"] as? String == "." || Utility.shared.host_basePrice < 1)
+        {
+            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "invalid_basePrice"))!)")
+            completion(true)
+            return
+        }
+        //        if(Utility.shared.host_basePrice == 0) {
+        //            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "baseprice_require"))!)")
+        //                                   completion(true)
+        //                                      return
+        //        }
+        if (Utility.shared.step3ValuesInfo["cleaningPrice"] != nil &&  Utility.shared.step3ValuesInfo["cleaningPrice"] as? String == "0" || Utility.shared.step3ValuesInfo["cleaningPrice"] as? String == ".")
+            
+        {
+            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "invalid_cleaningPrice"))!)")
+            completion(true)
+            return
+        }
+        if(from >= to && from != 0 && to != 0)
+        {
+            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "fromtimealert"))!)")
+            completion(true)
+            return
+        }
+        
         if let value = Utility.shared.step3ValuesInfo["weeklyDiscount"] {
             let weeklyDiscount = Double("\(value)") ?? 0.0
-
+            
             if (weeklyDiscount >= 100){
                 self.view.makeToast( "\((Utility.shared.getLanguage()?.value(forKey:"invaliddiscount"))!)")
                 completion(true)
-                   return
+                return
             }
         }
         else {
-                if let value = Utility.shared.step3ValuesInfo["monthlyDiscount"] {
-                    let weeklyDiscount = Double("\(value)") ?? 0.0
-
-                    if (weeklyDiscount >= 100){
-                        self.view.makeToast( "\((Utility.shared.getLanguage()?.value(forKey:"invaliddiscount"))!)")
-                        completion(true)
-                           return
-                    }
+            if let value = Utility.shared.step3ValuesInfo["monthlyDiscount"] {
+                let weeklyDiscount = Double("\(value)") ?? 0.0
+                
+                if (weeklyDiscount >= 100){
+                    self.view.makeToast( "\((Utility.shared.getLanguage()?.value(forKey:"invaliddiscount"))!)")
+                    completion(true)
+                    return
                 }
+            }
         }
         
-       
-    completion(false)
-    var weekprice = String()
-    var monthprice = String()
-    if(Utility.shared.step3ValuesInfo["weeklyDiscount"] != nil)
-    {
-     weekprice = "\(Utility.shared.step3ValuesInfo["weeklyDiscount"]!)"
-    }
-    else
-    {
-        weekprice = "0"
-    }
-    if(Utility.shared.step3ValuesInfo["monthlyDiscount"] != nil)
-    {
-    monthprice  = ("\(Utility.shared.step3ValuesInfo["monthlyDiscount"]!)")
-    }
-    else
-    {
-        monthprice = "0"
-    }
-  
-
-    let updatelist = UpdateListingStep3Mutation(id: Utility.shared.step3ValuesInfo["id"] as? Int,
-                                                houseRules: Utility.shared.step3ValuesInfo["houseRules"] as? [Int],
-                                                bookingNoticeTime: "\(Utility.shared.step3ValuesInfo["bookingNoticeTime"] ?? "")",
-        checkInStart: "\(Utility.shared.step3ValuesInfo["checkInStart"] ?? "")",
-        checkInEnd: "\(Utility.shared.step3ValuesInfo["checkInEnd"] ?? "")",
-        maxDaysNotice: "\(Utility.shared.step3ValuesInfo["maxDaysNotice"] ?? "")",
-        minNight: Utility.shared.step3ValuesInfo["minNight"] as? Int,
-        maxNight: Utility.shared.step3ValuesInfo["maxNight"] as? Int,
-        basePrice: Utility.shared.host_basePrice,
-        cleaningPrice:Utility.shared.host_cleanPrice,
-        currency: "\(Utility.shared.step3ValuesInfo["currency"] ?? "")",
-        weeklyDiscount:Int(weekprice),
-        monthlyDiscount:Int(monthprice),
-        bookingType: "\(Utility.shared.step3ValuesInfo["bookingType"] ?? "")",
-        cancellationPolicy: Utility.shared.step3ValuesInfo["cancellationPolicy"] as? Int)
-    apollo_headerClient.perform(mutation: updatelist){ (result,error) in
         
-        if(result?.data?.updateListingStep3?.status == 200)
+        completion(false)
+        var weekprice = String()
+        var monthprice = String()
+        if(Utility.shared.step3ValuesInfo["weeklyDiscount"] != nil)
         {
-            self.lottieView.isHidden = true
-
-            self.manageListingStepsvalue(listId: "\(Utility.shared.step3ValuesInfo["id"]!)", currentStep: 3)
-            
-            
+            weekprice = "\(Utility.shared.step3ValuesInfo["weeklyDiscount"]!)"
         }
-        else{
-            self.view.makeToast(result?.data?.updateListingStep3?.errorMessage)
+        else
+        {
+            weekprice = "0"
+        }
+        if(Utility.shared.step3ValuesInfo["monthlyDiscount"] != nil)
+        {
+            monthprice  = ("\(Utility.shared.step3ValuesInfo["monthlyDiscount"]!)")
+        }
+        else
+        {
+            monthprice = "0"
         }
         
         
-    }
+        let updatelist = UpdateListingStep3Mutation(id: .some(Utility.shared.step3ValuesInfo["id"] as! Int),
+                                                    houseRules: .some(Utility.shared.step3ValuesInfo["houseRules"] as! [Int?]), bookingNoticeTime: .some("\(Utility.shared.step3ValuesInfo["bookingNoticeTime"] ?? "")"), checkInStart: .some("\(Utility.shared.step3ValuesInfo["checkInStart"] ?? "")"), checkInEnd: .some("\(Utility.shared.step3ValuesInfo["checkInEnd"] ?? "")"), maxDaysNotice:  .some("\(Utility.shared.step3ValuesInfo["maxDaysNotice"] ?? "")"), minNight: Utility.shared.step3ValuesInfo["minNight"] as! GraphQLNullable<Int>, maxNight: Utility.shared.step3ValuesInfo["maxNight"] as! GraphQLNullable<Int>, basePrice: .some(Utility.shared.host_basePrice), cleaningPrice: .some(Utility.shared.host_cleanPrice), currency: .some("\(Utility.shared.step3ValuesInfo["currency"] ?? "")"), weeklyDiscount: .some(Int(weekprice) ?? 0), monthlyDiscount: .some(Int(monthprice) ?? 0), blockedDates: .some([]), bookingType: Utility.shared.step3ValuesInfo["bookingType"] as! String, cancellationPolicy: .some(Utility.shared.step3ValuesInfo["cancellationPolicy"] as! Int))
+        
+        Network.shared.apollo_headerClient.perform(mutation: updatelist){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.updateListingStep3?.status,data == 200 {
+                    self.lottieView.isHidden = true
+                    self.manageListingStepsvalue(listId: "\(Utility.shared.step3ValuesInfo["id"]!)" , currentStep: 3)
+                } else {
+                    self.view.makeToast(result.data?.updateListingStep3?.errorMessage)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
     }
               
-
-    
-    
-    func manageListingStepsvalue(listId:String,currentStep:Int)
-    {
+    func manageListingStepsvalue(listId:String,currentStep:Int){
         let manageListingStepsMutation = ManageListingStepsMutation(listId:listId, currentStep:currentStep)
-        apollo_headerClient.perform(mutation: manageListingStepsMutation){ (result,error) in
-            
-            if(result?.data?.manageListingSteps?.status == 200)
-            {
-                let becomeHost = BecomeHostVC()
-                becomeHost.listID = "\(Utility.shared.createId)"
-                becomeHost.showListingStepsAPICall(listID:"\(Utility.shared.createId)")
-              //  self.view.window!.layer.add(presentrightAnimation()!, forKey: kCATransition)
-                becomeHost.modalPresentationStyle = .fullScreen
-                self.present(becomeHost, animated:false, completion: nil)
-                
-            }
-            else {
-                self.view.makeToast(result?.data?.manageListingSteps?.errorMessage)
+        Network.shared.apollo_headerClient.perform(mutation: manageListingStepsMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.manageListingSteps?.status,data == 200 {
+                    let becomeHost = BecomeHostVC()
+                    becomeHost.listID = "\(Utility.shared.createId)"
+                    becomeHost.showListingStepsAPICall(listID:"\(Utility.shared.createId)")
+                    //  self.view.window!.layer.add(presentrightAnimation()!, forKey: kCATransition)
+                    becomeHost.modalPresentationStyle = .fullScreen
+                    self.present(becomeHost, animated:false, completion: nil)
+                    
+                } else {
+                    self.view.makeToast(result.data?.manageListingSteps?.errorMessage)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
-    
-    
-    
     
     //MARK: - Update Listing Step 1
    
-    func updateListingAPICall(completion: (_ success: Bool) -> Void) {
+func updateListingAPICall(completion: (_ success: Bool) -> Void) {
     
+    
+    var bedsCount = Utility.shared.step1ValuesInfo["beds"] as? Int
+    if(bedsCount == nil) {
+        bedsCount = 0
+    }
+    if(Utility.shared.bedcount>bedsCount!)
+    {
         
-        var bedsCount = Utility.shared.step1ValuesInfo["beds"] as? Int
-        if(bedsCount == nil) {
-            bedsCount = 0
-        }
-        if(Utility.shared.bedcount>bedsCount!)
-        {
-            
-            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"bed_count_exceed"))!)")
-            completion(false)
-            return
-        }
-        if Utility.shared.step1ValuesInfo["country"] == nil || (Utility.shared.step1ValuesInfo["country"] as? String) == ""  {
-           // if self.countryValue.isBlank{
-                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "enter_country"))!)")
+        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"bed_count_exceed"))!)")
+        completion(false)
+        return
+    }
+    if Utility.shared.step1ValuesInfo["country"] == nil || (Utility.shared.step1ValuesInfo["country"] as? String) == ""  {
+        // if self.countryValue.isBlank{
+        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "enter_country"))!)")
+        completion(true)
+        return
+    }
+    if Utility.shared.step1ValuesInfo["street"] == nil || (Utility.shared.step1ValuesInfo["street"] as? String) == ""{
+        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "enter_street"))!)")
+        completion(true)
+        return
+    }
+    if Utility.shared.step1ValuesInfo["city"] == nil || (Utility.shared.step1ValuesInfo["city"] as? String) == "" {
+        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "entercity"))!)")
+        completion(true)
+        return
+    }
+    if Utility.shared.step1ValuesInfo["state"] == nil || (Utility.shared.step1ValuesInfo["state"] as? String) == "" {
+        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "enterstate"))!)")
+        completion(true)
+        return
+    }
+    if Utility.shared.step1ValuesInfo["zipcode"] == nil || (Utility.shared.step1ValuesInfo["zipcode"] as? String) == ""  {
+        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "enterzipcode"))!)")
+        completion(true)
+        return
+    }
+    else {
+        if(Utility.shared.isfromshowmap) {
             completion(true)
-                return
-            }
-            if Utility.shared.step1ValuesInfo["street"] == nil || (Utility.shared.step1ValuesInfo["street"] as? String) == ""{
-                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "enter_street"))!)")
-                completion(true)
-                return
-            }
-            if Utility.shared.step1ValuesInfo["city"] == nil || (Utility.shared.step1ValuesInfo["city"] as? String) == "" {
-                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "entercity"))!)")
-                completion(true)
-                return
-            }
-            if Utility.shared.step1ValuesInfo["state"] == nil || (Utility.shared.step1ValuesInfo["state"] as? String) == "" {
-                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "enterstate"))!)")
-                completion(true)
-                return
-            }
-            if Utility.shared.step1ValuesInfo["zipcode"] == nil || (Utility.shared.step1ValuesInfo["zipcode"] as? String) == ""  {
-                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "enterzipcode"))!)")
-                completion(true)
-                return
-            }
-         else {
-                if(Utility.shared.isfromshowmap) {
-                                   completion(true)
-
-                }  else {
-                completion(false)
-                }
+            
+        }  else {
+            completion(false)
+        }
         var bedtypeInfoArr = [[String : Any]]()
         if let bedTypeInfo = Utility.shared.step1ValuesInfo["bedTypes"] as? [Any]
         {
             for i in 0..<bedTypeInfo.count
             {
-                if let userBedTypes = bedTypeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetail.Result.UserBedsType
+                if let userBedTypes = bedTypeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserBedsType
                 {
                     
                     var bedTypeInfo = [String : Any]()
                     if userBedTypes.bedType != nil {
-                    bedTypeInfo.updateValue((userBedTypes.bedType)!, forKey: "bedType")
-                    Utility.shared.step1ValuesInfo.updateValue(userBedTypes.bedType!, forKey: "bedType")
-                    bedTypeInfo.updateValue(userBedTypes.bedCount!, forKey: "bedCount")
-                    bedtypeInfoArr.append(bedTypeInfo)
+                        bedTypeInfo.updateValue((userBedTypes.bedType)!, forKey: "bedType")
+                        Utility.shared.step1ValuesInfo.updateValue(userBedTypes.bedType!, forKey: "bedType")
+                        bedTypeInfo.updateValue(userBedTypes.bedCount!, forKey: "bedCount")
+                        bedtypeInfoArr.append(bedTypeInfo)
                     }
-                   
+                    
                 }
                 
             }
@@ -424,70 +392,70 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
             }
             Utility.shared.step1ValuesInfo.updateValue(bedTypeString.trimmingCharacters(in: .whitespaces), forKey: "bedTypes")
         }
-
-       
         
-        let createlist = CreateListingMutation(listId: Utility.shared.createId,
-                                               roomType: "\(Utility.shared.step1ValuesInfo["roomType"] ?? "")",
-            houseType: "\(Utility.shared.step1ValuesInfo["houseType"] ?? "")" ,
-            residenceType: "\(Utility.shared.step1ValuesInfo["residenceType"] ?? "")",
-            bedrooms: "\(Utility.shared.step1ValuesInfo["bedrooms"] ?? "")" ,
-            buildingSize: "\(Utility.shared.step1ValuesInfo["buildingSize"] ?? "")",
-            bedType: "\(Utility.shared.step1ValuesInfo["bedType"] ?? "")" ,
-            beds: Utility.shared.step1ValuesInfo["beds"] as? Int,
-            personCapacity: Utility.shared.step1ValuesInfo["personCapacity"] as? Int,
-            bathrooms: (Utility.shared.step1ValuesInfo["bathrooms"] as? Double),
-            bathroomType: "\(Utility.shared.step1ValuesInfo["bathroomType"] ?? "")",
-            country: "\(Utility.shared.step1ValuesInfo["country"] ?? "")",
-            street: "\(Utility.shared.step1ValuesInfo["street"] ?? "")",
-            buildingName: "\(Utility.shared.step1ValuesInfo["buildingName"] ?? "")",
-            city: "\(Utility.shared.step1ValuesInfo["city"] ?? "")",
-            state: "\(Utility.shared.step1ValuesInfo["state"] ?? "")",
-            zipcode: "\(Utility.shared.step1ValuesInfo["zipcode"] ?? "")",
-            lat: (Utility.shared.step1ValuesInfo["lat"] as! Double),
-            lng: (Utility.shared.step1ValuesInfo["lng"] as! Double),
-            bedTypes: "\(Utility.shared.step1ValuesInfo["bedTypes"] ?? "")" ,
-            isMapTouched: Utility.shared.step1ValuesInfo["isMapTouched"] as? Bool,
-            amenities: Utility.shared.step1ValuesInfo["amenities"] as? [Int?] ,
-            safetyAmenities: Utility.shared.step1ValuesInfo["safetyAmenities"] as? [Int?],
-            spaces: Utility.shared.step1ValuesInfo["spaces"] as? [Int?])
-        apollo_headerClient.perform(mutation: createlist){(result,error) in
-            
-            if(result?.data?.createListing?.status == 200)
-            {
-                
-                Utility.shared.createId = (result?.data?.createListing?.id)!
-                
-                if(Utility.shared.isfromshowmap) {
-                                   return
-                }  else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    let becomeHost = BecomeHostVC()
-                    becomeHost.listID = "\(Utility.shared.createId)"
-                    becomeHost.showListingStepsAPICall(listID:"\(Utility.shared.createId)")
-                    becomeHost.modalPresentationStyle = .fullScreen
-                    self.present(becomeHost, animated:false, completion: nil)
+        
+        
+        let createlist = CreateListingMutation(listId: .some(Utility.shared.createId),
+                                               roomType: .some("\(Utility.shared.step1ValuesInfo["roomType"] ?? "")"),
+                                               houseType: .some("\(Utility.shared.step1ValuesInfo["houseType"] ?? "")"),
+                                               residenceType: .some("\(Utility.shared.step1ValuesInfo["residenceType"] ?? "")"),
+                                               bedrooms: .some("\(Utility.shared.step1ValuesInfo["bedrooms"] ?? "")") ,
+                                               buildingSize: .some("\(Utility.shared.step1ValuesInfo["buildingSize"] ?? "")"),
+                                               bedType: .some("\(Utility.shared.step1ValuesInfo["bedType"] ?? "")") ,
+                                               beds: Utility.shared.step1ValuesInfo["beds"] as! GraphQLNullable<Int> ,
+                                               personCapacity: Utility.shared.step1ValuesInfo["personCapacity"] as! GraphQLNullable<Int> ,
+                                               bathrooms: Utility.shared.step1ValuesInfo["bathrooms"] as! GraphQLNullable<Double> ,
+                                               bathroomType: .some("\(Utility.shared.step1ValuesInfo["bathroomType"] ?? "")"),
+                                               country: .some("\(Utility.shared.step1ValuesInfo["country"] ?? "")"),
+                                               street: .some("\(Utility.shared.step1ValuesInfo["street"] ?? "")"),
+                                               buildingName: .some("\(Utility.shared.step1ValuesInfo["buildingName"] ?? "")"),
+                                               city: .some("\(Utility.shared.step1ValuesInfo["city"] ?? "")"),
+                                               state: .some("\(Utility.shared.step1ValuesInfo["state"] ?? "")"),
+                                               zipcode: .some("\(Utility.shared.step1ValuesInfo["zipcode"] ?? "")"),
+                                               lat: .some(Utility.shared.step1ValuesInfo["lat"] as! Double) ,
+                                               lng: .some(Utility.shared.step1ValuesInfo["lng"] as! Double) ,
+                                               bedTypes: .some("\(Utility.shared.step1ValuesInfo["bedTypes"] ?? "")") ,
+                                               isMapTouched: .some((Utility.shared.step1ValuesInfo["isMapTouched"] != nil)) ,
+                                               amenities: .some(Utility.shared.step1ValuesInfo["amenities"] as? [Int?] ?? []),
+                                               safetyAmenities: .some(Utility.shared.step1ValuesInfo["safetyAmenities"] as? [Int?] ?? []),
+                                               spaces: .some(Utility.shared.step1ValuesInfo["spaces"] as? [Int?] ?? []))
+        Network.shared.apollo_headerClient.perform(mutation: createlist){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createListing?.status,data == 200 {
+                    
+                    Utility.shared.createId = (result.data?.createListing?.id)!
+                    
+                    if(Utility.shared.isfromshowmap) {
+                        return
+                    }  else {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            let becomeHost = BecomeHostVC()
+                            becomeHost.listID = "\(Utility.shared.createId)"
+                            becomeHost.showListingStepsAPICall(listID:"\(Utility.shared.createId)")
+                            becomeHost.modalPresentationStyle = .fullScreen
+                            self.present(becomeHost, animated:false, completion: nil)
+                        }
+                    }
+                    
+                } else {
+                    self.view.makeToast(result.data?.createListing?.errorMessage!)
                 }
-                }
-              
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            else{
-                
-                self.view.makeToast(result?.data?.createListing?.errorMessage)
-            }
-           
-        }
         }
     }
+}
     
     // MARK: - Update listing Step2
     func updatelistingStep2APICall(completion: (_ success:Bool) -> Void)
     {
         let text_Title = "\(Utility.shared.step2ValuesInfo["title"] ?? "")".trimmingCharacters(in:.whitespacesAndNewlines)
-         let text_Title1 = "\(Utility.shared.step2ValuesInfo["description"] ?? "")".trimmingCharacters(in:.whitespacesAndNewlines)
+        let text_Title1 = "\(Utility.shared.step2ValuesInfo["description"] ?? "")".trimmingCharacters(in:.whitespacesAndNewlines)
         if(text_Title == "")
         {
-         self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"addtitlealert"))!)")
+            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"addtitlealert"))!)")
             completion(true)
             return
         }
@@ -500,26 +468,26 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
         }
         else {
             completion(false)
-        let UpdateListingStep2mutation = UpdateListingStep2Mutation(id:Utility.shared.step2ValuesInfo["id"] != nil ? Utility.shared.step2ValuesInfo["id"] as! Int : 0, description:"\(Utility.shared.step2ValuesInfo["description"] ?? "")", title:"\(Utility.shared.step2ValuesInfo["title"] ?? "")", coverPhoto:Utility.shared.step2ValuesInfo["coverPhoto"] != nil ? Utility.shared.step2ValuesInfo["coverPhoto"] as! Int : 0)
-        apollo_headerClient.perform(mutation: UpdateListingStep2mutation){ (result,error) in
-            
-            if(result?.data?.updateListingStep2?.status == 200)
-            {
-               
-                let becomeHostObj = BecomeHostVC()
-                becomeHostObj.listID = "\(Utility.shared.step2ValuesInfo["id"] != nil ? Utility.shared.step2ValuesInfo["id"] as! Int : 0)"
-                becomeHostObj.showListingStepsAPICall(listID:"\(Utility.shared.step2ValuesInfo["id"] != nil ? Utility.shared.step2ValuesInfo["id"] as! Int : 0)")
-               // self.view.window!.layer.add(presentrightAnimation()!, forKey: kCATransition)
-                   becomeHostObj.modalPresentationStyle = .fullScreen
-                self.present(becomeHostObj, animated:false, completion: nil)
-                
+            let UpdateListingStep2mutation = UpdateListingStep2Mutation(id:Utility.shared.step2ValuesInfo["id"] != nil ? .some(Utility.shared.step2ValuesInfo["id"] as! Int) : .some(0), description:.some("\(Utility.shared.step2ValuesInfo["description"] ?? "")"), title:.some("\(Utility.shared.step2ValuesInfo["title"] ?? "")"), coverPhoto:Utility.shared.step2ValuesInfo["coverPhoto"] != nil ? .some(Utility.shared.step2ValuesInfo["coverPhoto"] as! Int) : .some(0))
+            Network.shared.apollo_headerClient.perform(mutation: UpdateListingStep2mutation){  response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.updateListingStep2?.status,data == 200 {
+                        
+                        let becomeHostObj = BecomeHostVC()
+                        becomeHostObj.listID = "\(Utility.shared.step2ValuesInfo["id"] != nil ? Utility.shared.step2ValuesInfo["id"] as! Int : 0)"
+                        becomeHostObj.showListingStepsAPICall(listID:"\(Utility.shared.step2ValuesInfo["id"] != nil ? Utility.shared.step2ValuesInfo["id"] as! Int : 0)")
+                        // self.view.window!.layer.add(presentrightAnimation()!, forKey: kCATransition)
+                        becomeHostObj.modalPresentationStyle = .fullScreen
+                        self.present(becomeHostObj, animated:false, completion: nil)
+                        
+                    } else {
+                        self.view.makeToast(result.data?.updateListingStep2?.errorMessage)
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
             }
-            else {
-                self.view.makeToast(result?.data?.updateListingStep2?.errorMessage)
-                
-               
-            }
-        }
         }
     }
     
@@ -530,62 +498,55 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
             if (Utility.shared.getCurrentUserID() != nil){
                 
                 let profileQuery = GetProfileQuery()
-                apollo_client = {
-                    let configuration = URLSessionConfiguration.default
-                    // Add additional headers as needed
-                    configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                    
-                    let url = URL(string:graphQLEndpoint)!
-                    
-                    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-                    
-                }()
                 
-                apollo_client.fetch(query: profileQuery, cachePolicy: .fetchIgnoringCacheData){ [self]  (result, error) in
-                    
-                    guard (result?.data?.userAccount?.result) != nil else {
+                Network.shared.apollo_headerClient.fetch(query: profileQuery, cachePolicy: .fetchIgnoringCacheData){ response in
+                    switch response {
+                    case .success(let result):
                         
-                        if result?.data?.userAccount?.status == 500{
-                            let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result?.data?.userAccount?.errorMessage, preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                                UserDefaults.standard.removeObject(forKey: "user_token")
-                                UserDefaults.standard.removeObject(forKey: "user_id")
-                                UserDefaults.standard.removeObject(forKey: "password")
-                                UserDefaults.standard.removeObject(forKey: "currency_rate")
-                                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                                let welcomeObj = WelcomePageVC()
-                                appDelegate.setInitialViewController(initialView: welcomeObj)
-                            }))
-                            self.present(alert, animated: true, completion: nil)
-                            return
-                        }else{
-                        print("Missing Data")
-                        return
+                        guard (result.data?.userAccount?.result) != nil else {
+                            
+                            if result.data?.userAccount?.status == 500{
+                                let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.userAccount?.errorMessage, preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                                    UserDefaults.standard.removeObject(forKey: "user_token")
+                                    UserDefaults.standard.removeObject(forKey: "user_id")
+                                    UserDefaults.standard.removeObject(forKey: "password")
+                                    UserDefaults.standard.removeObject(forKey: "currency_rate")
+                                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                    let welcomeObj = WelcomePageVC()
+                                    appDelegate.setInitialViewController(initialView: welcomeObj)
+                                }))
+                                self.present(alert, animated: true, completion: nil)
+                                return
+                            }else{
+                                print("Missing Data")
+                                return
+                            }
                         }
-                    }
-                    self.ProfileAPIArray = ((result?.data?.userAccount?.result)!)
-                    
-                    Utility.shared.userName  = "\(ProfileAPIArray.firstName != nil ? ProfileAPIArray.firstName! : "User")!"
-                  
-                    
-                    if let profImage = ProfileAPIArray.picture{
-                        Utility.shared.pickedimageString = "\(IMAGE_AVATAR_MEDIUM)\(profImage)"
-                    }
-                    else {
-                        Utility.shared.pickedimageString = "avatar"
-                    }
-                    
-                    self.setUpUI()
-    
-                    if (result?.data?.userAccount?.result?.picture) == nil {
-                        Utility.shared.isprofilepictureVerified = true
-                      
-                    }else{
+                        self.ProfileAPIArray = ((result.data?.userAccount?.result)!)
                         
-                        Utility.shared.isprofilepictureVerified = false
+                        Utility.shared.userName  = "\(String(describing: self.ProfileAPIArray?.firstName != nil ? self.ProfileAPIArray?.firstName! : "User"))!"
+                        
+                        if let profImage = self.ProfileAPIArray?.picture{
+                            Utility.shared.pickedimageString = "\(IMAGE_AVATAR_MEDIUM)\(profImage)"
+                        }
+                        else {
+                            Utility.shared.pickedimageString = "avatar"
+                        }
+                        
+                        self.setUpUI()
+                        
+                        if (result.data?.userAccount?.result?.picture) == nil {
+                            Utility.shared.isprofilepictureVerified = true
+                            
+                        }else{
+                            
+                            Utility.shared.isprofilepictureVerified = false
+                        }
+                        
+                    case .failure(let error):
+                        self.view.makeToast(error.localizedDescription)
                     }
-                    
-                   
                 }
             }
         }else{
@@ -598,10 +559,10 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     {
        
         if(Utility.shared.pickedimageString == "") {
-        overlayUsername.text = "Hi, \(ProfileAPIArray.firstName != nil ? ProfileAPIArray.firstName! : "User")!"
+            overlayUsername.text = "Hi, \(ProfileAPIArray?.firstName != nil ? ProfileAPIArray?.firstName! : "User")!"
         overlaystep3.text = "\(Utility.shared.getLanguage()?.value(forKey: "ready") ?? "")"
         
-        if let profImage = ProfileAPIArray.picture{
+            if let profImage = ProfileAPIArray?.picture{
      overlayUserImage.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(profImage)"), placeholderImage: #imageLiteral(resourceName: "unknown"))
             overlayUserImage.contentMode = .scaleAspectFill
         }
@@ -711,9 +672,9 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     
     func setRoomType()
     {
-        if(Utility.shared.getListSettingsArray.roomType != nil)
+        if(Utility.shared.getListSettingsArray?.roomType != nil)
         {
-        let listSettings = (Utility.shared.getListSettingsArray.roomType?.listSettings!)!
+            let listSettings = (Utility.shared.getListSettingsArray?.roomType?.listSettings!)!
         for item in listSettings
         {
             itemNameArray.append((item?.itemName)!)
@@ -747,15 +708,15 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     
     func setPersonCapacity()
     {
-        if(Utility.shared.getListSettingsArray.personCapacity != nil)
+        if(Utility.shared.getListSettingsArray?.personCapacity != nil)
         {
-        if let guestcountStartValue = Utility.shared.getListSettingsArray.personCapacity?.listSettings![0]?.startValue, let guestcountEndValue = Utility.shared.getListSettingsArray.personCapacity?.listSettings![0]?.endValue {
+            if let guestcountStartValue = Utility.shared.getListSettingsArray?.personCapacity?.listSettings![0]?.startValue, let guestcountEndValue = Utility.shared.getListSettingsArray?.personCapacity?.listSettings![0]?.endValue {
            // guestArrayCount = guestcountEndValue - guestcountStartValue
             guestArrayCount = guestcountEndValue
         }
         
         var guestWord = ""
-        if Utility.shared.getListSettingsArray.personCapacity?.listSettings![0]?.startValue == 1
+            if Utility.shared.getListSettingsArray?.personCapacity?.listSettings![0]?.startValue == 1
         {
             guestWord = "\(Utility.shared.getLanguage()?.value(forKey: "guest")as! String)"
         }else{
@@ -767,13 +728,13 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
         {
             if i == 0
             {
-                incrVal = (Utility.shared.getListSettingsArray.personCapacity?.listSettings![0]?.startValue!)!
+                incrVal = (Utility.shared.getListSettingsArray?.personCapacity?.listSettings![0]?.startValue!)!
 //                guestsDropdownArray.insert("\(Utility.shared.getLanguage()?.value(forKey: "Cap_for")as! String) \(getListSettingsArray.personCapacity?.listSettings![0]?.startValue ?? 0) \(Utility.shared.getLanguage()?.value(forKey: "guest")as! String)\(incrVal > 1 ? "s" : "")" , at: i)
                 
                 if incrVal > 1{
-                    guestsDropdownArray.insert("\(Utility.shared.getLanguage()?.value(forKey: "Cap_for")as! String) \(getListSettingsArray.personCapacity?.listSettings![0]?.startValue ?? 0) \(Utility.shared.getLanguage()?.value(forKey: "CapGuests") ?? "Guests")" , at: i)
+                    guestsDropdownArray.insert("\(Utility.shared.getLanguage()?.value(forKey: "Cap_for")as! String) \(getListSettingsArray?.personCapacity?.listSettings![0]?.startValue ?? 0) \(Utility.shared.getLanguage()?.value(forKey: "CapGuests") ?? "Guests")" , at: i)
                 }else{
-                    guestsDropdownArray.insert("\(Utility.shared.getLanguage()?.value(forKey: "Cap_for")as! String) \(getListSettingsArray.personCapacity?.listSettings![0]?.startValue ?? 0) \(Utility.shared.getLanguage()?.value(forKey: "guest") ?? "Guest")" , at: i)
+                    guestsDropdownArray.insert("\(Utility.shared.getLanguage()?.value(forKey: "Cap_for")as! String) \(getListSettingsArray?.personCapacity?.listSettings![0]?.startValue ?? 0) \(Utility.shared.getLanguage()?.value(forKey: "guest") ?? "Guest")" , at: i)
                 }
             }else {
                 incrVal = (incrVal + 1)
@@ -790,7 +751,7 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
         {
             guestLabel = guestsDropdownArray.first!
             listValuePicker.selectRow(0, inComponent: 0, animated: true)
-            Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray.personCapacity?.listSettings![0]?.startValue!)!, forKey: "personCapacity")
+            Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray?.personCapacity?.listSettings![0]?.startValue!)!, forKey: "personCapacity")
         }else{
             if((Utility.shared.step1ValuesInfo["personCapacity"]!as! Int) <= 1)
             {
@@ -1038,7 +999,7 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
         {
             placeLabel = itemNameArray[row]
             listValuePicker.selectRow(row, inComponent: component, animated: true)
-            Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray.roomType?.listSettings![row]?.id!)!, forKey: "roomType")
+            Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray?.roomType?.listSettings![row]?.id!)!, forKey: "roomType")
         }else{
             guestLabel = guestsDropdownArray[row]
             listValuePicker.selectRow(row, inComponent: component, animated: true)

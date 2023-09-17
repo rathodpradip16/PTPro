@@ -24,16 +24,7 @@ class AboutmeVC: UIViewController,UITextViewDelegate{
     @IBOutlet var cancelBtn: UIButton!
     var lottieView: LottieAnimationView!
     @IBOutlet var containerView: UIView!
-    var aboutvaluArray = GetProfileQuery.Data.UserAccount.Result()
-    let apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-      
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
+    var aboutvaluArray : GetProfileQuery.Data.UserAccount.Result?
     
     func lottienextAnimation(sender:UIButton)
     {
@@ -65,10 +56,10 @@ class AboutmeVC: UIViewController,UITextViewDelegate{
         }
         else {
             
-        if(aboutvaluArray.info != "" && aboutvaluArray.info != nil)
+            if(aboutvaluArray?.info != "" && aboutvaluArray?.info != nil)
         {
         let trimToCharacter = 250
-        let shortString = "\(aboutvaluArray.info!.prefix(trimToCharacter))"
+                let shortString = "\(aboutvaluArray?.info!.prefix(trimToCharacter))"
         aboutTxtView.text = shortString
         self.countLabel.text =  "\(aboutTxtView.text.count)/250"
             subTitleLbl.isHidden = true
@@ -139,17 +130,20 @@ class AboutmeVC: UIViewController,UITextViewDelegate{
     }
     func EditProfileAPICall(fieldName:String,fieldValue:String)
     {
-        let editprofileMutation = EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: fieldValue, deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
-        apollo_headerClient.perform(mutation: editprofileMutation){ (result,error) in
-            
-            if(result?.data?.userUpdate?.status == 200)
-            {
-                self.lottieView.isHidden = true
-                print("success")
-                self.dismiss(animated: false, completion: nil)
-            }
-            else {
-                self.view.makeToast(result?.data?.userUpdate?.errorMessage)
+        let editprofileMutation = EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: .some(fieldValue) , deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
+        Network.shared.apollo_headerClient.perform(mutation: editprofileMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.userUpdate?.status,data == 200 {
+                    self.lottieView.isHidden = true
+                    print("success")
+                    self.dismiss(animated: false, completion: nil)
+                    
+                } else {
+                    self.view.makeToast(result.data?.userUpdate?.errorMessage!)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
@@ -166,7 +160,7 @@ class AboutmeVC: UIViewController,UITextViewDelegate{
   
 
     @objc func keyboardWillShow(sender: NSNotification) {
-         //  if Utility().isConnectedToNetwork(){
+         //  if Utility.shared.isConnectedToNetwork(){
            
         if(!subTitleLbl.isHidden) {
         subTitleLbl.isHidden = true
@@ -179,7 +173,7 @@ class AboutmeVC: UIViewController,UITextViewDelegate{
     }
     @objc func keyboardWillHide(sender: NSNotification) {
         
-       // if Utility().isConnectedToNetwork(){
+       // if Utility.shared.isConnectedToNetwork(){
       //  let info = sender.userInfo!
       //  self.inboxlistingTable.frame.size.height += keyboardFrame.height-10
       //  self.aboutTxtView.frame.size.height = FULLHEIGHT - self.aboutTxtView.frame.origin.y

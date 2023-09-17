@@ -23,17 +23,8 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var offlineView: UIView!
-    var viewListingArray = ViewListingDetailsQuery.Data.ViewListing.Result()
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
-     var cancelResrvarionArray  = CancellationDataQuery.Data.CancelReservationDatum.Result()
+    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
+    var cancelResrvarionArray  : CancellationDataQuery.Data.CancelReservationData.Results?
     var checkinDate = String()
     var checkoutDate = String()
     var textviewValue = String()
@@ -131,7 +122,7 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(cancelResrvarionArray.reservationId != nil)
+        if(cancelResrvarionArray?.reservationId != nil)
         {
         return 1
         }
@@ -169,21 +160,21 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             cell.selectionStyle = .none
             
             var listTypeString = ""
-            listTypeString = "\(cancelResrvarionArray.listData?.roomType ?? "")"
-            if ((cancelResrvarionArray.listData?.beds ?? 0) > 1){
-                listTypeString = listTypeString + " / " + "\(cancelResrvarionArray.listData?.beds ?? 0)" + " beds"
-            }else if ((cancelResrvarionArray.listData?.beds ?? 0) == 1){
-                listTypeString = listTypeString + " / " + "\(cancelResrvarionArray.listData?.beds ?? 0)" + " bed"
+            listTypeString = "\(cancelResrvarionArray?.listData?.roomType ?? "")"
+            if ((cancelResrvarionArray?.listData?.beds ?? 0) > 1){
+                listTypeString = listTypeString + " / " + "\(cancelResrvarionArray?.listData?.beds ?? 0)" + " beds"
+            }else if ((cancelResrvarionArray?.listData?.beds ?? 0) == 1){
+                listTypeString = listTypeString + " / " + "\(cancelResrvarionArray?.listData?.beds ?? 0)" + " bed"
             }
            
             cell.lblRoomType.text = listTypeString
             
             
            
-            cell.lblDescription.text = cancelResrvarionArray.listData?.title
+            cell.lblDescription.text = cancelResrvarionArray?.listData?.title
             
-            let reviewsCount = cancelResrvarionArray.listData?.reviewsCount ?? 0
-            let ratings = cancelResrvarionArray.listData?.reviewsStarRating ?? 0
+            let reviewsCount = cancelResrvarionArray?.listData?.reviewsCount ?? 0
+            let ratings = cancelResrvarionArray?.listData?.reviewsStarRating ?? 0
             
             let value1 = Float("\(reviewsCount)") ?? 0.0
             let value2 = Float("\(ratings)") ?? 0.0
@@ -205,13 +196,13 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 cell.lblDescriptionTop.constant = 0
             }
     
-            if((cancelResrvarionArray.listData?.reviewsCount!)! > 0)
+            if((cancelResrvarionArray?.listData?.reviewsCount!)! > 0)
             {
-                if((cancelResrvarionArray.listData?.reviewsCount!)! == 1) {
-                    cell.lblReview.text = "\u{2022} \(cancelResrvarionArray.listData?.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)"
+                if((cancelResrvarionArray?.listData?.reviewsCount!)! == 1) {
+                    cell.lblReview.text = "\u{2022} \(cancelResrvarionArray?.listData?.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)"
                 }
                 else {
-                cell.lblReview.text = "\u{2022} \(cancelResrvarionArray.listData?.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"reviews"))!)"
+                cell.lblReview.text = "\u{2022} \(cancelResrvarionArray?.listData?.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"reviews"))!)"
                 }
             }
             else
@@ -219,7 +210,7 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 cell.lblReview.text = "\u{2022} \((Utility.shared.getLanguage()?.value(forKey:"delete_no"))!) \((Utility.shared.getLanguage()?.value(forKey:"reviews"))!)"
                 
             }
-            if let imgURL = cancelResrvarionArray.listData?.listPhotos?[0]?.name {
+            if let imgURL = cancelResrvarionArray?.listData?.listPhotos?[0]?.name {
             cell.imgView.sd_setImage(with: URL(string: "\(IMAGE_LISTING_MEDIUM)\(imgURL)"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
                 cell.imgView.halfroundedCorners(corners:[.topLeft, .bottomRight] , radius: 10)
            print(imgURL)
@@ -233,38 +224,38 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             let cell = tableView.dequeueReusableCell(withIdentifier: "tripscancellCell", for: indexPath)as! tripscancellCell
             cell.selectionStyle = .none
            // cell.backgroundColor = .gray
-//            cell.startLabel.text = "\(cancelResrvarionArray.startedIn!) \((Utility.shared.getLanguage()?.value(forKey:"day"))!)\(cancelResrvarionArray.startedIn! > 1 ? "s" : "")"
+//            cell.startLabel.text = "\(cancelResrvarionArray?.startedIn!) \((Utility.shared.getLanguage()?.value(forKey:"day"))!)\(cancelResrvarionArray?.startedIn! > 1 ? "s" : "")"
             
             
-            if cancelResrvarionArray.startedIn ?? 0 > 1{
-                cell.startLabel.text = "\(cancelResrvarionArray.startedIn!) \((Utility.shared.getLanguage()?.value(forKey:"days")) ?? "days")"
+            if cancelResrvarionArray?.startedIn ?? 0 > 1{
+                cell.startLabel.text = "\(cancelResrvarionArray?.startedIn!) \((Utility.shared.getLanguage()?.value(forKey:"days")) ?? "days")"
             }else{
-                cell.startLabel.text = "\(cancelResrvarionArray.startedIn!) \((Utility.shared.getLanguage()?.value(forKey:"day"))!)"
+                cell.startLabel.text = "\(cancelResrvarionArray?.startedIn!) \((Utility.shared.getLanguage()?.value(forKey:"day"))!)"
             }
             
-             let night = Double(cancelResrvarionArray.stayingFor!)
+           let night = Double(cancelResrvarionArray?.stayingFor! ?? 0.0)
             
             
-            if cancelResrvarionArray.stayingFor ?? 0 > 1{
+            if cancelResrvarionArray?.stayingFor ?? 0 > 1{
                 cell.nightsLabel.text = "\(night.clean) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights") - \(checkinDate) \((Utility.shared.getLanguage()?.value(forKey:"tosmall"))!) \(checkoutDate)"
             }else{
                 cell.nightsLabel.text = "\(night.clean) \((Utility.shared.getLanguage()?.value(forKey:"night"))!) - \(checkinDate) \((Utility.shared.getLanguage()?.value(forKey:"tosmall"))!) \(checkoutDate)"
             }
             
             
-            if cancelResrvarionArray.guests ?? 0 > 1{
-                cell.travellingLabel.text = "\(cancelResrvarionArray.guests!) \((Utility.shared.getLanguage()?.value(forKey:"CapGuests")) ?? "Guests")"
+            if cancelResrvarionArray?.guests ?? 0 > 1{
+                cell.travellingLabel.text = "\(cancelResrvarionArray?.guests!) \((Utility.shared.getLanguage()?.value(forKey:"CapGuests")) ?? "Guests")"
             }else{
-                cell.travellingLabel.text = "\(cancelResrvarionArray.guests!) \((Utility.shared.getLanguage()?.value(forKey:"guest"))!)"
+                cell.travellingLabel.text = "\(cancelResrvarionArray?.guests!) \((Utility.shared.getLanguage()?.value(forKey:"guest"))!)"
             }
             
 //            if(!Utility.shared.host_cancel_isfromCancel)
 //            {
-//            cell.tellLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"tell"))!) \(cancelResrvarionArray.hostName!) \((Utility.shared.getLanguage()?.value(forKey:"whycancel"))!)"
+//            cell.tellLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"tell"))!) \(cancelResrvarionArray?.hostName!) \((Utility.shared.getLanguage()?.value(forKey:"whycancel"))!)"
 //            }
 //            else
 //            {
-//              cell.tellLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"tell"))!) \(cancelResrvarionArray.guestName!) \((Utility.shared.getLanguage()?.value(forKey:"whycancel"))!)"
+//              cell.tellLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"tell"))!) \(cancelResrvarionArray?.guestName!) \((Utility.shared.getLanguage()?.value(forKey:"whycancel"))!)"
 //            }
             return cell
         }
@@ -328,15 +319,15 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             
             
             
-            let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: cancelResrvarionArray.currency!)
-            let restricted_price = Double(String(format: "%.2f",cancelResrvarionArray.nonRefundableNightPrice!))
+            let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: cancelResrvarionArray?.currency! ?? "")
+            let restricted_price = Double(String(format: "%.2f",cancelResrvarionArray?.nonRefundableNightPrice! ?? 0.0))
             if(restricted_price! < 0) {
                 cell.priceLAbel.attributedText = "\(currencysymbol!) 0.0".strikingThrough()
             }
             else {
             cell.priceLAbel.attributedText = "\(currencysymbol!)\(restricted_price!.clean)".strikingThrough()
             }
-            let total_price = Double(String(format: "%.2f",cancelResrvarionArray.refundToGuest!)) ?? 0.0
+            let total_price = Double(String(format: "%.2f",cancelResrvarionArray?.refundToGuest! ?? 0.0)) ?? 0.0
             if(total_price > 0.0)
             
             {
@@ -357,14 +348,14 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             }
             if(!Utility.shared.host_cancel_isfromCancel)
             {
-            cell.nameLabel.text = cancelResrvarionArray.hostName!
+            cell.nameLabel.text = cancelResrvarionArray?.hostName!
                
             }
             else
             {
-             cell.nameLabel.text = cancelResrvarionArray.guestName!
+             cell.nameLabel.text = cancelResrvarionArray?.guestName!
             }
-//            cell.titleLabel.text = cancelResrvarionArray.listData?.title!
+//            cell.titleLabel.text = cancelResrvarionArray?.listData?.title!
             let tap = UITapGestureRecognizer(target: self, action: #selector(TripsCancelVC.titleClicked))
          
             //let tap = UITapGestureRecognizer(target: self, action: #selector(titleClicked))
@@ -439,31 +430,31 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
                 {
                     let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)
-                    let from_currency = cancelResrvarionArray.listData?.listingData?.currency!
-                   // let currency_amount = (cancelResrvarionArray.listData?.listingData?.basePrice!)!
-                    let currency_amount = (cancelResrvarionArray.isSpecialPriceAverage!)
+                    let from_currency = cancelResrvarionArray?.listData?.listingData?.currency!
+                   // let currency_amount = (cancelResrvarionArray?.listData?.listingData?.basePrice!)!
+                    let currency_amount = (cancelResrvarionArray?.isSpecialPriceAverage!) ?? 0.0
                     let restricted_price =  Double(String(format: "%.2f",currency_amount))
                     
                     
-                    if cancelResrvarionArray.stayingFor ?? 0.0 > 1.0{
-                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean)  x \(cancelResrvarionArray.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                    if cancelResrvarionArray?.stayingFor ?? 0.0 > 1.0{
+                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean)  x \(cancelResrvarionArray?.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                     }else{
-                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean)  x \(cancelResrvarionArray.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean)  x \(cancelResrvarionArray?.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                     }
                 }
                 else
                 {
                     let currencysymbol = Utility.shared.getSymbol(forCurrencyCode:Utility.shared.currencyvalue_from_API_base)
-                    let from_currency = cancelResrvarionArray.listData?.listingData?.currency!
-                    let currency_amount = cancelResrvarionArray.isSpecialPriceAverage!
+                    let from_currency = cancelResrvarionArray?.listData?.listingData?.currency!
+                    let currency_amount = cancelResrvarionArray?.isSpecialPriceAverage! ?? 0.0
                     let restricted_price =  Double(String(format: "%.2f",currency_amount))
                     
-//                    cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean) x \(cancelResrvarionArray.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(cancelResrvarionArray.stayingFor! > 1 ? "s" : "")"
+//                    cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean) x \(cancelResrvarionArray?.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(cancelResrvarionArray?.stayingFor! > 1 ? "s" : "")"
                     
-                    if cancelResrvarionArray.stayingFor ?? 0.0 > 1.0{
-                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean) x \(cancelResrvarionArray.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                    if cancelResrvarionArray?.stayingFor ?? 0.0 > 1.0{
+                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean) x \(cancelResrvarionArray?.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                     }else{
-                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean) x \(cancelResrvarionArray.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean) x \(cancelResrvarionArray?.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                     }
                 }
                 cell.totalLabel.isHidden = true
@@ -471,26 +462,26 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             
             if(!Utility.shared.host_cancel_isfromCancel){
                 
-                self.profileName = cancelResrvarionArray.hostName ?? ""
+                self.profileName = cancelResrvarionArray?.hostName ?? ""
             }
             else {
                 
-                self.profileName = cancelResrvarionArray.guestName ?? ""
+                self.profileName = cancelResrvarionArray?.guestName ?? ""
             }
             
             
-            if(cancelResrvarionArray.hostProfilePicture != nil)
+            if(cancelResrvarionArray?.hostProfilePicture != nil)
             {
                 if(!Utility.shared.host_cancel_isfromCancel)
                 {
-            let listimage = cancelResrvarionArray.hostProfilePicture!
+            let listimage = cancelResrvarionArray?.hostProfilePicture!
                    
                 
             cell.Listimage.sd_setImage(with: URL(string: "\(IMAGE_AVATAR_MEDIUM)\(listimage)"), placeholderImage: #imageLiteral(resourceName: "unknown"))
                 }
-                else if(cancelResrvarionArray.guestProfilePicture != nil)
+                else if(cancelResrvarionArray?.guestProfilePicture != nil)
                 {
-                    let listimage = cancelResrvarionArray.guestProfilePicture!
+                    let listimage = cancelResrvarionArray?.guestProfilePicture!
                     
                     cell.Listimage.sd_setImage(with: URL(string: "\(IMAGE_AVATAR_MEDIUM)\(listimage)"), placeholderImage: #imageLiteral(resourceName: "unknown"))
                 }
@@ -503,7 +494,7 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 cell.Listimage.image = #imageLiteral(resourceName: "unknown")
             }
             
-            if(cancelResrvarionArray.nonRefundableNightPrice! <= 0 && !Utility.shared.host_cancel_isfromCancel)
+            if(cancelResrvarionArray?.nonRefundableNightPrice! ?? 0 <= 0 && !Utility.shared.host_cancel_isfromCancel)
             {
 //                cell.totalLabel.frame = CGRect(x: cell.totalLabel.frame.origin.x, y: 225, width: cell.totalLabel.frame.size.width, height: 35)
 //                 cell.inLabel.frame = CGRect(x: cell.inLabel.frame.origin.x, y: 225, width: cell.inLabel.frame.size.width, height: 30)
@@ -519,7 +510,7 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             }
             
             
-            if(cancelResrvarionArray.refundToGuest! == 0 )
+            if(cancelResrvarionArray?.refundToGuest! == 0 )
             
             {
                 cell.totalLabel.isHidden = true
@@ -598,7 +589,7 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
     @objc func cancelBtnTapped(_ sender: UIButton)
     {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         if(textviewValue.containsNothing)
         {
             self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"messagealert"))!)")
@@ -630,7 +621,7 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         }
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
         }
     }
@@ -692,28 +683,33 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     
 func getcancellationAPICall(reservationId:Int,userType:String,currency:String)
-{
-    let getcancellationquery = CancellationDataQuery(reservationId: reservationId, userType: userType, currency: currency)
-    apollo_headerClient.fetch(query: getcancellationquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-        guard (result?.data?.cancelReservationData?.results) != nil else{
-            print("Missing Data")
-           // self.lottieView.isHidden = true
-            
-            self.view.makeToast(result?.data?.cancelReservationData?.errorMessage!)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.dismiss(animated: false, completion: nil)
+    {
+        let getcancellationquery = CancellationDataQuery(reservationId: reservationId, userType: userType, currency: .some(currency))
+        Network.shared.apollo_headerClient.fetch(query: getcancellationquery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.cancelReservationData?.results) != nil else{
+                    print("Missing Data")
+                    // self.lottieView.isHidden = true
+                    
+                    self.view.makeToast(result.data?.cancelReservationData?.errorMessage!)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        self.dismiss(animated: false, completion: nil)
+                    }
+                    return
+                    
+                }
+                
+                self.cancelResrvarionArray = (result.data?.cancelReservationData?.results)!
+                self.viewDetailAPICall(listid: self.listID)
+                //        self.cancelTable.reloadData()
+                //        self.cancelTable.layoutIfNeeded()
+                //self.lottieView.isHidden = true
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            return
             
         }
-        
-        self.cancelResrvarionArray = (result?.data?.cancelReservationData?.results)!
-        self.viewDetailAPICall(listid: self.listID)
-//        self.cancelTable.reloadData()
-//        self.cancelTable.layoutIfNeeded()
-        //self.lottieView.isHidden = true
-       
-    }
     }
     func getCurrencyRate(basecurrency:String,fromCurrency:String,toCurrency:String,CurrencyRate:NSDictionary,amount:Double) -> Double
     {
@@ -734,67 +730,74 @@ func getcancellationAPICall(reservationId:Int,userType:String,currency:String)
     
     func cancellationBookingAPICall()
     {
-        if(cancelResrvarionArray.payoutToHost == nil)
+        if(cancelResrvarionArray?.payoutToHost == nil)
         {
-           cancelResrvarionArray.payoutToHost = 0
+    //        cancelResrvarionArray?.payoutToHost = 0
         }
-        let cancelBookingMutation = CancelReservationMutation(reservationId: cancelResrvarionArray.reservationId!, cancellationPolicy: cancelResrvarionArray.cancellationPolicy!, refundToGuest: cancelResrvarionArray.refundToGuest!, payoutToHost: cancelResrvarionArray.payoutToHost!, guestServiceFee: cancelResrvarionArray.guestServiceFee!, hostServiceFee: cancelResrvarionArray.hostServiceFee!, total: cancelResrvarionArray.total!, currency: cancelResrvarionArray.currency!, threadId: cancelResrvarionArray.threadId!, cancelledBy: cancelResrvarionArray.cancelledBy!, message: textviewValue, checkIn: cancelResrvarionArray.checkIn!, checkOut: cancelResrvarionArray.checkOut!, guests: cancelResrvarionArray.guests!)
-        apollo_headerClient.perform(mutation: cancelBookingMutation){(result,error)in
+        let cancelBookingMutation = CancelReservationMutation(reservationId: cancelResrvarionArray?.reservationId! ?? 0, cancellationPolicy: cancelResrvarionArray?.cancellationPolicy! ?? "", refundToGuest: cancelResrvarionArray?.refundToGuest! ?? 0, payoutToHost: cancelResrvarionArray?.payoutToHost! ?? 0, guestServiceFee: cancelResrvarionArray?.guestServiceFee! ?? 0, hostServiceFee: cancelResrvarionArray?.hostServiceFee! ?? 0, total: cancelResrvarionArray?.total! ?? 0, currency: cancelResrvarionArray?.currency! ?? "", threadId: cancelResrvarionArray?.threadId! ?? 0, cancelledBy: cancelResrvarionArray?.cancelledBy! ?? "", message: textviewValue, checkIn: cancelResrvarionArray?.checkIn! ?? "", checkOut: cancelResrvarionArray?.checkOut! ?? "", guests: cancelResrvarionArray?.guests! ?? 0)
+        Network.shared.apollo_headerClient.perform(mutation: cancelBookingMutation){ response in
             self.lottieView.isHidden  = true
-            if(result?.data?.cancelReservation?.status) != 200 {
-                self.view.makeToast(result?.data?.cancelReservation?.errorMessage)
-                return
-            }
-            Utility.shared.isfromcancelPAge = true
-            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"reservationcancel"))!)")
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                // code to remove your view
-                
-                if Utility.shared.isFromMessageListingPage_host{
+            switch response {
+            case .success(let result):
+                if let data = result.data?.cancelReservation?.status,data == 200 {
+                    Utility.shared.isfromcancelPAge = true
+                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"reservationcancel"))!)")
                     
-                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//                    appDelegate.settingRootViewControllerFunction()
-                    Utility.shared.setHostTab(index: 3)
-                    appDelegate.HostTabbarInitialize(initialView: CustomHostTabbar())
-                    
-                }else if Utility.shared.isFromMessageListingPage_guest {
-                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                    Utility.shared.setTab(index: 3)
-                    appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
-                    
-                }else{
-                       self.dismiss(animated: true, completion: nil)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        // code to remove your view
+                        
+                        if Utility.shared.isFromMessageListingPage_host{
+                            
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            //                    appDelegate.settingRootViewControllerFunction()
+                            Utility.shared.setHostTab(index: 3)
+                            appDelegate.HostTabbarInitialize(initialView: CustomHostTabbar())
+                            
+                        }else if Utility.shared.isFromMessageListingPage_guest {
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            Utility.shared.setTab(index: 3)
+                            appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
+                            
+                        }else{
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                        
+                    }
+                } else {
+                    self.view.makeToast(result.data?.cancelReservation?.errorMessage)
+                    return
                 }
-             
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
 
     func viewDetailAPICall(listid:Int)
     {
-       if Utility().isConnectedToNetwork(){
-           var viewListQuery = ViewListingDetailsQuery(listId:self.listID)
-        
-     
-         apollo_headerClient.fetch(query: viewListQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
+        if Utility.shared.isConnectedToNetwork(){
+            var viewListQuery = ViewListingDetailsQuery(listId:self.listID, preview: .some(false))
             
-        
-            if result?.data?.viewListing?.status == 200 {
-                    self.viewListingArray = (result?.data?.viewListing?.results)!
-                    if(self.viewListingArray.listingData != nil)
-                    {
-                        self.cancelationTitle = self.viewListingArray.listingData?.cancellation?.policyName ?? ""
-                        self.cancellationContent  = self.viewListingArray.listingData?.cancellation?.policyContent ?? ""
+            Network.shared.apollo_headerClient.fetch(query: viewListQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.viewListing?.status,data == 200 {
+                        self.viewListingArray = (result.data?.viewListing?.results)!
+                        if(self.viewListingArray?.listingData != nil)
+                        {
+                            self.cancelationTitle = self.viewListingArray?.listingData?.cancellation?.policyName ?? ""
+                            self.cancellationContent  = self.viewListingArray?.listingData?.cancellation?.policyContent ?? ""
+                            self.cancelTable.reloadData()
+                            self.lottieView.isHidden = true
+                        }
+                    } else {
                         self.cancelTable.reloadData()
                         self.lottieView.isHidden = true
                     }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
             }
-             else {
-                 self.cancelTable.reloadData()
-                 self.lottieView.isHidden = true
-             }
-         }
         }
     }
     

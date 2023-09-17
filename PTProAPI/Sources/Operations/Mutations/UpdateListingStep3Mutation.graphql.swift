@@ -5,52 +5,9 @@
 
 public class UpdateListingStep3Mutation: GraphQLMutation {
   public static let operationName: String = "UpdateListingStep3"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation UpdateListingStep3($id: Int, $houseRules: [Int], $bookingNoticeTime: String, $checkInStart: String, $checkInEnd: String, $maxDaysNotice: String, $minNight: Int, $maxNight: Int, $basePrice: Float, $cleaningPrice: Float, $currency: String, $weeklyDiscount: Int, $monthlyDiscount: Int, $blockedDates: [String], $bookingType: String!, $cancellationPolicy: Int) {
-        updateListingStep3(
-          id: $id
-          houseRules: $houseRules
-          bookingNoticeTime: $bookingNoticeTime
-          checkInStart: $checkInStart
-          checkInEnd: $checkInEnd
-          maxDaysNotice: $maxDaysNotice
-          minNight: $minNight
-          maxNight: $maxNight
-          basePrice: $basePrice
-          cleaningPrice: $cleaningPrice
-          currency: $currency
-          weeklyDiscount: $weeklyDiscount
-          monthlyDiscount: $monthlyDiscount
-          blockedDates: $blockedDates
-          bookingType: $bookingType
-          cancellationPolicy: $cancellationPolicy
-        ) {
-          __typename
-          results {
-            __typename
-            id
-            houseRules
-            bookingNoticeTime
-            checkInStart
-            checkInEnd
-            maxDaysNotice
-            minNight
-            maxNight
-            basePrice
-            cleaningPrice
-            currency
-            weeklyDiscount
-            monthlyDiscount
-            blockedDates
-          }
-          status
-          errorMessage
-          actionType
-        }
-      }
-      """
+      #"mutation UpdateListingStep3($id: Int, $houseRules: [Int], $bookingNoticeTime: String, $checkInStart: String, $checkInEnd: String, $maxDaysNotice: String, $minNight: Int, $maxNight: Int, $basePrice: Float, $cleaningPrice: Float, $currency: String, $weeklyDiscount: Int, $monthlyDiscount: Int, $blockedDates: [String], $bookingType: String!, $cancellationPolicy: Int) { updateListingStep3( id: $id houseRules: $houseRules bookingNoticeTime: $bookingNoticeTime checkInStart: $checkInStart checkInEnd: $checkInEnd maxDaysNotice: $maxDaysNotice minNight: $minNight maxNight: $maxNight basePrice: $basePrice cleaningPrice: $cleaningPrice currency: $currency weeklyDiscount: $weeklyDiscount monthlyDiscount: $monthlyDiscount blockedDates: $blockedDates bookingType: $bookingType cancellationPolicy: $cancellationPolicy ) { __typename results { __typename id houseRules bookingNoticeTime checkInStart checkInEnd maxDaysNotice minNight maxNight basePrice cleaningPrice currency weeklyDiscount monthlyDiscount blockedDates } status errorMessage actionType } }"#
     ))
 
   public var id: GraphQLNullable<Int>
@@ -127,10 +84,10 @@ public class UpdateListingStep3Mutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("updateListingStep3", UpdateListingStep3?.self, arguments: [
         "id": .variable("id"),
         "houseRules": .variable("houseRules"),
@@ -158,10 +115,11 @@ public class UpdateListingStep3Mutation: GraphQLMutation {
     /// Parent Type: `EditListingResponse`
     public struct UpdateListingStep3: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.EditListingResponse }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.EditListingResponse }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", Results?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -178,10 +136,11 @@ public class UpdateListingStep3Mutation: GraphQLMutation {
       /// Parent Type: `EditListing`
       public struct Results: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.EditListing }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.EditListing }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("houseRules", [Int?]?.self),
           .field("bookingNoticeTime", String?.self),

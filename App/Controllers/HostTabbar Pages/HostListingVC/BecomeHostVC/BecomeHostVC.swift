@@ -32,23 +32,14 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     @IBOutlet weak var errorCode404Lbl: UILabel!
     
     var lottieView: LottieAnimationView!
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
-    var showListingstepArray = ShowListingStepsQuery.Data.ShowListingStep.Result()
-    var step1ListingDetails = GetStep1ListingDetailsQuery.Data.GetListingDetail.Result()
-    var step3ListingDetails = GetListingDetailsStep3Query.Data.GetListingDetail.Result()
+    var showListingstepArray : ShowListingStepsQuery.Data.ShowListingSteps.Results?
+    var step1ListingDetails : GetStep1ListingDetailsQuery.Data.GetListingDetails.Results?
+    var step3ListingDetails : GetListingDetailsStep3Query.Data.GetListingDetails.Results?
     var listID = String()
     var ispublishenable:Bool = false
-    var siteSettingArray = [SiteSettingsQuery.Data.SiteSetting.Result]()
+    var siteSettingArray = [SiteSettingsQuery.Data.SiteSettings.Result]()
     
-    var getListingStep2Array = GetListingDetailsStep2Query.Data.GetListingDetail.Result()
+    var getListingStep2Array : GetListingDetailsStep2Query.Data.GetListingDetails.Results?
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -131,19 +122,19 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     func submitForVerification(listID:Int)
     {
         let submitforverificationmutation = SubmitForVerificationMutation(id:listID, listApprovalStatus:"pending")
-        apollo_headerClient.perform(mutation: submitforverificationmutation){(result,error) in
-           
-            if(result?.data?.submitForVerification?.status == 200)
-            {
-                self.showListingStepsAPICall(listID:self.listID)
-                
-            } else {
-                
-                
-                self.view.makeToast(result?.data?.submitForVerification?.errorMessage!)
-                
+        Network.shared.apollo_headerClient.perform(mutation: submitforverificationmutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.submitForVerification?.status,data == 200 {
+                    self.showListingStepsAPICall(listID:self.listID)
+                } else {
+                    self.view.makeToast(result.data?.submitForVerification?.errorMessage!)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
+        
     }
     
     
@@ -151,31 +142,36 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     func showListingStepsAPICall(listID:String)
     {
         let showListingStepsquery = ShowListingStepsQuery(listId: listID)
-        apollo_headerClient.fetch(query: showListingStepsquery,cachePolicy:.fetchIgnoringCacheData){(result,error)in
-            guard (result?.data?.showListingSteps?.results) != nil else{
-                if let errorMsg = result?.data?.showListingSteps?.errorMessage, let status = result?.data?.showListingSteps?.status, status == 400 || errorMsg  == "Something went wrong"
-                {
-                    self.UHOhLbl.isHidden = false
-                    self.CantSeeLbl.isHidden = false
-                    self.errorCode404Lbl.isHidden = false
-                    self.becomeStepsTable.isHidden = true
+        Network.shared.apollo_headerClient.fetch(query: showListingStepsquery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.showListingSteps?.results) != nil else{
+                    if let errorMsg = result.data?.showListingSteps?.errorMessage, let status = result.data?.showListingSteps?.status, status == 400 || errorMsg  == "Something went wrong"
+                    {
+                        self.UHOhLbl.isHidden = false
+                        self.CantSeeLbl.isHidden = false
+                        self.errorCode404Lbl.isHidden = false
+                        self.becomeStepsTable.isHidden = true
+                        
+                        print("Missing Data")
+                    }
+                    return
                     
-                    print("Missing Data")
                 }
-                return
-
-            }
-            
-            //self.becomeStepsTable.isHidden = false
-            self.lottieView.isHidden = true
-            self.showListingstepArray = (result?.data?.showListingSteps?.results)!
-            if(!self.ispublishenable)
-            {
-            self.becomeStepsTable.reloadData()
-            }
-            else
-            {
-            self.ispublishenable = false
+                
+                //self.becomeStepsTable.isHidden = false
+                self.lottieView.isHidden = true
+                self.showListingstepArray = (result.data?.showListingSteps?.results)!
+                if(!self.ispublishenable)
+                {
+                    self.becomeStepsTable.reloadData()
+                }
+                else
+                {
+                    self.ispublishenable = false
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
@@ -185,240 +181,251 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func getStep3ListingDetails()
     {
-        let step3ListingDetailsquery = GetListingDetailsStep3Query(listId: listID, preview: true)
-        apollo_headerClient.fetch(query: step3ListingDetailsquery,cachePolicy:.fetchIgnoringCacheData){(result,error)in
-            guard (result?.data?.getListingDetails?.results) != nil else{
-                print("Missing Data")
-                if(result?.data?.getListingDetails?.status == 400)
-                {
-                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"nolist"))!)")
-                    self.UHOhLbl.isHidden = false
-                    self.CantSeeLbl.isHidden = false
-                    self.errorCode404Lbl.isHidden = false
-                    self.becomeStepsTable.isHidden = true
-                }
-                return
-            }
-            self.step3ListingDetails = (result?.data?.getListingDetails?.results)!
-            Utility.shared.selectedRules.removeAllObjects()
-            
-            if(self.step3ListingDetails.listingData != nil)
-            {
-                Utility.shared.step3_Edit = true
-                if let id = self.step3ListingDetails.id {
-                Utility.shared.step3ValuesInfo.updateValue(id, forKey: "id")
-                Utility.shared.createId = id
-                }
-                if let houserules = self.step3ListingDetails.houseRules {
-                Utility.shared.step3ValuesInfo.updateValue(houserules, forKey: "houseRules")
-                }
-                if(self.step3ListingDetails.listingData?.bookingNoticeTime != nil)
-                {
-                Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.bookingNoticeTime!)!, forKey: "bookingNoticeTime")
-                }
-                if let checkinStart = self.step3ListingDetails.listingData?.checkInStart { Utility.shared.step3ValuesInfo.updateValue(checkinStart, forKey: "checkInStart") }
-               if let checkInEnd = self.step3ListingDetails.listingData?.checkInEnd { Utility.shared.step3ValuesInfo.updateValue(checkInEnd, forKey: "checkInEnd")
-                }
-                if let maxDaysNotice = self.step3ListingDetails.listingData?.maxDaysNotice { Utility.shared.step3ValuesInfo.updateValue(maxDaysNotice, forKey: "maxDaysNotice")
-                }
-                if let minNight = self.step3ListingDetails.listingData?.minNight {
-                
-                Utility.shared.step3ValuesInfo.updateValue(minNight, forKey: "minNight")
-                }
-                 if let maxNight = self.step3ListingDetails.listingData?.maxNight {
-                
-                Utility.shared.step3ValuesInfo.updateValue(maxNight, forKey: "maxNight")
-                }
-                if(self.step3ListingDetails.listingData?.basePrice != nil)
-                { Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.basePrice!)!, forKey: "basePrice")
-                    Utility.shared.host_basePrice = (self.step3ListingDetails.listingData?.basePrice!)!
-                }
-                if(self.step3ListingDetails.listingData?.cleaningPrice != nil)
-                {
-                Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.cleaningPrice!)!, forKey: "cleaningPrice")
-                    Utility.shared.host_cleanPrice = (self.step3ListingDetails.listingData?.cleaningPrice!)!
-                }
-                if let currency = (self.step3ListingDetails.listingData?.currency) { Utility.shared.step3ValuesInfo.updateValue(currency, forKey: "currency")
-                }
-                if(self.step3ListingDetails.listingData?.weeklyDiscount != nil)
-                {
-                Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.weeklyDiscount!)!, forKey: "weeklyDiscount")
-                }
-                if(self.step3ListingDetails.listingData?.monthlyDiscount != nil)
-                {
-                Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.monthlyDiscount!)!, forKey: "monthlyDiscount")
-                }
-                if(self.step3ListingDetails.bookingType != nil)
-                {
-                Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.bookingType!), forKey: "bookingType")
-                }
-                if(self.step3ListingDetails.listingData?.cancellationPolicy != nil)
-                {
-                Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.cancellationPolicy!)!, forKey: "cancellationPolicy")
-                }
-                
-                let StepTwoObj = HouseRulesViewController()
-                self.view.window?.backgroundColor = UIColor.white
-              //  self.view?.layer.add(presentrightAnimation()!, forKey: kCATransition)
-                StepTwoObj.modalPresentationStyle = .fullScreen
-                self.present(StepTwoObj, animated:false, completion: nil)
-            }
-            else
-            {
-             
-                let StepTwoObj = HouseRulesViewController()
-                Utility.shared.createId = self.step3ListingDetails.id!
-                Utility.shared.step3ValuesInfo.removeAll()
-                Utility.shared.step3ValuesInfo.updateValue(self.step3ListingDetails.id!, forKey: "id")
-                Utility.shared.selectedRules.removeAllObjects()
-                Utility.shared.host_basePrice = 0
-                Utility.shared.host_cleanPrice = 0
-                self.view.window?.backgroundColor = UIColor.white
-               StepTwoObj.modalPresentationStyle = .fullScreen
-                self.present(StepTwoObj, animated:false, completion: nil)
-            }
-        }
+        let step3ListingDetailsquery = GetListingDetailsStep3Query(listId: listID, preview: .none)
+//        Network.shared.apollo_headerClient.fetch(query: step3ListingDetailsquery, cachePolicy: .fetchIgnoringCacheData) { response in
+//            switch response {
+//            case .success(let result):
+//                guard (result.data?.getListingDetails?.results) != nil else{
+//                    print("Missing Data")
+//                    if(result.data?.getListingDetails?.status == 400)
+//                    {
+//                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"nolist"))!)")
+//                        self.UHOhLbl.isHidden = false
+//                        self.CantSeeLbl.isHidden = false
+//                        self.errorCode404Lbl.isHidden = false
+//                        self.becomeStepsTable.isHidden = true
+//                    }
+//                    return
+//                }
+//                self.step3ListingDetails = (result.data?.getListingDetails?.results)!
+//                Utility.shared.selectedRules.removeAllObjects()
+//                
+//                if(self.step3ListingDetails?.listingData != nil)
+//                {
+//                    Utility.shared.step3_Edit = true
+//                    if let id = self.step3ListingDetails?.__data["id"] as? Int {
+//                        Utility.shared.step3ValuesInfo.updateValue(id, forKey: "id")
+//                        Utility.shared.createId = id
+//                    }
+//                    if let houserules = self.step3ListingDetails.houseRules {
+//                        Utility.shared.step3ValuesInfo.updateValue(houserules, forKey: "houseRules")
+//                    }
+//                    if(self.step3ListingDetails.listingData?.bookingNoticeTime != nil)
+//                    {
+//                        Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.bookingNoticeTime!)!, forKey: "bookingNoticeTime")
+//                    }
+//                    if let checkinStart = self.step3ListingDetails.listingData?.checkInStart { Utility.shared.step3ValuesInfo.updateValue(checkinStart, forKey: "checkInStart") }
+//                    if let checkInEnd = self.step3ListingDetails.listingData?.checkInEnd { Utility.shared.step3ValuesInfo.updateValue(checkInEnd, forKey: "checkInEnd")
+//                    }
+//                    if let maxDaysNotice = self.step3ListingDetails.listingData?.maxDaysNotice { Utility.shared.step3ValuesInfo.updateValue(maxDaysNotice, forKey: "maxDaysNotice")
+//                    }
+//                    if let minNight = self.step3ListingDetails.listingData?.minNight {
+//                        
+//                        Utility.shared.step3ValuesInfo.updateValue(minNight, forKey: "minNight")
+//                    }
+//                    if let maxNight = self.step3ListingDetails.listingData?.maxNight {
+//                        
+//                        Utility.shared.step3ValuesInfo.updateValue(maxNight, forKey: "maxNight")
+//                    }
+//                    if(self.step3ListingDetails.listingData?.basePrice != nil)
+//                    { Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.basePrice!)!, forKey: "basePrice")
+//                        Utility.shared.host_basePrice = (self.step3ListingDetails.listingData?.basePrice!)!
+//                    }
+//                    if(self.step3ListingDetails.listingData?.cleaningPrice != nil)
+//                    {
+//                        Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.cleaningPrice!)!, forKey: "cleaningPrice")
+//                        Utility.shared.host_cleanPrice = (self.step3ListingDetails.listingData?.cleaningPrice!)!
+//                    }
+//                    if let currency = (self.step3ListingDetails.listingData?.currency) { Utility.shared.step3ValuesInfo.updateValue(currency, forKey: "currency")
+//                    }
+//                    if(self.step3ListingDetails.listingData?.weeklyDiscount != nil)
+//                    {
+//                        Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.weeklyDiscount!)!, forKey: "weeklyDiscount")
+//                    }
+//                    if(self.step3ListingDetails.listingData?.monthlyDiscount != nil)
+//                    {
+//                        Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.monthlyDiscount!)!, forKey: "monthlyDiscount")
+//                    }
+//                    if(self.step3ListingDetails.bookingType != nil)
+//                    {
+//                        Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.bookingType!), forKey: "bookingType")
+//                    }
+//                    if(self.step3ListingDetails.listingData?.cancellationPolicy != nil)
+//                    {
+//                        Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.cancellationPolicy!)!, forKey: "cancellationPolicy")
+//                    }
+//                    
+//                    let StepTwoObj = HouseRulesViewController()
+//                    self.view.window?.backgroundColor = UIColor.white
+//                    //  self.view?.layer.add(presentrightAnimation()!, forKey: kCATransition)
+//                    StepTwoObj.modalPresentationStyle = .fullScreen
+//                    self.present(StepTwoObj, animated:false, completion: nil)
+//                }
+//                else
+//                {
+//                    
+//                    let StepTwoObj = HouseRulesViewController()
+//                    Utility.shared.createId = self.step3ListingDetails.id!
+//                    Utility.shared.step3ValuesInfo.removeAll()
+//                    Utility.shared.step3ValuesInfo.updateValue(self.step3ListingDetails.id!, forKey: "id")
+//                    Utility.shared.selectedRules.removeAllObjects()
+//                    Utility.shared.host_basePrice = 0
+//                    Utility.shared.host_cleanPrice = 0
+//                    self.view.window?.backgroundColor = UIColor.white
+//                    StepTwoObj.modalPresentationStyle = .fullScreen
+//                    self.present(StepTwoObj, animated:false, completion: nil)
+//                }
+//            case .failure(let error):
+//                self.view.makeToast(error.localizedDescription)
+//            }
+//        }
     }
     
     
     func siteSettingsAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let siteSettingsquery = SiteSettingsQuery()
-            apollo_headerClient.fetch(query:siteSettingsquery,cachePolicy: .fetchIgnoringCacheData){ [self](result,error) in
-                if(result?.data?.siteSettings?.status == 200)
-                {
-                    self.siteSettingArray = result?.data?.siteSettings?.results as! [SiteSettingsQuery.Data.SiteSetting.Result]
-                    for i in self.siteSettingArray{
-                        if(i.name == "listingApproval")
-                        {
-                            if(i.value == "1")
+            let siteSettingsquery = SiteSettingsQuery(type: .none)
+            Network.shared.apollo_headerClient.fetch(query:siteSettingsquery,cachePolicy: .fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.siteSettings?.status,data == 200 {
+                        self.siteSettingArray = result.data?.siteSettings?.results as! [SiteSettingsQuery.Data.SiteSettings.Result]
+                        for i in self.siteSettingArray{
+                            if(i.name == "listingApproval")
                             {
-                            Utility.shared.listingApproval = "required"
-                            } else {
-                                Utility.shared.listingApproval = "optional"
+                                if(i.value == "1")
+                                {
+                                    Utility.shared.listingApproval = "required"
+                                } else {
+                                    Utility.shared.listingApproval = "optional"
+                                }
                             }
                         }
+                        
                     }
-                   
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
             }
-            
-          //  let siteSettingsquery = siteSe
-            
         }
     }
    
     func getStep1ListingDetails()
     {
         let step1ListingDetailsquery = GetStep1ListingDetailsQuery(listId: listID, preview: true)
-        apollo_headerClient.fetch(query: step1ListingDetailsquery,cachePolicy:.fetchIgnoringCacheData){(result,error)in
-            guard (result?.data?.getListingDetails?.results) != nil else{
-                print("Missing Data")
-                if(result?.data?.getListingDetails?.status == 400)
-                {
-                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"nolist"))!)")
-                    self.UHOhLbl.isHidden = false
-                    self.CantSeeLbl.isHidden = false
-                    self.errorCode404Lbl.isHidden = false
-                    self.becomeStepsTable.isHidden = true
+        Network.shared.apollo_headerClient.fetch(query: step1ListingDetailsquery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getListingDetails?.results) != nil else{
+                    print("Missing Data")
+                    if(result.data?.getListingDetails?.status == 400)
+                    {
+                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"nolist"))!)")
+                        self.UHOhLbl.isHidden = false
+                        self.CantSeeLbl.isHidden = false
+                        self.errorCode404Lbl.isHidden = false
+                        self.becomeStepsTable.isHidden = true
+                    }
+                    return
                 }
-                return
-            }
-            Utility.shared.isfromshowmap = false
-            self.step1ListingDetails = (result?.data?.getListingDetails?.results)!
-            Utility.shared.selectedAmenityIdList.removeAllObjects()
-            Utility.shared.selectedsafetyAmenityIdList.removeAllObjects()
-            Utility.shared.selectedspaceAmenityIdList.removeAllObjects()
-           
-            if (result?.data?.getListingDetails?.results?.id != nil)
-            {
-                Utility.shared.step1ValuesInfo.updateValue((result?.data?.getListingDetails?.results?.id!)!, forKey: "listId")
-                Utility.shared.createId = (result?.data?.getListingDetails?.results?.id!)!
-            }
-           
-            if let country = (result?.data?.getListingDetails?.results?.country) { Utility.shared.step1ValuesInfo.updateValue(country, forKey: "country") }
-            if let street = (result?.data?.getListingDetails?.results?.street) { Utility.shared.step1ValuesInfo.updateValue(street, forKey: "street")
-            }
-            if (result?.data?.getListingDetails?.results?.buildingName) != nil{
-                Utility.shared.step1ValuesInfo.updateValue((result?.data?.getListingDetails?.results?.buildingName!)!, forKey: "buildingName")
-            }
-            if let city = (result?.data?.getListingDetails?.results?.city) { Utility.shared.step1ValuesInfo.updateValue(city, forKey: "city")
-                       }
-            
-            if let state = (result?.data?.getListingDetails?.results?.state) { Utility.shared.step1ValuesInfo.updateValue(state, forKey: "state")
-            }
-            if let zipcode = (result?.data?.getListingDetails?.results?.zipcode) { Utility.shared.step1ValuesInfo.updateValue(zipcode, forKey: "zipcode")
-            }
-            if((result?.data?.getListingDetails?.results?.lat != nil) && (result?.data?.getListingDetails?.results?.lng != nil))
-            {
-            Utility.shared.step1ValuesInfo.updateValue((result?.data?.getListingDetails?.results?.lat!)!, forKey: "lat")
-            Utility.shared.step1ValuesInfo.updateValue((result?.data?.getListingDetails?.results?.lng!)!, forKey: "lng")
-            }
-           if let isMapTouched = (result?.data?.getListingDetails?.results?.isMapTouched) { Utility.shared.step1ValuesInfo.updateValue(isMapTouched, forKey: "isMapTouched")
-            }
-            if let bedrooms = (result?.data?.getListingDetails?.results?.bedrooms) { Utility.shared.step1ValuesInfo.updateValue(bedrooms, forKey: "bedrooms")
-            }
-             if let residenceType = (result?.data?.getListingDetails?.results?.residenceType) { Utility.shared.step1ValuesInfo.updateValue(residenceType, forKey: "residenceType")
-            }
-            if let beds = (result?.data?.getListingDetails?.results?.beds) { Utility.shared.step1ValuesInfo.updateValue(beds, forKey: "beds")
-            }
-            if let userBedsTypes = (result?.data?.getListingDetails?.results?.userBedsTypes) { Utility.shared.step1ValuesInfo.updateValue(userBedsTypes, forKey: "bedTypes") }
-            if let personCapacity = (result?.data?.getListingDetails?.results?.personCapacity) { Utility.shared.step1ValuesInfo.updateValue(personCapacity, forKey: "personCapacity") }
-            if let bathroomCount = result?.data?.getListingDetails?.results?.bathrooms
-            {
-                Utility.shared.step1ValuesInfo.updateValue(bathroomCount, forKey: "bathrooms")
-            }
-           if let userAmenities = result?.data?.getListingDetails?.results?.userAmenities
-           { Utility.shared.step1ValuesInfo.updateValue(userAmenities, forKey: "amenities") }
-           
-            if let userSafetyAmenities = result?.data?.getListingDetails?.results?.userSafetyAmenities { Utility.shared.step1ValuesInfo.updateValue(userSafetyAmenities, forKey: "safetyAmenities") }
-           if let userSpaces = result?.data?.getListingDetails?.results?.userSpaces { Utility.shared.step1ValuesInfo.updateValue(userSpaces, forKey: "spaces")
-            }
-            for index in (result?.data?.getListingDetails?.results?.settingsData!)!
-            {
-                if index?.listsettings?.settingsType?.typeName == "roomType"
+                Utility.shared.isfromshowmap = false
+                self.step1ListingDetails = (result.data?.getListingDetails?.results)!
+                Utility.shared.selectedAmenityIdList.removeAllObjects()
+                Utility.shared.selectedsafetyAmenityIdList.removeAllObjects()
+                Utility.shared.selectedspaceAmenityIdList.removeAllObjects()
+                
+                if (result.data?.getListingDetails?.results?.id != nil)
                 {
-                    Utility.shared.step1ValuesInfo.updateValue((index?.listsettings?.id!)!, forKey: "roomType")
+                    Utility.shared.step1ValuesInfo.updateValue((result.data?.getListingDetails?.results?.id!)!, forKey: "listId")
+                    Utility.shared.createId = (result.data?.getListingDetails?.results?.id!)!
                 }
-
-                if index?.listsettings?.settingsType?.typeName == "buildingSize"
+                
+                if let country = (result.data?.getListingDetails?.results?.country) { Utility.shared.step1ValuesInfo.updateValue(country, forKey: "country") }
+                if let street = (result.data?.getListingDetails?.results?.street) { Utility.shared.step1ValuesInfo.updateValue(street, forKey: "street")
+                }
+                if (result.data?.getListingDetails?.results?.buildingName) != nil{
+                    Utility.shared.step1ValuesInfo.updateValue((result.data?.getListingDetails?.results?.buildingName!)!, forKey: "buildingName")
+                }
+                if let city = (result.data?.getListingDetails?.results?.city) { Utility.shared.step1ValuesInfo.updateValue(city, forKey: "city")
+                }
+                
+                if let state = (result.data?.getListingDetails?.results?.state) { Utility.shared.step1ValuesInfo.updateValue(state, forKey: "state")
+                }
+                if let zipcode = (result.data?.getListingDetails?.results?.zipcode) { Utility.shared.step1ValuesInfo.updateValue(zipcode, forKey: "zipcode")
+                }
+                if((result.data?.getListingDetails?.results?.lat != nil) && (result.data?.getListingDetails?.results?.lng != nil))
                 {
-                    Utility.shared.step1ValuesInfo.updateValue((index?.listsettings?.id!)!, forKey: "buildingSize")
+                    Utility.shared.step1ValuesInfo.updateValue((result.data?.getListingDetails?.results?.lat!)!, forKey: "lat")
+                    Utility.shared.step1ValuesInfo.updateValue((result.data?.getListingDetails?.results?.lng!)!, forKey: "lng")
                 }
-                if index?.listsettings?.settingsType?.typeName == "bathroomType"
+                if let isMapTouched = (result.data?.getListingDetails?.results?.isMapTouched) { Utility.shared.step1ValuesInfo.updateValue(isMapTouched, forKey: "isMapTouched")
+                }
+                if let bedrooms = (result.data?.getListingDetails?.results?.bedrooms) { Utility.shared.step1ValuesInfo.updateValue(bedrooms, forKey: "bedrooms")
+                }
+                if let residenceType = (result.data?.getListingDetails?.results?.residenceType) { Utility.shared.step1ValuesInfo.updateValue(residenceType, forKey: "residenceType")
+                }
+                if let beds = (result.data?.getListingDetails?.results?.beds) { Utility.shared.step1ValuesInfo.updateValue(beds, forKey: "beds")
+                }
+                if let userBedsTypes = (result.data?.getListingDetails?.results?.userBedsTypes) { Utility.shared.step1ValuesInfo.updateValue(userBedsTypes, forKey: "bedTypes") }
+                if let personCapacity = (result.data?.getListingDetails?.results?.personCapacity) { Utility.shared.step1ValuesInfo.updateValue(personCapacity, forKey: "personCapacity") }
+                if let bathroomCount = result.data?.getListingDetails?.results?.bathrooms
                 {
-                    Utility.shared.step1ValuesInfo.updateValue((index?.listsettings?.id!)!, forKey: "bathroomType")
+                    Utility.shared.step1ValuesInfo.updateValue(bathroomCount, forKey: "bathrooms")
                 }
-                if index?.listsettings?.settingsType?.typeName == "bedType"
+                if let userAmenities = result.data?.getListingDetails?.results?.userAmenities
+                { Utility.shared.step1ValuesInfo.updateValue(userAmenities, forKey: "amenities") }
+                
+                if let userSafetyAmenities = result.data?.getListingDetails?.results?.userSafetyAmenities { Utility.shared.step1ValuesInfo.updateValue(userSafetyAmenities, forKey: "safetyAmenities") }
+                if let userSpaces = result.data?.getListingDetails?.results?.userSpaces { Utility.shared.step1ValuesInfo.updateValue(userSpaces, forKey: "spaces")
+                }
+                for index in (result.data?.getListingDetails?.results?.settingsData!)!
                 {
-                    Utility.shared.step1ValuesInfo.updateValue((index?.listsettings?.id!)!, forKey: "bedType")
+                    if index?.listsettings?.settingsType?.typeName == "roomType"
+                    {
+                        Utility.shared.step1ValuesInfo.updateValue((index?.listsettings?.id!)!, forKey: "roomType")
+                    }
+                    
+                    if index?.listsettings?.settingsType?.typeName == "buildingSize"
+                    {
+                        Utility.shared.step1ValuesInfo.updateValue((index?.listsettings?.id!)!, forKey: "buildingSize")
+                    }
+                    if index?.listsettings?.settingsType?.typeName == "bathroomType"
+                    {
+                        Utility.shared.step1ValuesInfo.updateValue((index?.listsettings?.id!)!, forKey: "bathroomType")
+                    }
+                    if index?.listsettings?.settingsType?.typeName == "bedType"
+                    {
+                        Utility.shared.step1ValuesInfo.updateValue((index?.listsettings?.id!)!, forKey: "bedType")
+                    }
                 }
+                if((result.data?.getListingDetails?.results?.settingsData!.count)! > 0 )
+                {
+                    Utility.shared.step1ValuesInfo.updateValue((result.data?.getListingDetails?.results?.settingsData![1]?.listsettings?.id!)!, forKey: "houseType")
+                }
+                Utility.shared.createId = Int(self.listID) ?? 0
+                if(self.CheckActiveStateStep1() == "\((Utility.shared.getLanguage()?.value(forKey:"change"))!)")
+                {
+                    Utility.shared.step1_inactivestatus = "completed"
+                    Utility.shared.isfrombecomehoststep1Edit = true
+                }
+                else
+                {
+                    Utility.shared.step1_inactivestatus = "inactive"
+                }
+                let StepOne = PlaceListingViewController()
+                StepOne.modalPresentationStyle = .fullScreen
+                self.present(StepOne, animated:false, completion: nil)
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            if((result?.data?.getListingDetails?.results?.settingsData!.count)! > 0 )
-            {
-            Utility.shared.step1ValuesInfo.updateValue((result?.data?.getListingDetails?.results?.settingsData![1]?.listsettings?.id!)!, forKey: "houseType")
-            }
-            Utility.shared.createId = Int(self.listID) ?? 0
-            if(self.CheckActiveStateStep1() == "\((Utility.shared.getLanguage()?.value(forKey:"change"))!)")
-            {
-             Utility.shared.step1_inactivestatus = "completed"
-              Utility.shared.isfrombecomehoststep1Edit = true
-            }
-            else
-            {
-             Utility.shared.step1_inactivestatus = "inactive"
-            }
-            let StepOne = PlaceListingViewController()
-        StepOne.modalPresentationStyle = .fullScreen
-            self.present(StepOne, animated:false, completion: nil)
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int{
-     if(showListingstepArray.listId != nil)
+        if(showListingstepArray?.listId != nil)
      {
-        if((showListingstepArray.listing?.isReady)! == true)
+            if((showListingstepArray?.listing?.isReady)! == true)
         {
         return 3
         }
@@ -427,7 +434,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
         return 0
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(showListingstepArray.listId != nil)
+        if(showListingstepArray?.listId != nil)
         {
         if(section == 0)
         {
@@ -437,7 +444,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
             return 2
         }
         else{
-            if((showListingstepArray.listing?.isReady)! == true)
+            if((showListingstepArray?.listing?.isReady)! == true)
             {
                 return 1
             }
@@ -632,7 +639,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
             cell.tag = indexPath.row + 2000
              if(Utility.shared.listingApproval == "optional")
             {
-                if(showListingstepArray.listing?.isPublished! == true)
+                 if(showListingstepArray?.listing?.isPublished! == true)
                 {
                    
                     cell.listnameLabel.text = "* \((Utility.shared.getLanguage()?.value(forKey:"listpublish"))!)"
@@ -648,9 +655,9 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                     Utility.shared.unpublish_preview_check = true
                     cell.publishBtn.isUserInteractionEnabled = true
                 }
-            } else if(Utility.shared.listingApproval == "required" && showListingstepArray.listing?.listApprovalStatus == "approved")
+             } else if(Utility.shared.listingApproval == "required" && showListingstepArray?.listing?.listApprovalStatus == "approved")
             {
-                if(showListingstepArray.listing?.isPublished! == true)
+                if(showListingstepArray?.listing?.isPublished! == true)
                 {
                    
                     cell.listnameLabel.text = "* \((Utility.shared.getLanguage()?.value(forKey:"listpublish"))!)"
@@ -667,7 +674,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                     cell.publishBtn.isUserInteractionEnabled = true
                 }
                 
-            } else if(Utility.shared.listingApproval == "required" && showListingstepArray.listing?.listApprovalStatus == "declined")
+             } else if(Utility.shared.listingApproval == "required" && showListingstepArray?.listing?.listApprovalStatus == "declined")
             {
                 
                 cell.listnameLabel.text = "* \((Utility.shared.getLanguage()?.value(forKey:"your_listing_ready"))!)"
@@ -676,7 +683,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                 cell.publishBtn.isHidden =  false
                 Utility.shared.unpublish_preview_check = false
             }
-            else if(Utility.shared.listingApproval == "required" && showListingstepArray.listing?.listApprovalStatus == "pending")
+            else if(Utility.shared.listingApproval == "required" && showListingstepArray?.listing?.listApprovalStatus == "pending")
             {
                 
                 cell.listnameLabel.text = "* \((Utility.shared.getLanguage()?.value(forKey:"your_listing_submisison"))!)"
@@ -729,7 +736,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     }
     @objc func step1BtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         getStep1ListingDetails()
         }
         else
@@ -740,7 +747,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     @objc func step2BtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
          self.getListingDetailsStep2()
         }
         else
@@ -750,40 +757,42 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     }
     
     func getListingDetailsStep2()
-    {
-        let getlistingStep2query = GetListingDetailsStep2Query(listId:"\(showListingstepArray.listId!)", preview: true)
-        apollo_headerClient.fetch(query: getlistingStep2query,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            guard (result?.data?.getListingDetails?.results) != nil else{
-//                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"nolist"))!)")
-//                self.UHOhLbl.isHidden = false
-//                self.CantSeeLbl.isHidden = false
-//                self.errorCode404Lbl.isHidden = false
-//                self.becomeStepsTable.isHidden = true
-                self.view.makeToast(result?.data?.getListingDetails?.errorMessage)
+{
+    let getlistingStep2query = GetListingDetailsStep2Query(listId:"\(showListingstepArray?.listId!)", preview: true)
+    Network.shared.apollo_headerClient.fetch(query: getlistingStep2query,cachePolicy:.fetchIgnoringCacheData){ response in
+        switch response {
+        case .success(let result):
+            guard (result.data?.getListingDetails?.results) != nil else{
+                //                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"nolist"))!)")
+                //                self.UHOhLbl.isHidden = false
+                //                self.CantSeeLbl.isHidden = false
+                //                self.errorCode404Lbl.isHidden = false
+                //                self.becomeStepsTable.isHidden = true
+                self.view.makeToast(result.data?.getListingDetails?.errorMessage)
                 return
             }
-            self.getListingStep2Array = (result?.data?.getListingDetails?.results)!
+            self.getListingStep2Array = (result.data?.getListingDetails?.results)!
             let StepTwoObj = StepTwoVC()
-            if ((!self.showListingstepArray.isPhotosAdded! || self.showListingstepArray.isPhotosAdded!) && (self.showListingstepArray.step2 == "completed")) {
+            if ((!(self.showListingstepArray?.isPhotosAdded! ?? false) || ((self.showListingstepArray?.isPhotosAdded!) != nil)) && (self.showListingstepArray?.step2 == "completed")) {
                 StepTwoObj.saveexit_Activated = "true"
             }
-            if(self.showListingstepArray.step2 == "active")
+            if(self.showListingstepArray?.step2 == "active")
             {
                 StepTwoObj.saveexit_Activated = "false"
             }
             
-            if (result?.data?.getListingDetails?.results?.title != nil) { Utility.shared.step2ValuesInfo.updateValue((result?.data?.getListingDetails?.results?.title!)!, forKey: "title")
+            if (result.data?.getListingDetails?.results?.title != nil) { Utility.shared.step2ValuesInfo.updateValue((result.data?.getListingDetails?.results?.title!)!, forKey: "title")
                 
             }else {
                 Utility.shared.step2ValuesInfo.updateValue("", forKey: "title")
             }
-              if (result?.data?.getListingDetails?.results?.description != nil) { Utility.shared.step2ValuesInfo.updateValue((result?.data?.getListingDetails?.results?.description!)!, forKey: "description")}
+            if (result.data?.getListingDetails?.results?.description != nil) { Utility.shared.step2ValuesInfo.updateValue((result.data?.getListingDetails?.results?.description!)!, forKey: "description")}
             else {
-                           Utility.shared.step2ValuesInfo.updateValue("", forKey: "description")
-                       }
-            if (result?.data?.getListingDetails?.results?.coverPhoto != nil) { Utility.shared.step2ValuesInfo.updateValue((result?.data?.getListingDetails?.results?.coverPhoto!)!, forKey: "coverPhoto")}
-            if (result?.data?.getListingDetails?.results?.id != nil) { Utility.shared.step2ValuesInfo.updateValue((result?.data?.getListingDetails?.results?.id!)!, forKey: "id")}
-                       
+                Utility.shared.step2ValuesInfo.updateValue("", forKey: "description")
+            }
+            if (result.data?.getListingDetails?.results?.coverPhoto != nil) { Utility.shared.step2ValuesInfo.updateValue((result.data?.getListingDetails?.results?.coverPhoto!)!, forKey: "coverPhoto")}
+            if (result.data?.getListingDetails?.results?.id != nil) { Utility.shared.step2ValuesInfo.updateValue((result.data?.getListingDetails?.results?.id!)!, forKey: "id")}
+            
             
             Utility.shared.step2_Title = ""
             Utility.shared.step2_Description = ""
@@ -791,12 +800,14 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
             StepTwoObj.getListingDetailsStep2()
             StepTwoObj.modalPresentationStyle = .fullScreen
             self.present(StepTwoObj, animated:false, completion: nil)
+        case .failure(let error): break
         }
     }
+}
     
     @objc func step3BtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.getStep3ListingDetails()
         }
         else
@@ -812,11 +823,11 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func CheckActiveStateStep1()-> String
     {
-        if(showListingstepArray.step1 == "active" && showListingstepArray.step2 == "inactive" && showListingstepArray.step3 == "inactive")
+        if(showListingstepArray?.step1 == "active" && showListingstepArray?.step2 == "inactive" && showListingstepArray?.step3 == "inactive")
         {
             return "\((Utility.shared.getLanguage()?.value(forKey:"continue"))!)"
         }
-        else if(showListingstepArray.step1 == "completed" && (showListingstepArray.step2 == "active" || showListingstepArray.step2 == "inactive" || showListingstepArray.step2 == "completed"))
+        else if(showListingstepArray?.step1 == "completed" && (showListingstepArray?.step2 == "active" || showListingstepArray?.step2 == "inactive" || showListingstepArray?.step2 == "completed"))
         {
             return "\((Utility.shared.getLanguage()?.value(forKey:"change"))!)"
         }
@@ -825,16 +836,16 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func CheckActiveStateStep2() ->String
     {
-        if (!showListingstepArray.isPhotosAdded! && (showListingstepArray.step2 == "completed" || showListingstepArray.step2 == "active")) {
+        if (!(showListingstepArray?.isPhotosAdded! ?? false) && (showListingstepArray?.step2 == "completed" || showListingstepArray?.step2 == "active")) {
             
             return "\((Utility.shared.getLanguage()?.value(forKey:"continue"))!)"
         }
       else{
-       if(showListingstepArray.step2 == "completed")
+          if(showListingstepArray?.step2 == "completed")
         {
             return "\((Utility.shared.getLanguage()?.value(forKey:"change"))!)"
         }
-        else if(showListingstepArray.step2 == "active")
+          else if(showListingstepArray?.step2 == "active")
        {
         return "\((Utility.shared.getLanguage()?.value(forKey:"continue"))!)"
        }
@@ -846,10 +857,10 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func CheckActiveStateStep3() ->String
     {
-   if (showListingstepArray.step3 == "completed") {
+        if (showListingstepArray?.step3 == "completed") {
         return "\((Utility.shared.getLanguage()?.value(forKey:"change"))!)"
         }
-    else if(showListingstepArray.step3 == "inactive")
+        else if(showListingstepArray?.step3 == "inactive")
    {
     return ""
    }
@@ -861,11 +872,11 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     @objc func PublishBtnTapped(_ sender: UIButton)
     {
          let cell = view.viewWithTag(sender.tag + 2000) as? StepPublishCell
-        //if Utility().isConnectedToNetwork(){
+        //if Utility.shared.isConnectedToNetwork(){
             let btnsendtag: UIButton = sender
             if(btnsendtag.currentTitle == "\((Utility.shared.getLanguage()?.value(forKey:"publishnow"))!)"){
                 Utility.shared.unpublish_preview_check = false
-                PublishAPICall(listid:showListingstepArray.listId!, action: "publish",sender:sender,tag:sender.tag)
+                PublishAPICall(listid:showListingstepArray?.listId! ?? 0, action: "publish",sender:sender,tag:sender.tag)
 //                btnsendtag.setTitle("UnPublish Now", for: .normal)
 //
 //                cell!.listnameLabel.text = "Your Listing is Published"
@@ -873,11 +884,11 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                 
             } else if(btnsendtag.currentTitle == "\((Utility.shared.getLanguage()?.value(forKey:"submit_appeal"))!)" || btnsendtag.currentTitle == "\((Utility.shared.getLanguage()?.value(forKey:"submit_verification"))!)")
             {
-                submitForVerification(listID: showListingstepArray.listId!)
+                submitForVerification(listID: showListingstepArray?.listId! ?? 0)
             }
             else {
                 Utility.shared.unpublish_preview_check = true
-                PublishAPICall(listid: showListingstepArray.listId!, action: "unPublish",sender:sender,tag:sender.tag)
+                PublishAPICall(listid: showListingstepArray?.listId! ?? 0, action: "unPublish",sender:sender,tag:sender.tag)
 //                btnsendtag.setTitle("Publish Now", for: .normal)
 //
 //                cell!.listnameLabel.text = "Your Listing is ready to Publish!"
@@ -886,13 +897,14 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
         }
     
     func PublishAPICall(listid:Int,action:String,sender:UIButton,tag:Int)
-    {
-        let managepublishstatusMutation = ManagePublishStatusMutation(listId: listid, action: action)
-        apollo_headerClient.perform(mutation: managepublishstatusMutation){(result,error) in
-            let btnsendtag: UIButton = sender
-            let cell = self.view.viewWithTag(sender.tag + 2000) as? StepPublishCell
-            if(result?.data?.managePublishStatus?.status == 200)
-            {
+{
+    let managepublishstatusMutation = ManagePublishStatusMutation(listId: listid, action: action)
+    Network.shared.apollo_headerClient.perform(mutation: managepublishstatusMutation){ response in
+        let btnsendtag: UIButton = sender
+        let cell = self.view.viewWithTag(sender.tag + 2000) as? StepPublishCell
+        switch response {
+        case .success(let result):
+            if let data = result.data?.managePublishStatus?.status,data == 200 {
                 self.ispublishenable = true
                 self.showListingStepsAPICall(listID:self.listID)
                 if(!Utility.shared.unpublish_preview_check)
@@ -907,26 +919,26 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                     cell!.listnameLabel.text = "* \((Utility.shared.getLanguage()?.value(forKey:"readypublish"))!)"
                 }
                 
-            }else
-            {
-                
-                self.view.makeToast(result?.data?.managePublishStatus?.errorMessage != nil ? result?.data?.managePublishStatus?.errorMessage! : "")
+            } else {
+                self.view.makeToast(result.data?.managePublishStatus?.errorMessage != nil ? result.data?.managePublishStatus?.errorMessage! : "")
             }
-            
+        case .failure(let error):
+            self.view.makeToast(error.localizedDescription)
         }
     }
+}
     
     @objc func previewBtnTapped(_ sender: UIButton)
     {
         let viewListing = UpdatedViewListing()
-        viewListing.listID = showListingstepArray.listId ?? 0
+        viewListing.listID = showListingstepArray?.listId ?? 0
         Utility.shared.unpublish_preview_check = true
         viewListing.modalPresentationStyle = .fullScreen
         self.present(viewListing, animated: true, completion: nil)
         }
     @IBAction func retryBtnTapped(_ sender: Any) {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
         }
         

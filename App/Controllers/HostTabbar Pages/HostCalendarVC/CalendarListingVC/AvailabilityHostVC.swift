@@ -44,15 +44,6 @@ class AvailabilityHostVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     var special = String()
     var currency = String()
     let characterset = NSCharacterSet(charactersIn: "0123456789.")
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     var delegate:AvailabilityHostVCDelegate!
     
     override func viewDidLoad() {
@@ -93,7 +84,7 @@ class AvailabilityHostVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     @IBAction func nextBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.view.endEditing(true)
         if(( special == "." || special.rangeOfCharacter(from: characterset.inverted) != nil ) && !selected)
         {
@@ -147,54 +138,48 @@ class AvailabilityHostVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func SaveAPICall(listid:Int,blockedDates:[String],calendarStatus:String,isSpecialPrice:Double)
     {
-       let updateSpecialPriceMutation = UpdateSpecialPriceMutation(listId: listid, blockedDates: blockedDates, calendarStatus: calendarStatus, isSpecialPrice: isSpecialPrice)
-        apollo_headerClient.perform(mutation: updateSpecialPriceMutation){(result,error) in
-            if(result?.data?.updateSpecialPrice?.status == 200)
-            {
-                
-                Utility.shared.isfrom_availability_calendar_date = true
-                Utility.shared.isfrom_availability_calendar = true
-                self.delegate?.BlockedlistAPICall(listId: self.listId)
-                self.delegate?.APICall(listImage: self.listImage, title: self.title_val, entireTitle: self.entireTitle, listId: self.listId)
-                self.dismiss(animated: true, completion: nil)
-
+        let updateSpecialPriceMutation = UpdateSpecialPriceMutation(listId: listid, blockedDates: .some(blockedDates), calendarStatus: .some(calendarStatus), isSpecialPrice: .some(isSpecialPrice))
+        Network.shared.apollo_headerClient.perform(mutation: updateSpecialPriceMutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.updateSpecialPrice?.status,data == 200 {
+                    Utility.shared.isfrom_availability_calendar_date = true
+                    Utility.shared.isfrom_availability_calendar = true
+                    self.delegate?.BlockedlistAPICall(listId: self.listId)
+                    self.delegate?.APICall(listImage: self.listImage, title: self.title_val, entireTitle: self.entireTitle, listId: self.listId)
+                    self.dismiss(animated: true, completion: nil)
+                    
+                }
+                else {
+                    self.view.makeToast(result.data?.updateSpecialPrice?.errorMessage)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            else {
-                self.view.makeToast(result?.data?.updateSpecialPrice?.errorMessage)
-            }
-//            else{
-//              
-////                self.dismiss(animated: true, completion: nil)
-//                self.view.makeToast(result?.data?.updateSpecialPrice?.errorMessage!)
-//            }
-            
         }
     }
     func SaveAPICall(listid:Int,blockedDates:[String],calendarStatus:String)
-       {
-          let updateSpecialPriceMutation = UpdateSpecialPriceMutation(listId: listid, blockedDates: blockedDates, calendarStatus: calendarStatus, isSpecialPrice: nil)
-           apollo_headerClient.perform(mutation: updateSpecialPriceMutation){(result,error) in
-               if(result?.data?.updateSpecialPrice?.status == 200)
-               {
-                print("Result for Block Dates \(result?.data?.updateSpecialPrice)")
-                   Utility.shared.isfrom_availability_calendar_date = true
-                   Utility.shared.isfrom_availability_calendar = true
-                   self.delegate?.BlockedlistAPICall(listId: self.listId)
-                   self.delegate?.APICall(listImage: self.listImage, title: self.title_val, entireTitle: self.entireTitle, listId: self.listId)
-                   self.dismiss(animated: true, completion: nil)
-
-               }
-               else {
-                   self.view.makeToast(result?.data?.updateSpecialPrice?.errorMessage)
-               }
-//               else{
-//
-//   //                self.dismiss(animated: true, completion: nil)
-//                   self.view.makeToast(result?.data?.updateSpecialPrice?.errorMessage)
-//               }
-               
-           }
-       }
+    {
+        let updateSpecialPriceMutation = UpdateSpecialPriceMutation(listId: listid, blockedDates: .some(blockedDates), calendarStatus: .some(calendarStatus), isSpecialPrice: nil)
+        Network.shared.apollo_headerClient.perform(mutation: updateSpecialPriceMutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.updateSpecialPrice?.status,data == 200 {
+                    print("Result for Block Dates \(result.data?.updateSpecialPrice)")
+                    Utility.shared.isfrom_availability_calendar_date = true
+                    Utility.shared.isfrom_availability_calendar = true
+                    self.delegate?.BlockedlistAPICall(listId: self.listId)
+                    self.delegate?.APICall(listImage: self.listImage, title: self.title_val, entireTitle: self.entireTitle, listId: self.listId)
+                    self.dismiss(animated: true, completion: nil)
+                    
+                } else {
+                    self.view.makeToast(result.data?.updateSpecialPrice?.errorMessage)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
+    }
     
     @objc func keyboardWillHide(sender: NSNotification) {
         
@@ -202,7 +187,7 @@ class AvailabilityHostVC: UIViewController,UITableViewDelegate,UITableViewDataSo
 
 
     @IBAction func closeBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             Utility.shared.isfrom_availability_calendar_date = true
             Utility.shared.isfrom_availability_calendar = true
 //            self.delegate?.BlockedlistAPICall(listId: self.listId)
@@ -231,7 +216,7 @@ class AvailabilityHostVC: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
         }
     }

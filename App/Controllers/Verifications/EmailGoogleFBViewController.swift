@@ -15,7 +15,7 @@ import PTProAPI
 
 class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-   
+    
     
     @IBOutlet weak var backBtn: UIButton!
     
@@ -23,16 +23,6 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var topView: UIView!
     
     @IBOutlet weak var titleLAbel: UILabel!
-    let apollo_headerClient: ApolloClient = {
-    let configuration = URLSessionConfiguration.default
-    // Add additional headers as needed
-    configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-    
-    let url = URL(string:graphQLEndpoint)!
-    
-    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    
-}()
     var lottieViewbtn: LottieAnimationView!
     var google_btn_title = String()
     var facebook_btn_title = String()
@@ -44,11 +34,11 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
         if(Utility.shared.isRTLLanguage()) {
-                   backBtn.imageView?.performRTLTransform()
-               }
+            backBtn.imageView?.performRTLTransform()
+        }
         
         self.navigationController?.isNavigationBarHidden = true
-
+        
         // Do any additional setup after loading the view.
         
         VerificationTableView.register(UINib(nibName: "EmailGoogleFBTableViewCell", bundle: nil), forCellReuseIdentifier: "EmailGoogleFBTableViewCell")
@@ -78,7 +68,7 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
         }
         
         titleLAbel.font = UIFont(name: APP_FONT_MEDIUM, size: 17)
-          
+        
     }
     @objc func autoscrolling()
     {
@@ -97,8 +87,8 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
         self.lottieViewbtn.play()
         Timer.scheduledTimer(timeInterval:0.2, target: self, selector: #selector(autoscrolling), userInfo: nil, repeats: true)
     }
-   
-
+    
+    
     @IBAction func backBtnTapped(_ sender: Any) {
         
         self.dismiss(animated: true, completion: nil)
@@ -109,7 +99,7 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
     
@@ -124,16 +114,16 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
             
             
             cell.logo_imageView.image = #imageLiteral(resourceName: "Verify_email")
-             cell.action_Button.setTitle(email_btn_title, for: .normal)
+            cell.action_Button.setTitle(email_btn_title, for: .normal)
             if(email_btn_title == "\((Utility.shared.getLanguage()?.value(forKey:"verified"))!)")
             {
                 cell.action_Button.isHidden = true
-            cell.action_Button.isUserInteractionEnabled = false
-            cell.des_text_label.text = "\((Utility.shared.getLanguage()?.value(forKey:"verify_email"))!)"
+                cell.action_Button.isUserInteractionEnabled = false
+                cell.des_text_label.text = "\((Utility.shared.getLanguage()?.value(forKey:"verify_email"))!)"
             } else {
                 cell.action_Button.isHidden = false
-             cell.action_Button.isUserInteractionEnabled = true
-            cell.des_text_label.text = "\((Utility.shared.getLanguage()?.value(forKey:"emailverify"))!)"
+                cell.action_Button.isUserInteractionEnabled = true
+                cell.des_text_label.text = "\((Utility.shared.getLanguage()?.value(forKey:"emailverify"))!)"
             }
             cell.action_Button.addTarget(self, action: #selector(emailBtnTapped), for: .touchUpInside)
             
@@ -170,29 +160,29 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
     @objc func emailBtnTapped(sender : UIButton)
     {
         if Utility.shared.isConnectedToNetwork(){
-        if(sender.tag == 0)
-        {
-        self.lottienextAnimation(sender: sender)
-        self.emailAPICall(sender: sender)
-        }
+            if(sender.tag == 0)
+            {
+                self.lottienextAnimation(sender: sender)
+                self.emailAPICall(sender: sender)
+            }
         } else {
-           self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"error_field"))!)")
+            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"error_field"))!)")
         }
         
     }
     @objc func fbBtnTapped(sender : UIButton)
     {
         if Utility.shared.isConnectedToNetwork(){
-        if(sender.tag == 1)
-        {
-        if(self.facebook_btn_title == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
-        {
-        
-        faceBookLogin(viewC: self,button: sender)
-        } else {
-        self.facebookVerifyAPICall(sender: sender)
-        }
-        }
+            if(sender.tag == 1)
+            {
+                if(self.facebook_btn_title == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
+                {
+                    
+                    faceBookLogin(viewC: self,button: sender)
+                } else {
+                    self.facebookVerifyAPICall(sender: sender)
+                }
+            }
         } else {
             self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"error_field"))!)")
         }
@@ -215,39 +205,40 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
                     GIDSignIn.sharedInstance.signOut()
                     GIDSignIn.sharedInstance.signIn(withPresenting: self) { user, error in
                         guard error == nil else { return }
-
+                        
                         self.googleAPICall()
                         // If sign in succeeded, display the app's main content View.
                         
-                      }
+                    }
                 }
                 else{
                     self.googleAPICall()
                 }
             }
         } else {
-         self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"error_field"))!)")
+            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"error_field"))!)")
         }
     }
     func emailAPICall(sender : UIButton)
     {
         let resendAPIquery = ResendConfirmEmailQuery()
-        apollo_headerClient.fetch(query: resendAPIquery,cachePolicy: .fetchIgnoringCacheData){(result,error) in
-            if(result?.data?.resendConfirmEmail?.status == 200)
-            {
-               
-                sender.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"verifyemail"))!)", for: .normal)
-                self.view.makeToast(result?.data?.resendConfirmEmail?.errorMessage)
-                self.lottieViewbtn.isHidden = true
-                //self.VerificationTableView.reloadData()
-            }
-            else
-            {
-                self.view.makeToast(result?.data?.resendConfirmEmail?.errorMessage != nil ? result?.data?.resendConfirmEmail?.errorMessage! : "")
-                self.lottieViewbtn.isHidden = true
+        Network.shared.apollo_headerClient.fetch(query: resendAPIquery,cachePolicy: .fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.resendConfirmEmail?.status,data == 200 {
+                    sender.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"verifyemail"))!)", for: .normal)
+                    self.view.makeToast(result.data?.resendConfirmEmail?.errorMessage)
+                    self.lottieViewbtn.isHidden = true
+                } else {
+                    self.view.makeToast(result.data?.resendConfirmEmail?.errorMessage!)
+                    self.lottieViewbtn.isHidden = true
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
+    
     func googleAPICall()
     {
         var actiontype = String()
@@ -258,35 +249,36 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
             actiontype = "false"
         }
         let socialloginverifyMutation = SocialLoginVerifyMutation(verificationType:"google", actionType:actiontype)
-        apollo_headerClient.perform(mutation:socialloginverifyMutation){(result,error) in
-            if(result?.data?.socialVerification?.status == 200)
-            {
-                print("success")
-                if(self.google_btn_title == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
-                {
-                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"googleconnected"))!)")
-                    self.google_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"disconnect"))!)"
+        Network.shared.apollo_headerClient.perform(mutation:socialloginverifyMutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.socialVerification?.status,data == 200 {
+                    print("success")
+                    if(self.google_btn_title == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
+                    {
+                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"googleconnected"))!)")
+                        self.google_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"disconnect"))!)"
+                    } else {
+                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"googledisconnected"))!)")
+                        self.google_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)"
+                    }
+                    self.VerificationTableView.reloadData()
                 } else {
-                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"googledisconnected"))!)")
-                    self.google_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)"
+                    self.view.makeToast(result.data?.socialVerification?.errorMessage!)
                 }
-                self.VerificationTableView.reloadData()
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            else
-            {
-                self.view.makeToast(result?.data?.socialVerification?.errorMessage != nil ? result?.data?.socialVerification?.errorMessage! : "")
-            }
-            
-            
         }
         
     }
+    
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if(error == nil)
         {
-        self.googleAPICall()
+            self.googleAPICall()
         } else{
-          
+            
         }
         
     }
@@ -317,52 +309,46 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
     
     func facebookVerifyAPICall(sender : UIButton)
     {
-    
-                var actiontype = String()
-                if(sender.currentTitle == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
-                {
-                    actiontype = "true"
+        
+        var actiontype = String()
+        if(sender.currentTitle == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
+        {
+            actiontype = "true"
+        } else {
+            
+            actiontype = "false"
+        }
+        let socialloginverifyMutation = SocialLoginVerifyMutation(verificationType:"facebook", actionType: actiontype)
+        Network.shared.apollo_headerClient.perform(mutation:socialloginverifyMutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.socialVerification?.status,data == 200 {
+                    if(sender.currentTitle == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
+                    {
+                        sender.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"disconnect"))!)", for:.normal)
+                        self.facebook_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"disconnect"))!)"
+                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"facebookconnected"))!)")
+                        
+                    } else {
+                        
+                        
+                        sender.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)", for:.normal)
+                        self.facebook_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)"
+                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"facebookdisconnected"))!)")
+                        
+                    }
+                    self.VerificationTableView.reloadData()
+                    
                 } else {
-                
-                   actiontype = "false"
+                    self.view.makeToast(result.data?.socialVerification?.errorMessage!)
                 }
-                let socialloginverifyMutation = SocialLoginVerifyMutation(verificationType:"facebook", actionType: actiontype)
-                self.apollo_headerClient.perform(mutation:socialloginverifyMutation){(result,error) in
-                    if(result?.data?.socialVerification?.status == 200)
-                    {
-                        if(sender.currentTitle == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
-                        {
-                            sender.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"disconnect"))!)", for:.normal)
-                            self.facebook_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"disconnect"))!)"
-                            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"facebookconnected"))!)")
-                           
-                        } else {
-                        
-                        
-                            sender.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)", for:.normal)
-                            self.facebook_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)"
-                            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"facebookdisconnected"))!)")
-                            
-                        }
-                        self.VerificationTableView.reloadData()
-                        
-                    }
-                    else
-                    {
-                        
-                        
-                        self.view.makeToast(result?.data?.socialVerification?.errorMessage != nil ? result?.data?.socialVerification?.errorMessage! : "")
-                    }
-                    
-                    
-                }
-                
-                
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-    
-    
-    
+        }
+    }
 }
+
 extension UIView {
     func dropShadow(scale: Bool = true) {
         layer.masksToBounds = false

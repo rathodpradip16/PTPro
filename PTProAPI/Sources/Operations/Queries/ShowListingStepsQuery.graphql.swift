@@ -5,37 +5,9 @@
 
 public class ShowListingStepsQuery: GraphQLQuery {
   public static let operationName: String = "ShowListingSteps"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query ShowListingSteps($listId: String!) {
-        showListingSteps(listId: $listId) {
-          __typename
-          results {
-            __typename
-            id
-            listId
-            step1
-            step2
-            step3
-            listing {
-              __typename
-              id
-              isReady
-              listApprovalStatus
-              isPublished
-              user {
-                __typename
-                userBanStatus
-              }
-            }
-            isPhotosAdded
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query ShowListingSteps($listId: String!) { showListingSteps(listId: $listId) { __typename results { __typename id listId step1 step2 step3 listing { __typename id isReady listApprovalStatus isPublished user { __typename userBanStatus } } isPhotosAdded } status errorMessage } }"#
     ))
 
   public var listId: String
@@ -48,10 +20,10 @@ public class ShowListingStepsQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("showListingSteps", ShowListingSteps?.self, arguments: ["listId": .variable("listId")]),
     ] }
 
@@ -62,10 +34,11 @@ public class ShowListingStepsQuery: GraphQLQuery {
     /// Parent Type: `ShowListingCommon`
     public struct ShowListingSteps: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.ShowListingCommon }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ShowListingCommon }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", Results?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -80,10 +53,11 @@ public class ShowListingStepsQuery: GraphQLQuery {
       /// Parent Type: `ShowListingSteps`
       public struct Results: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.ShowListingSteps }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ShowListingSteps }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("listId", Int?.self),
           .field("step1", String?.self),
@@ -106,10 +80,11 @@ public class ShowListingStepsQuery: GraphQLQuery {
         /// Parent Type: `ShowListing`
         public struct Listing: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.ShowListing }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ShowListing }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("isReady", Bool?.self),
             .field("listApprovalStatus", String?.self),
@@ -128,10 +103,11 @@ public class ShowListingStepsQuery: GraphQLQuery {
           /// Parent Type: `User`
           public struct User: PTProAPI.SelectionSet {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ParentType { PTProAPI.Objects.User }
-            public static var __selections: [Selection] { [
+            public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.User }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
               .field("userBanStatus", Int?.self),
             ] }
 

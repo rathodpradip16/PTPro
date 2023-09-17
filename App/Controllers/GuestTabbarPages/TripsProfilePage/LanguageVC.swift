@@ -40,7 +40,7 @@ class LanguageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     var LanguagesymbolArray = [String]()
     var appearanceArray = ["Auto","Light","Dark"]
     
-    var userEditProfileArray = GetProfileQuery.Data.UserAccount.Result()
+    var userEditProfileArray : GetProfileQuery.Data.UserAccount.Result?
     var selectedLanguageArray = NSMutableArray()
     var selectedAppearanceArray = NSMutableArray()
     var delegate:LanguageVCDelegate!
@@ -48,15 +48,6 @@ class LanguageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     var selectedCurrency = String()
     var selectedLanguageSymbol = String()
     var selectedLanguage = String()
-    let apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initialSetup()
@@ -139,7 +130,7 @@ class LanguageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     }
 
     @IBAction func retryBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         self.offlineView.isHidden = true
         self.doneBtn.isHidden = false
         }
@@ -149,7 +140,7 @@ class LanguageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func langSelected()
         {
-             if Utility().isConnectedToNetwork(){
+             if Utility.shared.isConnectedToNetwork(){
                  self.offlineView.isHidden = true
             if(!Utility.shared.isfrom_payoutcurrency){
                
@@ -240,7 +231,7 @@ class LanguageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     
     @IBAction func donebtntapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
              self.offlineView.isHidden = true
         if(!Utility.shared.isfrom_payoutcurrency){
            
@@ -466,9 +457,9 @@ class LanguageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                 cell.aboutLabel.textColor =  Theme.PRIMARY_COLOR
               cell.rightArrowimg.image = #imageLiteral(resourceName: "redtick")
             }
-            else if((userEditProfileArray.preferredCurrency) != nil)
+            else if((userEditProfileArray?.preferredCurrency) != nil)
             {
-            if((userEditProfileArray.preferredCurrency!) == (Utility.shared.currencyDataArray[indexPath.row].symbol!))
+                if((userEditProfileArray?.preferredCurrency!) == (Utility.shared.currencyDataArray[indexPath.row].symbol!))
             {
                 cell.aboutLabel.textColor =  Theme.PRIMARY_COLOR
                 cell.rightArrowimg.image = #imageLiteral(resourceName: "redtick")
@@ -528,7 +519,7 @@ class LanguageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
         }
         else{
             selectedLanguageArray.removeAllObjects()
-            userEditProfileArray.preferredLanguageName = ""
+            //userEditProfileArray?.preferredLanguageName = ""
             selectedLanguageArray.add(LanguageArray[indexPath.row])
             //selectedLanguageArray.add(Utility.shared.LanguageDataArray[indexPath.row].label!)
         }
@@ -594,12 +585,12 @@ class LanguageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                 //selectedLanguageArray.remove(Utility.shared.currencyDataArray[indexPath.row].symbol!)
                 
                 selectedLanguageArray.removeAllObjects()
-                userEditProfileArray.preferredCurrency = Utility.shared.currencyDataArray[indexPath.row].symbol!
+//                userEditProfileArray?.preferredCurrency = Utility.shared.currencyDataArray[indexPath.row].symbol!
                 self.selectedLanguageArray.add(Utility.shared.currencyDataArray[indexPath.row].symbol!)
             }
             else{
                 selectedLanguageArray.removeAllObjects()
-                userEditProfileArray.preferredCurrency = Utility.shared.currencyDataArray[indexPath.row].symbol!
+//                userEditProfileArray?.preferredCurrency = Utility.shared.currencyDataArray[indexPath.row].symbol!
                 self.selectedLanguageArray.add(Utility.shared.currencyDataArray[indexPath.row].symbol!)
                // Utility.shared.setPreferredCurrency(currency_rate: (Utility.shared.currencyDataArray[indexPath.row].symbol!))
             }
@@ -633,15 +624,16 @@ class LanguageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func EditProfileAPICall(fieldName:String,fieldValue:String)
     {
-        let editprofileMutation = EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: fieldValue, deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
-        apollo_headerClient.perform(mutation: editprofileMutation){ (result,error) in
-            
-            if(result?.data?.userUpdate?.status == 200)
-            {
-                print("success")
-            }
-            else {
-                self.view.makeToast(result?.data?.userUpdate?.errorMessage!)
+        let editprofileMutation = EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: .some(fieldValue), deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
+        Network.shared.apollo_headerClient.perform(mutation: editprofileMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.userUpdate?.status,data == 200 {
+                } else {
+                    self.view.makeToast(result.data?.userUpdate?.errorMessage!)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }

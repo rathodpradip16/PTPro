@@ -5,28 +5,9 @@
 
 public class ContactSupportQuery: GraphQLQuery {
   public static let operationName: String = "contactSupport"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query contactSupport($message: String, $listId: Int, $reservationId: Int, $userType: String) {
-        contactSupport(
-          message: $message
-          listId: $listId
-          reservationId: $reservationId
-          userType: $userType
-        ) {
-          __typename
-          result {
-            __typename
-            userId
-            email
-            firstName
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query contactSupport($message: String, $listId: Int, $reservationId: Int, $userType: String) { contactSupport( message: $message listId: $listId reservationId: $reservationId userType: $userType ) { __typename result { __typename userId email firstName } status errorMessage } }"#
     ))
 
   public var message: GraphQLNullable<String>
@@ -55,10 +36,10 @@ public class ContactSupportQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("contactSupport", ContactSupport?.self, arguments: [
         "message": .variable("message"),
         "listId": .variable("listId"),
@@ -74,10 +55,11 @@ public class ContactSupportQuery: GraphQLQuery {
     /// Parent Type: `UserCommon`
     public struct ContactSupport: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.UserCommon }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserCommon }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("result", Result?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -92,10 +74,11 @@ public class ContactSupportQuery: GraphQLQuery {
       /// Parent Type: `UserType`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.UserType }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserType }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("userId", String?.self),
           .field("email", String?.self),
           .field("firstName", String?.self),

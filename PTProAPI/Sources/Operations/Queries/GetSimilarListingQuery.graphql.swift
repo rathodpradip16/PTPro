@@ -5,36 +5,9 @@
 
 public class GetSimilarListingQuery: GraphQLQuery {
   public static let operationName: String = "getSimilarListing"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getSimilarListing($lat: Float, $lng: Float, $listId: Int) {
-        getSimilarListing(listId: $listId, lat: $lat, lng: $lng) {
-          __typename
-          results {
-            __typename
-            id
-            title
-            personCapacity
-            beds
-            bookingType
-            reviewsCount
-            reviewsStarRating
-            listingData {
-              __typename
-              basePrice
-              currency
-              cleaningPrice
-            }
-            wishListStatus
-            isListOwner
-            listPhotoName
-            roomType
-          }
-          status
-        }
-      }
-      """
+      #"query getSimilarListing($lat: Float, $lng: Float, $listId: Int) { getSimilarListing(listId: $listId, lat: $lat, lng: $lng) { __typename results { __typename id title personCapacity beds bookingType reviewsCount reviewsStarRating listingData { __typename basePrice currency cleaningPrice } wishListStatus isListOwner listPhotoName roomType } status } }"#
     ))
 
   public var lat: GraphQLNullable<Double>
@@ -59,10 +32,10 @@ public class GetSimilarListingQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getSimilarListing", GetSimilarListing?.self, arguments: [
         "listId": .variable("listId"),
         "lat": .variable("lat"),
@@ -77,10 +50,11 @@ public class GetSimilarListingQuery: GraphQLQuery {
     /// Parent Type: `AllList`
     public struct GetSimilarListing: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.AllList }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.AllList }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", [Result?]?.self),
         .field("status", Int?.self),
       ] }
@@ -93,10 +67,11 @@ public class GetSimilarListingQuery: GraphQLQuery {
       /// Parent Type: `ShowListing`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.ShowListing }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ShowListing }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("title", String?.self),
           .field("personCapacity", Int?.self),
@@ -129,10 +104,11 @@ public class GetSimilarListingQuery: GraphQLQuery {
         /// Parent Type: `ListingData`
         public struct ListingData: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.ListingData }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ListingData }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("basePrice", Double?.self),
             .field("currency", String?.self),
             .field("cleaningPrice", Double?.self),

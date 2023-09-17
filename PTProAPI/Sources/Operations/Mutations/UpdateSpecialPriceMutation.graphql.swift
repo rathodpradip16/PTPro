@@ -5,22 +5,9 @@
 
 public class UpdateSpecialPriceMutation: GraphQLMutation {
   public static let operationName: String = "UpdateSpecialPrice"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation UpdateSpecialPrice($listId: Int!, $blockedDates: [String], $calendarStatus: String, $isSpecialPrice: Float) {
-        UpdateSpecialPrice(
-          listId: $listId
-          blockedDates: $blockedDates
-          calendarStatus: $calendarStatus
-          isSpecialPrice: $isSpecialPrice
-        ) {
-          __typename
-          status
-          errorMessage
-        }
-      }
-      """
+      #"mutation UpdateSpecialPrice($listId: Int!, $blockedDates: [String], $calendarStatus: String, $isSpecialPrice: Float) { UpdateSpecialPrice( listId: $listId blockedDates: $blockedDates calendarStatus: $calendarStatus isSpecialPrice: $isSpecialPrice ) { __typename status errorMessage } }"#
     ))
 
   public var listId: Int
@@ -49,10 +36,10 @@ public class UpdateSpecialPriceMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("UpdateSpecialPrice", UpdateSpecialPrice?.self, arguments: [
         "listId": .variable("listId"),
         "blockedDates": .variable("blockedDates"),
@@ -68,10 +55,11 @@ public class UpdateSpecialPriceMutation: GraphQLMutation {
     /// Parent Type: `ListBlockedDatesResponseType`
     public struct UpdateSpecialPrice: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.ListBlockedDatesResponseType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ListBlockedDatesResponseType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
       ] }

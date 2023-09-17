@@ -31,7 +31,7 @@ class GoogleLocationService: UIViewController {
         let GetBaseUrl = URL(string: finalURL!)!
         
         print("BASE URL : \(String(describing: GetBaseUrl))")
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             
             let request = AF.request(GetBaseUrl).validate()
             

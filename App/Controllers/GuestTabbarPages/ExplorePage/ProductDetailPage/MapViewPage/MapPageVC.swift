@@ -18,7 +18,7 @@ class MapPageVC: UIViewController,GMSMapViewDelegate {
     
     var mapView: GMSMapView!
     var cirlce: GMSCircle!
-    var mapArray = ViewListingDetailsQuery.Data.ViewListing.Result()
+    var mapArray : ViewListingDetailsQuery.Data.ViewListing.Results?
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var HeadlocationLabel: UILabel!
@@ -27,8 +27,8 @@ class MapPageVC: UIViewController,GMSMapViewDelegate {
     @IBOutlet weak var bottomView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        let lat = mapArray.lat!
-        let long = mapArray.lng!
+        guard let lat = mapArray?.lat! else { return }
+        guard let long = mapArray?.lng! else { return }
         let camera = GMSCameraPosition.camera(withLatitude: lat,
                                                           longitude: long, zoom:15)
         
@@ -101,7 +101,7 @@ class MapPageVC: UIViewController,GMSMapViewDelegate {
         cirlce.strokeColor = Theme.PRIMARY_COLOR
         cirlce.strokeWidth = 2.5;
         cirlce.map = mapView
-        HeadlocationLabel.text = "\(mapArray.title != nil ? mapArray.title! : "") in \(mapArray.city != nil ? mapArray.city! : ""),\(mapArray.state != nil ? mapArray.state! : ""),\(mapArray.country != nil ? mapArray.country! : "")"
+        HeadlocationLabel.text = "\(mapArray?.title != nil ? mapArray?.title! : "") in \(mapArray?.city != nil ? mapArray?.city! : ""),\(mapArray?.state != nil ? mapArray?.state! : ""),\(mapArray?.country != nil ? mapArray?.country! : "")"
         locationTitleLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"location"))!)"
         bookingLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"exactlocation"))!)"
     }

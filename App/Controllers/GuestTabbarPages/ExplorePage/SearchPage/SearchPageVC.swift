@@ -201,7 +201,7 @@ class SearchPageVC: UIViewController,UITextFieldDelegate,CLLocationManagerDelega
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-      if Utility().isConnectedToNetwork(){
+      if Utility.shared.isConnectedToNetwork(){
           self.offlineView.isHidden = true
           placesTable.reloadData()
         }
@@ -233,7 +233,7 @@ class SearchPageVC: UIViewController,UITextFieldDelegate,CLLocationManagerDelega
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-           if Utility().isConnectedToNetwork(){
+           if Utility.shared.isConnectedToNetwork(){
             if(self.locationArray.count > 0)
             {
             let aString = ((self.locationArray.object(at: indexPath.row) as! NSDictionary).value(forKey: "address_full") as! String)

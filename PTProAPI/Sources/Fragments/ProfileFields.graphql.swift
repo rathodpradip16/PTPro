@@ -4,22 +4,16 @@
 @_exported import ApolloAPI
 
 public struct ProfileFields: PTProAPI.SelectionSet, Fragment {
-  public static var fragmentDefinition: StaticString { """
-    fragment profileFields on userProfile {
-      __typename
-      profileId
-      firstName
-      lastName
-      picture
-      location
-    }
-    """ }
+  public static var fragmentDefinition: StaticString {
+    #"fragment profileFields on userProfile { __typename profileId firstName lastName picture location }"#
+  }
 
   public let __data: DataDict
-  public init(data: DataDict) { __data = data }
+  public init(_dataDict: DataDict) { __data = _dataDict }
 
-  public static var __parentType: ParentType { PTProAPI.Objects.UserProfile }
-  public static var __selections: [Selection] { [
+  public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserProfile }
+  public static var __selections: [ApolloAPI.Selection] { [
+    .field("__typename", String.self),
     .field("profileId", Int?.self),
     .field("firstName", String?.self),
     .field("lastName", String?.self),

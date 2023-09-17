@@ -5,26 +5,9 @@
 
 public class ContactHostMutation: GraphQLMutation {
   public static let operationName: String = "ContactHost"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation ContactHost($listId: Int!, $hostId: String!, $content: String!, $userId: String!, $type: String, $startDate: String!, $endDate: String!, $personCapacity: Int) {
-        CreateEnquiry(
-          listId: $listId
-          hostId: $hostId
-          userId: $userId
-          content: $content
-          type: $type
-          startDate: $startDate
-          endDate: $endDate
-          personCapacity: $personCapacity
-        ) {
-          __typename
-          status
-          errorMessage
-        }
-      }
-      """
+      #"mutation ContactHost($listId: Int!, $hostId: String!, $content: String!, $userId: String!, $type: String, $startDate: String!, $endDate: String!, $personCapacity: Int) { CreateEnquiry( listId: $listId hostId: $hostId userId: $userId content: $content type: $type startDate: $startDate endDate: $endDate personCapacity: $personCapacity ) { __typename status errorMessage } }"#
     ))
 
   public var listId: Int
@@ -69,10 +52,10 @@ public class ContactHostMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("CreateEnquiry", CreateEnquiry?.self, arguments: [
         "listId": .variable("listId"),
         "hostId": .variable("hostId"),
@@ -92,10 +75,11 @@ public class ContactHostMutation: GraphQLMutation {
     /// Parent Type: `Enquiry`
     public struct CreateEnquiry: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.Enquiry }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Enquiry }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
       ] }

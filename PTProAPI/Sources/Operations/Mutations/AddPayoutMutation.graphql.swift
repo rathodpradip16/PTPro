@@ -5,38 +5,9 @@
 
 public class AddPayoutMutation: GraphQLMutation {
   public static let operationName: String = "addPayout"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation addPayout($methodId: Int!, $payEmail: String!, $address1: String!, $address2: String!, $city: String!, $state: String!, $country: String!, $zipcode: String!, $currency: String!, $firstname: String, $lastname: String, $accountNumber: String, $routingNumber: String, $businessType: String, $accountToken: String, $personToken: String) {
-        addPayout(
-          methodId: $methodId
-          payEmail: $payEmail
-          address1: $address1
-          address2: $address2
-          city: $city
-          state: $state
-          country: $country
-          zipcode: $zipcode
-          currency: $currency
-          firstname: $firstname
-          lastname: $lastname
-          accountNumber: $accountNumber
-          routingNumber: $routingNumber
-          businessType: $businessType
-          accountToken: $accountToken
-          personToken: $personToken
-        ) {
-          __typename
-          status
-          errorMessage
-          connectUrl
-          successUrl
-          failureUrl
-          stripeAccountId
-        }
-      }
-      """
+      #"mutation addPayout($methodId: Int!, $payEmail: String!, $address1: String!, $address2: String!, $city: String!, $state: String!, $country: String!, $zipcode: String!, $currency: String!, $firstname: String, $lastname: String, $accountNumber: String, $routingNumber: String, $businessType: String, $accountToken: String, $personToken: String) { addPayout( methodId: $methodId payEmail: $payEmail address1: $address1 address2: $address2 city: $city state: $state country: $country zipcode: $zipcode currency: $currency firstname: $firstname lastname: $lastname accountNumber: $accountNumber routingNumber: $routingNumber businessType: $businessType accountToken: $accountToken personToken: $personToken ) { __typename status errorMessage connectUrl successUrl failureUrl stripeAccountId } }"#
     ))
 
   public var methodId: Int
@@ -113,10 +84,10 @@ public class AddPayoutMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("addPayout", AddPayout?.self, arguments: [
         "methodId": .variable("methodId"),
         "payEmail": .variable("payEmail"),
@@ -144,10 +115,11 @@ public class AddPayoutMutation: GraphQLMutation {
     /// Parent Type: `GetPayoutType`
     public struct AddPayout: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.GetPayoutType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.GetPayoutType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
         .field("connectUrl", String?.self),

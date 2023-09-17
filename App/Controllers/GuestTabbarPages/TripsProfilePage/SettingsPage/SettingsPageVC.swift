@@ -28,20 +28,11 @@ class SettingsPageVC: UIViewController,LanguageVCDelegate {
     @IBOutlet weak var pageTitleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     var apollo_headerClient:ApolloClient!
-    var EditProfileArray = GetProfileQuery.Data.UserAccount.Result()
+    var EditProfileArray : GetProfileQuery.Data.UserAccount.Result?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor =   UIColor(named: "colorController")
-         apollo_headerClient = {
-            let configuration = URLSessionConfiguration.default
-            // Add additional headers as needed
-            configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-            
-            let url = URL(string:graphQLEndpoint)!
-            
-            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-        }()
-        
+         
         self.backBtn.setImage(UIImage(named: "left_arrow"), for: .normal)
         self.backBtn.setTitle("", for: .normal)
         self.backBtn.backgroundColor = Theme.ButtonBack_BG
@@ -77,39 +68,37 @@ class SettingsPageVC: UIViewController,LanguageVCDelegate {
     func EdiprofileAPICall()
     {
         let profileQuery = GetProfileQuery()
-        apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            
-            guard (result?.data?.userAccount?.result) != nil else
-            {
-                if result?.data?.userAccount?.status == 500{
-                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result?.data?.userAccount?.errorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                        UserDefaults.standard.removeObject(forKey: "user_token")
-                        UserDefaults.standard.removeObject(forKey: "user_id")
-                        UserDefaults.standard.removeObject(forKey: "password")
-                        UserDefaults.standard.removeObject(forKey: "currency_rate")
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        let welcomeObj = WelcomePageVC()
-                        appDelegate.setInitialViewController(initialView: welcomeObj)
-                    }))
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }else{
-                    self.view.makeToast(result?.data?.userAccount?.errorMessage!)
-                return
+        Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.userAccount?.result) != nil else
+                {
+                    if result.data?.userAccount?.status == 500{
+                        let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.userAccount?.errorMessage, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                            UserDefaults.standard.removeObject(forKey: "user_token")
+                            UserDefaults.standard.removeObject(forKey: "user_id")
+                            UserDefaults.standard.removeObject(forKey: "password")
+                            UserDefaults.standard.removeObject(forKey: "currency_rate")
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            let welcomeObj = WelcomePageVC()
+                            appDelegate.setInitialViewController(initialView: welcomeObj)
+                        }))
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    }else{
+                        self.view.makeToast(result.data?.userAccount?.errorMessage!)
+                        return
+                    }
                 }
+                
+                print(result.data?.userAccount?.result as Any)
+                Utility.shared.EditProfileArray  = ((result.data?.userAccount?.result)!)
+                self.EditProfileArray = ((result.data?.userAccount?.result)!)
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            
-            print(result?.data?.userAccount?.result as Any)
-            Utility.shared.EditProfileArray  = ((result?.data?.userAccount?.result)!)
-            self.EditProfileArray = ((result?.data?.userAccount?.result)!)
-
-           
-           
-
         }
-        
-        
     }
 
     
@@ -163,7 +152,7 @@ extension SettingsPageVC: UITableViewDelegate, UITableViewDataSource{
                 
             }else{
                 let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)
-                Utility.shared.selectedCurrency = Utility.shared.ProfileAPIArray.preferredCurrency ?? "USD"
+                Utility.shared.selectedCurrency = Utility.shared.ProfileAPIArray?.preferredCurrency ?? "USD"
                 if(currencysymbol == Utility.shared.selectedCurrency) {
                     cell.profileRightValueLabel.text =   "\(Utility.shared.selectedCurrency )"
                 }

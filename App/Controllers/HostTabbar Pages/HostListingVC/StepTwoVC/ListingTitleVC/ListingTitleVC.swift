@@ -47,9 +47,9 @@ class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
     
     var placeholderLabel : UILabel!
     var placeholderLabel1 : UILabel!
-    var getListingStep2Array = GetListingDetailsStep2Query.Data.GetListingDetail.Result()
+    var getListingStep2Array : GetListingDetailsStep2Query.Data.GetListingDetails.Results?
     var saveexit_Activated = String()
-    var showListingstepArray = ShowListingStepsQuery.Data.ShowListingStep.Result()
+    var showListingstepArray : ShowListingStepsQuery.Data.ShowListingSteps.Results?
     
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
     @IBOutlet weak var stepTitleHeightConstraint: NSLayoutConstraint!
@@ -143,7 +143,7 @@ class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
         else
         {
         
-        titleTV.text = getListingStep2Array.title != nil ? getListingStep2Array.title! : ""
+            titleTV.text = getListingStep2Array?.title != nil ? getListingStep2Array?.title! : ""
         
         }
         titleTV.isScrollEnabled = true
@@ -215,7 +215,7 @@ class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
         else
         {
        
-        descriptionTV.text = getListingStep2Array.description != nil ? getListingStep2Array.description! : ""
+            descriptionTV.text = getListingStep2Array?.description != nil ? getListingStep2Array?.description! : ""
         }
         
         descriptionTV.isScrollEnabled = true
@@ -301,16 +301,16 @@ class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
         }
     }
     @IBAction func backBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.view.endEditing(true)
      //   self.view!.layer.add(dismissrightAnimation()!, forKey: kCATransition)
             if(saveexit_Activated == "true")
             {
                 let StepTwoObj = StepTwoVC()
-                if ((!self.showListingstepArray.isPhotosAdded! || self.showListingstepArray.isPhotosAdded!) && (self.showListingstepArray.step2 == "completed")) {
+                if ((!(self.showListingstepArray?.isPhotosAdded! ?? false) || ((self.showListingstepArray?.isPhotosAdded!) != nil)) && (self.showListingstepArray?.step2 == "completed")) {
                     StepTwoObj.saveexit_Activated = "true"
                 }
-                if(self.showListingstepArray.step2 == "active")
+                if(self.showListingstepArray?.step2 == "active")
                 {
                     StepTwoObj.saveexit_Activated = "false"
                 }
@@ -330,7 +330,7 @@ class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
         }
     }
     @IBAction func savandexitBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             
         if(Utility.shared.host_step2_isfromEdit)
         {
@@ -371,7 +371,7 @@ class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
          self.present(becomeHostObj, animated:false, completion: nil)
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.nextBtn.isHidden = false
             self.offlinview.isHidden = true
         }
@@ -380,23 +380,22 @@ class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
     func manageListingSteps(listId:String,currentStep:Int)
     {
         let manageListingStepsMutation = ManageListingStepsMutation(listId:listId, currentStep:currentStep)
-        super.apollo_headerClient.perform(mutation: manageListingStepsMutation){ (result,error) in
-            
-            if(result?.data?.manageListingSteps?.status == 200)
-                {
-                    
-               // self.goToBecomeAHost()
+        Network.shared.apollo_headerClient.perform(mutation: manageListingStepsMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.manageListingSteps?.status,data == 200 {
+                } else {
+                    self.view.makeToast(result.data?.manageListingSteps?.errorMessage!)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            else {
-                self.view.makeToast(result?.data?.manageListingSteps?.errorMessage)
-            }
-            
         }
-            
+        
     }
     
     @IBAction func nextBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         let text_Title = titleTV.text.trimmingCharacters(in:.whitespacesAndNewlines)
         if(text_Title == "")
         {
@@ -508,10 +507,10 @@ extension ListingTitleVC: stepsUpdateProtocol{
             switch selectedPageIndex{
             case 0:
                 let StepTwoObj = StepTwoVC()
-                if ((!self.showListingstepArray.isPhotosAdded! || self.showListingstepArray.isPhotosAdded!) && (self.showListingstepArray.step2 == "completed")) {
+                if ((!(self.showListingstepArray?.isPhotosAdded! ?? false) || ((self.showListingstepArray?.isPhotosAdded!) != nil)) && (self.showListingstepArray?.step2 == "completed")) {
                     StepTwoObj.saveexit_Activated = "true"
                 }
-                if(self.showListingstepArray.step2 == "active")
+                if(self.showListingstepArray?.step2 == "active")
                 {
                     StepTwoObj.saveexit_Activated = "false"
                 }

@@ -5,26 +5,9 @@
 
 public class ReservationStatusMutation: GraphQLMutation {
   public static let operationName: String = "ReservationStatus"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation ReservationStatus($threadId: Int!, $content: String, $type: String, $startDate: String, $endDate: String, $personCapacity: Int, $reservationId: Int, $actionType: String) {
-        ReservationStatus(
-          threadId: $threadId
-          content: $content
-          type: $type
-          startDate: $startDate
-          endDate: $endDate
-          personCapacity: $personCapacity
-          reservationId: $reservationId
-          actionType: $actionType
-        ) {
-          __typename
-          status
-          errorMessage
-        }
-      }
-      """
+      #"mutation ReservationStatus($threadId: Int!, $content: String, $type: String, $startDate: String, $endDate: String, $personCapacity: Int, $reservationId: Int, $actionType: String) { ReservationStatus( threadId: $threadId content: $content type: $type startDate: $startDate endDate: $endDate personCapacity: $personCapacity reservationId: $reservationId actionType: $actionType ) { __typename status errorMessage } }"#
     ))
 
   public var threadId: Int
@@ -69,10 +52,10 @@ public class ReservationStatusMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("ReservationStatus", ReservationStatus?.self, arguments: [
         "threadId": .variable("threadId"),
         "content": .variable("content"),
@@ -92,10 +75,11 @@ public class ReservationStatusMutation: GraphQLMutation {
     /// Parent Type: `SendMessage`
     public struct ReservationStatus: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.SendMessage }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.SendMessage }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
       ] }

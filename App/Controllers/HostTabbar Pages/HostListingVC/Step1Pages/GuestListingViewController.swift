@@ -173,9 +173,9 @@ class GuestListingViewController: BaseHostTableviewController {
         
         
        
-        let bathrooms = Utility.shared.getListSettingsArray.bathrooms?.listSettings != nil ? (Utility.shared.getListSettingsArray.bathrooms?.listSettings![0]?.endValue)! : 0
+        guard let bathrooms = Utility.shared.getListSettingsArray?.bathrooms?.listSettings != nil ? (Utility.shared.getListSettingsArray?.bathrooms?.listSettings![0]?.endValue) : 0 else { return  }
         
-        let MinCount = Utility.shared.getListSettingsArray.bathrooms?.listSettings != nil ? (Utility.shared.getListSettingsArray.bathrooms?.listSettings![0]?.startValue)! : 0
+        let MinCount = Utility.shared.getListSettingsArray?.bathrooms?.listSettings != nil ? (Utility.shared.getListSettingsArray?.bathrooms?.listSettings![0]?.startValue)! : 0
         let valcount = bathrooms + 1
         var index = 0
         var incrVal = Float(MinCount)
@@ -204,7 +204,7 @@ class GuestListingViewController: BaseHostTableviewController {
     
     func setBathroomType()
     {
-        let typeListSettings = (Utility.shared.getListSettingsArray.bathroomType?.listSettings!)!
+        let typeListSettings = (Utility.shared.getListSettingsArray?.bathroomType?.listSettings!)!
         for item in typeListSettings
         {
             bathroomTypeArr.append((item?.itemName)!)
@@ -216,7 +216,7 @@ class GuestListingViewController: BaseHostTableviewController {
             bathroomTypeLbl = bathroomTypeArr.first != nil ? bathroomTypeArr.first! : ""
             pickerView.selectRow(0, inComponent: 0, animated: true)
             
-            Utility.shared.step1ValuesInfo.updateValue(((Utility.shared.getListSettingsArray.bathroomType?.listSettings!.count)! > 0 ? ((Utility.shared.getListSettingsArray.bathroomType?.listSettings!.first??.id!)!) : 0), forKey: "bathroomType")
+            Utility.shared.step1ValuesInfo.updateValue(((Utility.shared.getListSettingsArray?.bathroomType?.listSettings!.count)! > 0 ? ((Utility.shared.getListSettingsArray?.bathroomType?.listSettings!.first??.id!)!) : 0), forKey: "bathroomType")
         }else{
             _ = typeListSettings.filter({ (item) -> Bool in
                 if (Utility.shared.step1ValuesInfo["bathroomType"]! as? Int) == item?.id
@@ -236,7 +236,7 @@ class GuestListingViewController: BaseHostTableviewController {
             } else {
                 bathroomTypeLbl = bathroomTypeArr.first != nil ? bathroomTypeArr.first! : ""
                 pickerView.selectRow(0, inComponent: 0, animated: true)
-            Utility.shared.step1ValuesInfo.updateValue(((Utility.shared.getListSettingsArray.bathroomType?.listSettings!.count)! > 0 ? ((Utility.shared.getListSettingsArray.bathroomType?.listSettings!.first??.id!)!) : 0), forKey: "bathroomType")
+            Utility.shared.step1ValuesInfo.updateValue(((Utility.shared.getListSettingsArray?.bathroomType?.listSettings!.count)! > 0 ? ((Utility.shared.getListSettingsArray?.bathroomType?.listSettings!.first??.id!)!) : 0), forKey: "bathroomType")
             }
         }
     }
@@ -245,9 +245,9 @@ class GuestListingViewController: BaseHostTableviewController {
     override func setPersonCapacity()
     {
         var incrVal = 1
-        let personcapacity = (Utility.shared.getListSettingsArray.personCapacity?.listSettings![0]?.endValue)!
+        let personcapacity = (Utility.shared.getListSettingsArray?.personCapacity?.listSettings![0]?.endValue)!
         
-        let personMinCount = (Utility.shared.getListSettingsArray.personCapacity?.listSettings![0]?.startValue)!
+        let personMinCount = (Utility.shared.getListSettingsArray?.personCapacity?.listSettings![0]?.startValue)!
         for i in 0..<personcapacity
         {
             personCapacityArray.insert(incrVal , at: i)
@@ -267,8 +267,8 @@ class GuestListingViewController: BaseHostTableviewController {
     func setBedRoomsCount()
     {
         var bedroomincrVal = 1
-        let bedroomCapacityCount = (Utility.shared.getListSettingsArray.bedrooms?.listSettings![0]?.endValue)!
-        let bedroomCapacityminCount = (Utility.shared.getListSettingsArray.bedrooms?.listSettings![0]?.startValue)!
+        let bedroomCapacityCount = (Utility.shared.getListSettingsArray?.bedrooms?.listSettings![0]?.endValue)!
+        let bedroomCapacityminCount = (Utility.shared.getListSettingsArray?.bedrooms?.listSettings![0]?.startValue)!
         for i in 0..<bedroomCapacityCount
         {
             bedRoomCapacity.insert(bedroomincrVal , at: i)
@@ -294,8 +294,8 @@ class GuestListingViewController: BaseHostTableviewController {
     func setBedsCount()
     {
         var bedincrVal = 1
-        let bedCapacityCount = (Utility.shared.getListSettingsArray.beds?.listSettings![0]?.endValue)!
-        let bedCapacityminCount = (Utility.shared.getListSettingsArray.beds?.listSettings![0]?.startValue)!
+        let bedCapacityCount = (Utility.shared.getListSettingsArray?.beds?.listSettings![0]?.endValue)!
+        let bedCapacityminCount = (Utility.shared.getListSettingsArray?.beds?.listSettings![0]?.startValue)!
         for i in 0..<bedCapacityCount
         {
             bedCapacity.insert(bedincrVal , at: i)
@@ -345,13 +345,13 @@ class GuestListingViewController: BaseHostTableviewController {
     //IBActions
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineUIview.isHidden = true
         }
         
     }
     @IBAction func RedirectNextPage(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             
             
             let bedsCount = Utility.shared.step1ValuesInfo["beds"] as? Int
@@ -426,7 +426,7 @@ class GuestListingViewController: BaseHostTableviewController {
     }
     
     @IBAction func saveAndExit(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
                 self.lottieViewanimation()
             let bedsCount = Utility.shared.step1ValuesInfo["beds"] as? Int
             if(bedsCount != nil)
@@ -515,7 +515,7 @@ class GuestListingViewController: BaseHostTableviewController {
                 }
                 cell?.countshowLabel.text = "\(personCapacityValue)"
                 
-                if cell?.countshowLabel.text == String((Utility.shared.getListSettingsArray.personCapacity?.listSettings![0]?.startValue)!){
+                if cell?.countshowLabel.text == String((Utility.shared.getListSettingsArray?.personCapacity?.listSettings![0]?.startValue)!){
                     cell?.minusBtn.isEnabled = false
                     cell?.minusBtn.alpha = 0.5
                     cell?.minusBtn.borderColor = Theme.PRIMARY_COLOR.withAlphaComponent(0.5)
@@ -539,7 +539,7 @@ class GuestListingViewController: BaseHostTableviewController {
                 }
                 cell?.countshowLabel.text = "\(bedRoomCount)"
                 
-                if cell?.countshowLabel.text == String((Utility.shared.getListSettingsArray.bedrooms?.listSettings![0]?.startValue)!){
+                if cell?.countshowLabel.text == String((Utility.shared.getListSettingsArray?.bedrooms?.listSettings![0]?.startValue)!){
                     cell?.minusBtn.isEnabled = false
                     cell?.minusBtn.alpha = 0.5
                     cell?.minusBtn.borderColor = Theme.PRIMARY_COLOR.withAlphaComponent(0.5)
@@ -564,7 +564,7 @@ class GuestListingViewController: BaseHostTableviewController {
                 cell?.roomsTitleLabel.textColor =  UIColor(named: "Title_Header")
                 cell?.countshowLabel.text = "\(bedCount)"
                 
-                if cell?.countshowLabel.text == String((Utility.shared.getListSettingsArray.beds?.listSettings![0]?.startValue)!){
+                if cell?.countshowLabel.text == String((Utility.shared.getListSettingsArray?.beds?.listSettings![0]?.startValue)!){
                     cell?.minusBtn.isEnabled = false
                     cell?.minusBtn.alpha = 0.5
                     cell?.minusBtn.borderColor = Theme.PRIMARY_COLOR.withAlphaComponent(0.5)
@@ -627,7 +627,7 @@ class GuestListingViewController: BaseHostTableviewController {
                     cell?.roomsTitleLabel.textColor = UIColor(named: "Title_Header")
                     cell?.countshowLabel.textColor = UIColor(named: "Title_Header")
                     
-                    if cell?.countshowLabel.text == String((Utility.shared.getListSettingsArray.bathrooms?.listSettings![0]?.startValue)!){
+                    if cell?.countshowLabel.text == String((Utility.shared.getListSettingsArray?.bathrooms?.listSettings![0]?.startValue)!){
                         cell?.minusBtn.isEnabled = false
                         cell?.minusBtn.alpha = 0.5
                         cell?.minusBtn.borderColor = Theme.PRIMARY_COLOR.withAlphaComponent(0.5)
@@ -793,7 +793,7 @@ class GuestListingViewController: BaseHostTableviewController {
             bathroomTypeLbl = bathroomTypeArr[row]
         }
         pickerView.selectRow(row, inComponent: component, animated: true)
-        Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray.bathroomType?.listSettings![row]!.id!)!, forKey: "bathroomType")
+        Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray?.bathroomType?.listSettings![row]!.id!)!, forKey: "bathroomType")
     }
     
     //MARK: - UITextFieldDelegates

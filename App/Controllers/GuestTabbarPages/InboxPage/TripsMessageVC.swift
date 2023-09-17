@@ -27,7 +27,7 @@ class TripsMessageVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     @IBOutlet weak var inboxTable: UITableView!
     var totalListcount:Int = 0
     var PageIndex : Int = 1
-    var getallMessageArray = [GetAllThreadsQuery.Data.GetAllThread.Result]()
+    var getallMessageArray = [GetAllThreadsQuery.Data.GetAllThreads.Result]()
   
     var apollo_headerClient:ApolloClient!
      var lottieView: LottieAnimationView!
@@ -47,15 +47,6 @@ class TripsMessageVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     {
         if((Utility.shared.getCurrentUserToken()) != nil)
         {
-            apollo_headerClient = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                
-                let url = URL(string:graphQLEndpoint)!
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
         }
         else{
             apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
@@ -220,7 +211,7 @@ class TripsMessageVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            if Utility().isConnectedToNetwork(){
+            if Utility.shared.isConnectedToNetwork(){
         let InboxListingObj = InboxListingVC()
                 if(getallMessageArray.count > 0)
                 {
@@ -274,7 +265,7 @@ class TripsMessageVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.offlineView.isHidden = true
         self.getallMessageArray.removeAll()
         PageIndex = 1
@@ -284,65 +275,70 @@ class TripsMessageVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     func getMessageAPICall()
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             var threadtype = String()
-
+            
             if(Utility.shared.getTabbar()! || Utility.shared.isfromNotificationHost || Utility.shared.isfromBackroundBooking || Utility.shared.isfromOfflineNotification || Utility.shared.isfromOfflineBooking)
-
+                
             {
-              threadtype = HOST
+                threadtype = HOST
             }
             else{
                 threadtype = GUEST
             }
             
-            let getmessagequery = GetAllThreadsQuery(threadType:threadtype,currentPage:PageIndex)
+            let getmessagequery = GetAllThreadsQuery(threadType:.some(threadtype), threadId: .none, currentPage:.some(PageIndex))
             
-            apollo_headerClient.fetch(query:getmessagequery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
+            Network.shared.apollo_headerClient.fetch(query:getmessagequery,cachePolicy:.fetchIgnoringCacheData){ response in
                 self.inboxTable.isSkeletonable = false
                 self.inboxTable.hideSkeleton()
-                
-                guard (result?.data?.getAllThreads?.results) != nil else{
-                    print("Missing Data")
+                switch response {
+                case .success(let result):
                     
-                    if result?.data?.getAllThreads?.status == 500{
-                        let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message:result?.data?.getAllThreads?.errorMessage, preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                            UserDefaults.standard.removeObject(forKey: "user_token")
-                            UserDefaults.standard.removeObject(forKey: "user_id")
-                            UserDefaults.standard.removeObject(forKey: "password")
-                            UserDefaults.standard.removeObject(forKey: "currency_rate")
-                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                            let welcomeObj = WelcomePageVC()
-                            appDelegate.setInitialViewController(initialView: welcomeObj)
-                        }))
-                        self.present(alert, animated: true, completion: nil)
+                    guard (result.data?.getAllThreads?.results) != nil else{
+                        print("Missing Data")
+                        
+                        if result.data?.getAllThreads?.status == 500{
+                            let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message:result.data?.getAllThreads?.errorMessage, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                                UserDefaults.standard.removeObject(forKey: "user_token")
+                                UserDefaults.standard.removeObject(forKey: "user_id")
+                                UserDefaults.standard.removeObject(forKey: "password")
+                                UserDefaults.standard.removeObject(forKey: "currency_rate")
+                                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                let welcomeObj = WelcomePageVC()
+                                appDelegate.setInitialViewController(initialView: welcomeObj)
+                            }))
+                            self.present(alert, animated: true, completion: nil)
+                            return
+                        }
+                        if(self.getallMessageArray.count == 0)
+                        {
+                            
+                            self.inboxTable.isHidden = true
+                            self.noMessageView.isHidden = false
+                        }
+                        else
+                        {
+                            self.inboxTable.isHidden = false
+                            self.noMessageView.isHidden = true
+                        }
+                        
                         return
                     }
-                    if(self.getallMessageArray.count == 0)
-                    {
-                        
-                        self.inboxTable.isHidden = true
-                        self.noMessageView.isHidden = false
-                    }
-                    else
-                    {
-                        self.inboxTable.isHidden = false
-                        self.noMessageView.isHidden = true
-                    }
-                   
-                    return
+                    self.offlineView.isHidden = true
+                    self.inboxTable.isHidden = false
+                    self.lottieView.isHidden = true
+                    self.totalListcount = (result.data?.getAllThreads?.count)!
+                    self.getallMessageArray.append(contentsOf: ((result.data?.getAllThreads?.results)!) as! [GetAllThreadsQuery.Data.GetAllThreads.Result])
+                    self.inboxTable.isSkeletonable = false
+                    self.inboxTable.hideSkeleton()
+                    
+                    self.inboxTable.reloadData()
+                    
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-                self.offlineView.isHidden = true
-                self.inboxTable.isHidden = false
-                self.lottieView.isHidden = true
-                self.totalListcount = (result?.data?.getAllThreads?.count)!
-                 self.getallMessageArray.append(contentsOf: ((result?.data?.getAllThreads?.results)!) as! [GetAllThreadsQuery.Data.GetAllThread.Result])
-                self.inboxTable.isSkeletonable = false
-                self.inboxTable.hideSkeleton()
-               
-               self.inboxTable.reloadData()
-                
             }
         }
         else{

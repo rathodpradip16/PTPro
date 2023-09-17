@@ -71,15 +71,15 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     var PageIndex:Int = 1
     var totalPages = Int()
     var isScrollBottom:Bool = false
-    var ResultArray = GetThreadsQuery.Data.GetThread.Result()
-    var getmessageListquery = [GetThreadsQuery.Data.GetThread.Result.ThreadItem]()
-    var viewUpdateQuery = GetThreadsQuery.Data.GetThread.Result.ThreadItemForType()
-    var sendMessageArray = SendMessageMutation.Data.SendMessage.Result()
-    var getunreadthreadCount = GetUnReadThreadCountQuery.Data.GetUnReadThreadCount.Result()
+    var ResultArray : GetThreadsQuery.Data.GetThreads.Results?
+    var getmessageListquery = [GetThreadsQuery.Data.GetThreads.Results.ThreadItem]()
+    var viewUpdateQuery : GetThreadsQuery.Data.GetThreads.Results.ThreadItemForType?
+    var sendMessageArray : SendMessageMutation.Data.SendMessage.Results?
+    var getunreadthreadCount : GetUnReadThreadCountQuery.Data.GetUnReadThreadCount.Results?
     //var getallreservationquery = [GetAllReservationQuery.Data.GetAllReservation.Result]()
     
-    var viewListingArray = ViewListingDetailsQuery.Data.ViewListing.Result()
-    var getbillingArray = GetBillingCalculationQuery.Data.GetBillingCalculation.Result()
+    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
+    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     
     
     var releaseDate: NSDate?
@@ -96,15 +96,6 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     var preApproveStartString = String()
 
     
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     var isnewMessage:Bool = false
     
     override func viewDidLoad() {
@@ -235,14 +226,18 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     func ViewdetailApiCall(listid: Int){
         
         if Utility.shared.isConnectedToNetwork() {
-         
-            let viewlistingQuery = ViewListingDetailsQuery(listId: listid)
-            apollo_headerClient.fetch(query: viewlistingQuery, cachePolicy:.fetchIgnoringCacheData){(result, error) in
-                guard (result?.data?.viewListing?.results) != nil else{
-                    print("missing Data")
-                    return
+            
+            let viewlistingQuery = ViewListingDetailsQuery(listId: listid, preview: .none)
+            Network.shared.apollo_headerClient.fetch(query: viewlistingQuery, cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.viewListing?.results) != nil else{
+                        print("missing Data")
+                        return
+                    }
+                    self.viewListingArray = (result.data?.viewListing?.results)!
+                case .failure(_): break
                 }
-                self.viewListingArray = (result?.data?.viewListing?.results)!
             }
             
         }
@@ -298,14 +293,16 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     @IBAction func sendBtnTapped(_ sender: Any) {
-          if Utility().isConnectedToNetwork(){
+          if Utility.shared.isConnectedToNetwork(){
              message = messageTxtView.text
             if(!(Utility.shared.checkEmptyWithString(value: message)) && getmessageListquery.count > 0)
             {
           
             let timestamp = Date().currentTimeMillis()
            
-            let array =   GetThreadsQuery.Data.GetThread.Result.ThreadItem.init(id:self.sendMessageArray.id, threadId:self.threadId, reservationId:self.sendMessageArray.reservationId, content:messageTxtView.text, sentBy:Utility.shared.getCurrentUserID()! as String, type:"message", startDate: self.sendMessageArray.startDate, endDate:self.sendMessageArray.endDate, createdAt:"\(timestamp)")
+                let json: [String: AnyHashable] = ["id": self.sendMessageArray?.__data._data["id"] as? Int, "threadId": self.threadId,"reservationId":self.sendMessageArray?.reservationId,"content":messageTxtView.text, "sentBy":Utility.shared.getCurrentUserID()! as String,"type":"message","startDate":self.sendMessageArray?.startDate,"endDate":self.sendMessageArray?.endDate,"createdAt":"\(timestamp)"]
+                let array = GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
+                
                 print(sendMessageArray)
             self.getmessageListquery.insert(array, at:0)
                 
@@ -359,18 +356,24 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func sendMessageAPICall()
     {
-       
-            let sendMsgMutation = SendMessageMutation(threadId:threadId, content:message, type: "message")
-            
-         apollo_headerClient.perform(mutation: sendMsgMutation){(result,error) in
-                guard (result?.data?.sendMessage?.results) != nil else{
+        
+        let sendMsgMutation = SendMessageMutation(threadId:threadId, content:.some(message), type: "message")
+        
+        Network.shared.apollo_headerClient.perform(mutation: sendMsgMutation){ response in
+            switch response {
+            case .success(let result):
+                
+                guard (result.data?.sendMessage?.results) != nil else{
                     print("Missing Data")
                     return
                 }
-
-            self.sendMessageArray = (result?.data?.sendMessage?.results)!
- 
                 
+                self.sendMessageArray = (result.data?.sendMessage?.results)!
+                
+                
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
         }
     }
     
@@ -465,15 +468,19 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
   func readMessage()
-  {
-    let readMessageMutation = ReadMessageMutation(threadId: threadId)
-    apollo_headerClient.perform(mutation: readMessageMutation){(result,error) in
-        guard (result?.data?.readMessage?.status) != 200 else{
-            print("Missing Data")
-            return
-    }
-    
-    }
+    {
+        let readMessageMutation = ReadMessageMutation(threadId: threadId)
+        Network.shared.apollo_headerClient.perform(mutation: readMessageMutation){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.readMessage?.status) != 200 else{
+                    print("Missing Data")
+                    return
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
     }
     @IBAction func messageunreadTapped(_ sender: Any) {
         self.readMessage()
@@ -494,36 +501,31 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     //MARK: - UnReadCount Message
     @objc func getUnreadCountMessage()
     {
-         if Utility().isConnectedToNetwork(){
-            let getunreadmessageCount = GetUnReadThreadCountQuery(threadId: threadId)
-            apollo_headerClient.fetch(query: getunreadmessageCount,cachePolicy: .fetchIgnoringCacheData){(result,error) in
-                guard (result?.data?.getUnReadThreadCount?.results) != nil else{
-                    print("Missing Data")
-                    return
+        if Utility.shared.isConnectedToNetwork(){
+            let getunreadmessageCount = GetUnReadThreadCountQuery(threadId: .some(threadId))
+            Network.shared.apollo_headerClient.fetch(query: getunreadmessageCount,cachePolicy: .fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getUnReadThreadCount?.results) != nil else{
+                        print("Missing Data")
+                        return
+                    }
+                    self.getunreadthreadCount = (result.data?.getUnReadThreadCount?.results!)!
+                    if(result.data?.getUnReadThreadCount?.results?.isUnReadMessage == true)
+                    {
+                        //                    if(self.isnewMessage)
+                        //                    {
+                        self.unreadView.isHidden = false
+                        //}
+                        self.newmessageBtn.layer.cornerRadius = 20.0
+                        self.newmessageBtn.layer.masksToBounds = true
+                        self.newmessageBtn.layer.borderColor = Theme.TextLightColor.cgColor
+                        self.newmessageBtn.layer.borderWidth = 0.5
+                        print("Getmessage")
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-                self.getunreadthreadCount = (result?.data?.getUnReadThreadCount?.results!)!
-                if(result?.data?.getUnReadThreadCount?.results?.isUnReadMessage == true)
-                {
-//                    if(self.isnewMessage)
-//                    {
-                    self.unreadView.isHidden = false
-                    //}
-                    self.newmessageBtn.layer.cornerRadius = 20.0
-                    self.newmessageBtn.layer.masksToBounds = true
-                    self.newmessageBtn.layer.borderColor = Theme.TextLightColor.cgColor
-                    self.newmessageBtn.layer.borderWidth = 0.5
-                   
-                    
-                    
-                   
-                  //  self.unreadView.animShow()
-
-//
-//                    self.showunreadview(unreadview: unreadviewlayer)
-
-                    print("Getmessage")
-                }
-                
             }
         }
         else
@@ -550,7 +552,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func getMessageListAPICall(threadId:Int)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             var threadtype = String()
             if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
             {
@@ -558,91 +560,92 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     threadtype = GUEST
                 }
                 else {
-                  threadtype = HOST
+                    threadtype = HOST
                 }
-            
+                
             }
             else
             {
-             threadtype = GUEST
+                threadtype = GUEST
             }
             
             print("PageIndex \(PageIndex)")
             print("threadType \(threadtype)")
             print("threadID \(threadId)")
             
-            let getmessagequery = GetThreadsQuery(threadType:threadtype, threadId: threadId, currentPage: PageIndex)
-            apollo_headerClient.fetch(query:getmessagequery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-                guard (result?.data?.getThreads?.results) != nil else{
-                    print("Missing Data")
-                    self.view.makeToast("\(result?.data?.getThreads?.errorMessage ?? "\(Utility.shared.getLanguage()?.value(forKey:"somethingwrong") ?? "Something Went wrong")")")
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                        self.dismiss(animated: true)
-                    })
-                    return
-                }
-               
-               self.inboxlistingTable.hideSkeleton()
-                self.inboxlistingTable.isSkeletonable = false
-                if(!self.isnewMessage)
-                {
-                     self.totalListcount = (result?.data?.getThreads?.results?.getThreadCount)!
-                    self.getmessageListquery.append(contentsOf: ((result?.data?.getThreads?.results?.threadItems)!) as! [GetThreadsQuery.Data.GetThread.Result.ThreadItem])
-                   
-                    self.viewUpdateQuery =  (result?.data?.getThreads?.results?.threadItemForType)! 
-                    // self.getmessageListquery = self.getmessageListquery.reversed()
-                    self.ResultArray = ((result?.data?.getThreads?.results)!)
-//                    if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
-//                    {
-//                        self.nameLabel.text = self.ResultArray.guestProfile?.displayName != nil ? self.ResultArray.hostProfile?.displayName! : ""
-//                    }
-//                    else
-//                    {
-//                        self.nameLabel.text = self.ResultArray.hostProfile?.displayName != nil ? self.ResultArray.hostProfile?.displayName! : ""
-//                    }
-                    self.lottieView.isHidden = true
+            let getmessagequery = GetThreadsQuery(threadType:.some(threadtype), threadId: .some(threadId), currentPage: .some(PageIndex), sortOrder: .none)
+            Network.shared.apollo_headerClient.fetch(query:getmessagequery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getThreads?.results) != nil else{
+                        print("Missing Data")
+                        self.view.makeToast("\(result.data?.getThreads?.errorMessage ?? "\(Utility.shared.getLanguage()?.value(forKey:"somethingwrong") ?? "Something Went wrong")")")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                            self.dismiss(animated: true)
+                        })
+                        return
+                    }
+                    
                     self.inboxlistingTable.hideSkeleton()
                     self.inboxlistingTable.isSkeletonable = false
-                    self.ViewUpdation()
-                    UIView.performWithoutAnimation {
-                        self.inboxlistingTable.reloadSections([0], with: .none)
+                    if(!self.isnewMessage)
+                    {
+                        self.totalListcount = (result.data?.getThreads?.results?.getThreadCount)!
+                        self.getmessageListquery.append(contentsOf: ((result.data?.getThreads?.results?.threadItems)!) as! [GetThreadsQuery.Data.GetThreads.Results.ThreadItem])
+                        
+                        self.viewUpdateQuery =  (result.data?.getThreads?.results?.threadItemForType)!
+                        // self.getmessageListquery = self.getmessageListquery.reversed()
+                        self.ResultArray = ((result.data?.getThreads?.results)!)
+                        //                    if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
+                        //                    {
+                        //                        self.nameLabel.text = self.ResultArray?.guestProfile?.displayName != nil ? self.ResultArray?.hostProfile?.displayName! : ""
+                        //                    }
+                        //                    else
+                        //                    {
+                        //                        self.nameLabel.text = self.ResultArray?.hostProfile?.displayName != nil ? self.ResultArray?.hostProfile?.displayName! : ""
+                        //                    }
+                        self.lottieView.isHidden = true
+                        self.inboxlistingTable.hideSkeleton()
+                        self.inboxlistingTable.isSkeletonable = false
+                        self.ViewUpdation()
+                        UIView.performWithoutAnimation {
+                            self.inboxlistingTable.reloadSections([0], with: .none)
+                        }
+                        
+                    } else {
+                        
+                        self.unreadView.isHidden = true
+                        //self.isnewMessage = false
+                        var messageArray = [GetThreadsQuery.Data.GetThreads.Results.ThreadItem]()
+                        messageArray.removeAll()
+                        messageArray.append(contentsOf: ((result.data?.getThreads?.results?.threadItems)!) as! [GetThreadsQuery.Data.GetThreads.Results.ThreadItem])
+                        for i in 0..<messageArray.count
+                        {
+                            if messageArray[i].id != self.getmessageListquery[i].id
+                            {
+                                self.getmessageListquery.insert(((result.data?.getThreads?.results?.threadItems![i])!), at:i)
+                            }
+                        }
+                        
+                        self.viewUpdateQuery =  (result.data?.getThreads?.results?.threadItemForType)!
+                        self.ViewUpdation()
+                        UIView.performWithoutAnimation {
+                            self.inboxlistingTable.reloadSections([0], with: .none)
+                        }
+                        
+                        return
                     }
-                  
+                    
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-                else
-                {
-                
-                self.unreadView.isHidden = true
-                //self.isnewMessage = false
-                var messageArray = [GetThreadsQuery.Data.GetThread.Result.ThreadItem]()
-                messageArray.removeAll()
-                messageArray.append(contentsOf: ((result?.data?.getThreads?.results?.threadItems)!) as! [GetThreadsQuery.Data.GetThread.Result.ThreadItem])
-                for i in 0..<messageArray.count
-                {
-                  if messageArray[i].id != self.getmessageListquery[i].id
-                  {
-                 self.getmessageListquery.insert(((result?.data?.getThreads?.results?.threadItems![i])!), at:i)
-                    }
-                }
-                   
-                    self.viewUpdateQuery =  (result?.data?.getThreads?.results?.threadItemForType)! 
-                self.ViewUpdation()
-                    UIView.performWithoutAnimation {
-                        self.inboxlistingTable.reloadSections([0], with: .none)
-                    }
-                  
-                return
-                }
-                
-                
             }
-        }
-        else{
+        }else{
             // self.previousTable.isHidden = true
             self.offlineView.isHidden = false
             self.inboxlistingTable.isSkeletonable = true
             inboxlistingTable.showAnimatedGradientSkeleton()
-           
+            
             let shadowSize2 : CGFloat = 3.0
             let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
                                                         y: -shadowSize2 / 2,
@@ -758,7 +761,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 cell.circleIndicationView.backgroundColor = Utility.shared.getbookingtypeColor(type: getmessageListquery[indexPath.row].type ?? "")
                 return cell
             }
-            else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray.hostProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate != nil && getmessageListquery[indexPath.row].startDate != ""))
+            else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray?.hostProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate != nil && getmessageListquery[indexPath.row].startDate != ""))
             {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "inboxListingcellTableViewCell", for: indexPath)as! inboxListingcellTableViewCell
                 cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
@@ -770,9 +773,9 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 else{
                     cell.messageLAbel.text = getmessageListquery[indexPath.row].content != nil ? getmessageListquery[indexPath.row].content! : ""
                 }
-                if(ResultArray.hostProfile?.picture != nil)
+                if(ResultArray?.hostProfile?.picture != nil)
                 {
-                    let listimage = (ResultArray.hostProfile?.picture!)!
+                    let listimage = (ResultArray?.hostProfile?.picture!)!
                     cell.profileImage.sd_setImage(with: URL(string: "\(IMAGE_AVATAR_MEDIUM)\(listimage)"), placeholderImage: #imageLiteral(resourceName: "unknown"))
                 }
                 else
@@ -794,7 +797,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 
                 return cell
             }
-            else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray.guestProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate != nil && getmessageListquery[indexPath.row].startDate != ""))
+            else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray?.guestProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate != nil && getmessageListquery[indexPath.row].startDate != ""))
             {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ReceiverMessageCell", for: indexPath)as! ReceiverMessageCell
                 cell.selectionStyle = .none
@@ -808,9 +811,9 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 }
                 cell.receiverView.backgroundColor =  UIColor(named: "Button_Grey_Color")
                 cell.requestLabel.text = Utility.shared.getbookingtype(type:(getmessageListquery[indexPath.row].type!))
-                if(ResultArray.guestProfile?.picture != nil)
+                if(ResultArray?.guestProfile?.picture != nil)
                 {
-                    let listimage = (ResultArray.guestProfile?.picture!)!
+                    let listimage = (ResultArray?.guestProfile?.picture!)!
                     cell.profileImage.sd_setImage(with: URL(string: "\(IMAGE_AVATAR_MEDIUM)\(listimage)"), placeholderImage: #imageLiteral(resourceName: "unknown"))
                 }
                 else
@@ -832,7 +835,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 cell.circleIndicationView.backgroundColor = Utility.shared.getbookingtypeColor(type: getmessageListquery[indexPath.row].type ?? "")
                 return cell
             }
-            else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray.guestProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate == nil || getmessageListquery[indexPath.row].startDate == ""))
+            else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray?.guestProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate == nil || getmessageListquery[indexPath.row].startDate == ""))
             {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ReceiverMessageonlyCell", for: indexPath)as! ReceiverMessageonlyCell
                 cell.curveView.isHidden = false
@@ -849,9 +852,9 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 else{
                     cell.messageLabel.text = getmessageListquery[indexPath.row].content != nil ? getmessageListquery[indexPath.row].content!.trimmingCharacters(in: .newlines) : ""
                 }
-                if(ResultArray.guestProfile?.picture != nil)
+                if(ResultArray?.guestProfile?.picture != nil)
                 {
-                    let listimage = (ResultArray.guestProfile?.picture!)!
+                    let listimage = (ResultArray?.guestProfile?.picture!)!
                     cell.profileimage.sd_setImage(with: URL(string: "\(IMAGE_AVATAR_MEDIUM)\(listimage)"), placeholderImage: #imageLiteral(resourceName: "unknown"))
                 }
                 else
@@ -863,7 +866,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 cell.dateLabel.text = "\(msgday), \(msgdate)"
                 return cell
             }
-            else if((((getmessageListquery[indexPath.row].sentBy!) == (ResultArray.hostProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate == nil || getmessageListquery[indexPath.row].startDate == "")))
+            else if((((getmessageListquery[indexPath.row].sentBy!) == (ResultArray?.hostProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate == nil || getmessageListquery[indexPath.row].startDate == "")))
             {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "sendCell", for: indexPath)as! sendCell
                 cell.curveView.isHidden = false
@@ -882,9 +885,9 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 else{
                     cell.messageLAbel.text = getmessageListquery[indexPath.row].content != nil ? getmessageListquery[indexPath.row].content!.trimmingCharacters(in: .newlines) : ""
                 }
-                if(ResultArray.hostProfile?.picture != nil)
+                if(ResultArray?.hostProfile?.picture != nil)
                 {
-                    let listimage = (ResultArray.hostProfile?.picture!)!
+                    let listimage = (ResultArray?.hostProfile?.picture!)!
                     cell.profileImage.sd_setImage(with: URL(string: "\(IMAGE_AVATAR_MEDIUM)\(listimage)"), placeholderImage: #imageLiteral(resourceName: "unknown"))
                 }
                 else
@@ -937,7 +940,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             cell.circleIndicationView.backgroundColor = Utility.shared.getbookingtypeColor(type: getmessageListquery[indexPath.row].type ?? "")
             return cell
         }
-        else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray.guestProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate != nil && getmessageListquery[indexPath.row].startDate != ""))
+        else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray?.guestProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate != nil && getmessageListquery[indexPath.row].startDate != ""))
         {
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "inboxListingcellTableViewCell", for: indexPath)as! inboxListingcellTableViewCell
@@ -950,9 +953,9 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             else{
                 cell.messageLAbel.text = getmessageListquery[indexPath.row].content != nil ? getmessageListquery[indexPath.row].content!.trimmingCharacters(in: .newlines) : ""
             }
-            if(ResultArray.guestProfile?.picture != nil)
+            if(ResultArray?.guestProfile?.picture != nil)
             {
-                let listimage = (ResultArray.guestProfile?.picture!)!
+                let listimage = (ResultArray?.guestProfile?.picture!)!
                 cell.profileImage.sd_setImage(with: URL(string: "\(IMAGE_AVATAR_MEDIUM)\(listimage)"), placeholderImage: #imageLiteral(resourceName: "unknown"))
             }
             else
@@ -973,7 +976,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             
             return cell
         }
-        else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray.hostProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate != nil && getmessageListquery[indexPath.row].startDate != ""))
+        else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray?.hostProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate != nil && getmessageListquery[indexPath.row].startDate != ""))
         {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ReceiverMessageCell", for: indexPath)as! ReceiverMessageCell
             cell.selectionStyle = .none
@@ -986,9 +989,9 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 cell.receiverMsgLabel.text = getmessageListquery[indexPath.row].content != nil ? getmessageListquery[indexPath.row].content!.trimmingCharacters(in: .newlines) : ""
             }
             cell.requestLabel.text = Utility.shared.getbookingtype(type:(getmessageListquery[indexPath.row].type != nil ? getmessageListquery[indexPath.row].type! : ""))
-            if(ResultArray.hostProfile?.picture != nil)
+            if(ResultArray?.hostProfile?.picture != nil)
             {
-                let listimage = (ResultArray.hostProfile?.picture!)!
+                let listimage = (ResultArray?.hostProfile?.picture!)!
                 cell.profileImage.sd_setImage(with: URL(string: "\(IMAGE_AVATAR_MEDIUM)\(listimage)"), placeholderImage: #imageLiteral(resourceName: "unknown"))
             }
             else
@@ -1009,7 +1012,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             cell.circleIndicationView.backgroundColor = Utility.shared.getbookingtypeColor(type: getmessageListquery[indexPath.row].type ?? "")
             return cell
         }
-        else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray.hostProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate == nil ||  getmessageListquery[indexPath.row].startDate == ""))
+        else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray?.hostProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate == nil ||  getmessageListquery[indexPath.row].startDate == ""))
         {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ReceiverMessageonlyCell", for: indexPath)as! ReceiverMessageonlyCell
             cell.curveView.isHidden = false
@@ -1026,9 +1029,9 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             else{
                 cell.messageLabel.text = getmessageListquery[indexPath.row].content != nil ? getmessageListquery[indexPath.row].content!.trimmingCharacters(in: .newlines) : ""
             }
-            if(ResultArray.hostProfile?.picture != nil)
+            if(ResultArray?.hostProfile?.picture != nil)
             {
-                let listimage = (ResultArray.hostProfile?.picture!)!
+                let listimage = (ResultArray?.hostProfile?.picture!)!
                 cell.profileimage.sd_setImage(with: URL(string: "\(IMAGE_AVATAR_MEDIUM)\(listimage)"), placeholderImage: #imageLiteral(resourceName: "unknown"))
             }
             else
@@ -1040,7 +1043,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             cell.dateLabel.text = "\(msgday),\(msgdate)"
             return cell
         }
-        else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray.guestProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate == nil || getmessageListquery[indexPath.row].startDate == ""))
+        else if(((getmessageListquery[indexPath.row].sentBy!) == (ResultArray?.guestProfile?.userId!)) && (getmessageListquery[indexPath.row].startDate == nil || getmessageListquery[indexPath.row].startDate == ""))
         {
             let cell = tableView.dequeueReusableCell(withIdentifier: "sendCell", for: indexPath)as! sendCell
             cell.selectionStyle = .none
@@ -1058,9 +1061,9 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             else{
                 cell.messageLAbel.text = getmessageListquery[indexPath.row].content != nil ?  getmessageListquery[indexPath.row].content!.trimmingCharacters(in: .newlines) : ""
             }
-            if(ResultArray.guestProfile?.picture != nil)
+            if(ResultArray?.guestProfile?.picture != nil)
             {
-                let listimage = (ResultArray.guestProfile?.picture!)!
+                let listimage = (ResultArray?.guestProfile?.picture!)!
                 cell.profileImage.sd_setImage(with: URL(string: "\(IMAGE_AVATAR_MEDIUM)\(listimage)"), placeholderImage: #imageLiteral(resourceName: "unknown"))
             }
             else
@@ -1117,7 +1120,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                            
                 print(i ?? 0)
                     
-                if i.type == "preApproved"{
+                if i?.type == "preApproved"{
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
 
@@ -1180,7 +1183,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             HeaderViewShadowView.frame = CGRect(x: 25, y: 2, width: CustomHeaderView.frame.size.width-50, height: CustomHeaderView.frame.size.height-4)
                             HeaderDescriptionTitle.frame = CGRect(x: 10, y: 6, width: HeaderViewShadowView.frame.size.width-20, height: 50)
                             TimeLabel.frame = CGRect(x: 10, y: HeaderDescriptionTitle.frame.size.height+HeaderDescriptionTitle.frame.origin.y+5, width: HeaderDescriptionTitle.frame.size.width, height: 40)
-                            HeaderDescriptionTitle.text = "\((Utility.shared.getLanguage()?.value(forKey: "Booking_approved"))!) \(self.ResultArray.hostProfile?.firstName != nil ? ((self.ResultArray.hostProfile?.firstName!)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "fortheirlisting"))!)"
+                            HeaderDescriptionTitle.text = "\((Utility.shared.getLanguage()?.value(forKey: "Booking_approved"))!) \(self.ResultArray?.hostProfile?.firstName != nil ? ((self.ResultArray?.hostProfile?.firstName!)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "fortheirlisting"))!)"
                             if Utility.shared.isRTLLanguage()
                             {
                                HeaderActionBtn.frame = CGRect(x: HeaderViewShadowView.frame.size.width-85, y: TimeLabel.frame.size.height+TimeLabel.frame.origin.y+5, width: 80, height: 40)
@@ -1206,9 +1209,9 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             
                             
                             
-                            let CurrentDate = i.createdAt
-                            let sDate = i.startDate
-                            let edate = i.endDate
+                            let CurrentDate = i?.createdAt
+                            let sDate = i?.startDate
+                            let edate = i?.endDate
                             if(Int(sDate!) != nil && Int(edate!) != nil)
                             {
                                 let timeStampValueStart = Int(sDate!)!/1000
@@ -1283,7 +1286,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                         }
                         
                         
-                }else if i.type == "inquiry"{
+                }else if i?.type == "inquiry"{
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
                             
@@ -1294,10 +1297,10 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             HeaderViewShadowView.frame = CGRect(x:10, y: 2, width: CustomHeaderView.frame.size.width-20, height: CustomHeaderView.frame.size.height-4)
                             HeaderDescriptionTitle.frame = CGRect(x: 10, y: 6, width: HeaderViewShadowView.frame.size.width-20, height: 50)
                             TimeLabel.frame = CGRect(x: 10, y: additionalTitle.frame.size.height+HeaderDescriptionTitle.frame.origin.y+60, width: HeaderDescriptionTitle.frame.size.width, height: 40)
-                            HeaderDescriptionTitle.text = "\((Utility.shared.getLanguage()?.value(forKey: "Invite"))!) \(self.ResultArray.guestProfile?.firstName != nil ? ((self.ResultArray.guestProfile?.firstName!)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "By_preApproving"))!)"
+                            HeaderDescriptionTitle.text = "\((Utility.shared.getLanguage()?.value(forKey: "Invite"))!) \(self.ResultArray?.guestProfile?.firstName != nil ? ((self.ResultArray?.guestProfile?.firstName!)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "By_preApproving"))!)"
                             additionalTitle.frame = CGRect(x: 10, y: HeaderDescriptionTitle.frame.size.height+HeaderDescriptionTitle.frame.origin.y+10, width: HeaderViewShadowView.frame.size.width-20, height: 50)
                             additionalTitle.isHidden = false
-                            additionalTitle.text = "\((Utility.shared.getLanguage()?.value(forKey: "let"))!) \(self.ResultArray.guestProfile?.firstName != nil ? ((self.ResultArray.guestProfile?.firstName!)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "knowthesedays"))!)"
+                            additionalTitle.text = "\((Utility.shared.getLanguage()?.value(forKey: "let"))!) \(self.ResultArray?.guestProfile?.firstName != nil ? ((self.ResultArray?.guestProfile?.firstName!)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "knowthesedays"))!)"
                             additionalTitle.textColor =  UIColor(named: "searchPlaces_TextColor")
                             additionalTitle.numberOfLines = 2
                             if Utility.shared.isRTLLanguage()
@@ -1325,11 +1328,11 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             self.HeaderActionBtn.layer.cornerRadius = self.HeaderActionBtn.frame.size.height/2
                             self.HeaderActionBtn.clipsToBounds = true
                             
-                            let CurrentDate = i.createdAt //getmessageListquery.first?.createdAt
+                            let CurrentDate = i?.createdAt //getmessageListquery.first?.createdAt
                             
-                            let sDate = i.startDate //getmessageListquery.first?.startDate
+                            let sDate = i?.startDate //getmessageListquery.first?.startDate
                             
-                            let edate = i.endDate //getmessageListquery.first?.endDate
+                            let edate = i?.endDate //getmessageListquery.first?.endDate
                             if(Int(sDate!) != nil && Int(edate!) != nil) {
                             let timeStampValueStart = Int(sDate!)!/1000
                             let startingDate = Date(timeIntervalSince1970: TimeInterval(timeStampValueStart))
@@ -1405,7 +1408,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             HeaderViewShadowView.frame = CGRect(x: 25, y: 2, width: CustomHeaderView.frame.size.width-50, height: CustomHeaderView.frame.size.height-4)
                             HeaderDescriptionTitle.frame = CGRect(x: 5, y: 6, width: HeaderViewShadowView.frame.size.width-10, height: 30)
                             
-                            HeaderDescriptionTitle.text = "You messaged \(self.ResultArray.hostProfile?.firstName != nil ? ((self.ResultArray.hostProfile?.firstName!)!) : "")  about thier listing"
+                            HeaderDescriptionTitle.text = "You messaged \(self.ResultArray?.hostProfile?.firstName != nil ? ((self.ResultArray?.hostProfile?.firstName!)!) : "")  about thier listing"
                             
                             // let BookingLabel = UILabel()
                             HeaderDescLabel.frame = CGRect(x: 5, y: HeaderDescriptionTitle.frame.size.height+HeaderDescriptionTitle.frame.origin.y+1, width: HeaderViewShadowView.frame.size.width-10, height: 60)
@@ -1452,7 +1455,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             // TimeLabel.isHidden = true
                         }
                         
-                }else if i.type == "instantBooking" || i.type == "intantBooking" {
+                }else if i?.type == "instantBooking" || i?.type == "intantBooking" {
 
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
@@ -1563,7 +1566,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                         //                    HeaderActionBtn.isHidden = true
                         //                    TimeLabel.isHidden = true
                         
-                }else if i.type == "requestToBook" {
+                }else if i?.type == "requestToBook" {
 
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
@@ -1574,7 +1577,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             HeaderViewShadowView.frame = CGRect(x:10, y: 2, width: CustomHeaderView.frame.size.width-20, height: CustomHeaderView.frame.size.height-4)
                             HeaderDescriptionTitle.frame = CGRect(x: 10, y: 6, width: HeaderViewShadowView.frame.size.width-20, height: 50)
                             TimeLabel.frame = CGRect(x: 10, y: HeaderDescriptionTitle.frame.size.height+HeaderDescriptionTitle.frame.origin.y+5, width: HeaderDescriptionTitle.frame.size.width, height: 40)
-                            HeaderDescriptionTitle.text = "\((self.ResultArray.guestProfile?.firstName != nil ? ((self.ResultArray.guestProfile?.firstName!)!) : "")) \((Utility.shared.getLanguage()?.value(forKey: "Guest_BookingRequest"))!)"
+                            HeaderDescriptionTitle.text = "\((self.ResultArray?.guestProfile?.firstName != nil ? ((self.ResultArray?.guestProfile?.firstName!)!) : "")) \((Utility.shared.getLanguage()?.value(forKey: "Guest_BookingRequest"))!)"
                             
                             HeaderActionBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey: "approve"))!)", for: .normal)
                             HeaderActionBtn.setTitleColor(.white, for: .normal)
@@ -1608,11 +1611,11 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             HeaderDeclineButton.removeTarget(self, action: nil, for: .allEvents)
                             self.HeaderDeclineButton.addTarget(self, action: #selector(decline_btn_tapped), for: .touchUpInside)
                             
-                            let CurrentDate = i.createdAt //getmessageListquery.first?.createdAt
+                            let CurrentDate = i?.createdAt //getmessageListquery.first?.createdAt
                             
-                            let sDate = i.startDate //getmessageListquery.first?.startDate
+                            let sDate = i?.startDate //getmessageListquery.first?.startDate
                             
-                            let edate = i.endDate //getmessageListquery.first?.endDate
+                            let edate = i?.endDate //getmessageListquery.first?.endDate
                             if(Int(sDate!) != nil && Int(edate!) != nil) {
                             let timeStampValueStart = Int(sDate!)!/1000
                             let startingDate = Date(timeIntervalSince1970: TimeInterval(timeStampValueStart))
@@ -1675,7 +1678,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             HeaderViewShadowView.frame = CGRect(x: 25, y: 2, width: CustomHeaderView.frame.size.width-50, height: CustomHeaderView.frame.size.height-4)
                             HeaderDescriptionTitle.frame = CGRect(x: 10, y: 6, width: HeaderViewShadowView.frame.size.width-20, height: 50)
                             HeaderDescLabel.frame = CGRect(x: 10, y: HeaderDescriptionTitle.frame.size.height+HeaderDescriptionTitle.frame.origin.y+5, width: HeaderDescriptionTitle.frame.size.width, height: 20)
-                            HeaderDescriptionTitle.text = "\((Utility.shared.getLanguage()?.value(forKey: "yourrequest"))!) \(self.ResultArray.hostProfile?.firstName != nil ? ((self.ResultArray.hostProfile?.firstName!)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "listing"))!)"
+                            HeaderDescriptionTitle.text = "\((Utility.shared.getLanguage()?.value(forKey: "yourrequest"))!) \(self.ResultArray?.hostProfile?.firstName != nil ? ((self.ResultArray?.hostProfile?.firstName!)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "listing"))!)"
                             //TimeLabel.backgroundColor = .blue
                             HeaderDescLabel.text = "\((Utility.shared.getLanguage()?.value(forKey: "hostrespond"))!)"
                             HeaderDescLabel.font = UIFont(name: APP_FONT, size:14)
@@ -1691,7 +1694,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                         }
                         
                         
-                    }else if i.type == "cancelledByGuest"{
+                }else if i?.type == "cancelledByGuest"{
 
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
@@ -1706,7 +1709,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             HeaderDescLabel.frame = CGRect(x: 5, y: HeaderDescriptionTitle.frame.size.height+HeaderDescriptionTitle.frame.origin.y+1, width: HeaderViewShadowView.frame.size.width-10, height: 60)
                             //HeaderDescLabel.backgroundColor = .blue
                             HeaderDescLabel.font = UIFont(name:APP_FONT, size:12)
-                            HeaderDescLabel.text = "\(ResultArray.guestProfile?.firstName != nil ? ((ResultArray.guestProfile?.firstName)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "Booking_cancelled_Guest"))!)"
+                            HeaderDescLabel.text = "\(ResultArray?.guestProfile?.firstName != nil ? ((ResultArray?.guestProfile?.firstName)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "Booking_cancelled_Guest"))!)"
                             // HeaderViewShadowView.addSubview(BookingLabel)
                             HeaderActionBtn.frame = CGRect(x: 5, y: HeaderDescLabel.frame.size.height+HeaderDescLabel.frame.origin.y+10, width: 200, height: 40)
                             TimeLabel.frame = CGRect(x: HeaderActionBtn.frame.size.width+HeaderActionBtn.frame.origin.x+5, y: HeaderDescriptionTitle.frame.size.height+HeaderDescriptionTitle.frame.origin.y+5, width: HeaderDescriptionTitle.frame.size.width-85, height: 40)
@@ -1754,7 +1757,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                         }
                         
                         
-                    }else if i.type == "cancelledByHost"{
+                }else if i?.type == "cancelledByHost"{
 
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
@@ -1770,7 +1773,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             HeaderDescLabel.frame = CGRect(x: 5, y: HeaderDescriptionTitle.frame.size.height+HeaderDescriptionTitle.frame.origin.y+1, width: HeaderViewShadowView.frame.size.width-10, height: 40)
                             //HeaderDescLabel.backgroundColor = .blue
                             HeaderDescLabel.font = UIFont(name: APP_FONT_MEDIUM, size:14)
-                            HeaderDescLabel.text = "\(ResultArray.guestProfile?.firstName != nil ? ((ResultArray.guestProfile?.firstName)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "Booking_cancelled_Host"))!)"
+                            HeaderDescLabel.text = "\(ResultArray?.guestProfile?.firstName != nil ? ((ResultArray?.guestProfile?.firstName)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "Booking_cancelled_Host"))!)"
                             // HeaderViewShadowView.addSubview(BookingLabel)
                             if Utility.shared.isRTLLanguage()
                             {
@@ -1810,7 +1813,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             HeaderDescLabel.frame = CGRect(x: 5, y: HeaderDescriptionTitle.frame.size.height+HeaderDescriptionTitle.frame.origin.y+1, width: HeaderViewShadowView.frame.size.width-10, height: 40)
                             //HeaderDescLabel.backgroundColor = .blue
                             HeaderDescLabel.font = UIFont(name:APP_FONT, size:12)
-                            HeaderDescLabel.text = "\(ResultArray.hostProfile?.firstName != nil ? ((ResultArray.hostProfile?.firstName)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "Booking_cancelled_Guest"))!)"
+                            HeaderDescLabel.text = "\(ResultArray?.hostProfile?.firstName != nil ? ((ResultArray?.hostProfile?.firstName)!) : "") \((Utility.shared.getLanguage()?.value(forKey: "Booking_cancelled_Guest"))!)"
                             // HeaderViewShadowView.addSubview(BookingLabel)
                             if Utility.shared.isRTLLanguage()
                             {
@@ -1835,7 +1838,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             HeaderDeclineButton.isHidden = true
                             HeaderDescLabel.isHidden = false
                         }
-                    }else if i.type == "declined" {
+                    }else if i?.type == "declined" {
 
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
@@ -1900,7 +1903,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             HeaderDescLabel.isHidden = false
                             
                         }
-                    }else if i.type == "approved"{
+                    }else if i?.type == "approved"{
 
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
@@ -2009,7 +2012,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             
                         }
                         
-                    }else if i.type == "completed"{
+                    }else if i?.type == "completed"{
 
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
@@ -2090,7 +2093,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                             HeaderDeclineButton.isHidden = true
                             HeaderDescLabel.isHidden = false
                         }
-                    } else if i.type == "expired"{
+                    } else if i?.type == "expired"{
 
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
@@ -2240,72 +2243,61 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
 
     }
 
-    func profileAPICall()
-    {
+    func profileAPICall(){
         
         if(Utility.shared.getCurrentUserToken() != nil)
         {
             let profileQuery = GetProfileQuery()
-            apollo_headerClient = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                
-                let url = URL(string:graphQLEndpoint)!
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
-            apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-                
-                guard (result?.data?.userAccount?.result) != nil else
-                {
-                    if result?.data?.userAccount?.status == 500{
-                        let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result?.data?.userAccount?.errorMessage, preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                            UserDefaults.standard.removeObject(forKey: "user_token")
-                            UserDefaults.standard.removeObject(forKey: "user_id")
-                            UserDefaults.standard.removeObject(forKey: "password")
-                            UserDefaults.standard.removeObject(forKey: "currency_rate")
-                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                            let welcomeObj = WelcomePageVC()
-                            appDelegate.setInitialViewController(initialView: welcomeObj)
-                        }))
-                        self.present(alert, animated: true, completion: nil)
-                        return
-                    }else{
-                    print("Missing Data")
-                    self.lottieView.isHidden = true
-                        self.inboxlistingTable.hideSkeleton()
-                        self.inboxlistingTable.isSkeletonable = false
-                    self.HeaderActionBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey: "book"))!)", for: .normal)
-                    return
+            Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.userAccount?.result) != nil else
+                    {
+                        if result.data?.userAccount?.status == 500{
+                            let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.userAccount?.errorMessage, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                                UserDefaults.standard.removeObject(forKey: "user_token")
+                                UserDefaults.standard.removeObject(forKey: "user_id")
+                                UserDefaults.standard.removeObject(forKey: "password")
+                                UserDefaults.standard.removeObject(forKey: "currency_rate")
+                                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                let welcomeObj = WelcomePageVC()
+                                appDelegate.setInitialViewController(initialView: welcomeObj)
+                            }))
+                            self.present(alert, animated: true, completion: nil)
+                            return
+                        }else{
+                            print("Missing Data")
+                            self.lottieView.isHidden = true
+                            self.inboxlistingTable.hideSkeleton()
+                            self.inboxlistingTable.isSkeletonable = false
+                            self.HeaderActionBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey: "book"))!)", for: .normal)
+                            return
+                        }
                     }
-                }
-                self.lottieView.isHidden = true
-                self.inboxlistingTable.hideSkeleton()
-                self.inboxlistingTable.isSkeletonable = false
-                self.HeaderActionBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey: "book"))!)", for: .normal)
-                if (result?.data?.userAccount?.result?.picture) == nil {
-                    Utility.shared.isprofilepictureVerified = true
-                }else{
+                    self.lottieView.isHidden = true
+                    self.inboxlistingTable.hideSkeleton()
+                    self.inboxlistingTable.isSkeletonable = false
+                    self.HeaderActionBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey: "book"))!)", for: .normal)
+                    if (result.data?.userAccount?.result?.picture) == nil {
+                        Utility.shared.isprofilepictureVerified = true
+                    }else{
+                        
+                        Utility.shared.isprofilepictureVerified = false
+                    }
                     
-                    Utility.shared.isprofilepictureVerified = false
-                }
-                
-                Utility.shared.ProfileAPIArray = ((result?.data?.userAccount?.result)!)
-                if(Utility.shared.ProfileAPIArray.verification?.isEmailConfirmed == true)
-                {
-                    
-                    self.navigationAPICall()
-                }
-                else{
+                    Utility.shared.ProfileAPIArray = ((result.data?.userAccount?.result)!)
+                    if(Utility.shared.ProfileAPIArray?.verification?.isEmailConfirmed == true)
+                    {
+                        
+                        self.navigationAPICall()
+                    }
+                    else{
                         self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"emailverifyalert"))!)")
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-                
-
-                
-                
-                
             }
         }
     }
@@ -2412,8 +2404,8 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     }else{
                         if i.startDate != nil && i.endDate != nil{
                             
-                            recentString = i.startDate!
-                            endString = i.endDate!
+                            recentString = i.startDate! ?? ""
+                            endString = i.endDate! ?? ""
                             PersonCap = i.personCapacity ?? 1
                             reservartion = i.reservationId ?? 0
                         }else{
@@ -2463,90 +2455,91 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             }
             
             let billingListquery = GetBillingCalculationQuery(listId:Int(Utility.shared.ListID)!, startDate:dateFormaatter.string(from: startingDate), endDate:dateFormaatter.string(from: EndingDate), guests: PersonCap, convertCurrency:currency)
-            apollo_headerClient.fetch(query: billingListquery){(result,error) in
-                guard (result?.data?.getBillingCalculation?.result) != nil else{
+            Network.shared.apollo_headerClient.fetch(query: billingListquery){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getBillingCalculation?.result) != nil else{
+                        self.view.makeToast(result.data?.getBillingCalculation?.errorMessage!)
+                        return
+                    }
+                    self.getbillingArray = (result.data?.getBillingCalculation?.result)!
+                    Utility.shared.guestCountToBeSend = self.getbillingArray?.guests ?? Utility.shared.guestCountToBeSend
+                    let dateFormaatter1 = DateFormatter()
+                    dateFormaatter1.timeZone = TimeZone(abbreviation: "UTC")
+                    dateFormaatter1.dateFormat = "MMM dd"
+                    var datefetchedStart1 = String()
+                    var datefetchedEnd1 = String()
+                    datefetchedStart1 = dateFormaatter1.string(from: startingDate)
+                    datefetchedEnd1  = dateFormaatter1.string(from: EndingDate)
+                    
+                    //                let bookingStep = BookingstepOneVC()
+                    //                bookingStep.houserulesArray = self.viewListingArray.houseRules as! [ViewListingDetailsQuery.Data.ViewListing.Result.HouseRule]
+                    //                bookingStep.viewListingArray = self.viewListingArray
+                    //                Utility.shared.passbillingArray = self.getbillingArray
+                    //                Utility.shared.bookingListimage = self.viewListingArray.listPhotoName != nil ? self.viewListingArray.listPhotoName! : ""
+                    //                Utility.shared.bookingListname = self.viewListingArray.title != nil ? self.viewListingArray.title! : ""
+                    //                bookingStep.addDateinLabel = datefetchedStart1
+                    //                bookingStep.addDateoutLabel = datefetchedEnd1
+                    //                Utility.shared.PreApprovedID = true
+                    //                //                self.requestTable.reloadData()
+                    //
+                    //                Utility.shared.bookingdateLabel = "\(datefetchedStart1) - \(datefetchedEnd1), \(PersonCap) \((Utility.shared.getLanguage()?.value(forKey:"guest"))!)"
+                    //                Utility.shared.numberofnights_Selected = self.getbillingArray.nights != nil ? self.getbillingArray.nights! : 0
+                    //                var currencysymbol = String()
+                    //                if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
+                    //                         {
+                    //                             currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)!
+                    //                         }
+                    //                         else
+                    //                         {
+                    //                            currencysymbol = Utility.shared.getSymbol(forCurrencyCode:Utility.shared.currencyvalue_from_API_base)!
+                    //                         }
+                    //                bookingStep.totalPriceLabel = "\(currencysymbol)\(self.getbillingArray.total != nil ? ((self.getbillingArray.total)!) : 0.0)"
+                    //                bookingStep.modalPresentationStyle = .fullScreen
+                    //                self.present(bookingStep, animated: true, completion: nil)
+                    //
                     
                     
-                   
                     
-                    self.view.makeToast(result?.data?.getBillingCalculation?.errorMessage!)
-                    return
-                }
-                self.getbillingArray = (result?.data?.getBillingCalculation?.result)!
-                Utility.shared.guestCountToBeSend = self.getbillingArray.guests ?? Utility.shared.guestCountToBeSend
-                let dateFormaatter1 = DateFormatter()
-                dateFormaatter1.timeZone = TimeZone(abbreviation: "UTC")
-                dateFormaatter1.dateFormat = "MMM dd"
-                var datefetchedStart1 = String()
-                var datefetchedEnd1 = String()
-                datefetchedStart1 = dateFormaatter1.string(from: startingDate)
-                datefetchedEnd1  = dateFormaatter1.string(from: EndingDate)
-                
-//                let bookingStep = BookingstepOneVC()
-//                bookingStep.houserulesArray = self.viewListingArray.houseRules as! [ViewListingDetailsQuery.Data.ViewListing.Result.HouseRule]
-//                bookingStep.viewListingArray = self.viewListingArray
-//                Utility.shared.passbillingArray = self.getbillingArray
-//                Utility.shared.bookingListimage = self.viewListingArray.listPhotoName != nil ? self.viewListingArray.listPhotoName! : ""
-//                Utility.shared.bookingListname = self.viewListingArray.title != nil ? self.viewListingArray.title! : ""
-//                bookingStep.addDateinLabel = datefetchedStart1
-//                bookingStep.addDateoutLabel = datefetchedEnd1
-//                Utility.shared.PreApprovedID = true
-//                //                self.requestTable.reloadData()
-//
-//                Utility.shared.bookingdateLabel = "\(datefetchedStart1) - \(datefetchedEnd1), \(PersonCap) \((Utility.shared.getLanguage()?.value(forKey:"guest"))!)"
-//                Utility.shared.numberofnights_Selected = self.getbillingArray.nights != nil ? self.getbillingArray.nights! : 0
-//                var currencysymbol = String()
-//                if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
-//                         {
-//                             currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)!
-//                         }
-//                         else
-//                         {
-//                            currencysymbol = Utility.shared.getSymbol(forCurrencyCode:Utility.shared.currencyvalue_from_API_base)!
-//                         }
-//                bookingStep.totalPriceLabel = "\(currencysymbol)\(self.getbillingArray.total != nil ? ((self.getbillingArray.total)!) : 0.0)"
-//                bookingStep.modalPresentationStyle = .fullScreen
-//                self.present(bookingStep, animated: true, completion: nil)
-//
-                
-                
-                
-                let bookobj = RequestbookVC()
-                Utility.shared.booking_message = ""
-               
+                    let bookobj = RequestbookVC()
+                    Utility.shared.booking_message = ""
+                    
                     bookobj.viewListingArray = self.viewListingArray
-                bookobj.isFromMessage = true
-                bookobj.currency_Dict = Utility.shared.currency_Dict
-                bookobj.selectedStartDate = startingDate
-                bookobj.selectedEndDate = EndingDate
-                bookobj.currencyvalue_from_API_base = Utility.shared.currencyvalue_from_API_base ?? ""
-                if(bookobj.getbillingArray.checkIn == nil)
-                {
-                   
+                    bookobj.isFromMessage = true
+                    bookobj.currency_Dict = Utility.shared.currency_Dict
+                    bookobj.selectedStartDate = startingDate
+                    bookobj.selectedEndDate = EndingDate
+                    bookobj.currencyvalue_from_API_base = Utility.shared.currencyvalue_from_API_base ?? ""
+                    if(bookobj.getbillingArray?.checkIn == nil)
+                    {
+                        
                         bookobj.getbillingArray = self.getbillingArray
+                        
+                    }
                     
+                    Utility.shared.passbillingArray = self.getbillingArray
+                    Utility.shared.bookingListimage = self.viewListingArray?.listPhotoName != nil ? (self.viewListingArray?.listPhotoName!)! : ""
+                    Utility.shared.bookingListname = self.viewListingArray?.title != nil ? (self.viewListingArray?.title!)! : ""
+                    Utility.shared.PreApprovedID = true
+                    //                self.requestTable.reloadData()
+                    
+                    Utility.shared.bookingdateLabel = "\(datefetchedStart1) - \(datefetchedEnd1), \(PersonCap) \((Utility.shared.getLanguage()?.value(forKey:"guest"))!)"
+                    Utility.shared.numberofnights_Selected = self.getbillingArray?.nights != nil ? (self.getbillingArray?.nights!)! : 0
+                    var currencysymbol = String()
+                    if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
+                    {
+                        currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)!
+                    }
+                    else
+                    {
+                        currencysymbol = Utility.shared.getSymbol(forCurrencyCode:Utility.shared.currencyvalue_from_API_base)!
+                    }
+                    bookobj.delegate = self
+                    bookobj.modalPresentationStyle = .fullScreen
+                    self.present(bookobj, animated: true, completion: nil)
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-                
-                Utility.shared.passbillingArray = self.getbillingArray
-                Utility.shared.bookingListimage = self.viewListingArray.listPhotoName != nil ? self.viewListingArray.listPhotoName! : ""
-                Utility.shared.bookingListname = self.viewListingArray.title != nil ? self.viewListingArray.title! : ""
-                Utility.shared.PreApprovedID = true
-                //                self.requestTable.reloadData()
-                
-                Utility.shared.bookingdateLabel = "\(datefetchedStart1) - \(datefetchedEnd1), \(PersonCap) \((Utility.shared.getLanguage()?.value(forKey:"guest"))!)"
-                Utility.shared.numberofnights_Selected = self.getbillingArray.nights != nil ? self.getbillingArray.nights! : 0
-                var currencysymbol = String()
-                if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
-                         {
-                             currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)!
-                         }
-                         else
-                         {
-                            currencysymbol = Utility.shared.getSymbol(forCurrencyCode:Utility.shared.currencyvalue_from_API_base)!
-                         }
-                bookobj.delegate = self
-                bookobj.modalPresentationStyle = .fullScreen
-                self.present(bookobj, animated: true, completion: nil)
                 
             }
             
@@ -2621,8 +2614,8 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     if i.type == "requestToBook"{
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
-                            recentString = i.startDate!
-                            endString = i.endDate!
+                            recentString = i.startDate! 
+                            endString = i.endDate! 
                             PersonCap = i.personCapacity ?? 1
                             reservartion = i.reservationId ?? 0
                         }else if i.type == "preApproved"{
@@ -2649,10 +2642,9 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let sDate = recentString  //getmessageListquery.first?.startDate
                     let edate =  endString //getmessageListquery.first?.endDate
                     
-                    
-                    let array =   GetThreadsQuery.Data.GetThread.Result.ThreadItem.init(id:self.sendMessageArray.id, threadId:self.threadId, reservationId:reservartion, content:"", sentBy:Utility.shared.getCurrentUserID()! as String, type:"declined", startDate: sDate, endDate:edate, createdAt:"\(timestamp)")
-                    
-                    
+                    let json: [String: AnyHashable] = ["id": self.sendMessageArray?.__data._data["id"] as? Int, "threadId": self.threadId,"reservationId":reservartion,"content":"", "sentBy":Utility.shared.getCurrentUserID()! as String,"type":"declined","startDate":sDate,"endDate":edate,"createdAt":"\(timestamp)"]
+                    let array = GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
+
                     //     print( getmessageListquery.first?.startDate)
                     
                     let timeStampValueStart = Int(sDate) != nil  ? Int(sDate)!/1000 : 0
@@ -2671,20 +2663,24 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     print(datefetchedStart)
                     print(datefetchedEnd)
                     
-                    let reservationMutation = ReservationStatusMutation(threadId: threadId, content: "", type: "declined", startDate: datefetchedStart, endDate: datefetchedEnd, personCapacity: PersonCap, reservationId: reservartion, actionType: "declined")
-                    apollo_headerClient.perform(mutation: reservationMutation){ (result, error) in
-                        if result?.data?.reservationStatus?.status == 200{
-                            print("success")
-                            self.HeaderActionBtn.isUserInteractionEnabled = true
-                            self.HeaderDeclineButton.isUserInteractionEnabled = true
-                            self.getmessageListquery.insert(array, at: 0)
-                            self.getMessageListAPICall(threadId: self.threadId)
-                            self.inboxlistingTable.reloadData()
-                            self.ViewUpdation()
-                            self.countdownTimer.invalidate()
-                        }else{
-                            self.HeaderActionBtn.isUserInteractionEnabled = true
-                            self.HeaderDeclineButton.isUserInteractionEnabled = true
+                    let reservationMutation = ReservationStatusMutation(threadId: threadId, content: "", type: "declined", startDate: .some(datefetchedStart), endDate: .some(datefetchedEnd), personCapacity: .some(PersonCap), reservationId: .some(reservartion), actionType: "declined")
+                    Network.shared.apollo_headerClient.perform(mutation: reservationMutation){ response  in
+                        switch response{
+                        case .success(let result):
+                            if result.data?.reservationStatus?.status == 200{
+                                print("success")
+                                self.HeaderActionBtn.isUserInteractionEnabled = true
+                                self.HeaderDeclineButton.isUserInteractionEnabled = true
+                                self.getmessageListquery.insert(array, at: 0)
+                                self.getMessageListAPICall(threadId: self.threadId)
+                                self.inboxlistingTable.reloadData()
+                                self.ViewUpdation()
+                                self.countdownTimer.invalidate()
+                            }else{
+                                self.HeaderActionBtn.isUserInteractionEnabled = true
+                                self.HeaderDeclineButton.isUserInteractionEnabled = true
+                            }
+                        case .failure(_):break
                         }
                     }
                 }
@@ -2739,8 +2735,8 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     if i.type == "requestToBook"{
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
-                            recentString = i.startDate!
-                            endString = i.endDate!
+                            recentString = i.startDate! ?? ""
+                            endString = i.endDate! ?? ""
                             PersonCap = i.personCapacity ?? 1
                             reservartion = i.reservationId ?? 0
                         }else if i.type == "preApproved"{
@@ -2768,8 +2764,9 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let edate =  endString //getmessageListquery.first?.endDate
                     
                     
-                    let array =   GetThreadsQuery.Data.GetThread.Result.ThreadItem.init(id:self.sendMessageArray.id, threadId:self.threadId, reservationId:reservartion, content:"", sentBy:Utility.shared.getCurrentUserID()! as String, type:"approved", startDate: sDate, endDate:edate, createdAt:"\(timestamp)")
-                    
+
+                    let json: [String: AnyHashable] = ["id":self.sendMessageArray?.__data._data["id"] as? Int, "threadId":self.threadId, "reservationId":reservartion, "content":"", "sentBy":Utility.shared.getCurrentUserID()! as String, "type":"approved", "startDate": sDate, "endDate":edate, "createdAt":"\(timestamp)"]
+                    let array = GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
                     
                     //     print( getmessageListquery.first?.startDate)
                     
@@ -2789,18 +2786,22 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     print(datefetchedStart)
                     print(datefetchedEnd)
                     
-                    let reservationMutation = ReservationStatusMutation(threadId: threadId, content: "", type: "approved", startDate: datefetchedStart, endDate: datefetchedEnd, personCapacity: PersonCap, reservationId: reservartion, actionType: "approved")
-                    apollo_headerClient.perform(mutation: reservationMutation){ (result, error) in
-                        if result?.data?.reservationStatus?.status == 200{
-                            print("success")
-                            self.getMessageListAPICall(threadId: self.threadId)
-                            self.HeaderActionBtn.isUserInteractionEnabled = true
-                            self.getmessageListquery.insert(array, at: 0)
-                            self.inboxlistingTable.reloadData()
-                            self.ViewUpdation()
-                            self.countdownTimer.invalidate()
-                        }else{
-                            self.HeaderActionBtn.isUserInteractionEnabled = true
+                    let reservationMutation = ReservationStatusMutation(threadId: threadId, content: "", type: .some("approved"), startDate: .some(datefetchedStart), endDate: .some(datefetchedEnd), personCapacity: .some(PersonCap), reservationId: .some(reservartion), actionType: "approved")
+                    Network.shared.apollo_headerClient.perform(mutation: reservationMutation){ response in
+                        switch response{
+                        case .success(let result):
+                            if result.data?.reservationStatus?.status == 200{
+                                print("success")
+                                self.getMessageListAPICall(threadId: self.threadId)
+                                self.HeaderActionBtn.isUserInteractionEnabled = true
+                                self.getmessageListquery.insert(array, at: 0)
+                                self.inboxlistingTable.reloadData()
+                                self.ViewUpdation()
+                                self.countdownTimer.invalidate()
+                            }else{
+                                self.HeaderActionBtn.isUserInteractionEnabled = true
+                            }
+                        case .failure(_): break
                         }
                     }
                 }
@@ -2827,19 +2828,19 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     @objc func PreApproveTapped(){
         
         if Utility.shared.isConnectedToNetwork() {
-        //    self.offlineView.isHidden = true
-//             self.isnewMessage = true
-//           self.getMessageListAPICall(threadId: threadId)
-//            self.getUnreadCountMessage()
-//            self.readMessage()
+            //    self.offlineView.isHidden = true
+            //             self.isnewMessage = true
+            //           self.getMessageListAPICall(threadId: threadId)
+            //            self.getUnreadCountMessage()
+            //            self.readMessage()
             self.HeaderActionBtn.isUserInteractionEnabled = false
             self.lottieAnimation()
             self.readMessage()
             PageIndex = 0
             self.isnewMessage = true
-          
             
-          
+            
+            
             self.unreadView.isHidden = true
             var recentString = String()
             var endString = String()
@@ -2865,8 +2866,8 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     if i.type == "inquiry"{
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
-                            recentString = i.startDate!
-                            endString = i.endDate!
+                            recentString = i.startDate! ?? ""
+                            endString = i.endDate! ?? ""
                             PersonCap = i.personCapacity ?? 1
                             reservartion = i.reservationId ?? 0
                         }else if i.type == "preApproved"{
@@ -2894,8 +2895,8 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let edate =  endString //getmessageListquery.first?.endDate
                     
                     
-                    let array =   GetThreadsQuery.Data.GetThread.Result.ThreadItem.init(id:self.sendMessageArray.id, threadId:self.threadId, reservationId:reservartion, content:"", sentBy:Utility.shared.getCurrentUserID()! as String, type:"preApproved", startDate: sDate, endDate:edate, createdAt:"\(timestamp)")
-                    
+                    let json: [String: AnyHashable] = ["id":self.sendMessageArray?.__data._data["id"] as? Int, "threadId":self.threadId, "reservationId":reservartion, "content":"", "sentBy":Utility.shared.getCurrentUserID()! as String, "type":"preApproved", "startDate": sDate, "endDate":edate, "createdAt":"\(timestamp)"]
+                    let array = GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
                     
                     //     print( getmessageListquery.first?.startDate)
                     
@@ -2914,26 +2915,32 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     
                     print(datefetchedStart)
                     
-                    let preapproveMutation = PreapproveMutation(threadId: threadId, content: "", type: "preApproved", startDate: datefetchedStart, endDate: datefetchedEnd, personCapacity: PersonCap, reservationId: reservartion)
-                    apollo_headerClient.perform(mutation: preapproveMutation){(result,error) in
-                        
+                    let preapproveMutation = PreapproveMutation(threadId: threadId, content: "", type: "preApproved", startDate: .some(datefetchedStart), endDate: .some(datefetchedEnd), personCapacity: .some(PersonCap), reservationId: .some(reservartion))
+                    Network.shared.apollo_headerClient.perform(mutation: preapproveMutation){ response in
                         self.lottieView.isHidden = true
                         self.inboxlistingTable.hideSkeleton()
                         self.inboxlistingTable.isSkeletonable = false
-                        if result?.data?.sendMessage?.status == 200{
-                            print("Success")
-                           self.HeaderActionBtn.isUserInteractionEnabled = true
-                            self.HeaderActionBtn.isMultipleTouchEnabled = false
-                            self.getMessageListAPICall(threadId: self.threadId)
-                            self.getmessageListquery.insert(array, at:0)
-                            self.inboxlistingTable.reloadData()
-                            self.ViewUpdation()
-                            self.countdownTimer.invalidate()
-                            
-                        }else{
-                            self.HeaderActionBtn.isUserInteractionEnabled = true
-                            self.HeaderActionBtn.isMultipleTouchEnabled = false
+                        
+                        switch response {
+                        case .success(let result):
+                            if let data = result.data?.sendMessage?.status,data == 200 {
+                                print("Success")
+                                self.HeaderActionBtn.isUserInteractionEnabled = true
+                                self.HeaderActionBtn.isMultipleTouchEnabled = false
+                                self.getMessageListAPICall(threadId: self.threadId)
+                                self.getmessageListquery.insert(array, at:0)
+                                self.inboxlistingTable.reloadData()
+                                self.ViewUpdation()
+                                self.countdownTimer.invalidate()
+                                
+                            } else {
+                                self.HeaderActionBtn.isUserInteractionEnabled = true
+                                self.HeaderActionBtn.isMultipleTouchEnabled = false
+                            }
+                        case .failure(let error):
+                            self.view.makeToast(error.localizedDescription)
                         }
+                        
                     }
                 }
                 
@@ -2950,18 +2957,16 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 //
             }
             
-
+            
         }else{
             
             self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "error_field"))!)")
-//            self.offlineView_func()
-//
-//
-//            self.view.layoutIfNeeded()
-//            self.view.bringSubviewToFront(self.offlineView)
+            //            self.offlineView_func()
+            //
+            //
+            //            self.view.layoutIfNeeded()
+            //            self.view.bringSubviewToFront(self.offlineView)
         }
-        
-        
     }
     
     @objc func cancelReservationHost(){
@@ -2998,8 +3003,8 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     if i.type == "instantBooking" || i.type == "approved" || i.type == "intantBooking"{
                         if(Utility.shared.host_message_isfromHost || Utility.shared.host_message_isfrommessage || Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification)
                         {
-                            recentString = i.startDate!
-                            endString = i.endDate!
+                            recentString = i.startDate! ?? ""
+                            endString = i.endDate! ?? ""
                             PersonCap = i.personCapacity ?? 1
                             reservartion = i.reservationId ?? 0
                         }else{
@@ -3023,8 +3028,8 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let edate =  endString //getmessageListquery.first?.endDate
                     
                     
-                    let array =   GetThreadsQuery.Data.GetThread.Result.ThreadItem.init(id:self.sendMessageArray.id, threadId:self.threadId, reservationId:reservartion, content:"", sentBy:Utility.shared.getCurrentUserID()! as String, type:"preApproved", startDate: sDate, endDate:edate, createdAt:"\(timestamp)")
-                    
+                    let json: [String: AnyHashable]  =   ["id":self.sendMessageArray?.__data._data["id"] as? Int, "threadId":self.threadId, "reservationId":reservartion, "content":"", "sentBy":Utility.shared.getCurrentUserID()! as String, "type":"preApproved", "startDate": sDate, "endDate":edate, "createdAt":"\(timestamp)"]
+                    let array = GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
                     
                     //     print( getmessageListquery.first?.startDate)
                     
@@ -3115,8 +3120,8 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                         {
 
                         }else{
-                            recentString = i.startDate!
-                            endString = i.endDate!
+                            recentString = i.startDate! ?? ""
+                            endString = i.endDate! ?? ""
                             PersonCap = i.personCapacity ?? 1
                             reservartion = i.reservationId ?? 0
                         }
@@ -3141,8 +3146,8 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let edate =  endString //getmessageListquery.first?.endDate
                     
                     
-                    let array =   GetThreadsQuery.Data.GetThread.Result.ThreadItem.init(id:self.sendMessageArray.id, threadId:self.threadId, reservationId:reservartion, content:"", sentBy:Utility.shared.getCurrentUserID()! as String, type:"preApproved", startDate: sDate, endDate:edate, createdAt:"\(timestamp)")
-                    
+                    let json: [String: AnyHashable]  = ["id":self.sendMessageArray?.__data._data["id"], "threadId":self.threadId, "reservationId":reservartion, "content":"", "sentBy":Utility.shared.getCurrentUserID()! as String, "type":"preApproved", "startDate": sDate, "endDate":edate, "createdAt":"\(timestamp)"]
+                    let array = GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
                     
                     //     print( getmessageListquery.first?.startDate)
                     
@@ -3291,7 +3296,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     @objc func keyboardWillShow(sender: NSNotification) {
-      //  if Utility().isConnectedToNetwork(){
+      //  if Utility.shared.isConnectedToNetwork(){
         
         
         
@@ -3321,7 +3326,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
 
     @objc func keyboardWillHide(sender: NSNotification) {
         
-       // if Utility().isConnectedToNetwork(){
+       // if Utility.shared.isConnectedToNetwork(){
         let info = sender.userInfo!
         self.bottomview.frame.origin.y = (FULLHEIGHT - 75)
         if isformViewUpdation{

@@ -22,16 +22,7 @@ class VerifyOTPPage: UIViewController,UITextFieldDelegate{
     @IBOutlet weak var enterDigitLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var topView: UIView!
-    var EditProfileArray = GetProfileQuery.Data.UserAccount.Result()
-    let apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
+    var EditProfileArray : GetProfileQuery.Data.UserAccount.Result?
     var lottieView1: LottieAnimationView!
     var countrycode = String()
     var phoneno = String()
@@ -113,62 +104,67 @@ class VerifyOTPPage: UIViewController,UITextFieldDelegate{
     func verifyPhonenumberCall()
     {
         let verifyphonenoMutation = VerifyPhoneNumberMutation(verificationCode:Int(otpTF.text!)!)
-        apollo_headerClient.perform(mutation: verifyphonenoMutation){(result,error) in
-            if(result?.data?.verifyPhoneNumber?.status == 200)
-            {
-                 //self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
-                self.lottieView1.isHidden = true
-                               self.nextBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"next"))!)", for: .normal)
-                let editprofileobj = EditProfileVC()
-                editprofileobj.EditProfileArray = self.EditProfileArray
-                editprofileobj.modalPresentationStyle = .fullScreen
-                self.present(editprofileobj, animated:false, completion:nil)
-               
+        Network.shared.apollo_headerClient.perform(mutation: verifyphonenoMutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.verifyPhoneNumber?.status,data == 200 {
+                    //self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+                    self.lottieView1.isHidden = true
+                    self.nextBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"next"))!)", for: .normal)
+                    let editprofileobj = EditProfileVC()
+                    editprofileobj.EditProfileArray = self.EditProfileArray
+                    editprofileobj.modalPresentationStyle = .fullScreen
+                    self.present(editprofileobj, animated:false, completion:nil)
+                    
+                } else {
+                    self.view.makeToast(result.data?.verifyPhoneNumber?.errorMessage!)
+                    
+                    //                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"validotp"))!)")
+                    self.lottieView1.isHidden = true
+                    self.nextBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"next"))!)", for: .normal)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            else
-            {
-                self.view.makeToast(result?.data?.verifyPhoneNumber?.errorMessage!)
-                
-//                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"validotp"))!)")
-                self.lottieView1.isHidden = true
-                self.nextBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"next"))!)", for: .normal)
-            }
-//            else
-//            {
-//                self.view.makeToast(result?.data?.verifyPhoneNumber?.errorMessage!)
-//            }
+            
         }
     }
     func addPhonenumberCall()
-       {
-           let addphonenumberMutation = AddPhoneNumberMutation(countryCode:countrycode, phoneNumber:phoneno)
-           apollo_headerClient.perform(mutation: addphonenumberMutation){(result,error) in
-               if(result?.data?.addPhoneNumber?.status == 200)
-               {
-                   self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"sentOTP"))!)")
-                                   
-               }
-               else
-               {
-                   self.view.makeToast("\((result?.data?.addPhoneNumber?.errorMessage!)!)")
-               }
-           }
-       }
+    {
+        let addphonenumberMutation = AddPhoneNumberMutation(countryCode:countrycode, phoneNumber:phoneno)
+        Network.shared.apollo_headerClient.perform(mutation: addphonenumberMutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.addPhoneNumber?.status,data == 200 {
+                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"sentOTP"))!)")
+                } else {
+                    self.view.makeToast("\((result.data?.addPhoneNumber?.errorMessage!)!)")
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
+    }
     func getEnteredPhonenoAPICall()
     {
         let getEnteredphonenoquery = GetEnteredPhoneNoQuery()
-        apollo_headerClient.fetch(query:getEnteredphonenoquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            if(result?.data?.getPhoneData?.status == 200)
-            {
-                self.view.endEditing(true)
-                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"sentOTP"))!)")
-               
+        Network.shared.apollo_headerClient.fetch(query:getEnteredphonenoquery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.getPhoneData?.status,data == 200 {
+                    self.view.endEditing(true)
+                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"sentOTP"))!)")
+                } else {
+                    self.view.makeToast(result.data?.getPhoneData?.errorMessage!)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
 
     @IBAction func nextBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
     
         let OTPtext = otpTF.text?.trimmingCharacters(in: .whitespacesAndNewlines)
         if(OTPtext == "")

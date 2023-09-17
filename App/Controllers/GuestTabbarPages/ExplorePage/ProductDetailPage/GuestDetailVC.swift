@@ -25,7 +25,7 @@ protocol GuestDetailVCDelegate: class {
 class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,SKPhotoBrowserDelegate,AirbnbDatePickerDelegate,RequestbookVCDelegate,ContacthostVCDelegate,WhishlistPageVCProtocol{
     
     func didupdateWhishlistStatus(status: Bool) {
-        viewListingArray.wishListStatus = status
+        //   viewListingArray?.wishListStatus = status
         self.detailTable.reloadSections(IndexSet(integer: 0), with:.none)
        // self.viewDetailAPICall(listid:listID)
     }
@@ -108,14 +108,14 @@ class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     var apollo_headerClient: ApolloClient!
     
-    var viewListingArray = ViewListingDetailsQuery.Data.ViewListing.Result()
+    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
     var similarlistingArray = [GetSimilarListingQuery.Data.GetSimilarListing.Result]()
-    var propertyReviewArray = [GetPropertyReviewsQuery.Data.GetPropertyReview.Result]()
+    var propertyReviewArray = [GetPropertyReviewsQuery.Data.GetPropertyReviews.Result]()
     var propertyReviewsCount = 0
     var reviewTitle = ""
-    var reiewListingArray = [UserReviewsQuery.Data.UserReview.Result]()
-    var getreviewArray = [GetReviewsListQuery.Data.GetReview.Result]()
-    var getbillingArray = GetBillingCalculationQuery.Data.GetBillingCalculation.Result()
+    var reiewListingArray = [UserReviewsQuery.Data.UserReviews.Result]()
+    var getreviewArray = [GetReviewsListQuery.Data.GetReviews.Result]()
+    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     var delegate:GuestDetailVCDelegate?
     var Pagecontrol:ISPageControl!
     var isamenityTapped:Bool = false
@@ -166,15 +166,6 @@ class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     {
         if((Utility.shared.getCurrentUserToken()) != nil)
         {
-            apollo_headerClient = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                
-                let url = URL(string:graphQLEndpoint)!
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
             moreBtnImage.isHidden = false
             moreBtn.isHidden = false
             
@@ -192,7 +183,7 @@ class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
     @IBAction func moreBtnTapped(_ sender: Any) {
         
-          if Utility().isConnectedToNetwork(){
+          if Utility.shared.isConnectedToNetwork(){
             
         let actionSheetController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
@@ -240,13 +231,13 @@ class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     @IBAction func checkAvailabilityTapped(_ sender: Any) {
         let btnsendtag: UIButton = sender as! UIButton
-        if(viewListingArray.userId != nil)
+        if(viewListingArray?.userId != nil)
         {
-        if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(viewListingArray.userId!)"))
+        if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(viewListingArray?.userId!)"))
         {
             self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"ownbookalert"))!)")
         }
-        else if(viewListingArray.listingData?.maxDaysNotice == "unavailable")
+        else if(viewListingArray?.listingData?.maxDaysNotice == "unavailable")
         {
             self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"listunavailablebook"))!)")
         }
@@ -256,28 +247,29 @@ class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         {
         Utility.shared.blocked_date_month.removeAllObjects()
             
-        
-        for i in viewListingArray.blockedDates!
-        {
-        let timestamp = i?.blockedDates
-            let timestamValue =  Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
-        let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
-        let dateFormatter1 = DateFormatter()
-        dateFormatter1.dateFormat = "LL"
-        let date = "\(dateFormatter.string(from: newTime))"
-        if(i?.calendarStatus != "available")
-        {
-        Utility.shared.blocked_date_month.add("\(date)")
-        }
-        Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
-        }
-            if let minstay = (viewListingArray.listingData?.minNight!) {
+            if let dates = viewListingArray?.blockedDates{
+                for i in dates
+                {
+                    let timestamp = i?.blockedDates
+                    let timestamValue =  Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
+                    let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
+                    let dateFormatter1 = DateFormatter()
+                    dateFormatter1.dateFormat = "LL"
+                    let date = "\(dateFormatter.string(from: newTime))"
+                    if(i?.calendarStatus != "available")
+                    {
+                        Utility.shared.blocked_date_month.add("\(date)")
+                    }
+                    Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
+                }
+            }
+            if let minstay = (viewListingArray?.listingData?.minNight!) {
                 Utility.shared.minimumstay = minstay }
         Utility.shared.isfromcheckingPage = true
      
-                Utility.shared.maximum_days_notice = Utility.shared.maximum_notice_period(maximumnoticeperiod: (viewListingArray.listingData?.maxDaysNotice!)!)!
+                Utility.shared.maximum_days_notice = Utility.shared.maximum_notice_period(maximumnoticeperiod: (viewListingArray?.listingData?.maxDaysNotice!)!)!
         let datePickerViewController = AirbnbDatePickerViewController(dateFrom: selectedStartDate, dateTo: selectedEndDate)
         datePickerViewController.delegate = self
             datePickerViewController.isFromFilter = false
@@ -287,7 +279,7 @@ class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         self.present(navigationController, animated: true, completion: nil)
             }
             else{
-                if Utility().isConnectedToNetwork(){
+                if Utility.shared.isConnectedToNetwork(){
                     if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
                     {
                         let welcomeObj = WelcomePageVC()
@@ -297,7 +289,7 @@ class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                     }
                     else
                     {
-                if(getbillingArray.checkIn != nil)
+                        if(getbillingArray?.checkIn != nil)
                 {
                 let bookobj = RequestbookVC()
                 Utility.shared.booking_message = ""
@@ -306,7 +298,7 @@ class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 bookobj.selectedStartDate = selectedStartDate
                 bookobj.selectedEndDate = selectedEndDate
                 bookobj.currencyvalue_from_API_base = currencyvalue_from_API_base
-                if(bookobj.getbillingArray.checkIn == nil)
+                            if(bookobj.getbillingArray?.checkIn == nil)
                 {
                 bookobj.getbillingArray = getbillingArray
                 }
@@ -432,8 +424,8 @@ func initialSetup()
     
     func viewDetailAPICall(listid:Int)
     {
-       if Utility().isConnectedToNetwork(){
-        var viewListQuery = ViewListingDetailsQuery(listId:listid)
+       if Utility.shared.isConnectedToNetwork(){
+           var viewListQuery = ViewListingDetailsQuery(listId:listid, preview: .none)
         
         if(Utility.shared.unpublish_preview_check)
         {
@@ -442,11 +434,12 @@ func initialSetup()
         }
         else
         {
-           viewListQuery = ViewListingDetailsQuery(listId:listid)
+            viewListQuery = ViewListingDetailsQuery(listId:listid, preview: .none)
         }
-         apollo_headerClient.fetch(query: viewListQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            
-            guard (result?.data?.viewListing?.status) == 200 else{
+         Network.shared.apollo_headerClient.fetch(query: viewListQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+            guard (result.data?.viewListing?.status) == 200 else{
                     print("Missing Data")
 //                    if(self.viewListingArray == nil)
 //                    {
@@ -476,15 +469,15 @@ func initialSetup()
                     return
                 }
             
-            if result?.data?.viewListing?.status == 200 {
-                    self.viewListingArray = (result?.data?.viewListing?.results)!
-                    if(self.viewListingArray.listingData != nil)
+            if result.data?.viewListing?.status == 200 {
+                    self.viewListingArray = (result.data?.viewListing?.results)!
+                    if(self.viewListingArray?.listingData != nil)
                     {
                         if(Utility.shared.getPreferredCurrency() != nil &&  Utility.shared.getPreferredCurrency() != "")
                         {
                             let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)
-                            let from_currency = (self.viewListingArray.listingData?.currency!)
-                            let currency_amount = (self.viewListingArray.listingData?.basePrice != nil ? (self.viewListingArray.listingData?.basePrice?.clean) : "0")
+                            let from_currency = (self.viewListingArray?.listingData?.currency!)
+                            let currency_amount = (self.viewListingArray?.listingData?.basePrice != nil ? (self.viewListingArray?.listingData?.basePrice?.clean) : "0")
                             let price_value = Utility.shared.getCurrencyRate(basecurrency:self.currencyvalue_from_API_base, fromCurrency:from_currency!, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:Double(currency_amount!) as! Double)
                             let restricted_price =  Double(String(format: "%.2f",price_value))
                             self.PriceLabel.text =  "\(currencysymbol!)\(restricted_price!.clean) \((Utility.shared.getLanguage()?.value(forKey:"pernight"))!)"
@@ -492,17 +485,17 @@ func initialSetup()
                         else
                         {
                             let currencysymbol = Utility.shared.getSymbol(forCurrencyCode:self.currencyvalue_from_API_base)
-                            let from_currency = (self.viewListingArray.listingData?.currency!)
-                            let currency_amount = (self.viewListingArray.listingData?.basePrice != nil ? (self.viewListingArray.listingData?.basePrice?.clean) : "0")
+                            let from_currency = (self.viewListingArray?.listingData?.currency!)
+                            let currency_amount = (self.viewListingArray?.listingData?.basePrice != nil ? (self.viewListingArray?.listingData?.basePrice?.clean) : "0")
                             let price_value = Utility.shared.getCurrencyRate(basecurrency:self.currencyvalue_from_API_base, fromCurrency:from_currency!, toCurrency:self.currencyvalue_from_API_base, CurrencyRate:Utility.shared.currency_Dict, amount:Double(currency_amount!) as! Double)
                             let restricted_price =  Double(String(format: "%.2f",price_value))
                             self.PriceLabel.text =  "\(currencysymbol!)\(restricted_price!.clean) \((Utility.shared.getLanguage()?.value(forKey:"pernight"))!)"
                         }
-                        if let val = (self.viewListingArray.listingData?.cancellation?.policyName!)
+                        if let val = (self.viewListingArray?.listingData?.cancellation?.policyName!)
                         {
                             Utility.shared.cancelpolicy = val
                         }
-                        if let value = (self.viewListingArray.listingData?.cancellation?.policyContent!)
+                        if let value = (self.viewListingArray?.listingData?.cancellation?.policyContent!)
                         {
                             Utility.shared.cancelpolicy_content = value
                         }
@@ -531,8 +524,8 @@ func initialSetup()
                         
                 }
                     
-                let value1 = Float(self.viewListingArray.reviewsCount ?? 0)
-                let value2 = Float(self.viewListingArray.reviewsStarRating ?? 0)
+                let value1 = Float(self.viewListingArray?.reviewsCount ?? 0)
+                let value2 = Float(self.viewListingArray?.reviewsStarRating ?? 0)
                 if(value2 != 0.0){
                         let reviewcount = (value2/value1)
                     self.ratingView.rating = (Double(String(format: "%.f",reviewcount)) ?? 0.0)
@@ -543,12 +536,12 @@ func initialSetup()
                         self.ratingView.rating = 0
                     }
                     
-                    self.reviewcountAPICall(profileid: ((self.viewListingArray.user?.profile?.profileId!)!))
-                self.getreviewAPICall(listId: listid, hostId: "\(self.viewListingArray.userId!)")
-                    self.similarListingAPICall(lat:self.viewListingArray.lat!, lng: self.viewListingArray.lng!, lisId: self.viewListingArray.id!)
-                self.getPropertyReviewsAPICall(lisId: self.viewListingArray.id ?? 0)
+                    self.reviewcountAPICall(profileid: ((self.viewListingArray?.user?.profile?.profileId!)!))
+                self.getreviewAPICall(listId: listid, hostId: "\(self.viewListingArray?.userId!)")
+                self.similarListingAPICall(lat:self.viewListingArray?.lat! ?? 0, lng: self.viewListingArray?.lng! ?? 0, lisId: self.viewListingArray?.id! ?? 0)
+                self.getPropertyReviewsAPICall(lisId: self.viewListingArray?.id ?? 0)
                     self.lottieView.isHidden = true
-                    if((Utility.shared.getCurrentUserID() != nil) && ("\(self.viewListingArray.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                    if((Utility.shared.getCurrentUserID() != nil) && ("\(self.viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                     {
                         self.moreBtn.isHidden = true
                         self.moreBtnImage.isHidden = true
@@ -560,7 +553,7 @@ func initialSetup()
                         self.moreBtnImage.isHidden = false
                     }
                     
-                    if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewListingArray.userId!)"))
+                    if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewListingArray?.userId!)"))
                     {
                         self.likeBtn.isHidden = true
                         self.heartImg.isHidden = true
@@ -596,7 +589,9 @@ func initialSetup()
                 
             }
 
-                
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
             }
 
         
@@ -632,27 +627,37 @@ func initialSetup()
     
     func similarListingAPICall(lat:Double,lng:Double,lisId:Int)
     {
-     let similarlistingquery = GetSimilarListingQuery(lat: lat, lng: lng, listId: lisId)
-        apollo_headerClient.fetch(query: similarlistingquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            guard (result?.data?.getSimilarListing?.results) != nil else{
-                print("Missing Data")
-                return
+        let similarlistingquery = GetSimilarListingQuery(lat: .some(lat), lng: .some(lng), listId: .some(lisId))
+        Network.shared.apollo_headerClient.fetch(query: similarlistingquery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getSimilarListing?.results) != nil else{
+                    print("Missing Data")
+                    return
+                }
+                self.similarlistingArray = ((result.data?.getSimilarListing?.results)!) as! [GetSimilarListingQuery.Data.GetSimilarListing.Result]
+                self.detailTable.reloadData()
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            self.similarlistingArray = ((result?.data?.getSimilarListing?.results)!) as! [GetSimilarListingQuery.Data.GetSimilarListing.Result]
-             self.detailTable.reloadData()
         }
     }
     func getPropertyReviewsAPICall(lisId:Int){
         self.propertyReviewArray.removeAll()
-     let propertyReviewsQuery = GetPropertyReviewsQuery(currentPage: 1, listId: listID)
-        apollo_headerClient.fetch(query: propertyReviewsQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            guard (result?.data?.getPropertyReviews?.results) != nil else{
-                print("Missing Data")
-                return
+        let propertyReviewsQuery = GetPropertyReviewsQuery(currentPage: 1, listId: listID)
+        Network.shared.apollo_headerClient.fetch(query: propertyReviewsQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getPropertyReviews?.results) != nil else{
+                    print("Missing Data")
+                    return
+                }
+                self.propertyReviewsCount = result.data?.getPropertyReviews?.count ?? 0
+                self.propertyReviewArray = ((result.data?.getPropertyReviews?.results)!) as! [GetPropertyReviewsQuery.Data.GetPropertyReviews.Result]
+                self.detailTable.reloadData()
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            self.propertyReviewsCount = result?.data?.getPropertyReviews?.count ?? 0
-            self.propertyReviewArray = ((result?.data?.getPropertyReviews?.results)!) as! [GetPropertyReviewsQuery.Data.GetPropertyReview.Result]
-             self.detailTable.reloadData()
         }
     }
     @objc func propertyReviewsReadALLBtnTapped(sender: UIButton){
@@ -687,40 +692,43 @@ func initialSetup()
         var currency = String()
         if(Utility.shared.getPreferredCurrency() != nil &&  Utility.shared.getPreferredCurrency() != "")
         {
-             currency = Utility.shared.getPreferredCurrency() != nil ? Utility.shared.getPreferredCurrency()! : self.currencyvalue_from_API_base
-           
+            currency = Utility.shared.getPreferredCurrency() != nil ? Utility.shared.getPreferredCurrency()! : self.currencyvalue_from_API_base
+            
         }
         else{
-           currency = self.currencyvalue_from_API_base
+            currency = self.currencyvalue_from_API_base
         }
         
         let billingListquery = GetBillingCalculationQuery(listId:listID, startDate: startDate, endDate: endDate, guests: Utility.shared.guestCountToBeSend, convertCurrency:currency)
-        apollo_headerClient.fetch(query: billingListquery){(result,error) in
-            guard (result?.data?.getBillingCalculation?.result) != nil else{
-                print("Missing Data")
-                if(result?.data?.getBillingCalculation?.errorMessage != nil)
-                {
-                self.infoView.isHidden = false
-                self.infoView.frame.origin.y = self.bottomView.frame.origin.y-60
-                let attributedString: NSMutableAttributedString = NSMutableAttributedString(string:"\((Utility.shared.getLanguage()?.value(forKey: "info"))!) \((result?.data?.getBillingCalculation?.errorMessage!)!)")
-                    attributedString.setColor(color:  UIColor(named: "Title_Header")!, forText:"\((result?.data?.getBillingCalculation?.errorMessage!)!)")   // or use direct value for text "red"
-                attributedString.setColor(color:Theme.SECONDARY_COLOR, forText:"\((Utility.shared.getLanguage()?.value(forKey: "info"))!)")   // or use direct value f
-                       self.infoLabel.attributedText = attributedString
+        Network.shared.apollo_headerClient.fetch(query: billingListquery){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getBillingCalculation?.result) != nil else{
+                    print("Missing Data")
+                    if(result.data?.getBillingCalculation?.errorMessage != nil)
+                    {
+                        self.infoView.isHidden = false
+                        self.infoView.frame.origin.y = self.bottomView.frame.origin.y-60
+                        let attributedString: NSMutableAttributedString = NSMutableAttributedString(string:"\((Utility.shared.getLanguage()?.value(forKey: "info"))!) \((result.data?.getBillingCalculation?.errorMessage!)!)")
+                        attributedString.setColor(color:  UIColor(named: "Title_Header")!, forText:"\((result.data?.getBillingCalculation?.errorMessage!)!)")   // or use direct value for text "red"
+                        attributedString.setColor(color:Theme.SECONDARY_COLOR, forText:"\((Utility.shared.getLanguage()?.value(forKey: "info"))!)")   // or use direct value f
+                        self.infoLabel.attributedText = attributedString
+                    }
+                    //self.infoLabel.text = "info \((result.data?.getBillingCalculation?.errorMessage!)!)"
+                    return
                 }
-                //self.infoLabel.text = "info \((result?.data?.getBillingCalculation?.errorMessage!)!)"
-                return
+                
+                self.getbillingArray = (result.data?.getBillingCalculation?.result)!
+                Utility.shared.guestCountToBeSend = self.getbillingArray?.guests ?? Utility.shared.guestCountToBeSend
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-  
-            self.getbillingArray = (result?.data?.getBillingCalculation?.result)!
-            Utility.shared.guestCountToBeSend = self.getbillingArray.guests ?? Utility.shared.guestCountToBeSend
-            
-            
-    }
+        }
         
     }
      
     @IBAction func shareBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
         {
             let welcomeObj = WelcomePageVC()
@@ -776,7 +784,7 @@ func initialSetup()
     }
     @IBAction func likeBtnTapped(_ sender: Any) {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
         {
             let welcomeObj = WelcomePageVC()
@@ -786,10 +794,10 @@ func initialSetup()
         }
         else
         {
-            if viewListingArray.id != nil {
+            if viewListingArray?.id != nil {
                 let headerView = WhishlistPageVC()
-                headerView.listID = viewListingArray.id!
-                headerView.listimage = viewListingArray.listPhotoName!
+                headerView.listID = viewListingArray?.id! ?? 0
+                headerView.listimage = viewListingArray?.listPhotoName! ?? ""
                 headerView.delegate = self
                 headerView.modalPresentationStyle = .overFullScreen
                 self.present(headerView, animated: true, completion: nil)
@@ -822,7 +830,7 @@ func initialSetup()
     
     //MARK:*************************************************** TABLEVIEW DELEGATE & DATASOURCE METHODS ************************************************>
     func numberOfSections(in tableView: UITableView) -> Int {
-        if(viewListingArray.listingPhotos != nil)
+        if(viewListingArray?.listingPhotos != nil)
         {
         return 10
         }
@@ -834,7 +842,7 @@ func initialSetup()
       {
         
           if(section == 4){
-              if(viewListingArray.userAmenities!.count > 4)
+              if(viewListingArray?.userAmenities!.count ?? 0 > 4)
               {
               if(!isamenityTapped){
                                   return  "\((Utility.shared.getLanguage()?.value(forKey:"showallamenities"))!)"
@@ -849,7 +857,7 @@ func initialSetup()
               }
           }
           else if(section == 5){
-               if(viewListingArray.userSpaces!.count > 4)
+              if(viewListingArray?.userSpaces!.count ?? 0 > 4)
                {
                 
                      if(!isuserspaceTapped){
@@ -864,9 +872,9 @@ func initialSetup()
               }
                  }
           else if(section == 6){
-              if(viewListingArray.userSafetyAmenities!.count > 4)
+              if(viewListingArray?.userSafetyAmenities!.count ?? 0 > 4)
               {
-              if(viewListingArray.userSafetyAmenities!.count > 0)
+                  if(viewListingArray?.userSafetyAmenities!.count ?? 0 > 0)
               {
                      if(!isusersafetyamenityTapped){
                         
@@ -935,7 +943,7 @@ func initialSetup()
           let footerView = UIView()
           footerView.backgroundColor = UIColor.white
         
-        if((section == 4 && (viewListingArray.userAmenities!.count > 4)) || (section == 5 && (viewListingArray.userSpaces!.count > 4)) || (section == 6 && (viewListingArray.userSafetyAmenities!.count > 4))) {
+          if((section == 4 && (viewListingArray?.userAmenities!.count ?? 0 > 4)) || (section == 5 && (viewListingArray?.userSpaces!.count ?? 0 > 4)) || (section == 6 && (viewListingArray?.userSafetyAmenities!.count ?? 0 > 4))) {
           let showmore = UIButton()
           showmore.frame = CGRect(x:15, y:0, width:tableView.bounds.size.width-40, height:45)
           showmore.backgroundColor = UIColor.white
@@ -958,16 +966,16 @@ func initialSetup()
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if((section==4) || (section==5) || (section==6)) {
             
-              if((section == 4) && (viewListingArray.userAmenities!.count > 4)) {
+            if((section == 4) && (viewListingArray?.userAmenities!.count ?? 0 > 4)) {
                 return 50
                 
               }
-            else if((section == 5) && (viewListingArray.userSpaces!.count > 4)) {
+            else if((section == 5) && (viewListingArray?.userSpaces!.count ?? 0 > 4)) {
                 return 50
                 
               }
              
-            else if((section == 6) && (viewListingArray.userSafetyAmenities!.count > 4)) {
+            else if((section == 6) && (viewListingArray?.userSafetyAmenities!.count ?? 0 > 4)) {
                 return 50
                 
               }
@@ -993,11 +1001,11 @@ func initialSetup()
             return 1
         }
         else if(section == 3){
-            if viewListingArray.listingData != nil{
-                if(viewListingArray.listingData!.minNight! > 0 && viewListingArray.listingData!.maxNight! > 0)
+            if viewListingArray?.listingData != nil{
+                if(viewListingArray?.listingData!.minNight! ?? 0 > 0 && viewListingArray?.listingData!.maxNight! ?? 0 > 0)
                 {
                     return 2
-                }else if viewListingArray.listingData!.minNight! == 0 && viewListingArray.listingData!.maxNight! > 0{
+                }else if viewListingArray?.listingData!.minNight! == 0 && viewListingArray?.listingData!.maxNight! ?? 0 > 0{
                     
                     
                     return 1
@@ -1009,22 +1017,22 @@ func initialSetup()
 
         }
        else if(section == 4){
-            if(viewListingArray.userAmenities!.count > 0)
+           if(viewListingArray?.userAmenities!.count ?? 0 > 0)
                      {
                      if(isamenityTapped)
                      {
-                    return viewListingArray.userAmenities!.count
+                         return viewListingArray?.userAmenities!.count ?? 0
                      }
                      else
                      {
                          
-                         if(viewListingArray.userAmenities!.count > 4)
+                         if(viewListingArray?.userAmenities!.count ?? 0 > 4)
                          {
                          return 4
                          }
                          else
                          {
-                             return viewListingArray.userAmenities!.count
+                             return viewListingArray?.userAmenities!.count ?? 0
                          }
                      }
                      }else
@@ -1034,22 +1042,22 @@ func initialSetup()
            
         }
         else if(section == 5){
-            if(viewListingArray.userSpaces!.count > 0)
+            if(viewListingArray?.userSpaces!.count ?? 0 > 0)
              {
              if(isuserspaceTapped)
              {
-            return viewListingArray.userSpaces!.count
+                 return viewListingArray?.userSpaces!.count ?? 0
              }
              else
              {
                  
-                 if(viewListingArray.userSpaces!.count > 4)
+                 if(viewListingArray?.userSpaces!.count ?? 0 > 4)
                  {
                  return 4
                  }
                  else
                  {
-                     return viewListingArray.userSpaces!.count
+                     return viewListingArray?.userSpaces!.count ?? 0
                  }
              }
              }else
@@ -1060,22 +1068,22 @@ func initialSetup()
         }
         else if(section == 6){
             
-            if(viewListingArray.userSafetyAmenities!.count > 0)
+            if(viewListingArray?.userSafetyAmenities!.count ?? 0 > 0)
                         {
                         if(isusersafetyamenityTapped)
                         {
-                       return viewListingArray.userSafetyAmenities!.count
+                       return viewListingArray?.userSafetyAmenities!.count ?? 0
                         }
                         else
                         {
                             
-                            if(viewListingArray.userSafetyAmenities!.count > 4)
+                            if(viewListingArray?.userSafetyAmenities!.count ?? 0 > 4)
                             {
                             return 4
                             }
                             else
                             {
-                                return viewListingArray.userSafetyAmenities!.count
+                                return viewListingArray?.userSafetyAmenities!.count ?? 0
                             }
                         }
                         }else
@@ -1089,18 +1097,18 @@ func initialSetup()
             return 1
         }
         else if(section == 8){
-            if(viewListingArray.reviewsCount == 0)
+            if(viewListingArray?.reviewsCount == 0)
             {
-                if(viewListingArray.houseRules?.count == 0)
+                if(viewListingArray?.houseRules?.count == 0)
                 {
-                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                     {
                         return 4
                     }
                     return 5
                 }
                 else {
-                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                     {
                         return 5
                     }
@@ -1109,16 +1117,16 @@ func initialSetup()
             
             }
             else {
-                if(viewListingArray.houseRules?.count == 0)
+                if(viewListingArray?.houseRules?.count == 0)
                 {
-                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                     {
                         return 5
                     }
                     return 6
                 }
                 else{
-                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                     {
                         return 6
                     }
@@ -1138,7 +1146,7 @@ func initialSetup()
     func tableView( _ tableView : UITableView,  titleForHeaderInSection section: Int)->String?
     {
         if(section == 3){
-            if(viewListingArray.listingData!.minNight! >= 0 && viewListingArray.listingData!.maxNight! > 0)
+            if(viewListingArray?.listingData!.minNight! ?? 0 >= 0 && viewListingArray?.listingData!.maxNight! ?? 0 > 0)
                            {
             return "\((Utility.shared.getLanguage()?.value(forKey:"minmaxnights"))!)"
             }
@@ -1147,21 +1155,21 @@ func initialSetup()
             }
         }
         if(section == 4){
-            if(viewListingArray.userAmenities!.count > 0){
+            if(viewListingArray?.userAmenities!.count ?? 0 > 0){
                 return "\((Utility.shared.getLanguage()?.value(forKey:"amenities"))!)"}
             else{
                 return ""
             }
         }
         else if(section == 5 ){
-              if(viewListingArray.userSpaces!.count > 0){
+              if(viewListingArray?.userSpaces!.count ?? 0 > 0){
             return "\((Utility.shared.getLanguage()?.value(forKey:"userspace"))!)"
               }else{
                 return ""
             }
         }
         else if(section == 6){
-            if(viewListingArray.userSafetyAmenities!.count > 0){
+            if(viewListingArray?.userSafetyAmenities!.count ?? 0 > 0){
             return "\((Utility.shared.getLanguage()?.value(forKey:"usersafety"))!)"
             }else{
                 return ""
@@ -1171,7 +1179,7 @@ func initialSetup()
         return ""
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-         if((section == 3 && (viewListingArray.listingData!.minNight! >= 0 && viewListingArray.listingData!.maxNight! > 0)) || (section == 4 && (viewListingArray.userAmenities!.count > 0)) || (section == 5 && (viewListingArray.userSpaces!.count > 0)) || (section == 6 && (viewListingArray.userSafetyAmenities!.count > 0))){
+         if((section == 3 && (viewListingArray?.listingData!.minNight! ?? 0 >= 0 && viewListingArray?.listingData!.maxNight! ?? 0 > 0)) || (section == 4 && (viewListingArray?.userAmenities!.count ?? 0 > 0)) || (section == 5 && (viewListingArray?.userSpaces!.count ?? 0 > 0)) || (section == 6 && (viewListingArray?.userSafetyAmenities!.count ?? 0 > 0))){
         let headerView = UIView()
         headerView.backgroundColor = UIColor.white
         
@@ -1207,14 +1215,14 @@ func initialSetup()
         else if(section == 3)
         {
 
-            if(viewListingArray.listingData!.minNight! >= 0 && viewListingArray.listingData!.maxNight! > 0)
+            if(viewListingArray?.listingData!.minNight! ?? 0 >= 0 && viewListingArray?.listingData!.maxNight! ?? 0 > 0)
             {
                 return 40
             }
             return .leastNormalMagnitude
 
-            if viewListingArray.listingData != nil{
-                if(viewListingArray.listingData!.minNight! >= 0 && viewListingArray.listingData!.maxNight! > 0)
+            if viewListingArray?.listingData != nil{
+                if(viewListingArray?.listingData!.minNight! ?? 0 >= 0 && viewListingArray?.listingData!.maxNight! ?? 0 > 0)
                 {
                      return 40
                 }
@@ -1224,7 +1232,7 @@ func initialSetup()
         }
         else if(section == 4)
         {
-            if(viewListingArray.userAmenities!.count == 0)
+            if(viewListingArray?.userAmenities!.count == 0)
             {
                 return .leastNormalMagnitude
             }
@@ -1232,7 +1240,7 @@ func initialSetup()
         }
         else if(section == 5)
         {
-            if(viewListingArray.userSpaces!.count == 0)
+            if(viewListingArray?.userSpaces!.count == 0)
             {
                 return .leastNormalMagnitude
             }
@@ -1240,7 +1248,7 @@ func initialSetup()
         }
         else if(section == 6)
         {
-            if(viewListingArray.userSafetyAmenities!.count == 0)
+            if(viewListingArray?.userSafetyAmenities!.count == 0)
             {
                 return .leastNormalMagnitude
             }
@@ -1260,7 +1268,7 @@ func initialSetup()
         }
         else if(indexPath.section == 1 ){
             return UITableView.automaticDimension
-            if(viewListingArray.title!.count<=19)
+            if((viewListingArray?.title!.count ?? 0) <= 19)
             {
                 return 160
             }
@@ -1269,7 +1277,7 @@ func initialSetup()
         else if(indexPath.section == 2){
             return UITableView.automaticDimension
             
-            if(viewListingArray.description?.count ?? 0 <= 30){
+            if(viewListingArray?.description?.count ?? 0 <= 30){
                 return 175
             }
             
@@ -1280,13 +1288,13 @@ func initialSetup()
         }
         else if(indexPath.section == 8)
         {
-            if(viewListingArray.reviewsCount == 0)
+            if(viewListingArray?.reviewsCount == 0)
             {
-                if(viewListingArray.houseRules?.count == 0)
+                if(viewListingArray?.houseRules?.count == 0)
                 {
                     if(indexPath.row == 4)
                     {
-                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                         {
                             return .leastNormalMagnitude
                         }
@@ -1302,7 +1310,7 @@ func initialSetup()
                 {
                     if(indexPath.row == 5)
                     {
-                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                         {
                             return .leastNormalMagnitude
                         }
@@ -1321,11 +1329,11 @@ func initialSetup()
                 {
                     return UITableView.automaticDimension
                 }
-                if(viewListingArray.houseRules?.count == 0)
+                if(viewListingArray?.houseRules?.count == 0)
                 {
                     if(indexPath.row == 5)
                     {
-                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                         {
                             return .leastNormalMagnitude
                         }
@@ -1340,7 +1348,7 @@ func initialSetup()
                 {
                     if(indexPath.row == 6)
                     {
-                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                         {
                             return .leastNormalMagnitude
                         }
@@ -1379,7 +1387,7 @@ func initialSetup()
             navigationView.backgroundColor = UIColor.white
             self.BackImg.image = self.BackImg.image?.withRenderingMode(.alwaysTemplate)
             self.BackImg.tintColor =  UIColor(named: "Title_Header")
-            if(viewListingArray.wishListStatus == true)
+            if(viewListingArray?.wishListStatus == true)
             {
                 self.heartImg.image = #imageLiteral(resourceName: "like").withRenderingMode(.alwaysOriginal)
             }
@@ -1405,7 +1413,7 @@ func initialSetup()
 //                self.BackImg.tintColor =  UIColor(named: "Title_Header")
 //            }
           //FOR REASON OF HIDING WHISHLIST
-            if(viewListingArray.wishListStatus == false)
+            if(viewListingArray?.wishListStatus == false)
             {
               self.heartImg.image = #imageLiteral(resourceName: "Heart").withRenderingMode(.alwaysOriginal)
             }
@@ -1452,7 +1460,7 @@ func initialSetup()
             
             heartImg.frame = CGRect(x: 0, y:15, width: 20, height: 20)
              //FOR REASON OF HIDING WHISHLIST
-            if(viewListingArray.wishListStatus == false)
+            if(viewListingArray?.wishListStatus == false)
             {
             self.heartImg.image = #imageLiteral(resourceName: "Heart")
             }
@@ -1489,11 +1497,11 @@ func initialSetup()
             
             
             
-            let array = viewListingArray.listingPhotos
+            let array = viewListingArray?.listingPhotos
             
             for j in array!
             {
-                if(viewListingArray.listPhotoName == viewListingArray.listingPhotos?[0]?.name)
+                if(viewListingArray?.listPhotoName == viewListingArray?.listingPhotos?[0]?.name)
                 {
                     if(filteredImageArray.contains("\(IMAGE_LISTING_MEDIUM)\(j?.name ?? "0")" as Any))
                     {
@@ -1557,27 +1565,27 @@ func initialSetup()
         if(indexPath.section == 1){
             let cell = tableView.dequeueReusableCell(withIdentifier: "HeaderDetailCell", for: indexPath)as! HeaderDetailCell
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
-            if let roomtype = viewListingArray.roomType {
+            if let roomtype = viewListingArray?.roomType {
                 cell.entireLabel.text = roomtype } else {
                 cell.entireLabel.text = ""
             }
-            if let title =  viewListingArray.title {
+            if let title =  viewListingArray?.title {
                 cell.itemTitleLabel.text = title.condensingWhitespace() }
           
-            cell.customcountryLabel.text = "\(viewListingArray.city != nil  ? viewListingArray.city! : ""), \(viewListingArray.state != nil ? viewListingArray.state! : ""), \(viewListingArray.country != nil ? viewListingArray.country! : "")"
+            cell.customcountryLabel.text = "\(viewListingArray?.city != nil  ? viewListingArray?.city! : ""), \(viewListingArray?.state != nil ? viewListingArray?.state! : ""), \(viewListingArray?.country != nil ? viewListingArray?.country! : "")"
             
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
-           if(viewListingArray.user?.profile?.picture != nil)
+           if(viewListingArray?.user?.profile?.picture != nil)
            {
-            let profImage = viewListingArray.user?.profile?.picture!
+            let profImage = viewListingArray?.user?.profile?.picture!
             cell.profileImage.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(String(describing: profImage!))"),placeholderImage: #imageLiteral(resourceName: "unknown"))
             }
             else
            {
             cell.profileImage.image = #imageLiteral(resourceName: "unknown")
             }
-            if let name = viewListingArray.user?.profile?.firstName {
-           // let displayname = viewListingArray.user?.profile?.displayName!
+            if let name = viewListingArray?.user?.profile?.firstName {
+           // let displayname = viewListingArray?.user?.profile?.displayName!
                 cell.hostedLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"hostedby"))!) \(name)"
             }
             cell.profileImage.layer.cornerRadius = cell.profileImage.frame.size.width/2
@@ -1603,17 +1611,17 @@ func initialSetup()
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
             
             
-            cell.descriptionLabel.text = viewListingArray.description?.condensingWhitespace()
-          //  cell.descriptionLabel.text = viewListingArray.description!
-           if(viewListingArray.personCapacity == 1)
+            cell.descriptionLabel.text = viewListingArray?.description?.condensingWhitespace()
+          //  cell.descriptionLabel.text = viewListingArray?.description!
+           if(viewListingArray?.personCapacity == 1)
            {
-           cell.guestLabel.text = "\(viewListingArray.personCapacity!) \((Utility.shared.getLanguage()?.value(forKey:"guestsmall"))!)"
+           cell.guestLabel.text = "\(viewListingArray?.personCapacity!) \((Utility.shared.getLanguage()?.value(forKey:"guestsmall"))!)"
             }
            else{
-            if let personCapacity = (viewListingArray.personCapacity) {
+            if let personCapacity = (viewListingArray?.personCapacity) {
                 cell.guestLabel.text = "\(personCapacity) \((Utility.shared.getLanguage()?.value(forKey:"guestssmall"))!)" }
             }
-            if let beds = viewListingArray.beds
+            if let beds = viewListingArray?.beds
             {
 //                cell.bedLabel.text = "\(beds) \((Utility.shared.getLanguage()?.value(forKey:"bed"))!)\(beds > 1 ? "s" : "")"
                 if beds > 1{
@@ -1622,7 +1630,7 @@ func initialSetup()
                     cell.bedLabel.text = "\(beds) \((Utility.shared.getLanguage()?.value(forKey:"bed"))!)"
                 }
             }
-            if let bedroom = viewListingArray.bedrooms
+            if let bedroom = viewListingArray?.bedrooms
             {
                 cell.bedroomLabel.text = "\(bedroom) \((Utility.shared.getLanguage()?.value(forKey:"bedroom"))!)\(bedroom != "1" ? "s" : "")"
                 
@@ -1632,7 +1640,7 @@ func initialSetup()
                     cell.bedroomLabel.text = "\(bedroom) \((Utility.shared.getLanguage()?.value(forKey:"bedroom"))!)"
                 }
             }
-            if let bathroom = viewListingArray.bathrooms {
+            if let bathroom = viewListingArray?.bathrooms {
 //                cell.privateBathLabel.text = "\(bathroom) \((Utility.shared.getLanguage()?.value(forKey:"privatebath"))!)\(bathroom > 1 ? "s" : "") "
                 
                 if bathroom > 1 {
@@ -1675,33 +1683,33 @@ func initialSetup()
             // cell.amenityLabel.text = (amenitiesArray[indexPath.row] as! String)
             if(indexPath.row == 0)
             {
-                if((viewListingArray.listingData?.minNight) != nil) && viewListingArray.listingData?.minNight != 0  {
-//                    cell.amenityLabel.text = "\((viewListingArray.listingData?.minNight!)!) \((Utility.shared.getLanguage()?.value(forKey:"minnight"))!)\((viewListingArray.listingData?.minNight!)! > 1 ? "s": "")"
+                if((viewListingArray?.listingData?.minNight) != nil) && viewListingArray?.listingData?.minNight != 0  {
+//                    cell.amenityLabel.text = "\((viewListingArray?.listingData?.minNight!)!) \((Utility.shared.getLanguage()?.value(forKey:"minnight"))!)\((viewListingArray?.listingData?.minNight!)! > 1 ? "s": "")"
                     
-                    if (viewListingArray.listingData?.minNight!)! > 1{
-                        cell.amenityLabel.text = "\((viewListingArray.listingData?.minNight!)!) \((Utility.shared.getLanguage()?.value(forKey:"minnights")) ?? "min Nights")"
+                    if (viewListingArray?.listingData?.minNight!)! > 1{
+                        cell.amenityLabel.text = "\((viewListingArray?.listingData?.minNight!)!) \((Utility.shared.getLanguage()?.value(forKey:"minnights")) ?? "min Nights")"
                     }else{
-                        cell.amenityLabel.text = "\((viewListingArray.listingData?.minNight!)!) \((Utility.shared.getLanguage()?.value(forKey:"minnight"))!)"
+                        cell.amenityLabel.text = "\((viewListingArray?.listingData?.minNight!)!) \((Utility.shared.getLanguage()?.value(forKey:"minnight"))!)"
                     }
                 }
-        else  if((viewListingArray.listingData?.maxNight) != nil) && viewListingArray.listingData?.maxNight != 0  {
-//                                   cell.amenityLabel.text = "\((viewListingArray.listingData?.maxNight)!) \((Utility.shared.getLanguage()?.value(forKey:"maxnight"))!)\(((viewListingArray.listingData?.maxNight!)!) > 1 ? "s": "")"
-                    if ((viewListingArray.listingData?.maxNight!)!) > 1 {
-                        cell.amenityLabel.text = "\((viewListingArray.listingData?.maxNight)!) \((Utility.shared.getLanguage()?.value(forKey:"maxnights")) ?? "max Nights")"
+        else  if((viewListingArray?.listingData?.maxNight) != nil) && viewListingArray?.listingData?.maxNight != 0  {
+//                                   cell.amenityLabel.text = "\((viewListingArray?.listingData?.maxNight)!) \((Utility.shared.getLanguage()?.value(forKey:"maxnight"))!)\(((viewListingArray?.listingData?.maxNight!)!) > 1 ? "s": "")"
+                    if ((viewListingArray?.listingData?.maxNight!)!) > 1 {
+                        cell.amenityLabel.text = "\((viewListingArray?.listingData?.maxNight)!) \((Utility.shared.getLanguage()?.value(forKey:"maxnights")) ?? "max Nights")"
                     }else{
-                        cell.amenityLabel.text = "\((viewListingArray.listingData?.maxNight)!) \((Utility.shared.getLanguage()?.value(forKey:"maxnight"))!)"
+                        cell.amenityLabel.text = "\((viewListingArray?.listingData?.maxNight)!) \((Utility.shared.getLanguage()?.value(forKey:"maxnight"))!)"
                     }
                 }
             }
                 
             else if(indexPath.row == 1)
             {
-                if((viewListingArray.listingData?.maxNight) != nil) && viewListingArray.listingData?.maxNight != 0  {
-//                    cell.amenityLabel.text = "\((viewListingArray.listingData?.maxNight)!) \((Utility.shared.getLanguage()?.value(forKey:"maxnight"))!)\(((viewListingArray.listingData?.maxNight!)!) > 1 ? "s": "")"
-                    if ((viewListingArray.listingData?.maxNight!)!) > 1 {
-                        cell.amenityLabel.text = "\((viewListingArray.listingData?.maxNight)!) \((Utility.shared.getLanguage()?.value(forKey:"maxnights")) ?? "max Nights")"
+                if((viewListingArray?.listingData?.maxNight) != nil) && viewListingArray?.listingData?.maxNight != 0  {
+//                    cell.amenityLabel.text = "\((viewListingArray?.listingData?.maxNight)!) \((Utility.shared.getLanguage()?.value(forKey:"maxnight"))!)\(((viewListingArray?.listingData?.maxNight!)!) > 1 ? "s": "")"
+                    if ((viewListingArray?.listingData?.maxNight!)!) > 1 {
+                        cell.amenityLabel.text = "\((viewListingArray?.listingData?.maxNight)!) \((Utility.shared.getLanguage()?.value(forKey:"maxnights")) ?? "max Nights")"
                     }else{
-                        cell.amenityLabel.text = "\((viewListingArray.listingData?.maxNight)!) \((Utility.shared.getLanguage()?.value(forKey:"maxnight"))!)"
+                        cell.amenityLabel.text = "\((viewListingArray?.listingData?.maxNight)!) \((Utility.shared.getLanguage()?.value(forKey:"maxnight"))!)"
                     }
                 }
             }
@@ -1711,7 +1719,7 @@ func initialSetup()
         else if(indexPath.section == 4){
             let cell = tableView.dequeueReusableCell(withIdentifier: "AmenityDetailCell", for: indexPath) as! AmenityDetailCell
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
-            if let itemname = viewListingArray.userAmenities![indexPath.row]?.itemName {
+            if let itemname = viewListingArray?.userAmenities![indexPath.row]?.itemName {
                 cell.amenityLabel.text = itemname }
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
             return cell
@@ -1720,7 +1728,7 @@ func initialSetup()
             let cell = tableView.dequeueReusableCell(withIdentifier: "AmenityDetailCell", for: indexPath) as! AmenityDetailCell
             //cell.amenityLabel.text = (userSpaceArray[indexPath.row] as! String)
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
-            if let itemname = viewListingArray.userSpaces![indexPath.row]?.itemName {
+            if let itemname = viewListingArray?.userSpaces![indexPath.row]?.itemName {
             cell.amenityLabel.text = itemname
             }
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
@@ -1729,7 +1737,7 @@ func initialSetup()
         else if(indexPath.section == 6){
             let cell = tableView.dequeueReusableCell(withIdentifier: "AmenityDetailCell", for: indexPath) as! AmenityDetailCell
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
-            if let itemName = viewListingArray.userSafetyAmenities![indexPath.row]?.itemName {
+            if let itemName = viewListingArray?.userSafetyAmenities![indexPath.row]?.itemName {
                 cell.amenityLabel.text = itemName }
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
              return cell
@@ -1755,15 +1763,15 @@ func initialSetup()
             cell.mapMarkerView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
             cell.mapMarkerView.layer.shadowOpacity = 0.3
             cell.mapMarkerView.layer.shadowPath = shadowPath.cgPath
-            let lat = "\(viewListingArray.lat!)"
-            let long = "\(viewListingArray.lng!)"
+            let lat = "\(viewListingArray?.lat!)"
+            let long = "\(viewListingArray?.lng!)"
             cell.mapView .addSubview(cell.centerCircleView)
            
             let staticMapUrl: String = "https://maps.googleapis.com/maps/api/staticmap?key=\(GOOGLE_API_KEY)&center=\(lat),\(long)&\("zoom=15&size=\(2 * Int(cell.mapView.frame.size.width))x\(2 * Int(cell.mapView.frame.size.height))")&sensor=true&language=en"
             cell.centerCircleView.backgroundColor = UIColor(red: 0.0/255.0, green: 132.0/255.0, blue: 135.0/255.0, alpha:0.3)
             let mapUrl: NSURL = NSURL(string: staticMapUrl)!
             cell.mapView.sd_setImage(with: mapUrl as URL, placeholderImage: UIImage(named: "palceholder"))
-            cell.mapLabel.text = "\(viewListingArray.city != nil ? viewListingArray.city! : ""), \(viewListingArray.state != nil ? viewListingArray.state! : "" ), \(viewListingArray.country != nil ? viewListingArray.country! : "") \((Utility.shared.getLanguage()?.value(forKey:"exactlocation"))!)"
+            cell.mapLabel.text = "\(viewListingArray?.city != nil ? viewListingArray?.city! : ""), \(viewListingArray?.state != nil ? viewListingArray?.state! : "" ), \(viewListingArray?.country != nil ? viewListingArray?.country! : "") \((Utility.shared.getLanguage()?.value(forKey:"exactlocation"))!)"
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
            
             return cell
@@ -1774,25 +1782,25 @@ func initialSetup()
             
            
             
-            if(viewListingArray.reviewsCount == 0)
+            if(viewListingArray?.reviewsCount == 0)
             {
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
                 cell.selectionStyle = UITableViewCell.SelectionStyle.none
                 cell.flexLabel.textColor = Theme.PRIMARY_COLOR
-                if(viewListingArray.houseRules?.count == 0)
+                if(viewListingArray?.houseRules?.count == 0)
             {
                 cell.checkLabel.text = (checkArray[indexPath.row] as! String)
                 
                 if(indexPath.row == 0)
                 {
-                    if(viewListingArray.listingData?.checkInStart == "Flexible")
+                    if(viewListingArray?.listingData?.checkInStart == "Flexible")
                     {
-                    cell.flexLabel.text = viewListingArray.listingData?.checkInStart!
+                    cell.flexLabel.text = viewListingArray?.listingData?.checkInStart!
                     }
                     else
                     {
-                    if let checkinstart = (viewListingArray.listingData?.checkInStart)
+                    if let checkinstart = (viewListingArray?.listingData?.checkInStart)
                         {
                      cell.flexLabel.text = self.conversionRailwaytime(time:checkinstart)
                         }
@@ -1801,15 +1809,15 @@ func initialSetup()
                 }
                 else if(indexPath.row == 1)
                 {
-                    if(viewListingArray.listingData?.checkInEnd == "Flexible")
+                    if(viewListingArray?.listingData?.checkInEnd == "Flexible")
                     {
-                        cell.flexLabel.text = viewListingArray.listingData?.checkInEnd!
+                        cell.flexLabel.text = viewListingArray?.listingData?.checkInEnd!
                     }
                     else
                     {
-                        if(viewListingArray.listingData?.checkInEnd != nil)
+                        if(viewListingArray?.listingData?.checkInEnd != nil)
                         {
-                        cell.flexLabel.text = self.conversionRailwaytime(time: (viewListingArray.listingData?.checkInEnd!)!)
+                        cell.flexLabel.text = self.conversionRailwaytime(time: (viewListingArray?.listingData?.checkInEnd!)!)
                         }
                     }
     
@@ -1818,7 +1826,7 @@ func initialSetup()
                 else if(indexPath.row == 2)
                 {
                  
-                    if let policyname = viewListingArray.listingData?.cancellation?.policyName! {
+                    if let policyname = viewListingArray?.listingData?.cancellation?.policyName! {
                         cell.flexLabel.text = policyname }
                       return cell
                 }
@@ -1838,15 +1846,15 @@ func initialSetup()
                     cell.selectionStyle = UITableViewCell.SelectionStyle.none
                     if(indexPath.row == 0)
                     {
-                        if(viewListingArray.listingData?.checkInStart == "Flexible")
+                        if(viewListingArray?.listingData?.checkInStart == "Flexible")
                         {
-                            cell.flexLabel.text = viewListingArray.listingData?.checkInStart!
+                            cell.flexLabel.text = viewListingArray?.listingData?.checkInStart!
                         }
                         else
                         {
-                            if(viewListingArray.listingData?.checkInStart != nil)
+                            if(viewListingArray?.listingData?.checkInStart != nil)
                                 {
-                            cell.flexLabel.text = self.conversionRailwaytime(time: (viewListingArray.listingData?.checkInStart!)!)
+                            cell.flexLabel.text = self.conversionRailwaytime(time: (viewListingArray?.listingData?.checkInStart!)!)
                             }
                             else
                                 {
@@ -1857,15 +1865,15 @@ func initialSetup()
                     }
                     else if(indexPath.row == 1)
                     {
-                        if(viewListingArray.listingData?.checkInEnd == "Flexible")
+                        if(viewListingArray?.listingData?.checkInEnd == "Flexible")
                         {
-                            cell.flexLabel.text = viewListingArray.listingData?.checkInEnd!
+                            cell.flexLabel.text = viewListingArray?.listingData?.checkInEnd!
                         }
                         else
                         {
-                            if(viewListingArray.listingData?.checkInStart != nil)
+                            if(viewListingArray?.listingData?.checkInStart != nil)
                             {
-                            cell.flexLabel.text = self.conversionRailwaytime(time: (viewListingArray.listingData?.checkInEnd!)!)
+                            cell.flexLabel.text = self.conversionRailwaytime(time: (viewListingArray?.listingData?.checkInEnd!)!)
                             }
                             else
                             {
@@ -1882,7 +1890,7 @@ func initialSetup()
                     else if(indexPath.row == 3)
                     {
                         
-                         if let policyname = viewListingArray.listingData?.cancellation?.policyName! {
+                         if let policyname = viewListingArray?.listingData?.cancellation?.policyName! {
                                                cell.flexLabel.text = policyname }
                           return cell
                     }
@@ -1905,7 +1913,7 @@ func initialSetup()
             }
             else{
                 
-                if(viewListingArray.houseRules?.count == 0)
+                if(viewListingArray?.houseRules?.count == 0)
                 {
                     
                     if(indexPath.row == 0)
@@ -1914,13 +1922,13 @@ func initialSetup()
                         cell.selectionStyle = UITableViewCell.SelectionStyle.none
                         cell.flexLabel.textColor = Theme.PRIMARY_COLOR
                         cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"checkintime"))!)"
-                        if(viewListingArray.listingData?.checkInStart == "Flexible")
+                        if(viewListingArray?.listingData?.checkInStart == "Flexible")
                         {
-                            cell.flexLabel.text = viewListingArray.listingData?.checkInStart!
+                            cell.flexLabel.text = viewListingArray?.listingData?.checkInStart!
                         }
                         else
                         {
-                            cell.flexLabel.text = self.conversionRailwaytime(time: (viewListingArray.listingData?.checkInStart!)!)
+                            cell.flexLabel.text = self.conversionRailwaytime(time: (viewListingArray?.listingData?.checkInStart!)!)
                         }
                         return cell
                     }
@@ -1930,13 +1938,13 @@ func initialSetup()
                         cell.selectionStyle = UITableViewCell.SelectionStyle.none
                         cell.flexLabel.textColor = Theme.PRIMARY_COLOR
                         cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"checkouttime"))!)"
-                        if(viewListingArray.listingData?.checkInEnd == "Flexible")
+                        if(viewListingArray?.listingData?.checkInEnd == "Flexible")
                         {
-                            cell.flexLabel.text = viewListingArray.listingData?.checkInEnd!
+                            cell.flexLabel.text = viewListingArray?.listingData?.checkInEnd!
                         }
                         else
                         {
-                            if let checkInEnd = (viewListingArray.listingData?.checkInEnd!) {
+                            if let checkInEnd = (viewListingArray?.listingData?.checkInEnd!) {
                                 cell.flexLabel.text = self.conversionRailwaytime(time: checkInEnd) }
                         }
                         return cell
@@ -1958,8 +1966,8 @@ func initialSetup()
                         }
                         
                         
-                        let value1 = Double(self.viewListingArray.reviewsCount ?? 0)
-                        let value2 = Double(self.viewListingArray.reviewsStarRating ?? 0)
+                        let value1 = Double(self.viewListingArray?.reviewsCount ?? 0)
+                        let value2 = Double(self.viewListingArray?.reviewsStarRating ?? 0)
                         var reviewcount = 0
                         if(value2 != 0.0){
                             reviewcount = Int(round(value2/value1))
@@ -1995,7 +2003,7 @@ func initialSetup()
 //                            if let reviewContent = self.getreviewArray[0].reviewContent {
 //                                cell1.reviewLabel.text = reviewContent }
 //                        cell1.reviewDateLabel.text = reviewDate
-//                        cell1.reviewCountLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"readall"))!) \(viewListingArray.reviewsCount!) \((Utility.shared.getLanguage()?.value(forKey:"views"))!)"
+//                        cell1.reviewCountLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"readall"))!) \(viewListingArray?.reviewsCount!) \((Utility.shared.getLanguage()?.value(forKey:"views"))!)"
 //                        cell1.reviewRateView.rating = self.getreviewArray[0].rating!
 //
 //
@@ -2003,7 +2011,7 @@ func initialSetup()
 //                        else{
 //
 //                        }
-//                        if let reviewsCount = (viewListingArray.reviewsCount)
+//                        if let reviewsCount = (viewListingArray?.reviewsCount)
 //                        {
 //
 ////                            cell1.readallBtn.setTitle("\(reviewsCount) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)\(reviewsCount > 1 ? "s" : "")", for: .normal)
@@ -2035,7 +2043,7 @@ func initialSetup()
                         cell.selectionStyle = UITableViewCell.SelectionStyle.none
                         cell.flexLabel.textColor = Theme.PRIMARY_COLOR
                         cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"cancellationPolicy"))!)"
-                        if let policyname =  viewListingArray.listingData?.cancellation?.policyName {
+                        if let policyname =  viewListingArray?.listingData?.cancellation?.policyName {
                             cell.flexLabel.text = policyname }
                         return cell
                     }
@@ -2065,13 +2073,13 @@ func initialSetup()
                         cell.selectionStyle = UITableViewCell.SelectionStyle.none
                         cell.flexLabel.textColor = Theme.PRIMARY_COLOR
                          cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"checkintime"))!)"
-                        if(viewListingArray.listingData?.checkInStart == "Flexible")
+                        if(viewListingArray?.listingData?.checkInStart == "Flexible")
                         {
-                            cell.flexLabel.text = viewListingArray.listingData?.checkInStart!
+                            cell.flexLabel.text = viewListingArray?.listingData?.checkInStart!
                         }
                         else
                         {
-                            if let checkinstart = viewListingArray.listingData?.checkInStart {
+                            if let checkinstart = viewListingArray?.listingData?.checkInStart {
                                 cell.flexLabel.text = self.conversionRailwaytime(time:checkinstart) }
                         }
                         return cell
@@ -2082,13 +2090,13 @@ func initialSetup()
                         cell.selectionStyle = UITableViewCell.SelectionStyle.none
                         cell.flexLabel.textColor = Theme.PRIMARY_COLOR
                         cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"checkouttime"))!)"
-                        if(viewListingArray.listingData?.checkInEnd == "Flexible")
+                        if(viewListingArray?.listingData?.checkInEnd == "Flexible")
                         {
-                            cell.flexLabel.text = viewListingArray.listingData?.checkInEnd!
+                            cell.flexLabel.text = viewListingArray?.listingData?.checkInEnd!
                         }
                         else
                         {
-                            if let checkInEnd = viewListingArray.listingData?.checkInEnd {
+                            if let checkInEnd = viewListingArray?.listingData?.checkInEnd {
                                 cell.flexLabel.text = self.conversionRailwaytime(time: checkInEnd) }
                         }
                         return cell
@@ -2109,8 +2117,8 @@ func initialSetup()
                             cell.collectionView.reloadData()
                         }
                         
-                        let value1 = Double(self.viewListingArray.reviewsCount ?? 0)
-                        let value2 = Double(self.viewListingArray.reviewsStarRating ?? 0)
+                        let value1 = Double(self.viewListingArray?.reviewsCount ?? 0)
+                        let value2 = Double(self.viewListingArray?.reviewsStarRating ?? 0)
                         var reviewcount = 0
                         if(value2 != 0.0){
                             reviewcount = Int(round(value2/value1))
@@ -2145,15 +2153,15 @@ func initialSetup()
 //                                               {
 //                                                cell2.reviewLabel.text = self.getreviewArray[0].reviewContent != nil ?  self.getreviewArray[0].reviewContent! : ""
 //                                               cell2.reviewDateLabel.text = reviewDate
-//                                               cell2.reviewCountLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"readall"))!) \(viewListingArray.reviewsCount!) \((Utility.shared.getLanguage()?.value(forKey:"views"))!)"
+//                                               cell2.reviewCountLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"readall"))!) \(viewListingArray?.reviewsCount!) \((Utility.shared.getLanguage()?.value(forKey:"views"))!)"
 //                                                cell2.reviewRateView.rating = self.getreviewArray[0].rating != nil ? self.getreviewArray[0].rating! : 0
 //                                               }
 //                         else{
 //
 //                        }
-//                        if(viewListingArray.reviewsCount != nil)
+//                        if(viewListingArray?.reviewsCount != nil)
 //                                               {
-//                                               if let reviewsCount = (viewListingArray.reviewsCount)
+//                                               if let reviewsCount = (viewListingArray?.reviewsCount)
 //                                               {
 //
 ////                                                   cell2.readallBtn.setTitle("\(reviewsCount) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)\(reviewsCount > 1 ? "s" : "")", for: .normal)
@@ -2196,7 +2204,7 @@ func initialSetup()
                         cell.selectionStyle = UITableViewCell.SelectionStyle.none
                         cell.flexLabel.textColor = Theme.PRIMARY_COLOR
                         cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"cancellationPolicy"))!)"
-                        if let policyname = viewListingArray.listingData?.cancellation?.policyName {
+                        if let policyname = viewListingArray?.listingData?.cancellation?.policyName {
                             cell.flexLabel.text =  policyname }
                         return cell
                     }
@@ -2268,15 +2276,15 @@ func initialSetup()
     
     @objc func profileTapped()
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
       if(((Utility.shared.getCurrentUserToken()) != nil) && (Utility.shared.getCurrentUserToken() != ""))
         {
         let editprofileobj = HostProfileViewPage()
          
         editprofileobj.reiewListingArray = reiewListingArray
-        editprofileobj.profileid = ((viewListingArray.user?.profile?.profileId!)!)
-            editprofileobj.profilename = (viewListingArray.user?.profile?.firstName!)!
-        editprofileobj.showprofileAPICall(profileid:(viewListingArray.user?.profile?.profileId!)!)
+        editprofileobj.profileid = ((viewListingArray?.user?.profile?.profileId!)!)
+            editprofileobj.profilename = (viewListingArray?.user?.profile?.firstName!)!
+        editprofileobj.showprofileAPICall(profileid:(viewListingArray?.user?.profile?.profileId!)!)
         editprofileobj.modalPresentationStyle = .fullScreen
         self.present(editprofileobj, animated: true, completion: nil)
         }
@@ -2316,20 +2324,20 @@ func initialSetup()
         else if(indexPath.section == 8)
        {
         
-        if(viewListingArray.reviewsCount == 0)
+        if(viewListingArray?.reviewsCount == 0)
         {
-            if(viewListingArray.houseRules?.count == 0)
+            if(viewListingArray?.houseRules?.count == 0)
             {
                 if(indexPath.row == 2)
                 {
                     let cancellationObj = CancellationVC()
-                    if let policy = viewListingArray.listingData?.cancellation?.policyName {
+                    if let policy = viewListingArray?.listingData?.cancellation?.policyName {
                   Utility.shared.cancelpolicy = policy
                         cancellationObj.cancelpolicy = policy }
-                    if((viewListingArray.listingData?.cancellation?.policyContent!) != nil)
+                    if((viewListingArray?.listingData?.cancellation?.policyContent!) != nil)
                     {
                     
-                    cancellationObj.cancelpolicy_content = (viewListingArray.listingData?.cancellation?.policyContent!)!
+                    cancellationObj.cancelpolicy_content = (viewListingArray?.listingData?.cancellation?.policyContent!)!
                     }
                     cancellationObj.modalPresentationStyle = .fullScreen
                     self.present(cancellationObj, animated: true, completion: nil)
@@ -2337,24 +2345,26 @@ func initialSetup()
                 if(indexPath.row == 3)
                 {
                     Utility.shared.blocked_date_month.removeAllObjects()
-                    for i in viewListingArray.blockedDates!
-                    {
-                        let timestamp = i?.blockedDates
-                        let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
-                        let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
-                        let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
-                        let dateFormatter1 = DateFormatter()
-                        dateFormatter1.dateFormat = "LL"
-                       // let newdate = Calendar.current.date(byAdding: .day, value: 1, to: newTime)
-                        let date = "\(dateFormatter.string(from: newTime))"
-                        if(i?.calendarStatus != "available")
+                    if let blockedDates = viewListingArray?.blockedDates{
+                        for i in blockedDates
                         {
-                        Utility.shared.blocked_date_month.add("\(date)")
+                            let timestamp = i?.blockedDates
+                            let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
+                            let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
+                            let dateFormatter1 = DateFormatter()
+                            dateFormatter1.dateFormat = "LL"
+                            // let newdate = Calendar.current.date(byAdding: .day, value: 1, to: newTime)
+                            let date = "\(dateFormatter.string(from: newTime))"
+                            if(i?.calendarStatus != "available")
+                            {
+                                Utility.shared.blocked_date_month.add("\(date)")
+                            }
+                            Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
                         }
-                        Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
                     }
-                    if let minNight = (viewListingArray.listingData?.minNight!) {
+                    if let minNight = (viewListingArray?.listingData?.minNight!) {
                         Utility.shared.minimumstay = minNight }
                     Utility.shared.isfromcheckingPage = true
                     let datePickerViewController = AirbnbDatePickerViewController(dateFrom: selectedStartDate, dateTo: selectedEndDate)
@@ -2367,7 +2377,7 @@ func initialSetup()
                 }
                 if(indexPath.row == 4)
                 {
-                    if Utility().isConnectedToNetwork(){
+                    if Utility.shared.isConnectedToNetwork(){
                         if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
                         {
                             let welcomeObj = WelcomePageVC()
@@ -2417,7 +2427,7 @@ func initialSetup()
                 if(indexPath.row == 2)
                 {
                     let houserulesObj = HouseRulesVC()
-                    houserulesObj.houserulesArray = self.viewListingArray.houseRules! as! [ViewListingDetailsQuery.Data.ViewListing.Result.HouseRule]
+                    houserulesObj.houserulesArray = self.viewListingArray?.houseRules! as! [ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
                     houserulesObj.modalPresentationStyle = .fullScreen
                     self.present(houserulesObj, animated: true, completion: nil)
                 }
@@ -2425,13 +2435,13 @@ func initialSetup()
                 else if(indexPath.row == 3)
                 {
                     let cancellationObj = CancellationVC()
-                    if let policy = (viewListingArray.listingData?.cancellation?.policyName!) {
+                    if let policy = (viewListingArray?.listingData?.cancellation?.policyName!) {
                   Utility.shared.cancelpolicy = policy
                         cancellationObj.cancelpolicy = policy }
-                    if((viewListingArray.listingData?.cancellation?.policyContent!) != nil)
+                    if((viewListingArray?.listingData?.cancellation?.policyContent!) != nil)
                     {
                         
-                        cancellationObj.cancelpolicy_content = (viewListingArray.listingData?.cancellation?.policyContent!)!
+                        cancellationObj.cancelpolicy_content = (viewListingArray?.listingData?.cancellation?.policyContent!)!
                     }
                     cancellationObj.modalPresentationStyle = .fullScreen
                     self.present(cancellationObj, animated: true, completion: nil)
@@ -2439,25 +2449,27 @@ func initialSetup()
                 if(indexPath.row == 4)
                 {
                     Utility.shared.blocked_date_month.removeAllObjects()
-                    for i in viewListingArray.blockedDates!
-                    {
-                        let timestamp = i?.blockedDates
-                        let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
-                        let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
-                        let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
-                        let dateFormatter1 = DateFormatter()
-                        dateFormatter1.dateFormat = "LL"
-                       let newdate = Calendar.current.date(byAdding: .day, value: 0, to: newTime)
-                        let date = "\(dateFormatter.string(from: newTime))"
-                        let newDate = "\(dateFormatter.string(from: newdate!))"
-                        if(i?.calendarStatus != "available")
+                    if let blockedDates = viewListingArray?.blockedDates{
+                        for i in blockedDates
                         {
-                        Utility.shared.blocked_date_month.add("\(date)")
+                            let timestamp = i?.blockedDates
+                            let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
+                            let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
+                            let dateFormatter1 = DateFormatter()
+                            dateFormatter1.dateFormat = "LL"
+                            let newdate = Calendar.current.date(byAdding: .day, value: 0, to: newTime)
+                            let date = "\(dateFormatter.string(from: newTime))"
+                            let newDate = "\(dateFormatter.string(from: newdate!))"
+                            if(i?.calendarStatus != "available")
+                            {
+                                Utility.shared.blocked_date_month.add("\(date)")
+                            }
+                            Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
                         }
-                        Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
                     }
-                    if let minstay = (viewListingArray.listingData?.minNight!) {
+                    if let minstay = (viewListingArray?.listingData?.minNight!) {
                         Utility.shared.minimumstay = minstay }
                     Utility.shared.isfromcheckingPage = true
                     let datePickerViewController = AirbnbDatePickerViewController(dateFrom: selectedStartDate, dateTo: selectedEndDate)
@@ -2470,7 +2482,7 @@ func initialSetup()
                 }
                 if(indexPath.row == 5)
                 {
-                    if Utility().isConnectedToNetwork(){
+                    if Utility.shared.isConnectedToNetwork(){
                         if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
                         {
                             let welcomeObj = WelcomePageVC()
@@ -2521,17 +2533,17 @@ func initialSetup()
         }
         else
         {
-                if(viewListingArray.houseRules?.count == 0)
+                if(viewListingArray?.houseRules?.count == 0)
                 {
                     if(indexPath.row == 3)
                     {
                         let cancellationObj = CancellationVC()
-                       cancellationObj.cancelpolicy = (viewListingArray.listingData?.cancellation?.policyName!)!
-                        Utility.shared.cancelpolicy = (viewListingArray.listingData?.cancellation?.policyName!)!
-                        if((viewListingArray.listingData?.cancellation?.policyContent!) != nil)
+                       cancellationObj.cancelpolicy = (viewListingArray?.listingData?.cancellation?.policyName!)!
+                        Utility.shared.cancelpolicy = (viewListingArray?.listingData?.cancellation?.policyName!)!
+                        if((viewListingArray?.listingData?.cancellation?.policyContent!) != nil)
                         {
                             
-                            cancellationObj.cancelpolicy_content = (viewListingArray.listingData?.cancellation?.policyContent!)!
+                            cancellationObj.cancelpolicy_content = (viewListingArray?.listingData?.cancellation?.policyContent!)!
                         }
                          cancellationObj.modalPresentationStyle = .fullScreen
                         self.present(cancellationObj, animated: true, completion: nil)
@@ -2539,24 +2551,26 @@ func initialSetup()
                     else if(indexPath.row == 4)
                     {
                         Utility.shared.blocked_date_month.removeAllObjects()
-                        for i in viewListingArray.blockedDates!
-                        {
-                            let timestamp = i?.blockedDates
-                            let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
-                            let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
-                            let dateFormatter = DateFormatter()
-                            dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
-                            let dateFormatter1 = DateFormatter()
-                            dateFormatter1.dateFormat = "LL"
-                           // let newdate = Calendar.current.date(byAdding: .day, value: 1, to: newTime)
-                            let date = "\(dateFormatter.string(from: newTime))"
-                            if(i?.calendarStatus != "available")
+                        if let blockedDates = viewListingArray?.blockedDates{
+                            for i in blockedDates
                             {
-                            Utility.shared.blocked_date_month.add("\(date)")
+                                let timestamp = i?.blockedDates
+                                let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
+                                let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
+                                let dateFormatter1 = DateFormatter()
+                                dateFormatter1.dateFormat = "LL"
+                                // let newdate = Calendar.current.date(byAdding: .day, value: 1, to: newTime)
+                                let date = "\(dateFormatter.string(from: newTime))"
+                                if(i?.calendarStatus != "available")
+                                {
+                                    Utility.shared.blocked_date_month.add("\(date)")
+                                }
+                                Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
                             }
-                            Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
                         }
-                        if let minstay = (viewListingArray.listingData?.minNight!) {
+                        if let minstay = (viewListingArray?.listingData?.minNight!) {
                             Utility.shared.minimumstay = minstay}
                         Utility.shared.isfromcheckingPage = true
                         let datePickerViewController = AirbnbDatePickerViewController(dateFrom: selectedStartDate, dateTo: selectedEndDate)
@@ -2569,7 +2583,7 @@ func initialSetup()
                     }
                     if(indexPath.row == 5)
                     {
-                        if Utility().isConnectedToNetwork(){
+                        if Utility.shared.isConnectedToNetwork(){
                             if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
                             {
                                 let welcomeObj = WelcomePageVC()
@@ -2619,7 +2633,7 @@ func initialSetup()
                     if(indexPath.row == 3)
                     {
                         let houserulesObj = HouseRulesVC()
-                        houserulesObj.houserulesArray = self.viewListingArray.houseRules! as! [ViewListingDetailsQuery.Data.ViewListing.Result.HouseRule]
+                        houserulesObj.houserulesArray = self.viewListingArray?.houseRules! as! [ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
                         houserulesObj.modalPresentationStyle = .fullScreen
                         self.present(houserulesObj, animated: true, completion: nil)
                     }
@@ -2627,13 +2641,13 @@ func initialSetup()
                     if(indexPath.row == 4)
                     {
                         let cancellationObj = CancellationVC()
-                        if let policy = (viewListingArray.listingData?.cancellation?.policyName!) {
+                        if let policy = (viewListingArray?.listingData?.cancellation?.policyName!) {
                       Utility.shared.cancelpolicy = policy
                             cancellationObj.cancelpolicy = policy }
-                        if((viewListingArray.listingData?.cancellation?.policyContent!) != nil)
+                        if((viewListingArray?.listingData?.cancellation?.policyContent!) != nil)
                         {
                             
-                            cancellationObj.cancelpolicy_content = (viewListingArray.listingData?.cancellation?.policyContent!)!
+                            cancellationObj.cancelpolicy_content = (viewListingArray?.listingData?.cancellation?.policyContent!)!
                         }
                         cancellationObj.modalPresentationStyle = .fullScreen
                         self.present(cancellationObj, animated: true, completion: nil)
@@ -2641,24 +2655,26 @@ func initialSetup()
                     if(indexPath.row == 5)
                     {
                         Utility.shared.blocked_date_month.removeAllObjects()
-                        for i in viewListingArray.blockedDates!
-                        {
-                            let timestamp = i?.blockedDates
-                            let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
-                            let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
-                            let dateFormatter = DateFormatter()
-                            dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
-                            let dateFormatter1 = DateFormatter()
-                            dateFormatter1.dateFormat = "LL"
-                            //let newdate = Calendar.current.date(byAdding: .day, value: 1, to: newTime)
-                            let date = "\(dateFormatter.string(from: newTime))"
-                            if(i?.calendarStatus != "available")
+                        if let blockedDates = viewListingArray?.blockedDates{
+                            for i in blockedDates
                             {
-                            Utility.shared.blocked_date_month.add("\(date)")
+                                let timestamp = i?.blockedDates
+                                let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
+                                let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
+                                let dateFormatter1 = DateFormatter()
+                                dateFormatter1.dateFormat = "LL"
+                                //let newdate = Calendar.current.date(byAdding: .day, value: 1, to: newTime)
+                                let date = "\(dateFormatter.string(from: newTime))"
+                                if(i?.calendarStatus != "available")
+                                {
+                                    Utility.shared.blocked_date_month.add("\(date)")
+                                }
+                                Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
                             }
-                            Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
                         }
-                        if let minstay = (viewListingArray.listingData?.minNight!) {
+                        if let minstay = (viewListingArray?.listingData?.minNight!) {
                         Utility.shared.minimumstay = minstay
                         }
                         Utility.shared.isfromcheckingPage = true
@@ -2672,7 +2688,7 @@ func initialSetup()
                     }
                     if(indexPath.row == 6)
                     {
-                         if Utility().isConnectedToNetwork(){
+                         if Utility.shared.isConnectedToNetwork(){
                             if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
                             {
                                 let welcomeObj = WelcomePageVC()
@@ -2732,7 +2748,7 @@ func initialSetup()
         present(browser, animated: true, completion: {})
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.lottieAnimation()
             offlineView.isHidden = true
             self.bottomView.isHidden = false
@@ -2767,7 +2783,7 @@ func initialSetup()
     @objc func readmoreTapped()
     {
         let readmoreObj = ReadmoreVC()
-        readmoreObj.ReadmoreText = self.viewListingArray.description!
+        readmoreObj.ReadmoreText = self.viewListingArray?.description! ?? ""
          readmoreObj.modalPresentationStyle = .fullScreen
         self.present(readmoreObj, animated: true, completion: nil)
         
@@ -3063,33 +3079,39 @@ func initialSetup()
     
     func reviewcountAPICall(profileid:Int)
     {
-        let reviewListquery = UserReviewsQuery(ownerType: "others", currentPage: 1, profileId: profileid)
+        let reviewListquery = UserReviewsQuery(ownerType: "others", currentPage: 1, profileId: .some(profileid))
         
-        apollo_headerClient.fetch(query: reviewListquery){(result,error) in
-            
-            
-            guard (result?.data?.userReviews?.results) != nil else{
-                print("Missing Data")
-                return
+        Network.shared.apollo_headerClient.fetch(query: reviewListquery){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.userReviews?.results) != nil else{
+                    print("Missing Data")
+                    return
+                }
+                self.reiewListingArray = (result.data?.userReviews?.results)! as! [UserReviewsQuery.Data.UserReviews.Result]
+                
+                //  self.timestampconvert(timestamp:self.reiewListingArray[0].createdAt!)
+                
+                // self.timestampconvert(timestamp:)
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            self.reiewListingArray = (result?.data?.userReviews?.results)! as! [UserReviewsQuery.Data.UserReview.Result]
-           
-              //  self.timestampconvert(timestamp:self.reiewListingArray[0].createdAt!)
-           
-          // self.timestampconvert(timestamp:)
         }
         
     }
     
     func getreviewAPICall(listId:Int,hostId:String){
-        
-        let getreviewquery = GetReviewsListQuery(listId: listId, currentPage: 1, hostId: hostId)
-        apollo_headerClient.fetch(query: getreviewquery){(result,error) in
-            if(result?.data?.getReviews?.status == 200){
-                self.getreviewArray = (result?.data?.getReviews?.results!)! as! [GetReviewsListQuery.Data.GetReview.Result]
-                if(self.getreviewArray.count > 0){
-                self.timestampconvert(timestamp:self.getreviewArray[0].createdAt!)
+        let getreviewquery = GetReviewsListQuery(listId: .some(listId), currentPage: 1, hostId: hostId)
+        Network.shared.apollo_headerClient.fetch(query: getreviewquery){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.getReviews?.status,data == 200 {
+                    self.getreviewArray = (result.data?.getReviews?.results!)! as! [GetReviewsListQuery.Data.GetReviews.Result]
+                    if(self.getreviewArray.count > 0){
+                        self.timestampconvert(timestamp:self.getreviewArray[0].createdAt!)
+                    }
                 }
+            case .failure(_): break
             }
         }
     }
@@ -3134,7 +3156,7 @@ func initialSetup()
             let fmt = DateFormatter()
             fmt.dateFormat = "yyyy-MM-dd"
             billingListAPICall(startDate: fmt.string(from: startDate!), endDate: fmt.string(from: endDate!))
-            if(viewListingArray.bookingType != nil && viewListingArray.bookingType! == "instant")
+            if(viewListingArray?.bookingType != nil && viewListingArray?.bookingType! == "instant")
             {
             chkAvailabiltyBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"book"))!)", for: .normal)
             }

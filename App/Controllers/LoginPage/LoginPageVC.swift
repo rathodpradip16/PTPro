@@ -124,7 +124,7 @@ class LoginPageVC: UIViewController {
     //Mark:******************************** Button Actions ***********************************************************************>
     
     @IBAction func retryTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.offelineView.isHidden = true
         self.lottieWholeView.isHidden = false
             
@@ -144,7 +144,7 @@ class LoginPageVC: UIViewController {
     
     @IBAction func nextBtnTapped(_ sender: Any) {
         
-    if Utility().isConnectedToNetwork(){
+    if Utility.shared.isConnectedToNetwork(){
         self.lottieWholeView.isHidden = false
         self.lottieWholeView.frame = CGRect(x: 0, y: 0, width: FULLWIDTH, height: FULLHEIGHT)
         self.lottieWholeView.backgroundColor =  UIColor.black.withAlphaComponent(0.5)
@@ -326,105 +326,110 @@ class LoginPageVC: UIViewController {
     {
         let loginquery = LoginQuery(email: emailTF.text!, password: passwordTF.text!, deviceType:"iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken)
         let apollo = ApolloClient(url: URL(string:graphQLEndpoint)!)
-        apollo.fetch(query: loginquery,cachePolicy:.fetchIgnoringCacheData) { (result,error) in
-            if(result?.data?.userLogin?.status == 200) {
-                
-                Utility.shared.logindataArray.removeAll()
-                if(result?.data?.userLogin?.result?.user?.preferredCurrency != nil)
-                {
-                Utility.shared.setPreferredCurrency(currency_rate: (result?.data?.userLogin?.result?.user?.preferredCurrency as AnyObject) as! String)
-                }
-                else
-                {
-                Utility.shared.setPreferredCurrency(currency_rate:"USD")
-                 Utility.shared.selectedCurrency = "USD"
-                }
-                Utility.shared.setopenTabbar(iswhichtabbar:false)
-                
-                if let usertoken = result?.data?.userLogin?.result?.userToken {
-                    Utility.shared.setUserToken(userID:"\(usertoken)" as NSString)
-                    Utility.shared.logindataArray.append(usertoken as AnyObject)
-                }
-                
-                if let userId = result?.data?.userLogin?.result?.userId {
-                                   Utility.shared.setUserID(userid:"\(userId)" as NSString)
-                     Utility.shared.logindataArray.append(userId as AnyObject)
-                               }
-
-               
-                Utility.shared.setPassword(password: self.passwordTF!.text! as NSString)
-                if let userId = result?.data?.userLogin?.result?.userToken {
-                                                  Utility.shared.setUserToken(userID: "\(userId)" as NSString)
-                    Utility.shared.user_token = "\(userId)"
-                        }
-        if let firstName = result?.data?.userLogin?.result?.user?.firstName {
-            Utility.shared.logindataArray.append(firstName as AnyObject)
-            }
-        if let picture = result?.data?.userLogin?.result?.user?.picture {
-                      Utility.shared.logindataArray.append(picture as AnyObject)
-                      }
-        if let createdAt = result?.data?.userLogin?.result?.user?.createdAt {
-                             Utility.shared.logindataArray.append(createdAt as AnyObject)
-                             }
-        if let isPhoneVerified = result?.data?.userLogin?.result?.user?.verification?.isPhoneVerified {
-                    Utility.shared.logindataArray.append(isPhoneVerified as AnyObject)
+        apollo.fetch(query: loginquery,cachePolicy:.fetchIgnoringCacheData) {  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.userLogin?.status,data == 200 {
+                    
+                    Utility.shared.logindataArray.removeAll()
+                    if(result.data?.userLogin?.result?.user?.preferredCurrency != nil)
+                    {
+                        Utility.shared.setPreferredCurrency(currency_rate: (result.data?.userLogin?.result?.user?.preferredCurrency as AnyObject) as! String)
                     }
-         if let isEmailConfirmed = result?.data?.userLogin?.result?.user?.verification?.isEmailConfirmed {
-         Utility.shared.logindataArray.append(isEmailConfirmed as AnyObject)
-         }
-        if let isIdVerification = result?.data?.userLogin?.result?.user?.verification?.isIdVerification {
-                   Utility.shared.logindataArray.append(isIdVerification as AnyObject)
-                   }
-        if let isGoogleConnected = result?.data?.userLogin?.result?.user?.verification?.isGoogleConnected {
-            Utility.shared.logindataArray.append(isGoogleConnected as AnyObject)
-                                 }
-    
-                if let isFacebookConnected = result?.data?.userLogin?.result?.user?.verification?.isFacebookConnected {
-                           Utility.shared.logindataArray.append(isFacebookConnected as AnyObject)
-                        }
-                
-                
-                Utility.shared.locationfromSearch = ""
-                Utility.shared.isfromfloatmap_Page = false
-                Utility.shared.isfromGuestProfile = false
-                if(Utility.shared.searchLocationDict.count > 0)
-                {
-                    Utility.shared.searchLocationDict.setValue(nil, forKey: "lat")
-                    Utility.shared.searchLocationDict.setValue(nil, forKey: "lon")
-                }
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                Utility.shared.setTab(index: 0)
-
-
-                self.view.window?.rootViewController?.dismiss(animated: false, completion: nil)
-
-                appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
-               
-            }else if result?.data?.userLogin?.status == 500 {
-                self.lottieView.isHidden = true
-                self.lottieWholeView.isHidden = true
-               // self.GoBtn.isHidden = true
-                self.emailTF.resignFirstResponder()
-                self.passwordTF.resignFirstResponder()
-                self.view.makeToast("\((result?.data?.userLogin?.errorMessage)!)")
-               // Utility.shared.showAlert(msg: "\((result?.data?.userLogin?.errorMessage)!)")
-                
-            }
-            else{
-
-                self.lottieView.isHidden = true
-                self.lottieWholeView.isHidden = true
-                self.GoBtn.isHidden = true
-                self.passwordTF.resignFirstResponder()
-                self.emailTF.resignFirstResponder()
-                self.invalidcredentialView.isHidden = false
-                if IS_IPHONE_X || IS_IPHONE_XR {
-                    self.invalidcredentialView.frame = CGRect(x: 0, y: FULLHEIGHT-80, width: FULLWIDTH, height: 60)
+                    else
+                    {
+                        Utility.shared.setPreferredCurrency(currency_rate:"USD")
+                        Utility.shared.selectedCurrency = "USD"
+                    }
+                    Utility.shared.setopenTabbar(iswhichtabbar:false)
+                    
+                    if let usertoken = result.data?.userLogin?.result?.userToken {
+                        Utility.shared.setUserToken(userID:"\(usertoken)" as NSString)
+                        Utility.shared.logindataArray.append(usertoken as AnyObject)
+                    }
+                    
+                    if let userId = result.data?.userLogin?.result?.userId {
+                        Utility.shared.setUserID(userid:"\(userId)" as NSString)
+                        Utility.shared.logindataArray.append(userId as AnyObject)
+                    }
+                    
+                    
+                    Utility.shared.setPassword(password: self.passwordTF!.text! as NSString)
+                    if let userId = result.data?.userLogin?.result?.userToken {
+                        Utility.shared.setUserToken(userID: "\(userId)" as NSString)
+                        Utility.shared.user_token = "\(userId)"
+                    }
+                    if let firstName = result.data?.userLogin?.result?.user?.firstName {
+                        Utility.shared.logindataArray.append(firstName as AnyObject)
+                    }
+                    if let picture = result.data?.userLogin?.result?.user?.picture {
+                        Utility.shared.logindataArray.append(picture as AnyObject)
+                    }
+                    if let createdAt = result.data?.userLogin?.result?.user?.createdAt {
+                        Utility.shared.logindataArray.append(createdAt as AnyObject)
+                    }
+                    if let isPhoneVerified = result.data?.userLogin?.result?.user?.verification?.isPhoneVerified {
+                        Utility.shared.logindataArray.append(isPhoneVerified as AnyObject)
+                    }
+                    if let isEmailConfirmed = result.data?.userLogin?.result?.user?.verification?.isEmailConfirmed {
+                        Utility.shared.logindataArray.append(isEmailConfirmed as AnyObject)
+                    }
+                    if let isIdVerification = result.data?.userLogin?.result?.user?.verification?.isIdVerification {
+                        Utility.shared.logindataArray.append(isIdVerification as AnyObject)
+                    }
+                    if let isGoogleConnected = result.data?.userLogin?.result?.user?.verification?.isGoogleConnected {
+                        Utility.shared.logindataArray.append(isGoogleConnected as AnyObject)
+                    }
+                    
+                    if let isFacebookConnected = result.data?.userLogin?.result?.user?.verification?.isFacebookConnected {
+                        Utility.shared.logindataArray.append(isFacebookConnected as AnyObject)
+                    }
+                    
+                    
+                    Utility.shared.locationfromSearch = ""
+                    Utility.shared.isfromfloatmap_Page = false
+                    Utility.shared.isfromGuestProfile = false
+                    if(Utility.shared.searchLocationDict.count > 0)
+                    {
+                        Utility.shared.searchLocationDict.setValue(nil, forKey: "lat")
+                        Utility.shared.searchLocationDict.setValue(nil, forKey: "lon")
+                    }
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    Utility.shared.setTab(index: 0)
+                    
+                    
+                    self.view.window?.rootViewController?.dismiss(animated: false, completion: nil)
+                    
+                    appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
+                    
+                } else if result.data?.userLogin?.status == 500 {
+                    self.lottieView.isHidden = true
+                    self.lottieWholeView.isHidden = true
+                    // self.GoBtn.isHidden = true
+                    self.emailTF.resignFirstResponder()
+                    self.passwordTF.resignFirstResponder()
+                    self.view.makeToast("\((result.data?.userLogin?.errorMessage)!)")
+                    // Utility.shared.showAlert(msg: "\((result.data?.userLogin?.errorMessage)!)")
                     
                 }
                 else{
-                    self.invalidcredentialView.frame = CGRect(x: 0, y: FULLHEIGHT-60, width: FULLWIDTH, height: 60)
+                    
+                    self.lottieView.isHidden = true
+                    self.lottieWholeView.isHidden = true
+                    self.GoBtn.isHidden = true
+                    self.passwordTF.resignFirstResponder()
+                    self.emailTF.resignFirstResponder()
+                    self.invalidcredentialView.isHidden = false
+                    if IS_IPHONE_X || IS_IPHONE_XR {
+                        self.invalidcredentialView.frame = CGRect(x: 0, y: FULLHEIGHT-80, width: FULLWIDTH, height: 60)
+                        
+                    }
+                    else{
+                        self.invalidcredentialView.frame = CGRect(x: 0, y: FULLHEIGHT-60, width: FULLWIDTH, height: 60)
+                    }
                 }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }

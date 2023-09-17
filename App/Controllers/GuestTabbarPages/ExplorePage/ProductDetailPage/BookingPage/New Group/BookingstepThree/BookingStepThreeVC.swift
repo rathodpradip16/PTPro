@@ -35,20 +35,11 @@ class BookingStepThreeVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     var lottieWholeView = UIView()
      var pickedimageString = String()
     var lottieView: LottieAnimationView!
-    var viewListingArray = ViewListingDetailsQuery.Data.ViewListing.Result()
-    var ProfileAPIArray = GetProfileQuery.Data.UserAccount.Result()
+    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
+    var ProfileAPIArray : GetProfileQuery.Data.UserAccount.Result?
     var currencyvalue_from_API_base = ""
-    var getbillingArray = GetBillingCalculationQuery.Data.GetBillingCalculation.Result()
+    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,7 +117,7 @@ class BookingStepThreeVC: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.lottieView.play()
     }
     @IBAction func nextBtnTapped(_ sender: Any) {
-        if(pickedimageString == "" && ProfileAPIArray.picture == nil)
+        if(pickedimageString == "" && ProfileAPIArray?.picture == nil)
         {
             
             self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"uploadprofile"))!)")
@@ -228,9 +219,9 @@ class BookingStepThreeVC: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
         }
         else{
-            if(ProfileAPIArray.picture != nil)
+            if(ProfileAPIArray?.picture != nil)
             {
-                let profImage = ProfileAPIArray.picture!
+                let profImage = ProfileAPIArray?.picture!
                 cell.editProfileimage.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(profImage)"), completed: nil)
             }
             else
@@ -268,7 +259,7 @@ class BookingStepThreeVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
          self.offlineView.isHidden = true
             self.nextBtn.isHidden = false
         }
@@ -319,7 +310,7 @@ class BookingStepThreeVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     func uploadProfileimageService(imageBase64:Data)
     {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.uploadProfilePic(profileimage:imageBase64,onSuccess:{response in
             })
         }
@@ -351,7 +342,7 @@ class BookingStepThreeVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func uploadProfilePic(profileimage:Data,onSuccess success: @escaping (NSDictionary) -> Void) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             let BaseUrl = URL(string: IMAGE_UPLOAD_PHOTO)
             print("BASE URL : \(IMAGE_UPLOAD_PHOTO)")
             print("data \(profileimage)")
@@ -408,33 +399,35 @@ class BookingStepThreeVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     {
         let profileQuery = GetProfileQuery()
         
-        apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            
-            guard (result?.data?.userAccount?.result) != nil else
-            {
-                if result?.data?.userAccount?.status == 500{
-                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result?.data?.userAccount?.errorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                        UserDefaults.standard.removeObject(forKey: "user_token")
-                        UserDefaults.standard.removeObject(forKey: "user_id")
-                        UserDefaults.standard.removeObject(forKey: "password")
-                        UserDefaults.standard.removeObject(forKey: "currency_rate")
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        let welcomeObj = WelcomePageVC()
-                        appDelegate.setInitialViewController(initialView: welcomeObj)
-                    }))
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }else{
-                    self.view.makeToast(result?.data?.userAccount?.errorMessage)
-                return
+        Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.userAccount?.result) != nil else
+                {
+                    if result.data?.userAccount?.status == 500{
+                        let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.userAccount?.errorMessage, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                            UserDefaults.standard.removeObject(forKey: "user_token")
+                            UserDefaults.standard.removeObject(forKey: "user_id")
+                            UserDefaults.standard.removeObject(forKey: "password")
+                            UserDefaults.standard.removeObject(forKey: "currency_rate")
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            let welcomeObj = WelcomePageVC()
+                            appDelegate.setInitialViewController(initialView: welcomeObj)
+                        }))
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    }else{
+                        self.view.makeToast(result.data?.userAccount?.errorMessage)
+                        return
+                    }
                 }
+                print(result.data?.userAccount?.result as Any)
+                self.ProfileAPIArray = ((result.data?.userAccount?.result)!)
+                self.bookingStepthreeTable.reloadData()
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            
-            print(result?.data?.userAccount?.result as Any)
-            
-            self.ProfileAPIArray = ((result?.data?.userAccount?.result)!)
-            self.bookingStepthreeTable.reloadData()
         }
         
         

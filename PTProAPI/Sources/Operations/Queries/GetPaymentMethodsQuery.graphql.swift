@@ -5,38 +5,19 @@
 
 public class GetPaymentMethodsQuery: GraphQLQuery {
   public static let operationName: String = "getPaymentMethods"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getPaymentMethods {
-        getPaymentMethods {
-          __typename
-          results {
-            __typename
-            id
-            name
-            processedIn
-            fees
-            currency
-            details
-            isEnable
-            paymentType
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query getPaymentMethods { getPaymentMethods { __typename results { __typename id name processedIn fees currency details isEnable paymentType } status errorMessage } }"#
     ))
 
   public init() {}
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getPaymentMethods", GetPaymentMethods?.self),
     ] }
 
@@ -47,10 +28,11 @@ public class GetPaymentMethodsQuery: GraphQLQuery {
     /// Parent Type: `GetPaymentType`
     public struct GetPaymentMethods: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.GetPaymentType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.GetPaymentType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", [Result?]?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -65,10 +47,11 @@ public class GetPaymentMethodsQuery: GraphQLQuery {
       /// Parent Type: `PaymentMethods`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.PaymentMethods }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.PaymentMethods }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("name", String?.self),
           .field("processedIn", String?.self),

@@ -5,44 +5,9 @@
 
 public class ShowUserProfileQuery: GraphQLQuery {
   public static let operationName: String = "showUserProfile"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query showUserProfile($profileId: Int, $isUser: Boolean) {
-        showUserProfile(profileId: $profileId, isUser: $isUser) {
-          __typename
-          results {
-            __typename
-            userId
-            profileId
-            firstName
-            lastName
-            dateOfBirth
-            gender
-            phoneNumber
-            preferredLanguage
-            preferredCurrency
-            location
-            info
-            createdAt
-            picture
-            reviewsCount
-            userVerifiedInfo {
-              __typename
-              id
-              isEmailConfirmed
-              isFacebookConnected
-              isGoogleConnected
-              isIdVerification
-              isPhoneVerified
-              status
-            }
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query showUserProfile($profileId: Int, $isUser: Boolean) { showUserProfile(profileId: $profileId, isUser: $isUser) { __typename results { __typename userId profileId firstName lastName dateOfBirth gender phoneNumber preferredLanguage preferredCurrency location info createdAt picture reviewsCount userVerifiedInfo { __typename id isEmailConfirmed isFacebookConnected isGoogleConnected isIdVerification isPhoneVerified status } } status errorMessage } }"#
     ))
 
   public var profileId: GraphQLNullable<Int>
@@ -63,10 +28,10 @@ public class ShowUserProfileQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("showUserProfile", ShowUserProfile?.self, arguments: [
         "profileId": .variable("profileId"),
         "isUser": .variable("isUser")
@@ -80,10 +45,11 @@ public class ShowUserProfileQuery: GraphQLQuery {
     /// Parent Type: `ShowUserProfileCommon`
     public struct ShowUserProfile: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.ShowUserProfileCommon }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ShowUserProfileCommon }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", Results?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -98,10 +64,11 @@ public class ShowUserProfileQuery: GraphQLQuery {
       /// Parent Type: `ShowUserProfile`
       public struct Results: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.ShowUserProfile }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ShowUserProfile }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("userId", String?.self),
           .field("profileId", Int?.self),
           .field("firstName", String?.self),
@@ -140,10 +107,11 @@ public class ShowUserProfileQuery: GraphQLQuery {
         /// Parent Type: `UserVerifiedInfo`
         public struct UserVerifiedInfo: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.UserVerifiedInfo }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserVerifiedInfo }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("isEmailConfirmed", Bool?.self),
             .field("isFacebookConnected", Bool?.self),

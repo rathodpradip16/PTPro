@@ -75,7 +75,7 @@ class ResetPasswordVC: UIViewController {
     }
     
     @IBAction func retryTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
         }
         
@@ -351,31 +351,32 @@ class ResetPasswordVC: UIViewController {
                 
                 if newPasswordTF.text == confirmPasswordTF.text {
                     let resetpass = ResetPasswordMutation(email: Utility.shared.deepLinkEmail, password: newPasswordTF.text!, token: Utility.shared.deepLinkToken)
-                    apollo.perform(mutation: resetpass){ (result,error)in
-                        print(result?.data?.updateForgotPassword?.status == 200)
-                        if result?.data?.updateForgotPassword?.status == 200 {
-                            
-                            let alert = UIAlertController(title: "\((Utility.shared.getLanguage()?.value(forKey: "success"))!)", message: "\((Utility.shared.getLanguage()?.value(forKey: "Password_reset"))!)", preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "\((Utility.shared.getLanguage()?.value(forKey: "okay"))!)", style: .default, handler: { (NavigatingtoLogin) in
-                                let logpage = LoginPageVC()
-                                logpage.modalPresentationStyle = .fullScreen
-                                self.present(logpage, animated: false, completion: nil)
+                    apollo.perform(mutation: resetpass){ response in
+                        switch response {
+                        case .success(let result):
+                            if let data = result.data?.updateForgotPassword?.status,data == 200 {
                                 
-                            }))
-                            self.present(alert, animated: true, completion: nil)
-                        }else{
-                            
-                            
-
-                            let alert = UIAlertController(title: "\((Utility.shared.getLanguage()?.value(forKey: "oops"))!)", message: "\((result?.data?.updateForgotPassword?.errorMessage)!)", preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "\((Utility.shared.getLanguage()?.value(forKey: "okay"))!)", style: .default, handler: { (NavigatingtoLogin) in
-                                let welcomeObj = WelcomePageVC()
-                                welcomeObj.modalPresentationStyle = .fullScreen
-                                self.present(welcomeObj, animated:false, completion: nil)
-                                
-                            }))
-                            self.present(alert, animated: true, completion: nil)
-                           // self.view.makeToast("\(String(describing: result?.data?.updateForgotPassword?.errorMessage))")
+                                let alert = UIAlertController(title: "\((Utility.shared.getLanguage()?.value(forKey: "success"))!)", message: "\((Utility.shared.getLanguage()?.value(forKey: "Password_reset"))!)", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "\((Utility.shared.getLanguage()?.value(forKey: "okay"))!)", style: .default, handler: { (NavigatingtoLogin) in
+                                    let logpage = LoginPageVC()
+                                    logpage.modalPresentationStyle = .fullScreen
+                                    self.present(logpage, animated: false, completion: nil)
+                                    
+                                }))
+                                self.present(alert, animated: true, completion: nil)
+                            } else {
+                                let alert = UIAlertController(title: "\((Utility.shared.getLanguage()?.value(forKey: "oops"))!)", message: "\((result.data?.updateForgotPassword?.errorMessage)!)", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "\((Utility.shared.getLanguage()?.value(forKey: "okay"))!)", style: .default, handler: { (NavigatingtoLogin) in
+                                    let welcomeObj = WelcomePageVC()
+                                    welcomeObj.modalPresentationStyle = .fullScreen
+                                    self.present(welcomeObj, animated:false, completion: nil)
+                                    
+                                }))
+                                self.present(alert, animated: true, completion: nil)
+                                // self.view.makeToast("\(String(describing: result.data?.updateForgotPassword?.errorMessage))")
+                            }
+                        case .failure(let error):
+                            self.view.makeToast(error.localizedDescription)
                         }
                     }
                     
@@ -387,7 +388,7 @@ class ResetPasswordVC: UIViewController {
                 
                 self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "passcode_count"))!)")
             }
-
+            
         }else{
             offlineView.isHidden = false
             let shadowSize2 : CGFloat = 3.0

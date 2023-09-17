@@ -254,14 +254,14 @@ class MapLocateVC: UIViewController,GMSMapViewDelegate,CLLocationManagerDelegate
         self.present(becomeHost, animated:false, completion: nil)
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
     }
     
     @objc func saveandexitTapped() {
         
-         if Utility().isConnectedToNetwork() {
+         if Utility.shared.isConnectedToNetwork() {
             Utility.shared.isfromshowmap = true
             self.lottieViewanimation()
             

@@ -80,7 +80,7 @@ class SocialSigninPage: UIViewController {
         }
     }
     @objc func applelogin(){
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         if #available(iOS 13.0, *) {
         let authorizationProvider = ASAuthorizationAppleIDProvider()
                 let request = authorizationProvider.createRequest()
@@ -122,111 +122,114 @@ class SocialSigninPage: UIViewController {
     }
 
     func facebookSignup(){
-            let graphRequest : GraphRequest = GraphRequest(graphPath: "me", parameters:["fields": "id, name, first_name, last_name, picture.type(large), email"])
-            graphRequest.start(completionHandler: { (connection, result, error) -> Void in
-                
-                if ((error) != nil)
-                {
-                    print("Error: \(String(describing: error))")
-                }
-                else
-                {
-                    let userName  = result as! NSDictionary
-                    
-                    let name = userName.value(forKey: "name") as! NSString
-                    
-                    let profile = userName.value(forKey: "picture") as! NSDictionary
-                    
-                    let data = profile.value(forKey: "data")as! NSDictionary
-                    let url = data.value(forKey: "url") as! String
-                    if let userEmail = userName.value(forKey: "email") as? NSString{
+        let graphRequest : GraphRequest = GraphRequest(graphPath: "me", parameters:["fields": "id, name, first_name, last_name, picture.type(large), email"])
+        graphRequest.start(completionHandler: { (connection, result, error) -> Void in
             
-                            
-                            
-                            let params = [
-                                
-                                "first_name": "\(name)",
-                                "email": "\(userEmail)",
-                                
-                            ]
-                        let signupMutation = SocialLoginQuery(firstName: "\(name)", lastName: "", email: "\(userEmail)", dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "facebook", gender: "", profilePicture:"\(url)")
+            if ((error) != nil)
+            {
+            }
+            else
+            {
+                let userName  = result as! NSDictionary
+                
+                let name = userName.value(forKey: "name") as! NSString
+                
+                let profile = userName.value(forKey: "picture") as! NSDictionary
+                
+                let data = profile.value(forKey: "data")as! NSDictionary
+                let url = data.value(forKey: "url") as! String
+                if let userEmail = userName.value(forKey: "email") as? NSString{
+                    
+                    
+                    
+                    let params = [
                         
-                        apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){ (result,error) in
-                            if(result?.data?.userSocialLogin?.status == 200)
-                            {
+                        "first_name": "\(name)",
+                        "email": "\(userEmail)",
+                        
+                    ]
+                    let signupMutation = SocialLoginQuery(firstName: .some("\(name)"), lastName: "", email: "\(userEmail)", dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "facebook", gender: "", profilePicture:.some("\(url)"))
+                    
+                    apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
+                        switch response {
+                        case .success(let result):
+                            if let data = result.data?.userSocialLogin?.status,data == 200 {
                                 Utility.shared.signupArray.removeAllObjects()
                                 Utility.shared.signupdataArray.removeAll()
                                 Utility.shared.setopenTabbar(iswhichtabbar:false)
-                               if let token = result?.data?.userSocialLogin?.result?.userToken {
-                                   Utility.shared.setUserToken(userID:token as NSString)
-                               }
-                               //Utility.shared.setUserToken(userID: (result?.data?.userSocialLogin?.result?.userToken as AnyObject) as! NSString)
-                               if let userid = result?.data?.userSocialLogin?.result?.userId {
-                                   Utility.shared.setUserID(userid:userid as NSString)
-                                                  }
-                               //Utility.shared.setUserID(userid: (result?.data?.userSocialLogin?.result?.userId as AnyObject)as! NSString)
-                               if(result?.data?.userSocialLogin?.result?.user?.preferredCurrency != nil)
-                               {
-                               Utility.shared.setPreferredCurrency(currency_rate: (result?.data?.userSocialLogin?.result?.user?.preferredCurrency as AnyObject) as! String)
-                               }
-                               else
-                               {
-                                   Utility.shared.setPreferredCurrency(currency_rate:"USD")
-                                   Utility.shared.selectedCurrency = "USD"
-                               }
-                               if let firstName = result?.data?.userSocialLogin?.result?.user?.firstName {
-                                  Utility.shared.signupdataArray.append(firstName as AnyObject)
-                               }
-                               if let createdAt = result?.data?.userSocialLogin?.result?.user?.createdAt {
-                                   Utility.shared.signupdataArray.append(createdAt as AnyObject)
-                               }
-                               if let picture = result?.data?.userSocialLogin?.result?.user?.picture {
-                                   Utility.shared.signupdataArray.append(picture as AnyObject)
-                               }
-                               if let isEmailConfirmed = result?.data?.userSocialLogin?.result?.user?.verification?.isEmailConfirmed {
-                                   Utility.shared.signupdataArray.append(isEmailConfirmed as AnyObject)
-                               }
-                               if let isIdVerification = result?.data?.userSocialLogin?.result?.user?.verification?.isIdVerification {
-                                   Utility.shared.signupdataArray.append(isIdVerification as AnyObject)
-                               }
-                               if let isFacebookConnected = result?.data?.userSocialLogin?.result?.user?.verification?.isFacebookConnected {
-                                   Utility.shared.signupdataArray.append(isFacebookConnected as AnyObject)
-                               }
-                               if let isPhoneVerified = result?.data?.userSocialLogin?.result?.user?.verification?.isPhoneVerified {
-                                   Utility.shared.signupdataArray.append(isPhoneVerified as AnyObject)
-                               }
-                               if let isGoogleConnected = result?.data?.userSocialLogin?.result?.user?.verification?.isGoogleConnected {
-                                   Utility.shared.signupdataArray.append(isGoogleConnected as AnyObject)
-                               }
-                                if let userToken = result?.data?.userSocialLogin?.result?.userToken {
-                                                      Utility.shared.user_token = userToken
-                                                  }
-                                //Utility.shared.user_token  = (result?.data?.userSocialLogin?.result?.userToken)! //usertoken
-                                 Utility.shared.setTab(index: 0)
+                                if let token = result.data?.userSocialLogin?.result?.userToken {
+                                    Utility.shared.setUserToken(userID:token as NSString)
+                                }
+                                //Utility.shared.setUserToken(userID: (result.data?.userSocialLogin?.result?.userToken as AnyObject) as! NSString)
+                                if let userid = result.data?.userSocialLogin?.result?.userId {
+                                    Utility.shared.setUserID(userid:userid as NSString)
+                                }
+                                //Utility.shared.setUserID(userid: (result.data?.userSocialLogin?.result?.userId as AnyObject)as! NSString)
+                                if(result.data?.userSocialLogin?.result?.user?.preferredCurrency != nil)
+                                {
+                                    Utility.shared.setPreferredCurrency(currency_rate: (result.data?.userSocialLogin?.result?.user?.preferredCurrency as AnyObject) as! String)
+                                }
+                                else
+                                {
+                                    Utility.shared.setPreferredCurrency(currency_rate:"USD")
+                                    Utility.shared.selectedCurrency = "USD"
+                                }
+                                if let firstName = result.data?.userSocialLogin?.result?.user?.firstName {
+                                    Utility.shared.signupdataArray.append(firstName as AnyObject)
+                                }
+                                if let createdAt = result.data?.userSocialLogin?.result?.user?.createdAt {
+                                    Utility.shared.signupdataArray.append(createdAt as AnyObject)
+                                }
+                                if let picture = result.data?.userSocialLogin?.result?.user?.picture {
+                                    Utility.shared.signupdataArray.append(picture as AnyObject)
+                                }
+                                if let isEmailConfirmed = result.data?.userSocialLogin?.result?.user?.verification?.isEmailConfirmed {
+                                    Utility.shared.signupdataArray.append(isEmailConfirmed as AnyObject)
+                                }
+                                if let isIdVerification = result.data?.userSocialLogin?.result?.user?.verification?.isIdVerification {
+                                    Utility.shared.signupdataArray.append(isIdVerification as AnyObject)
+                                }
+                                if let isFacebookConnected = result.data?.userSocialLogin?.result?.user?.verification?.isFacebookConnected {
+                                    Utility.shared.signupdataArray.append(isFacebookConnected as AnyObject)
+                                }
+                                if let isPhoneVerified = result.data?.userSocialLogin?.result?.user?.verification?.isPhoneVerified {
+                                    Utility.shared.signupdataArray.append(isPhoneVerified as AnyObject)
+                                }
+                                if let isGoogleConnected = result.data?.userSocialLogin?.result?.user?.verification?.isGoogleConnected {
+                                    Utility.shared.signupdataArray.append(isGoogleConnected as AnyObject)
+                                }
+                                if let userToken = result.data?.userSocialLogin?.result?.userToken {
+                                    Utility.shared.user_token = userToken
+                                }
+                                //Utility.shared.user_token  = (result.data?.userSocialLogin?.result?.userToken)! //usertoken
+                                Utility.shared.setTab(index: 0)
                                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
-
+                                
                                 self.view.window?.rootViewController?.dismiss(animated: false, completion: nil)
-
+                                
                                 appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
                                 
-
+                                
+                            } else {
+                                Utility.shared.showAlert(msg:((result.data?.userSocialLogin?.errorMessage)!))
                             }
-                            else{
-                                Utility.shared.showAlert(msg:((result?.data?.userSocialLogin?.errorMessage)!))
-                            }
+                        case .failure(let error):
+                            Utility.shared.showAlert(msg:error.localizedDescription)
                         }
-                    }else{
-                        self.view.makeToast("\(Utility.shared.getLanguage()?.value(forKey: "Email_Not_Received") ?? "Email not exist in your FB account, please use another one to sign in.")")
+                        
                     }
+                }else{
+                    self.view.makeToast("\(Utility.shared.getLanguage()?.value(forKey: "Email_Not_Received") ?? "Email not exist in your FB account, please use another one to sign in.")")
                 }
-            })
-            
-        }
+            }
+        })
+        
+    }
 
     @objc func googleLogin(){
         
         URLCache.shared.removeAllCachedResponses()
-
+        
         if let cookies = HTTPCookieStorage.shared.cookies {
             for cookie in cookies {
                 HTTPCookieStorage.shared.deleteCookie(cookie)
@@ -235,189 +238,185 @@ class SocialSigninPage: UIViewController {
         GIDSignIn.sharedInstance.signOut()
         GIDSignIn.sharedInstance.signIn(withPresenting: self) { result, error in
             guard error == nil else { return }
-
-               
+            
+            
             let name = result?.user.profile?.name
             let email = result?.user.profile?.email
             let userImageURL = result?.user.profile?.imageURL(withDimension: 200)!
-
-                
             
-                let params = [
-                 "name": "\(name ?? "")",
-                    "email": "\(email ?? "")",
-                 "image": "\(userImageURL)"
-                ]
-                
-                let signupMutation = SocialLoginQuery(firstName: "\(name ?? "")", lastName: "", email: "\(email ?? "")", dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "google", gender: "", profilePicture:"\(userImageURL)")
-                
-                 apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){ (result,error) in
-
-                    if(result?.data?.userSocialLogin?.status == 200)
-                    {
+            
+            
+            let params = [
+                "name": "\(name ?? "")",
+                "email": "\(email ?? "")",
+                "image": "\(userImageURL)"
+            ]
+            
+            let signupMutation = SocialLoginQuery(firstName: .some("\(name ?? "")"), lastName: "", email: "\(email ?? "")", dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "google", gender: "", profilePicture:.some("\(userImageURL)"))
+            
+            apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.userSocialLogin?.status,data == 200 {
                         Utility.shared.setopenTabbar(iswhichtabbar:false)
                         Utility.shared.signupArray.removeAllObjects()
                         Utility.shared.signupdataArray.removeAll()
-                     if let token = result?.data?.userSocialLogin?.result?.userToken {
-                         Utility.shared.setUserToken(userID:token as NSString)
-                     }
-                     if let userid = result?.data?.userSocialLogin?.result?.userId {
-                         Utility.shared.setUserID(userid:userid as NSString)
-                     }
-                     
-                     if(result?.data?.userSocialLogin?.result?.user?.preferredCurrency != nil)
-                     {
-                         Utility.shared.setPreferredCurrency(currency_rate: (result?.data?.userSocialLogin?.result?.user?.preferredCurrency as AnyObject) as! String)
-                     }
-                     else
-                     {
-                         Utility.shared.setPreferredCurrency(currency_rate:"USD")
-                         Utility.shared.selectedCurrency = "USD"
-                     }
-                     if let firstName = result?.data?.userSocialLogin?.result?.user?.firstName {
-                         Utility.shared.signupdataArray.append(firstName as AnyObject)
-                     }
-                     if let createdAt = result?.data?.userSocialLogin?.result?.user?.createdAt {
-                         Utility.shared.signupdataArray.append(createdAt as AnyObject)
-                     }
-                     if let picture = result?.data?.userSocialLogin?.result?.user?.picture {
-                         Utility.shared.signupdataArray.append(picture as AnyObject)
-                     }
-                     if let isEmailConfirmed = result?.data?.userSocialLogin?.result?.user?.verification?.isEmailConfirmed {
-                         Utility.shared.signupdataArray.append(isEmailConfirmed as AnyObject)
-                     }
-                     if let isIdVerification = result?.data?.userSocialLogin?.result?.user?.verification?.isIdVerification {
-                         Utility.shared.signupdataArray.append(isIdVerification as AnyObject)
-                     }
-                     if let isFacebookConnected = result?.data?.userSocialLogin?.result?.user?.verification?.isFacebookConnected {
-                         Utility.shared.signupdataArray.append(isFacebookConnected as AnyObject)
-                     }
-                     if let isPhoneVerified = result?.data?.userSocialLogin?.result?.user?.verification?.isPhoneVerified {
-                         Utility.shared.signupdataArray.append(isPhoneVerified as AnyObject)
-                     }
-                     if let isGoogleConnected = result?.data?.userSocialLogin?.result?.user?.verification?.isGoogleConnected {
-                         Utility.shared.signupdataArray.append(isGoogleConnected as AnyObject)
-                     }
-                     if let userToken = result?.data?.userSocialLogin?.result?.userToken {
-                         Utility.shared.user_token = userToken
-                     }
-
+                        if let token = result.data?.userSocialLogin?.result?.userToken {
+                            Utility.shared.setUserToken(userID:token as NSString)
+                        }
+                        if let userid = result.data?.userSocialLogin?.result?.userId {
+                            Utility.shared.setUserID(userid:userid as NSString)
+                        }
+                        
+                        if(result.data?.userSocialLogin?.result?.user?.preferredCurrency != nil)
+                        {
+                            Utility.shared.setPreferredCurrency(currency_rate: (result.data?.userSocialLogin?.result?.user?.preferredCurrency as AnyObject) as! String)
+                        }
+                        else
+                        {
+                            Utility.shared.setPreferredCurrency(currency_rate:"USD")
+                            Utility.shared.selectedCurrency = "USD"
+                        }
+                        if let firstName = result.data?.userSocialLogin?.result?.user?.firstName {
+                            Utility.shared.signupdataArray.append(firstName as AnyObject)
+                        }
+                        if let createdAt = result.data?.userSocialLogin?.result?.user?.createdAt {
+                            Utility.shared.signupdataArray.append(createdAt as AnyObject)
+                        }
+                        if let picture = result.data?.userSocialLogin?.result?.user?.picture {
+                            Utility.shared.signupdataArray.append(picture as AnyObject)
+                        }
+                        if let isEmailConfirmed = result.data?.userSocialLogin?.result?.user?.verification?.isEmailConfirmed {
+                            Utility.shared.signupdataArray.append(isEmailConfirmed as AnyObject)
+                        }
+                        if let isIdVerification = result.data?.userSocialLogin?.result?.user?.verification?.isIdVerification {
+                            Utility.shared.signupdataArray.append(isIdVerification as AnyObject)
+                        }
+                        if let isFacebookConnected = result.data?.userSocialLogin?.result?.user?.verification?.isFacebookConnected {
+                            Utility.shared.signupdataArray.append(isFacebookConnected as AnyObject)
+                        }
+                        if let isPhoneVerified = result.data?.userSocialLogin?.result?.user?.verification?.isPhoneVerified {
+                            Utility.shared.signupdataArray.append(isPhoneVerified as AnyObject)
+                        }
+                        if let isGoogleConnected = result.data?.userSocialLogin?.result?.user?.verification?.isGoogleConnected {
+                            Utility.shared.signupdataArray.append(isGoogleConnected as AnyObject)
+                        }
+                        if let userToken = result.data?.userSocialLogin?.result?.userToken {
+                            Utility.shared.user_token = userToken
+                        }
+                        
                         Utility.shared.setTab(index: 0)
                         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-
+                        
                         self.view.window?.rootViewController?.dismiss(animated: false, completion: nil)
-
-
+                        
+                        
                         appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
-
-
+                        
+                        
+                    } else {
+                        Utility.shared.showAlert(msg:((result.data?.userSocialLogin?.errorMessage) != nil ? ((result.data?.userSocialLogin?.errorMessage)!) : ""))
                     }
-                    else
-                    {
-//                            Utility.shared.showAlert(msg:((result?.data?.userSocialLogin?.errorMessage)!))
-                     Utility.shared.showAlert(msg:((result?.data?.userSocialLogin?.errorMessage) != nil ? ((result?.data?.userSocialLogin?.errorMessage)!) : ""))
-                    }
-                    
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
                 
                 
             }
             // If sign in succeeded, display the app's main content View.
-          }
+        }
         
     }
 
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if(error == nil)
-               {
-                  
-                   let name = user.profile?.name
-                   let email = user.profile?.email
-                   let userImageURL = user.profile?.imageURL(withDimension: 200)!
-
-                   
-               
-                   let params = [
-                       "name": "\(name ?? "")",
-                       "email": "\(email ?? "")",
-                       "image": "\(userImageURL)"
-                   ]
-                   
-                   let signupMutation = SocialLoginQuery(firstName: "\(name ?? "")", lastName: "", email: "\(email ?? "")", dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "google", gender: "", profilePicture:"\(userImageURL)")
-                   
-                    apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){ (result,error) in
-
-                       if(result?.data?.userSocialLogin?.status == 200)
-                       {
-                           Utility.shared.setopenTabbar(iswhichtabbar:false)
-                           Utility.shared.signupArray.removeAllObjects()
-                           Utility.shared.signupdataArray.removeAll()
-                           if let token = result?.data?.userSocialLogin?.result?.userToken {
-                                                             Utility.shared.setUserToken(userID:token as NSString)
-                                                         }
-                                                         //Utility.shared.setUserToken(userID: (result?.data?.userSocialLogin?.result?.userToken as AnyObject) as! NSString)
-                                                         if let userid = result?.data?.userSocialLogin?.result?.userId {
-                                                             Utility.shared.setUserID(userid:userid as NSString)
-                                                                            }
-                                                         //Utility.shared.setUserID(userid: (result?.data?.userSocialLogin?.result?.userId as AnyObject)as! NSString)
-                                                         if(result?.data?.userSocialLogin?.result?.user?.preferredCurrency != nil)
-                                                         {
-                                                         Utility.shared.setPreferredCurrency(currency_rate: (result?.data?.userSocialLogin?.result?.user?.preferredCurrency as AnyObject) as! String)
-                                                         }
-                                                         else
-                                                         {
-                                                             Utility.shared.setPreferredCurrency(currency_rate:"USD")
-                                                             Utility.shared.selectedCurrency = "USD"
-                                                         }
-                                                         if let firstName = result?.data?.userSocialLogin?.result?.user?.firstName {
-                                                            Utility.shared.signupdataArray.append(firstName as AnyObject)
-                                                         }
-                                                         if let createdAt = result?.data?.userSocialLogin?.result?.user?.createdAt {
-                                                             Utility.shared.signupdataArray.append(createdAt as AnyObject)
-                                                         }
-                                                         if let picture = result?.data?.userSocialLogin?.result?.user?.picture {
-                                                             Utility.shared.signupdataArray.append(picture as AnyObject)
-                                                         }
-                                                         if let isEmailConfirmed = result?.data?.userSocialLogin?.result?.user?.verification?.isEmailConfirmed {
-                                                             Utility.shared.signupdataArray.append(isEmailConfirmed as AnyObject)
-                                                         }
-                                                         if let isIdVerification = result?.data?.userSocialLogin?.result?.user?.verification?.isIdVerification {
-                                                             Utility.shared.signupdataArray.append(isIdVerification as AnyObject)
-                                                         }
-                                                         if let isFacebookConnected = result?.data?.userSocialLogin?.result?.user?.verification?.isFacebookConnected {
-                                                             Utility.shared.signupdataArray.append(isFacebookConnected as AnyObject)
-                                                         }
-                                                         if let isPhoneVerified = result?.data?.userSocialLogin?.result?.user?.verification?.isPhoneVerified {
-                                                             Utility.shared.signupdataArray.append(isPhoneVerified as AnyObject)
-                                                         }
-                                                         if let isGoogleConnected = result?.data?.userSocialLogin?.result?.user?.verification?.isGoogleConnected {
-                                                             Utility.shared.signupdataArray.append(isGoogleConnected as AnyObject)
-                                                         }
-                                                          if let userToken = result?.data?.userSocialLogin?.result?.userToken {
-                                                                                Utility.shared.user_token = userToken
-                                                                            }
-                           Utility.shared.setTab(index: 0)
-                           let appDelegate = UIApplication.shared.delegate as! AppDelegate
-
-                           self.view.window?.rootViewController?.dismiss(animated: false, completion: nil)
-
-
-                           appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
-
-
-                       }
-                       else
-                       {
-                        Utility.shared.showAlert(msg:((result?.data?.userSocialLogin?.errorMessage) != nil ? ((result?.data?.userSocialLogin?.errorMessage)!) : ""))
-                       }
-                       
-                   }
-                   
-                   
-               }
-               else
-               {
-                   print("\(error.localizedDescription)")
-               }
+        {
+            
+            let name = user.profile?.name
+            let email = user.profile?.email
+            let userImageURL = user.profile?.imageURL(withDimension: 200)!
+            
+            
+            
+            let params = [
+                "name": "\(name ?? "")",
+                "email": "\(email ?? "")",
+                "image": "\(userImageURL)"
+            ]
+            
+            let signupMutation = SocialLoginQuery(firstName: .some("\(name ?? "")"), lastName: .some(""), email: "\(email ?? "")", dateOfBirth: .some(""), deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: .some("google"), gender: .some(""), profilePicture:.some("\(userImageURL)"))
+            
+            apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.userSocialLogin?.status,data == 200 {
+                        Utility.shared.setopenTabbar(iswhichtabbar:false)
+                        Utility.shared.signupArray.removeAllObjects()
+                        Utility.shared.signupdataArray.removeAll()
+                        if let token = result.data?.userSocialLogin?.result?.userToken {
+                            Utility.shared.setUserToken(userID:token as NSString)
+                        }
+                        //Utility.shared.setUserToken(userID: (result.data?.userSocialLogin?.result?.userToken as AnyObject) as! NSString)
+                        if let userid = result.data?.userSocialLogin?.result?.userId {
+                            Utility.shared.setUserID(userid:userid as NSString)
+                        }
+                        //Utility.shared.setUserID(userid: (result.data?.userSocialLogin?.result?.userId as AnyObject)as! NSString)
+                        if(result.data?.userSocialLogin?.result?.user?.preferredCurrency != nil)
+                        {
+                            Utility.shared.setPreferredCurrency(currency_rate: (result.data?.userSocialLogin?.result?.user?.preferredCurrency as AnyObject) as! String)
+                        }
+                        else
+                        {
+                            Utility.shared.setPreferredCurrency(currency_rate:"USD")
+                            Utility.shared.selectedCurrency = "USD"
+                        }
+                        if let firstName = result.data?.userSocialLogin?.result?.user?.firstName {
+                            Utility.shared.signupdataArray.append(firstName as AnyObject)
+                        }
+                        if let createdAt = result.data?.userSocialLogin?.result?.user?.createdAt {
+                            Utility.shared.signupdataArray.append(createdAt as AnyObject)
+                        }
+                        if let picture = result.data?.userSocialLogin?.result?.user?.picture {
+                            Utility.shared.signupdataArray.append(picture as AnyObject)
+                        }
+                        if let isEmailConfirmed = result.data?.userSocialLogin?.result?.user?.verification?.isEmailConfirmed {
+                            Utility.shared.signupdataArray.append(isEmailConfirmed as AnyObject)
+                        }
+                        if let isIdVerification = result.data?.userSocialLogin?.result?.user?.verification?.isIdVerification {
+                            Utility.shared.signupdataArray.append(isIdVerification as AnyObject)
+                        }
+                        if let isFacebookConnected = result.data?.userSocialLogin?.result?.user?.verification?.isFacebookConnected {
+                            Utility.shared.signupdataArray.append(isFacebookConnected as AnyObject)
+                        }
+                        if let isPhoneVerified = result.data?.userSocialLogin?.result?.user?.verification?.isPhoneVerified {
+                            Utility.shared.signupdataArray.append(isPhoneVerified as AnyObject)
+                        }
+                        if let isGoogleConnected = result.data?.userSocialLogin?.result?.user?.verification?.isGoogleConnected {
+                            Utility.shared.signupdataArray.append(isGoogleConnected as AnyObject)
+                        }
+                        if let userToken = result.data?.userSocialLogin?.result?.userToken {
+                            Utility.shared.user_token = userToken
+                        }
+                        Utility.shared.setTab(index: 0)
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        
+                        self.view.window?.rootViewController?.dismiss(animated: false, completion: nil)
+                        
+                        
+                        appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
+                        
+                        
+                    } else {
+                        Utility.shared.showAlert(msg:((result.data?.userSocialLogin?.errorMessage) != nil ? ((result.data?.userSocialLogin?.errorMessage)!) : ""))
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
+                
+            }
+            
+            
+        }
     }
     
     @IBAction func close_tapped(_ sender: Any) {
@@ -449,73 +448,73 @@ extension SocialSigninPage: ASAuthorizationControllerDelegate {
         let name = KeychainService.loadUsername() != nil ? KeychainService.loadUsername()! : ""
        
         
-        let signupMutation = SocialLoginQuery(firstName:name as String, lastName: "", email:email as String, dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "apple", gender: "", profilePicture:"")
+        let signupMutation = SocialLoginQuery(firstName: .some(name as String), lastName: "", email:email as String, dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "apple", gender: "", profilePicture:"")
         
-         apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){ (result,error) in
+         apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.userSocialLogin?.status,data == 200 {
+                    Utility.shared.setopenTabbar(iswhichtabbar:false)
+                    Utility.shared.signupArray.removeAllObjects()
+                    Utility.shared.signupdataArray.removeAll()
+                     if let token = result.data?.userSocialLogin?.result?.userToken {
+                                                       Utility.shared.setUserToken(userID:token as NSString)
+                                                   }
+                                                   //Utility.shared.setUserToken(userID: (result.data?.userSocialLogin?.result?.userToken as AnyObject) as! NSString)
+                                                   if let userid = result.data?.userSocialLogin?.result?.userId {
+                                                       Utility.shared.setUserID(userid:userid as NSString)
+                                                                      }
+                                                   //Utility.shared.setUserID(userid: (result.data?.userSocialLogin?.result?.userId as AnyObject)as! NSString)
+                                                   if(result.data?.userSocialLogin?.result?.user?.preferredCurrency != nil)
+                                                   {
+                                                   Utility.shared.setPreferredCurrency(currency_rate: (result.data?.userSocialLogin?.result?.user?.preferredCurrency as AnyObject) as! String)
+                                                   }
+                                                   else
+                                                   {
+                                                       Utility.shared.setPreferredCurrency(currency_rate:"USD")
+                                                       Utility.shared.selectedCurrency = "USD"
+                                                   }
+                                                   if let firstName = result.data?.userSocialLogin?.result?.user?.firstName {
+                                                      Utility.shared.signupdataArray.append(firstName as AnyObject)
+                                                   }
+                                                   if let createdAt = result.data?.userSocialLogin?.result?.user?.createdAt {
+                                                       Utility.shared.signupdataArray.append(createdAt as AnyObject)
+                                                   }
+                                                   if let picture = result.data?.userSocialLogin?.result?.user?.picture {
+                                                       Utility.shared.signupdataArray.append(picture as AnyObject)
+                                                   }
+                                                   if let isEmailConfirmed = result.data?.userSocialLogin?.result?.user?.verification?.isEmailConfirmed {
+                                                       Utility.shared.signupdataArray.append(isEmailConfirmed as AnyObject)
+                                                   }
+                                                   if let isIdVerification = result.data?.userSocialLogin?.result?.user?.verification?.isIdVerification {
+                                                       Utility.shared.signupdataArray.append(isIdVerification as AnyObject)
+                                                   }
+                                                   if let isFacebookConnected = result.data?.userSocialLogin?.result?.user?.verification?.isFacebookConnected {
+                                                       Utility.shared.signupdataArray.append(isFacebookConnected as AnyObject)
+                                                   }
+                                                   if let isPhoneVerified = result.data?.userSocialLogin?.result?.user?.verification?.isPhoneVerified {
+                                                       Utility.shared.signupdataArray.append(isPhoneVerified as AnyObject)
+                                                   }
+                                                   if let isGoogleConnected = result.data?.userSocialLogin?.result?.user?.verification?.isGoogleConnected {
+                                                       Utility.shared.signupdataArray.append(isGoogleConnected as AnyObject)
+                                                   }
+                                                    if let userToken = result.data?.userSocialLogin?.result?.userToken {
+                                                                          Utility.shared.user_token = userToken
+                                                                      }//usertoken
+                    Utility.shared.setTab(index: 0)
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
-            if(result?.data?.userSocialLogin?.status == 200)
-            {
-                Utility.shared.setopenTabbar(iswhichtabbar:false)
-                Utility.shared.signupArray.removeAllObjects()
-                Utility.shared.signupdataArray.removeAll()
-                 if let token = result?.data?.userSocialLogin?.result?.userToken {
-                                                   Utility.shared.setUserToken(userID:token as NSString)
-                                               }
-                                               //Utility.shared.setUserToken(userID: (result?.data?.userSocialLogin?.result?.userToken as AnyObject) as! NSString)
-                                               if let userid = result?.data?.userSocialLogin?.result?.userId {
-                                                   Utility.shared.setUserID(userid:userid as NSString)
-                                                                  }
-                                               //Utility.shared.setUserID(userid: (result?.data?.userSocialLogin?.result?.userId as AnyObject)as! NSString)
-                                               if(result?.data?.userSocialLogin?.result?.user?.preferredCurrency != nil)
-                                               {
-                                               Utility.shared.setPreferredCurrency(currency_rate: (result?.data?.userSocialLogin?.result?.user?.preferredCurrency as AnyObject) as! String)
-                                               }
-                                               else
-                                               {
-                                                   Utility.shared.setPreferredCurrency(currency_rate:"USD")
-                                                   Utility.shared.selectedCurrency = "USD"
-                                               }
-                                               if let firstName = result?.data?.userSocialLogin?.result?.user?.firstName {
-                                                  Utility.shared.signupdataArray.append(firstName as AnyObject)
-                                               }
-                                               if let createdAt = result?.data?.userSocialLogin?.result?.user?.createdAt {
-                                                   Utility.shared.signupdataArray.append(createdAt as AnyObject)
-                                               }
-                                               if let picture = result?.data?.userSocialLogin?.result?.user?.picture {
-                                                   Utility.shared.signupdataArray.append(picture as AnyObject)
-                                               }
-                                               if let isEmailConfirmed = result?.data?.userSocialLogin?.result?.user?.verification?.isEmailConfirmed {
-                                                   Utility.shared.signupdataArray.append(isEmailConfirmed as AnyObject)
-                                               }
-                                               if let isIdVerification = result?.data?.userSocialLogin?.result?.user?.verification?.isIdVerification {
-                                                   Utility.shared.signupdataArray.append(isIdVerification as AnyObject)
-                                               }
-                                               if let isFacebookConnected = result?.data?.userSocialLogin?.result?.user?.verification?.isFacebookConnected {
-                                                   Utility.shared.signupdataArray.append(isFacebookConnected as AnyObject)
-                                               }
-                                               if let isPhoneVerified = result?.data?.userSocialLogin?.result?.user?.verification?.isPhoneVerified {
-                                                   Utility.shared.signupdataArray.append(isPhoneVerified as AnyObject)
-                                               }
-                                               if let isGoogleConnected = result?.data?.userSocialLogin?.result?.user?.verification?.isGoogleConnected {
-                                                   Utility.shared.signupdataArray.append(isGoogleConnected as AnyObject)
-                                               }
-                                                if let userToken = result?.data?.userSocialLogin?.result?.userToken {
-                                                                      Utility.shared.user_token = userToken
-                                                                  }//usertoken
-                Utility.shared.setTab(index: 0)
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-
-                self.view.window?.rootViewController?.dismiss(animated: false, completion: nil)
-
-
-                appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
+                    self.view.window?.rootViewController?.dismiss(animated: false, completion: nil)
 
 
-            }
-            else
-            {
-                
-                 Utility.shared.showAlert(msg:((result?.data?.userSocialLogin?.errorMessage)!))
+                    appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
+
+
+                } else {
+                    Utility.shared.showAlert(msg:((result.data?.userSocialLogin?.errorMessage)!))
+               }
+            case .failure(let error):
+                Utility.shared.showAlert(msg:error.localizedDescription)
             }
         }
         print("AppleID Credential Authorization: userId: \(appleIDCredential.user), email: \(String(describing: appleIDCredential.email))")

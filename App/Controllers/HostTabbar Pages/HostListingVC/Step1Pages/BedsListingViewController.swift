@@ -150,7 +150,7 @@ class BedsListingViewController: BaseHostTableviewController {
     
     override func setDropdownList() {
         
-        let bedTypes = (Utility.shared.getListSettingsArray.bedType?.listSettings!)!
+        let bedTypes = (Utility.shared.getListSettingsArray?.bedType?.listSettings!)!
         bed_id.removeAll()
         bed_type_id.removeAll()
         bedtypeInfoArr.removeAll()
@@ -170,7 +170,7 @@ class BedsListingViewController: BaseHostTableviewController {
 
                        for i in 0..<bedTypeInfo.count
                        {
-                           if let userBedTypes = bedTypeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetail.Result.UserBedsType
+                           if let userBedTypes = bedTypeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserBedsType
                            {
                                let index = bedTypes.firstIndex(where: { (item) -> Bool in
                                    item?.id == userBedTypes.bedType
@@ -200,7 +200,7 @@ class BedsListingViewController: BaseHostTableviewController {
         }else{
             bedTypeValue = bedType.first != nil ? bedType.first! : ""
             Utility.shared.bedcount = 0
-            Utility.shared.step1ValuesInfo.updateValue(Utility.shared.getListSettingsArray.bedType?.listSettings != nil ? ((Utility.shared.getListSettingsArray.bedType?.listSettings![0]!.id!)!) : 0, forKey: "bedType")
+            Utility.shared.step1ValuesInfo.updateValue(Utility.shared.getListSettingsArray?.bedType?.listSettings != nil ? ((Utility.shared.getListSettingsArray?.bedType?.listSettings![0]!.id!)!) : 0, forKey: "bedType")
             Utility.shared.step1ValuesInfo.updateValue("", forKey: "bedTypes")
         }
         tableView.reloadData()
@@ -219,14 +219,14 @@ class BedsListingViewController: BaseHostTableviewController {
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
     }
     //IBActions
     
     @IBAction func RedirectNextPage(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         
             let bedsCount = Utility.shared.step1ValuesInfo["beds"] as? Int
             if(bedsCount != nil)
@@ -256,9 +256,9 @@ class BedsListingViewController: BaseHostTableviewController {
         Utility.shared.step1ValuesInfo.updateValue(bedTypeString.trimmingCharacters(in: .whitespaces), forKey: "bedTypes")
             if(Utility.shared.step1ValuesInfo["bedType"] == nil)
             {
-                if(Utility.shared.getListSettingsArray.bedType?.listSettings![0]!.id != nil)
+                if(Utility.shared.getListSettingsArray?.bedType?.listSettings![0]!.id != nil)
                 {
-        Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray.bedType?.listSettings![0]!.id!)!, forKey: "bedType")
+        Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray?.bedType?.listSettings![0]!.id!)!, forKey: "bedType")
                 }
                 else
                 {
@@ -344,7 +344,7 @@ class BedsListingViewController: BaseHostTableviewController {
     }
     
     @IBAction func saveAndExitAction(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
             self.lottieViewanimation()
                 if(bedtypeInfoArr.count == 0)
                 {
@@ -424,12 +424,12 @@ class BedsListingViewController: BaseHostTableviewController {
         cell?.roomsTitleLabel.text = bedType[indexPath.row]
         cell?.roomsTitleLabel.textColor =  UIColor(named: "Title_Header")
           array_Count.removeAll()
-        if((Utility.shared.getListSettingsArray.bedType?.listSettings![indexPath.row]!.id!) == bed_type_id[indexPath.row])
+        if((Utility.shared.getListSettingsArray?.bedType?.listSettings![indexPath.row]!.id!) == bed_type_id[indexPath.row])
         {
             let index = bedtypeInfoArr.index(where: { dictionary in
                 guard let value = dictionary["bedType"] as? Int
                     else { return false }
-                return value == (Utility.shared.getListSettingsArray.bedType?.listSettings![indexPath.row]!.id!)
+                return value == (Utility.shared.getListSettingsArray?.bedType?.listSettings![indexPath.row]!.id!)
             })
             if let index = index {
                 cell?.countshowLabel.text = "\(bedtypeInfoArr[index]["bedCount"]!)"
@@ -440,19 +440,18 @@ class BedsListingViewController: BaseHostTableviewController {
                 {
                     if let dict = convertToDictionary(text: bedtypeInfo)
                     {
-                        
                         for i in 0..<dict.count
                         {
                             let userBedTypes = dict[i]
                             if let userbedType = userBedTypes["bedType"] as? Int
                             {
                                 let userbedCount = "\(userBedTypes["bedCount"]!)"
-                                let bedTypes = (Utility.shared.getListSettingsArray.bedType?.listSettings!)!
+                                let bedTypes = (Utility.shared.getListSettingsArray?.bedType?.listSettings!)!
                                 let index = bedTypes.index(where: { (item) -> Bool in
                                     item?.id == userbedType
                                 })
                                 bedTypeValue = bedType[index!]
-                                 if((Utility.shared.getListSettingsArray.bedType?.listSettings![indexPath.row]!.id!) == userbedType)
+                                 if((Utility.shared.getListSettingsArray?.bedType?.listSettings![indexPath.row]!.id!) == userbedType)
                                 {
                                     cell?.countshowLabel.text = "\(String(describing: Int(userbedCount)!))"
                                     var bedTypeInfo = [String : Any]()
@@ -537,25 +536,25 @@ class BedsListingViewController: BaseHostTableviewController {
                 var bedTypeInfo = [String : Any]()
                     if (bedtypeInfoArr.count > 0)
                     {
-                        if((Utility.shared.getListSettingsArray.bedType?.listSettings![sender.tag]!.id!) == bed_type_id[sender.tag])
+                        if((Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!) == bed_type_id[sender.tag])
                         {
                             let index = bedtypeInfoArr.index(where: { dictionary in
                                 guard let value = dictionary["bedType"] as? Int
                                     else { return false }
-                                return value == (Utility.shared.getListSettingsArray.bedType?.listSettings![sender.tag]!.id!)
+                                return value == (Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!)
                             })
                             if let index = index {
                                 bedtypeInfoArr.remove(at: index)
                                 
-                                bedTypeInfo.updateValue((Utility.shared.getListSettingsArray.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
-                                Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
+                                bedTypeInfo.updateValue((Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
+                                Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
                                 bedTypeInfo.updateValue(cell.countshowLabel.text!, forKey: "bedCount")
                                 bedtypeInfoArr.append(bedTypeInfo)
                             }
                             else
                             {
-                                bedTypeInfo.updateValue((Utility.shared.getListSettingsArray.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
-                                Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
+                                bedTypeInfo.updateValue((Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
+                                Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
                                 bedTypeInfo.updateValue(cell.countshowLabel.text!, forKey: "bedCount")
                                bedtypeInfoArr.append(bedTypeInfo)
                             }
@@ -566,8 +565,8 @@ class BedsListingViewController: BaseHostTableviewController {
                 }
                 else
                     {
-                        bedTypeInfo.updateValue((Utility.shared.getListSettingsArray.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
-                        Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
+                        bedTypeInfo.updateValue((Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
+                        Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
                         bedTypeInfo.updateValue(cell.countshowLabel.text!, forKey: "bedCount")
                        bedtypeInfoArr.append(bedTypeInfo)
                 }
@@ -616,12 +615,12 @@ class BedsListingViewController: BaseHostTableviewController {
                 Utility.shared.bedcount = Utility.shared.bedcount - 1
                 
                 
-                if((Utility.shared.getListSettingsArray.bedType?.listSettings![sender.tag]!.id!) == bed_type_id[sender.tag])
+                if((Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!) == bed_type_id[sender.tag])
                 {
                     let index = bedtypeInfoArr.index(where: { dictionary in
                         guard let value = dictionary["bedType"] as? Int
                             else { return false }
-                        return value == (Utility.shared.getListSettingsArray.bedType?.listSettings![sender.tag]!.id!)
+                        return value == (Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!)
                     })
                     if let index = index {
                         if((bedtypeInfoArr[index]["bedCount"] as? Int) == 1)
@@ -632,8 +631,8 @@ class BedsListingViewController: BaseHostTableviewController {
                         {
                             var bedTypeInfo = [String : Any]()
                            bedtypeInfoArr.remove(at: index)
-                            bedTypeInfo.updateValue((Utility.shared.getListSettingsArray.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
-                            Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
+                            bedTypeInfo.updateValue((Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
+                            Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!)!, forKey: "bedType")
                             bedTypeInfo.updateValue(cell.countshowLabel.text!, forKey: "bedCount")
                             bedtypeInfoArr.append(bedTypeInfo)
                         }

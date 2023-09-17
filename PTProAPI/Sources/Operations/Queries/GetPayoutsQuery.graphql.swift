@@ -5,50 +5,19 @@
 
 public class GetPayoutsQuery: GraphQLQuery {
   public static let operationName: String = "getPayouts"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getPayouts {
-        getPayouts {
-          __typename
-          results {
-            __typename
-            id
-            methodId
-            paymentMethod {
-              __typename
-              id
-              name
-            }
-            userId
-            payEmail
-            address1
-            address2
-            city
-            default
-            state
-            country
-            zipcode
-            currency
-            default
-            createdAt
-            last4Digits
-            isVerified
-            status
-          }
-        }
-      }
-      """
+      #"query getPayouts { getPayouts { __typename results { __typename id methodId paymentMethod { __typename id name } userId payEmail address1 address2 city default state country zipcode currency default createdAt last4Digits isVerified status } } }"#
     ))
 
   public init() {}
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getPayouts", GetPayouts?.self),
     ] }
 
@@ -59,10 +28,11 @@ public class GetPayoutsQuery: GraphQLQuery {
     /// Parent Type: `PayoutWholeType`
     public struct GetPayouts: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.PayoutWholeType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.PayoutWholeType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", [Result?]?.self),
       ] }
 
@@ -73,10 +43,11 @@ public class GetPayoutsQuery: GraphQLQuery {
       /// Parent Type: `Payout`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.Payout }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Payout }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("methodId", Int?.self),
           .field("paymentMethod", PaymentMethod?.self),
@@ -119,10 +90,11 @@ public class GetPayoutsQuery: GraphQLQuery {
         /// Parent Type: `PaymentMethods`
         public struct PaymentMethod: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.PaymentMethods }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.PaymentMethods }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("name", String?.self),
           ] }

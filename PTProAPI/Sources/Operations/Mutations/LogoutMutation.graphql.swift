@@ -5,17 +5,9 @@
 
 public class LogoutMutation: GraphQLMutation {
   public static let operationName: String = "Logout"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation Logout($deviceType: String!, $deviceId: String!) {
-        userLogout(deviceType: $deviceType, deviceId: $deviceId) {
-          __typename
-          status
-          errorMessage
-        }
-      }
-      """
+      #"mutation Logout($deviceType: String!, $deviceId: String!) { userLogout(deviceType: $deviceType, deviceId: $deviceId) { __typename status errorMessage } }"#
     ))
 
   public var deviceType: String
@@ -36,10 +28,10 @@ public class LogoutMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("userLogout", UserLogout?.self, arguments: [
         "deviceType": .variable("deviceType"),
         "deviceId": .variable("deviceId")
@@ -53,10 +45,11 @@ public class LogoutMutation: GraphQLMutation {
     /// Parent Type: `UserType`
     public struct UserLogout: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.UserType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
       ] }

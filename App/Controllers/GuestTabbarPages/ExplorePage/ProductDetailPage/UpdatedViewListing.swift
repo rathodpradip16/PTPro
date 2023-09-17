@@ -330,7 +330,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     }
     
     @IBAction func onClickSelectedDateBtn(_ sender: UIButton) {
-        if let minstay = (viewModel?.viewListingArray.listingData?.minNight!) {
+        if let minstay = (viewModel?.viewListingArray?.listingData?.minNight!) {
             Utility.shared.minimumstay = minstay }
         Utility.shared.isfromcheckingPage = true
         let datePickerViewController = AirbnbDatePickerViewController(dateFrom: self.viewModel?.selectedStartDate, dateTo: self.viewModel?.selectedEndDate)
@@ -346,7 +346,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     
     
     @IBAction func onClickRetryBtn(_ sender: UIButton) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
             self.scrollView.isHidden = true
             self.topHeaderStackView.isHidden = true
@@ -370,7 +370,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
                             self.infoTitleLabel.attributedText = attributedString
                         }
                     })
-                    if(self.viewModel?.viewListingArray.bookingType != nil && self.viewModel?.viewListingArray.bookingType! == "instant")
+                    if(self.viewModel?.viewListingArray?.bookingType != nil && self.viewModel?.viewListingArray?.bookingType! == "instant")
                     {
                         self.checkAvailabilityBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey:"book") ?? "Book")", for: .normal)
                     }else{
@@ -427,7 +427,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     func configureLikeBtn(){
         self.likeBtn.backgroundColor = .white
         self.likeBtn.setTitle("", for: .normal)
-        if let wishListStatus = self.viewModel?.viewListingArray.wishListStatus, wishListStatus == true{
+        if let wishListStatus = self.viewModel?.viewListingArray?.wishListStatus, wishListStatus == true{
             self.likeBtn.setImage(UIImage(named: "like"), for: .normal)
         }else{
             self.likeBtn.setImage(UIImage(named: "Heart"), for: .normal)
@@ -437,7 +437,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.likeBtn.clipsToBounds = true
         
         
-        if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewModel?.viewListingArray.userId ?? "")"))
+        if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewModel?.viewListingArray?.userId ?? "")"))
         {
             reportBtn.isHidden = true
         }
@@ -499,7 +499,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         if self.viewModel?.selectedStartDate == nil{
             self.checkAvailabilityBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey:"checkavailability") ?? "Check Availability")", for: .normal)
         }else{
-            if(self.viewModel?.viewListingArray.bookingType != nil && self.viewModel?.viewListingArray.bookingType! == "instant")
+            if(self.viewModel?.viewListingArray?.bookingType != nil && self.viewModel?.viewListingArray?.bookingType! == "instant")
             {
                 self.checkAvailabilityBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey:"book") ?? "Book")", for: .normal)
             }else{
@@ -641,10 +641,10 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     }
     func configureScrollViews(){
         var listTypeString = ""
-        listTypeString = "\(viewModel?.viewListingArray.houseType ?? "")"
+        listTypeString = "\(viewModel?.viewListingArray?.houseType ?? "")"
         
         
-        if viewModel?.viewListingArray.residenceType == "0" || viewModel?.viewListingArray.residenceType == nil  || viewModel?.viewListingArray.residenceType == "null" {
+        if viewModel?.viewListingArray?.residenceType == "0" || viewModel?.viewListingArray?.residenceType == nil  || viewModel?.viewListingArray?.residenceType == "null" {
             
         }
         else {
@@ -653,28 +653,28 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         
         
         
-//        if ((viewModel?.viewListingArray.beds ?? 0) > 1){
-//            listTypeString = listTypeString + " \u{2022} " + "\(viewModel?.viewListingArray.beds ?? 0)" + " Beds"
-//        }else if ((viewModel?.viewListingArray.beds ?? 0) == 1){
-//            listTypeString = listTypeString + " \u{2022} " + "\(viewModel?.viewListingArray.beds ?? 0)" + " Bed"
+//        if ((viewModel?.viewListingArray?.beds ?? 0) > 1){
+//            listTypeString = listTypeString + " \u{2022} " + "\(viewModel?.viewListingArray?.beds ?? 0)" + " Beds"
+//        }else if ((viewModel?.viewListingArray?.beds ?? 0) == 1){
+//            listTypeString = listTypeString + " \u{2022} " + "\(viewModel?.viewListingArray?.beds ?? 0)" + " Bed"
 //        }
         listTypeLabel.text = listTypeString
         listTypeLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         listTypeLabel.textColor = UIColor(named: "searchPlaces_TextColor")
         listTypeLabel.font = UIFont(name: APP_FONT, size: 14)
         
-        if(self.viewModel?.viewListingArray.bookingType != "instant") {
+        if(self.viewModel?.viewListingArray?.bookingType != "instant") {
         self.lightImage.isHidden = true
         }
         else {
             self.lightImage.isHidden = false
         }
-        listTitleLabel.text = viewModel?.viewListingArray.title ?? ""
+        listTitleLabel.text = viewModel?.viewListingArray?.title ?? ""
         listTitleLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         listTitleLabel.textColor = UIColor(named: "viewList_Title")
         listTitleLabel.font = UIFont(name: APP_FONT_MEDIUM, size: 19)
         
-        listAddressLabel.text = "\(viewModel?.viewListingArray.city ?? ""), \(viewModel?.viewListingArray.state ?? ""), \(viewModel?.viewListingArray.country ?? "")"
+        listAddressLabel.text = "\(viewModel?.viewListingArray?.city ?? ""), \(viewModel?.viewListingArray?.state ?? ""), \(viewModel?.viewListingArray?.country ?? "")"
         listAddressLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         listAddressLabel.textColor = UIColor(named: "searchPlaces_TextColor")
         listAddressLabel.font = UIFont(name: APP_FONT, size: 12)
@@ -683,7 +683,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.configureBedBathroomView()
         self.configureInfoView()
         
-        if ((viewModel?.viewListingArray.listingData?.minNight == nil || viewModel?.viewListingArray.listingData?.minNight == 0) && (viewModel?.viewListingArray.listingData?.maxNight == nil || viewModel?.viewListingArray.listingData?.maxNight == 0)){
+        if ((viewModel?.viewListingArray?.listingData?.minNight == nil || viewModel?.viewListingArray?.listingData?.minNight == 0) && (viewModel?.viewListingArray?.listingData?.maxNight == nil || viewModel?.viewListingArray?.listingData?.maxNight == 0)){
             self.minMaxView.isHidden = true
             self.minMaxViewHeightConstraint.constant = 0
           //  self.minMaxTopConstraint.constant = 0
@@ -700,14 +700,14 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     func configureHostView(){
         self.hostProfileImg.layer.cornerRadius = self.hostProfileImg.frame.size.height/2
         self.hostProfileImg.clipsToBounds = true
-        if let hostImg = viewModel?.viewListingArray.user?.profile?.picture{
+        if let hostImg = viewModel?.viewListingArray?.user?.profile?.picture{
             self.hostProfileImg.sd_setImage(with: URL(string: "\(IMAGE_AVATAR_URL)\(hostImg)"), placeholderImage: #imageLiteral(resourceName: "unknown"), completed: nil)
             self.hostProfileImg.contentMode = .scaleAspectFill
         }else{
             self.hostProfileImg.image = UIImage(named: "unknown")
         }
        
-        self.hostProfileName.text = "\(Utility.shared.getLanguage()?.value(forKey: "hostedby") ?? "Hosted by") \(viewModel?.viewListingArray.user?.profile?.firstName ?? "")"
+        self.hostProfileName.text = "\(Utility.shared.getLanguage()?.value(forKey: "hostedby") ?? "Hosted by") \(viewModel?.viewListingArray?.user?.profile?.firstName ?? "")"
         self.hostProfileName.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         self.hostProfileName.textColor = UIColor(named: "viewList_Title")
         self.hostProfileName.font = UIFont(name: APP_FONT_MEDIUM, size: 16.0)
@@ -728,7 +728,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     }
     
     func configureBedBathroomView(){
-        if let personCapacity = self.viewModel?.viewListingArray.personCapacity{
+        if let personCapacity = self.viewModel?.viewListingArray?.personCapacity{
             if personCapacity == 1{
                 self.guestCountLabel.text = "\(personCapacity) \(Utility.shared.getLanguage()?.value(forKey:"guestsmall") ?? "guest")"
             }else{
@@ -740,7 +740,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.guestCountLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         
         
-        if let bedrooms = self.viewModel?.viewListingArray.bedrooms{
+        if let bedrooms = self.viewModel?.viewListingArray?.bedrooms{
             if bedrooms == "1"{
                 self.bedroomCountLabel.text = "\(bedrooms) \(Utility.shared.getLanguage()?.value(forKey:"bedroom") ?? "Bedroom")"
             }else{
@@ -752,7 +752,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.bedroomCountLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         
         
-        if let beds = self.viewModel?.viewListingArray.beds{
+        if let beds = self.viewModel?.viewListingArray?.beds{
             if beds == 1{
                 self.bedsCountLabel.text = "\(beds) \(Utility.shared.getLanguage()?.value(forKey:"bed") ?? "Bed")"
             }else{
@@ -765,9 +765,9 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         
         
         
-        if (self.viewModel?.viewListingArray.roomType) != nil{
+        if (self.viewModel?.viewListingArray?.roomType) != nil{
            
-                self.guestCountLabel.text = self.viewModel?.viewListingArray.roomType
+                self.guestCountLabel.text = self.viewModel?.viewListingArray?.roomType
            
         }
         self.guestCountLabel.textColor = UIColor(named: "searchPlaces_TextColor")
@@ -775,7 +775,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.guestCountLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         
         
-        if let personCapacity = self.viewModel?.viewListingArray.personCapacity{
+        if let personCapacity = self.viewModel?.viewListingArray?.personCapacity{
             if personCapacity == 1{
                 self.RoomsCount.text = "\(personCapacity) \(Utility.shared.getLanguage()?.value(forKey:"guestsmall") ?? "guest")"
             }else{
@@ -787,9 +787,9 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.RoomsCount.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         
         
-        if let beds = self.viewModel?.viewListingArray.settingsData?[2]?.listsettings?.itemName{
+        if let beds = self.viewModel?.viewListingArray?.settingsData?[2]?.listsettings?.itemName{
            
-                self.singleRoomCount.text = self.viewModel?.viewListingArray.settingsData?[2]?.listsettings?.itemName
+                self.singleRoomCount.text = self.viewModel?.viewListingArray?.settingsData?[2]?.listsettings?.itemName
            
         }
         self.singleRoomCount.textColor = UIColor(named: "searchPlaces_TextColor")
@@ -798,7 +798,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
 
         
         
-        if let bathroom = self.viewModel?.viewListingArray.bathrooms{
+        if let bathroom = self.viewModel?.viewListingArray?.bathrooms{
             if bathroom > 1.0{
                 
                 self.bathroomCountLabel.text = "\(Float(bathroom)) \(Utility.shared.getLanguage()?.value(forKey:"privatebaths") ?? "Private Baths")"
@@ -826,7 +826,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.aboutListingLabel.textColor = UIColor(named: "Title_Header")
         self.aboutListingLabel.font = UIFont(name: APP_FONT_MEDIUM, size: 16)
         
-        self.descLabel.text = viewModel?.viewListingArray.description ?? ""
+        self.descLabel.text = viewModel?.viewListingArray?.description ?? ""
         self.descLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         self.descLabel.textColor = UIColor(named: "searchPlaces_TextColor")
         self.descLabel.font = UIFont(name: APP_FONT, size: 14)
@@ -864,7 +864,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     
     @IBAction func onClickReadMoreBtn(_ sender: Any) {
         let readmoreObj = ReadmoreVC()
-        readmoreObj.ReadmoreText = self.viewModel?.viewListingArray.description ?? ""
+        readmoreObj.ReadmoreText = self.viewModel?.viewListingArray?.description ?? ""
         readmoreObj.modalPresentationStyle = .fullScreen
         self.present(readmoreObj, animated: true, completion: nil)
     }
@@ -880,12 +880,12 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.minMaxLabel.textColor = UIColor(named: "Title_Header")
         self.minMaxLabel.font = UIFont(name: APP_FONT_MEDIUM, size: 16.0)
         
-        self.minValueLabel.text = "\(viewModel?.viewListingArray.listingData?.minNight ?? 0) \(Utility.shared.getLanguage()?.value(forKey: "minnights") ?? "min nights")"
+        self.minValueLabel.text = "\(viewModel?.viewListingArray?.listingData?.minNight ?? 0) \(Utility.shared.getLanguage()?.value(forKey: "minnights") ?? "min nights")"
         self.minValueLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         self.minValueLabel.textColor = UIColor(named: "searchPlaces_TextColor")
         self.minValueLabel.font = UIFont(name: APP_FONT, size: 14.0)
         
-        if(viewModel?.viewListingArray.listingData?.minNight == 0) {
+        if(viewModel?.viewListingArray?.listingData?.minNight == 0) {
             self.minValueLabel.isHidden = false
             self.minnightHeight.constant = 0
             self.minbulletImg.isHidden = true
@@ -898,7 +898,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
             minMaxViewHeightConstraint.constant = 95.5
         }
         
-        self.maxValueLabel.text = "\(viewModel?.viewListingArray.listingData?.maxNight ?? 0) \(Utility.shared.getLanguage()?.value(forKey: "maxnights") ?? "max nights")"
+        self.maxValueLabel.text = "\(viewModel?.viewListingArray?.listingData?.maxNight ?? 0) \(Utility.shared.getLanguage()?.value(forKey: "maxnights") ?? "max nights")"
         self.maxValueLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         self.maxValueLabel.textColor = UIColor(named: "searchPlaces_TextColor")
         self.maxValueLabel.font = UIFont(name: APP_FONT, size: 14.0)
@@ -913,11 +913,11 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.mapTitleLabel.textColor = UIColor(named: "Title_Header")
         self.mapTitleLabel.font = UIFont(name: APP_FONT_MEDIUM, size: 16.0)
         
-        let staticMapUrl: String = "https://maps.googleapis.com/maps/api/staticmap?key=\(GOOGLE_API_KEY)&center=\(viewModel?.viewListingArray.lat ?? 0.0),\(viewModel?.viewListingArray.lng ?? 0.0)&\("zoom=15&size=\(2 * Int(self.staticMapImgView.frame.size.width))x\(2 * Int(self.staticMapImgView.frame.size.height))")&sensor=true&language=en"
+        let staticMapUrl: String = "https://maps.googleapis.com/maps/api/staticmap?key=\(GOOGLE_API_KEY)&center=\(viewModel?.viewListingArray?.lat ?? 0.0),\(viewModel?.viewListingArray?.lng ?? 0.0)&\("zoom=15&size=\(2 * Int(self.staticMapImgView.frame.size.width))x\(2 * Int(self.staticMapImgView.frame.size.height))")&sensor=true&language=en"
         let mapUrl: NSURL = NSURL(string: staticMapUrl)!
         self.staticMapImgView.sd_setImage(with: mapUrl as URL, completed: nil)
          
-        self.mapLocationLabel.text = "\(viewModel?.viewListingArray.city ?? ""), \(viewModel?.viewListingArray.state ?? ""), \(viewModel?.viewListingArray.country ?? "")"
+        self.mapLocationLabel.text = "\(viewModel?.viewListingArray?.city ?? ""), \(viewModel?.viewListingArray?.state ?? ""), \(viewModel?.viewListingArray?.country ?? "")"
         self.mapLocationLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         self.mapLocationLabel.textColor = UIColor(named: "Title_Header")
         self.mapLocationLabel.font = UIFont(name: APP_FONT_MEDIUM, size: 12.0)
@@ -936,7 +936,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.checkInOutTitleLabel.textColor = UIColor(named: "Title_Header")
         self.checkInOutTitleLabel.font = UIFont(name: APP_FONT_MEDIUM, size: 16.0)
         
-        if let checkIn = self.viewModel?.viewListingArray.listingData?.checkInStart{
+        if let checkIn = self.viewModel?.viewListingArray?.listingData?.checkInStart{
             self.checkInValueLabel.text = "Check-in: " + "\(checkIn == "Flexible" ? checkIn : checkIn.conversionRailwaytime())"
         }else{
             self.checkInValueLabel.text = "Check-in: - "
@@ -945,10 +945,10 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.checkInValueLabel.textColor = UIColor(named: "searchPlaces_TextColor")
         self.checkInValueLabel.font = UIFont(name: APP_FONT, size: 14.0)
         
-        if let checkOut = self.viewModel?.viewListingArray.listingData?.checkInEnd{
+        if let checkOut = self.viewModel?.viewListingArray?.listingData?.checkInEnd{
             let checkoutVal =  "\(checkOut == "Flexible" ? checkOut : checkOut.conversionRailwaytime())"
             if(checkOut == "Flexible"){
-                if let checkIn = self.viewModel?.viewListingArray.listingData?.checkInStart{
+                if let checkIn = self.viewModel?.viewListingArray?.listingData?.checkInStart{
                     if checkIn == "Flexible" {
                        
                     }
@@ -973,7 +973,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
 //        self.checkOutValueLabel.textColor = UIColor(named: "searchPlaces_TextColor")
 //        self.checkOutValueLabel.font = UIFont(name: APP_FONT, size: 14.0)
         
-        if self.viewModel?.viewListingArray.houseRules?.count != 0{
+        if self.viewModel?.viewListingArray?.houseRules?.count != 0{
             self.houseRulesView.isHidden = false
         }else{
             self.houseRulesView.isHidden = true
@@ -996,7 +996,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.cancellationPolicyTitleLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         self.cancellationPolicyTitleLabel.textColor = UIColor(named: "Title_Header")
         self.cancellationPolicyTitleLabel.font = UIFont(name: APP_FONT_MEDIUM, size: 16.0)
-        self.cancellationPolicyValueLabel.text = self.viewModel?.viewListingArray.listingData?.cancellation?.policyName ?? "-"
+        self.cancellationPolicyValueLabel.text = self.viewModel?.viewListingArray?.listingData?.cancellation?.policyName ?? "-"
         self.cancellationPolicyValueLabel.textAlignment = Utility.shared.isRTLLanguage() ? .left : .right
         self.cancellationPolicyValueLabel.textColor = Theme.PRIMARY_COLOR
         self.cancellationPolicyValueLabel.font = UIFont(name: APP_FONT, size: 16.0)
@@ -1024,7 +1024,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.contactHostValueLabel.font = UIFont(name: APP_FONT, size: 16.0)
         self.contactHostBtn.setTitle("", for: .normal)
         
-        if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewModel?.viewListingArray.userId ?? "")"))
+        if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewModel?.viewListingArray?.userId ?? "")"))
         {
             contactHostView.isHidden = true
         }
@@ -1045,7 +1045,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     
     @IBAction func onClickHouseRulesBtn(_ sender: UIButton) {
         let houserulesObj = HouseRulesVC()
-        houserulesObj.houserulesArray = self.viewModel?.viewListingArray.houseRules! as! [ViewListingDetailsQuery.Data.ViewListing.Result.HouseRule]
+        houserulesObj.houserulesArray = self.viewModel?.viewListingArray?.houseRules! as! [ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
         houserulesObj.titleString = "\((Utility.shared.getLanguage()?.value(forKey:"houserules"))!)"
         houserulesObj.modalPresentationStyle = .fullScreen
         self.present(houserulesObj, animated: true, completion: nil)
@@ -1053,17 +1053,17 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     @IBAction func onClickCancellationPolicyBtn(_ sender: UIButton) {
         let cancellationObj = CancellationVC()
         print(viewModel?.viewListingArray)
-        if let policy = (viewModel?.viewListingArray.listingData?.cancellation?.policyName!) {
+        if let policy = (viewModel?.viewListingArray?.listingData?.cancellation?.policyName!) {
             Utility.shared.cancelpolicy = policy
             cancellationObj.cancelpolicy = policy
         }
-        if((viewModel?.viewListingArray.listingData?.cancellation?.policyContent!) != nil)
+        if((viewModel?.viewListingArray?.listingData?.cancellation?.policyContent!) != nil)
         {
-            cancellationObj.cancelpolicy_content = (viewModel?.viewListingArray.listingData?.cancellation?.policyContent!)!
+            cancellationObj.cancelpolicy_content = (viewModel?.viewListingArray?.listingData?.cancellation?.policyContent!)!
         }
-//        if((viewModel?.viewListingArray.listingData?.cancellation?.id?.days) != nil)
+//        if((viewModel?.viewListingArray?.listingData?.cancellation?.id?.days) != nil)
 //        {
-//            cancellationObj.days = (viewModel?.viewListingArray.listingData?.cancellation?.id?.days!)!
+//            cancellationObj.days = (viewModel?.viewListingArray?.listingData?.cancellation?.id?.days!)!
 //        }
         
         cancellationObj.modalPresentationStyle = .fullScreen
@@ -1073,14 +1073,14 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
 
        
 
-        if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewModel?.viewListingArray.userId ?? "")"))
+        if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewModel?.viewListingArray?.userId ?? "")"))
         {
             self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"ownbookalert"))!)")
             return
         }
         Utility.shared.fullcheckBlockedDateMonth.removeAllObjects()
         Utility.shared.blocked_date_month.removeAllObjects()
-        if let blockedDates = self.viewModel?.viewListingArray.blockedDates{
+        if let blockedDates = self.viewModel?.viewListingArray?.blockedDates{
             for i in blockedDates
             {
                 let timestamp = i?.blockedDates
@@ -1102,7 +1102,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
             }
         }
         
-        if let blockedDates = self.viewModel?.viewListingArray.fullBlockedDates{
+        if let blockedDates = self.viewModel?.viewListingArray?.fullBlockedDates{
             for i in blockedDates
             {
                 let timestamp = i?.blockedDates
@@ -1125,7 +1125,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
             }
         }
         
-        if let checkInDates = self.viewModel?.viewListingArray.checkInBlockedDates{
+        if let checkInDates = self.viewModel?.viewListingArray?.checkInBlockedDates{
             Utility.shared.checkedInDates.removeAllObjects()
             for i in checkInDates{
                 let timestamp = i?.blockedDates
@@ -1139,7 +1139,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
             }
         }
         
-        if let minstay = (viewModel?.viewListingArray.listingData?.minNight!) {
+        if let minstay = (viewModel?.viewListingArray?.listingData?.minNight!) {
             Utility.shared.minimumstay = minstay }
         Utility.shared.isfromcheckingPage = true
         let datePickerViewController = AirbnbDatePickerViewController(dateFrom: self.viewModel?.selectedStartDate, dateTo: self.viewModel?.selectedEndDate)
@@ -1153,7 +1153,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.present(navigationController, animated: true, completion: nil)
     }
     @IBAction func onClickContactHostBtn(_ sender: UIButton) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
             {
                 let welcomeObj = WelcomePageVC()
@@ -1187,13 +1187,13 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     
     @IBAction func onClickCheckAvailabilityBtn(_ sender: UIButton) {
         let btnsendtag: UIButton = sender as! UIButton
-        if(self.viewModel?.viewListingArray.userId != nil)
+        if(self.viewModel?.viewListingArray?.userId != nil)
         {
-            if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewModel?.viewListingArray.userId ?? "")"))
+            if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewModel?.viewListingArray?.userId ?? "")"))
             {
                 self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"ownbookalert"))!)")
             }
-            else if(self.viewModel?.viewListingArray.listingData?.maxDaysNotice == "unavailable")
+            else if(self.viewModel?.viewListingArray?.listingData?.maxDaysNotice == "unavailable")
             {
                 self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"listunavailablebook"))!)")
             }
@@ -1213,7 +1213,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
                     {
                     Utility.shared.blocked_date_month.removeAllObjects()
                     
-                    if let blockedDates = self.viewModel?.viewListingArray.fullBlockedDates{
+                    if let blockedDates = self.viewModel?.viewListingArray?.fullBlockedDates{
                         for i in blockedDates
                         {
                             let timestamp = i?.blockedDates
@@ -1237,7 +1237,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
                     
                     Utility.shared.fullcheckBlockedDateMonth.removeAllObjects()
                     
-                    if let blockedDates = self.viewModel?.viewListingArray.blockedDates{
+                    if let blockedDates = self.viewModel?.viewListingArray?.blockedDates{
                         for i in blockedDates
                         {
                             let timestamp = i?.blockedDates
@@ -1257,7 +1257,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
                         }
                     }
                     
-                    if let checkInDates = self.viewModel?.viewListingArray.checkInBlockedDates{
+                    if let checkInDates = self.viewModel?.viewListingArray?.checkInBlockedDates{
                         Utility.shared.checkedInDates.removeAllObjects()
                         for i in checkInDates{
                             let timestamp = i?.blockedDates
@@ -1271,12 +1271,12 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
                         }
                     }
 
-                    if let minstay = (self.viewModel?.viewListingArray.listingData?.minNight!) {
+                    if let minstay = (self.viewModel?.viewListingArray?.listingData?.minNight!) {
                         Utility.shared.minimumstay = minstay
                     }
                     Utility.shared.isfromcheckingPage = true
                     
-                    Utility.shared.maximum_days_notice = Utility.shared.maximum_notice_period(maximumnoticeperiod: (self.viewModel?.viewListingArray.listingData?.maxDaysNotice!)!)!
+                    Utility.shared.maximum_days_notice = Utility.shared.maximum_notice_period(maximumnoticeperiod: (self.viewModel?.viewListingArray?.listingData?.maxDaysNotice!)!)!
                     let datePickerViewController = AirbnbDatePickerViewController(dateFrom: self.viewModel?.selectedStartDate, dateTo: self.viewModel?.selectedEndDate)
                         datePickerViewController.isFromFilter = false
                     datePickerViewController.delegate = self
@@ -1289,7 +1289,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
                 }
                 }
                 else{
-                    if Utility().isConnectedToNetwork(){
+                    if Utility.shared.isConnectedToNetwork(){
                         if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
                         {
                             let welcomeObj = WelcomePageVC()
@@ -1299,7 +1299,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
                         }
                         else
                         {
-                            if(self.viewModel?.getbillingArray.checkIn != nil)
+                            if(self.viewModel?.getbillingArray?.checkIn != nil)
                             {
                                 let bookobj = RequestbookVC()
                                 Utility.shared.booking_message = ""
@@ -1311,7 +1311,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
                                 bookobj.selectedStartDate = self.viewModel?.selectedStartDate
                                 bookobj.selectedEndDate = self.viewModel?.selectedEndDate
                                 bookobj.currencyvalue_from_API_base = self.viewModel?.currencyvalue_from_API_base ?? ""
-                                if(bookobj.getbillingArray.checkIn == nil)
+                                if(bookobj.getbillingArray?.checkIn == nil)
                                 {
                                     if let getBillArray = self.viewModel?.getbillingArray{
                                         bookobj.getbillingArray = getBillArray
@@ -1348,7 +1348,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
                                                                                 bookobj.selectedStartDate = self.viewModel?.selectedStartDate
                                                                                 bookobj.selectedEndDate = self.viewModel?.selectedEndDate
                                                                                 bookobj.currencyvalue_from_API_base = self.viewModel?.currencyvalue_from_API_base ?? ""
-                                                                                if(bookobj.getbillingArray.checkIn == nil)
+                                                                                if(bookobj.getbillingArray?.checkIn == nil)
                                                                                 {
                                                                                     if let getBillArray = self.viewModel?.getbillingArray{
                                                                                         bookobj.getbillingArray = getBillArray
@@ -1394,7 +1394,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         self.infoView.isHidden = true
     }
     @IBAction func onClickShareBtn(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
 //            if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
 //            {
 //                let welcomeObj = WelcomePageVC()
@@ -1413,17 +1413,17 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         }
     }
     @IBAction func onClickLikeBtn(_ sender: UIButton) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
             {
                 let welcomeObj = WelcomePageVC()
                 welcomeObj.modalPresentationStyle = .fullScreen
                 self.present(welcomeObj, animated:false, completion: nil)
             }else{
-                if viewModel?.viewListingArray.id != nil {
+                if viewModel?.viewListingArray?.id != nil {
                     let headerView = WhishlistPageVC()
-                    headerView.listID = viewModel?.viewListingArray.id ?? 0
-                    headerView.listimage = viewModel?.viewListingArray.listPhotoName ?? ""
+                    headerView.listID = viewModel?.viewListingArray?.id ?? 0
+                    headerView.listimage = viewModel?.viewListingArray?.listPhotoName ?? ""
                     headerView.delegate = self
                     headerView.modalPresentationStyle = .overFullScreen
                     self.present(headerView, animated: true, completion: nil)
@@ -1434,7 +1434,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         }
     }
     @IBAction func onClickReportBtn(_ sender: UIButton) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
 //            let actionSheetController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 //            let firstAction: UIAlertAction = UIAlertAction(title: "\((Utility.shared.getLanguage()?.value(forKey:"reporthost")) ?? "Report Host")", style: .default) { action -> Void in
             if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
@@ -1447,7 +1447,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
             {
             
                 let reportPageObj = ReportuserPage()
-                reportPageObj.profileid = self.viewModel?.viewListingArray.user?.profile?.profileId ?? 0
+                reportPageObj.profileid = self.viewModel?.viewListingArray?.user?.profile?.profileId ?? 0
                  reportPageObj.modalPresentationStyle = .fullScreen
                 self.present(reportPageObj, animated: false, completion: nil)
             }
@@ -1465,8 +1465,8 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     }
     @IBAction func onClickViewProfile(_ sender: UIButton) {
         let editprofileobj = HostProfileViewPage()
-        editprofileobj.profileid = viewModel?.viewListingArray.user?.profile?.profileId ?? 0
-        editprofileobj.profilename = viewModel?.viewListingArray.user?.profile?.firstName ?? ""
+        editprofileobj.profileid = viewModel?.viewListingArray?.user?.profile?.profileId ?? 0
+        editprofileobj.profilename = viewModel?.viewListingArray?.user?.profile?.firstName ?? ""
         editprofileobj.modalPresentationStyle = .fullScreen
         self.present(editprofileobj, animated: true, completion: nil)
     }
@@ -1485,24 +1485,8 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     
     
     func checkApolloStatus()
-    {
-        if((Utility.shared.getCurrentUserToken()) != nil)
-        {
-            viewModel?.apollo_headerClient = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                
-                let url = URL(string:graphQLEndpoint)!
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
-        }
-        else{
-            viewModel?.apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
-        }
-        
-        if Utility().isConnectedToNetwork(){
+    {        
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
             self.scrollView.isHidden = true
             self.topHeaderStackView.isHidden = true
@@ -1539,14 +1523,14 @@ extension UpdatedViewListing {
         
         if result?.data?.viewListing?.status == 200 {
             self.viewModel?.viewListingArray = (result?.data?.viewListing?.results)!
-            if(self.viewModel?.viewListingArray.listingData != nil)
+            if(self.viewModel?.viewListingArray?.listingData != nil)
             {
                 viewModel?.setupTestData()
                 if(Utility.shared.getPreferredCurrency() != nil &&  Utility.shared.getPreferredCurrency() != "")
                 {
                     let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)
-                    let from_currency = (self.viewModel?.viewListingArray.listingData?.currency!)
-                    let currency_amount = (self.viewModel?.viewListingArray.listingData?.basePrice != nil ? (self.viewModel?.viewListingArray.listingData?.basePrice?.clean) : "0")
+                    let from_currency = (self.viewModel?.viewListingArray?.listingData?.currency!)
+                    let currency_amount = (self.viewModel?.viewListingArray?.listingData?.basePrice != nil ? (self.viewModel?.viewListingArray?.listingData?.basePrice?.clean) : "0")
                     let price_value = Utility.shared.getCurrencyRate(basecurrency:self.viewModel?.currencyvalue_from_API_base ?? "", fromCurrency:from_currency!, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:Double(currency_amount!) ?? 0.0)
                     let restricted_price =  Double(String(format: "%.2f",price_value))
                     self.listPriceLabel.text =  "\(currencysymbol!)\(restricted_price!.clean) / \(Utility.shared.getLanguage()?.value(forKey:"night") ?? "Night")"
@@ -1569,8 +1553,8 @@ extension UpdatedViewListing {
                 else
                 {
                     let currencysymbol = Utility.shared.getSymbol(forCurrencyCode:self.viewModel?.currencyvalue_from_API_base ?? "")
-                    let from_currency = (self.viewModel?.viewListingArray.listingData?.currency!)
-                    let currency_amount = (self.viewModel?.viewListingArray.listingData?.basePrice != nil ? (self.viewModel?.viewListingArray.listingData?.basePrice?.clean) : "0")
+                    let from_currency = (self.viewModel?.viewListingArray?.listingData?.currency!)
+                    let currency_amount = (self.viewModel?.viewListingArray?.listingData?.basePrice != nil ? (self.viewModel?.viewListingArray?.listingData?.basePrice?.clean) : "0")
                     let price_value = Utility.shared.getCurrencyRate(basecurrency:self.viewModel?.currencyvalue_from_API_base ?? "", fromCurrency:from_currency!, toCurrency:self.viewModel?.currencyvalue_from_API_base ?? "", CurrencyRate:Utility.shared.currency_Dict, amount:Double(currency_amount!) ?? 0.0)
                     let restricted_price =  Double(String(format: "%.2f",price_value))
                     self.listPriceLabel.text =  "\(currencysymbol!)\(restricted_price!.clean) / \(Utility.shared.getLanguage()?.value(forKey:"night") ?? "Night")"
@@ -1591,11 +1575,11 @@ extension UpdatedViewListing {
                     self.listPriceLabel.attributedText = attributedString
                 }
                 
-                if let val = (self.viewModel?.viewListingArray.listingData?.cancellation?.policyName!)
+                if let val = (self.viewModel?.viewListingArray?.listingData?.cancellation?.policyName!)
                 {
                     Utility.shared.cancelpolicy = val
                 }
-                if let value = (self.viewModel?.viewListingArray.listingData?.cancellation?.policyContent!)
+                if let value = (self.viewModel?.viewListingArray?.listingData?.cancellation?.policyContent!)
                 {
                     Utility.shared.cancelpolicy_content = value
                 }
@@ -1605,8 +1589,8 @@ extension UpdatedViewListing {
                 self.bottomView.isHidden = true
             }
             
-            let value1 = Float(self.viewModel?.viewListingArray.reviewsCount ?? 0)
-            let value2 = Float(self.viewModel?.viewListingArray.reviewsStarRating ?? 0)
+            let value1 = Float(self.viewModel?.viewListingArray?.reviewsCount ?? 0)
+            let value2 = Float(self.viewModel?.viewListingArray?.reviewsStarRating ?? 0)
             if(value2 != 0.0){
                 let reviewcount = (value2/value1)
                 self.listRatingLabel.text = "\(Int(reviewcount.rounded()))"
@@ -1621,13 +1605,13 @@ extension UpdatedViewListing {
                 self.listRatingView.isHidden = true
                 self.centerConstant.constant = 0
             }
-            self.viewModel?.reviewcountAPICall(profileid: (self.viewModel?.viewListingArray.user?.profile?.profileId ?? 0), completion: {
+            self.viewModel?.reviewcountAPICall(profileid: (self.viewModel?.viewListingArray?.user?.profile?.profileId ?? 0), completion: {
                 value in
             })
-            self.viewModel?.getreviewAPICall(listId: viewModel?.listID ?? 0, hostId: self.viewModel?.viewListingArray.userId ?? "0", completion: {
+            self.viewModel?.getreviewAPICall(listId: viewModel?.listID ?? 0, hostId: self.viewModel?.viewListingArray?.userId ?? "0", completion: {
                 value in
             })
-            self.viewModel?.similarListingAPICall(lat:self.viewModel?.viewListingArray.lat ?? 0.0, lng: self.viewModel?.viewListingArray.lng ?? 0.0, lisId: self.viewModel?.viewListingArray.id ?? 0, completion: {
+            self.viewModel?.similarListingAPICall(lat:self.viewModel?.viewListingArray?.lat ?? 0.0, lng: self.viewModel?.viewListingArray?.lng ?? 0.0, lisId: self.viewModel?.viewListingArray?.id ?? 0, completion: {
                 value in
                 if value {
                     self.similarListingCollectionView.reloadData()
@@ -1641,7 +1625,7 @@ extension UpdatedViewListing {
                     }
                 }
             })
-            self.viewModel?.getPropertyReviewsAPICall(lisId: self.viewModel?.viewListingArray.id ?? 0, completion: {
+            self.viewModel?.getPropertyReviewsAPICall(lisId: self.viewModel?.viewListingArray?.id ?? 0, completion: {
                 value in
                 if value{
                     self.reviewTableView.reloadData()
@@ -1656,7 +1640,7 @@ extension UpdatedViewListing {
                 }
             })
             
-            if let amenitiesCount = self.viewModel?.viewListingArray.userAmenities?.count, amenitiesCount > 0{
+            if let amenitiesCount = self.viewModel?.viewListingArray?.userAmenities?.count, amenitiesCount > 0{
                 self.amenitiesTableView.isHidden = false
                 if self.isShowMoreAmenitiesClicked{
                     self.amenitiesTableHeightConstraint.constant = CGFloat((amenitiesCount * 34)+110)
@@ -1669,7 +1653,7 @@ extension UpdatedViewListing {
                 self.amenitiesTableHeightConstraint.constant = 0
             }
             
-            if let userSpaceCount = self.viewModel?.viewListingArray.userSpaces?.count, userSpaceCount > 0{
+            if let userSpaceCount = self.viewModel?.viewListingArray?.userSpaces?.count, userSpaceCount > 0{
                 self.userSpacesTableView.isHidden = false
                 if self.isShowMoreUserSpaceClicked{
                     self.userSpacesHeightConstraint.constant = CGFloat((userSpaceCount * 34)+110 )
@@ -1682,7 +1666,7 @@ extension UpdatedViewListing {
                 self.userSpacesHeightConstraint.constant = 0
             }
             
-            if let safetyAmenityCount = self.viewModel?.viewListingArray.userSafetyAmenities?.count, safetyAmenityCount > 0{
+            if let safetyAmenityCount = self.viewModel?.viewListingArray?.userSafetyAmenities?.count, safetyAmenityCount > 0{
                 self.safetyAmenitiesTableView.isHidden = false
                 if self.isShowMoreSafetyAmenitiesClicked{
                     self.safetyAmenitiesHeightConstriant.constant = CGFloat((safetyAmenityCount * 34)+110 )
@@ -1695,11 +1679,11 @@ extension UpdatedViewListing {
                 self.safetyAmenitiesHeightConstriant.constant = 0
             }
             
-            self.viewModel?.viewListingArray.userBedsTypes = self.viewModel?.viewListingArray.userBedsTypes?.filter({ value in
-                value != nil
-            })
+//            self.viewModel?.viewListingArray?.userBedsTypes = self.viewModel?.viewListingArray?.userBedsTypes?.filter({ value in
+//                value != nil
+//            })
             
-            if let safetyAmenityCount = self.viewModel?.viewListingArray.userBedsTypes?.count, safetyAmenityCount > 0{
+            if let safetyAmenityCount = self.viewModel?.viewListingArray?.userBedsTypes?.count, safetyAmenityCount > 0{
                 self.tblBeds.isHidden = false
                 if self.isShowMoreBedsClicked{
                     self.tblBedsheight.constant = CGFloat((safetyAmenityCount * 34)+110 )
@@ -1735,7 +1719,7 @@ extension UpdatedViewListing {
 extension UpdatedViewListing: WhishlistPageVCProtocol, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, SKPhotoBrowserDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.imgCollectionView{
-            return (viewModel?.viewListingArray.listingPhotos?.count ?? 0) > 0 ? 1 : 0
+            return (viewModel?.viewListingArray?.listingPhotos?.count ?? 0) > 0 ? 1 : 0
         }else if collectionView == self.similarListingCollectionView{
             return self.viewModel?.similarlistingArray.count ?? 0
         }else{
@@ -1759,11 +1743,11 @@ extension UpdatedViewListing: WhishlistPageVCProtocol, UICollectionViewDelegate,
             imageScroller.scrollView.bounces = false
         
            
-            let array = self.viewModel?.viewListingArray.listingPhotos
+            let array = self.viewModel?.viewListingArray?.listingPhotos
             
             for j in array!
             {
-                if(self.viewModel?.viewListingArray.listPhotoName == self.viewModel?.viewListingArray.listingPhotos?[0]?.name)
+                if(self.viewModel?.viewListingArray?.listPhotoName == self.viewModel?.viewListingArray?.listingPhotos?[0]?.name)
                 {
                     if(filteredImageArray.contains("\(IMAGE_LISTING_MEDIUM)\(j?.name ?? "0")" as Any))
                     {
@@ -2115,7 +2099,7 @@ extension UpdatedViewListing: WhishlistPageVCProtocol, UICollectionViewDelegate,
     
     @objc func likeBtnTapped(_ sender: UIButton!)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
             {
                 let welcomeObj = WelcomePageVC()
@@ -2147,29 +2131,29 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
             return ((viewModel?.propertyReviewsCount ?? 0) > 0) ? 1 : 0
         }else if tableView == self.amenitiesTableView{
             if self.isShowMoreAmenitiesClicked{
-                return self.viewModel?.viewListingArray.userAmenities?.count ?? 0
+                return self.viewModel?.viewListingArray?.userAmenities?.count ?? 0
             }else{
-                return ((self.viewModel?.viewListingArray.userAmenities?.count ?? 0) > 3 ? 3 : (self.viewModel?.viewListingArray.userAmenities?.count ?? 0))
+                return ((self.viewModel?.viewListingArray?.userAmenities?.count ?? 0) > 3 ? 3 : (self.viewModel?.viewListingArray?.userAmenities?.count ?? 0))
             }
         }else if tableView == self.userSpacesTableView{
             if self.isShowMoreUserSpaceClicked{
-                return self.viewModel?.viewListingArray.userSpaces?.count ?? 0
+                return self.viewModel?.viewListingArray?.userSpaces?.count ?? 0
             }else{
-                return ((self.viewModel?.viewListingArray.userSpaces?.count ?? 0) > 3 ? 3 : (self.viewModel?.viewListingArray.userSpaces?.count ?? 0))
+                return ((self.viewModel?.viewListingArray?.userSpaces?.count ?? 0) > 3 ? 3 : (self.viewModel?.viewListingArray?.userSpaces?.count ?? 0))
             }
         }else if tableView == self.safetyAmenitiesTableView{
             if self.isShowMoreSafetyAmenitiesClicked{
-                return self.viewModel?.viewListingArray.userSafetyAmenities?.count ?? 0
+                return self.viewModel?.viewListingArray?.userSafetyAmenities?.count ?? 0
             }else{
-                return ((self.viewModel?.viewListingArray.userSafetyAmenities?.count ?? 0) > 3 ? 3 : (self.viewModel?.viewListingArray.userSafetyAmenities?.count ?? 0))
+                return ((self.viewModel?.viewListingArray?.userSafetyAmenities?.count ?? 0) > 3 ? 3 : (self.viewModel?.viewListingArray?.userSafetyAmenities?.count ?? 0))
             }
             
         }
         else if tableView == self.tblBeds{
             if self.isShowMoreBedsClicked{
-                return self.viewModel?.viewListingArray.userBedsTypes?.count ?? 0
+                return self.viewModel?.viewListingArray?.userBedsTypes?.count ?? 0
             }else{
-                return ((self.viewModel?.viewListingArray.userBedsTypes?.count ?? 0) > 3 ? 3 : (self.viewModel?.viewListingArray.userBedsTypes?.count ?? 0))
+                return ((self.viewModel?.viewListingArray?.userBedsTypes?.count ?? 0) > 3 ? 3 : (self.viewModel?.viewListingArray?.userBedsTypes?.count ?? 0))
             }
             
         }
@@ -2197,8 +2181,8 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
             }
             
             
-            let value1 = Double(self.viewModel?.viewListingArray.reviewsCount ?? 0)
-            let value2 = Double(self.viewModel?.viewListingArray.reviewsStarRating ?? 0)
+            let value1 = Double(self.viewModel?.viewListingArray?.reviewsCount ?? 0)
+            let value2 = Double(self.viewModel?.viewListingArray?.reviewsStarRating ?? 0)
             var reviewcount = 0
             if(value2 != 0.0){
                 reviewcount = Int(round(value2/value1))
@@ -2227,13 +2211,13 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
             let cell = tableView.dequeueReusableCell(withIdentifier: "AmenityDetailCell", for: indexPath) as! AmenityDetailCell
             cell.contentView.backgroundColor = UIColor.clear
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
-            if let itemName = self.viewModel?.viewListingArray.userAmenities?[indexPath.row]?.itemName{
+            if let itemName = self.viewModel?.viewListingArray?.userAmenities?[indexPath.row]?.itemName{
                 cell.amenityLabel.text = itemName
             }else{
                 cell.amenityLabel.text = ""
             }
             
-            if let imageName = self.viewModel?.viewListingArray.userAmenities?[indexPath.row]?.image{
+            if let imageName = self.viewModel?.viewListingArray?.userAmenities?[indexPath.row]?.image{
                 cell.amenityImage.sd_setImage(with: URL(string:"\(amenitiesIcons)\(String(describing: imageName))"),placeholderImage: UIImage(named: "amenitiesImage"))
             }else{
                 cell.amenityImage.image = UIImage(named: "amenitiesImage")
@@ -2244,7 +2228,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
             let cell = tableView.dequeueReusableCell(withIdentifier: "AmenityDetailCell", for: indexPath) as! AmenityDetailCell
             cell.contentView.backgroundColor = UIColor.clear
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
-            if let itemName = self.viewModel?.viewListingArray.userSpaces?[indexPath.row]?.itemName{
+            if let itemName = self.viewModel?.viewListingArray?.userSpaces?[indexPath.row]?.itemName{
                 cell.amenityLabel.text = itemName
             }else{
                 cell.amenityLabel.text = ""
@@ -2259,12 +2243,12 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
             let cell = tableView.dequeueReusableCell(withIdentifier: "AmenityDetailCell", for: indexPath) as! AmenityDetailCell
             cell.contentView.backgroundColor = UIColor.clear
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
-            if let itemName = self.viewModel?.viewListingArray.userSafetyAmenities?[indexPath.row]?.itemName{
+            if let itemName = self.viewModel?.viewListingArray?.userSafetyAmenities?[indexPath.row]?.itemName{
                 cell.amenityLabel.text = itemName
             }else{
                 cell.amenityLabel.text = ""
             }
-            if let imageName = self.viewModel?.viewListingArray.userSafetyAmenities?[indexPath.row]?.image{
+            if let imageName = self.viewModel?.viewListingArray?.userSafetyAmenities?[indexPath.row]?.image{
                 cell.amenityImage.sd_setImage(with: URL(string:"\(amenitiesIcons)\(String(describing: imageName))"),placeholderImage: UIImage(named: "amenitiesImage"))
             }else{
                 cell.amenityImage.image = UIImage(named: "amenitiesImage")
@@ -2280,10 +2264,10 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
             cell.contentView.backgroundColor = UIColor.clear
           //  self.tblBeds.backgroundColor = UIColor.green
             
-            if let itemName = self.viewModel?.viewListingArray.userBedsTypes?[indexPath.row]?.bedName{
-                cell.amenityLabel.text = "\(itemName): \(self.viewModel?.viewListingArray.userBedsTypes?[indexPath.row]?.bedCount ?? 0)"
+            if let itemName = self.viewModel?.viewListingArray?.userBedsTypes?[indexPath.row]?.bedName{
+                cell.amenityLabel.text = "\(itemName): \(self.viewModel?.viewListingArray?.userBedsTypes?[indexPath.row]?.bedCount ?? 0)"
             }else{
-                cell.amenityLabel.text = "Bed: \(self.viewModel?.viewListingArray.userBedsTypes?[indexPath.row]?.bedCount ?? 0)"
+                cell.amenityLabel.text = "Bed: \(self.viewModel?.viewListingArray?.userBedsTypes?[indexPath.row]?.bedCount ?? 0)"
             }
            
             cell.amenityImage.image = #imageLiteral(resourceName: "bullet")
@@ -2353,8 +2337,8 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         
         if(tableView == self.amenitiesTableView) {
-            if(self.viewModel?.viewListingArray.userAmenities != nil) {
-            if((self.viewModel?.viewListingArray.userAmenities!.count)! > 3) {
+            if(self.viewModel?.viewListingArray?.userAmenities != nil) {
+            if((self.viewModel?.viewListingArray?.userAmenities!.count)! > 3) {
                 return 70
             }
             else {
@@ -2364,8 +2348,8 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
             return 0
         }
         else if(tableView == self.userSpacesTableView) {
-            if(self.viewModel?.viewListingArray.userSpaces != nil) {
-            if((self.viewModel?.viewListingArray.userSpaces!.count)! > 3) {
+            if(self.viewModel?.viewListingArray?.userSpaces != nil) {
+            if((self.viewModel?.viewListingArray?.userSpaces!.count)! > 3) {
                 return 70
             }
             else {
@@ -2375,8 +2359,8 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
             return 0
         }
        else if(tableView == self.safetyAmenitiesTableView) {
-           if(self.viewModel?.viewListingArray.userSafetyAmenities != nil) {
-           if((self.viewModel?.viewListingArray.userSafetyAmenities!.count)! > 3) {
+           if(self.viewModel?.viewListingArray?.userSafetyAmenities != nil) {
+           if((self.viewModel?.viewListingArray?.userSafetyAmenities!.count)! > 3) {
                 return 70
             }
             else {
@@ -2386,8 +2370,8 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
            return 0
         }
         else if(tableView == self.tblBeds) {
-            if(self.viewModel?.viewListingArray.userBedsTypes != nil) {
-            if((self.viewModel?.viewListingArray.userBedsTypes!.count)! > 3) {
+            if(self.viewModel?.viewListingArray?.userBedsTypes != nil) {
+            if((self.viewModel?.viewListingArray?.userBedsTypes!.count)! > 3) {
                  return 70
              }
              else {
@@ -2404,7 +2388,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if tableView == self.amenitiesTableView  {
-             let amenitiesCount = self.viewModel?.viewListingArray.userAmenities?.count
+             let amenitiesCount = self.viewModel?.viewListingArray?.userAmenities?.count
             if (amenitiesCount! > 3) {
             let footerView = UIView()
             footerView.backgroundColor = UIColor.clear
@@ -2451,7 +2435,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
         }
         
         else if( tableView == self.userSpacesTableView) {
-            let amenitiesCount = self.viewModel?.viewListingArray.userSpaces?.count
+            let amenitiesCount = self.viewModel?.viewListingArray?.userSpaces?.count
            if (amenitiesCount! > 3) {
             let footerView = UIView()
             footerView.backgroundColor = UIColor.clear
@@ -2499,7 +2483,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
             }
             
             else if( tableView == self.userSpacesTableView) {
-                let amenitiesCount = self.viewModel?.viewListingArray.userSpaces?.count
+                let amenitiesCount = self.viewModel?.viewListingArray?.userSpaces?.count
                if (amenitiesCount! > 3) {
                 let footerView = UIView()
                 footerView.backgroundColor = UIColor.clear
@@ -2547,7 +2531,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
                 
         }
         else if (tableView == self.safetyAmenitiesTableView){
-            let amenitiesCount = self.viewModel?.viewListingArray.userSafetyAmenities?.count
+            let amenitiesCount = self.viewModel?.viewListingArray?.userSafetyAmenities?.count
            if (amenitiesCount! > 3) {
             let footerView = UIView()
             footerView.backgroundColor = UIColor.clear
@@ -2594,7 +2578,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
                 }        }
         
         else if (tableView == self.tblBeds){
-            let amenitiesCount = self.viewModel?.viewListingArray.userBedsTypes?.count
+            let amenitiesCount = self.viewModel?.viewListingArray?.userBedsTypes?.count
            if (amenitiesCount! > 3) {
             let footerView = UIView()
             footerView.backgroundColor = UIColor.clear
@@ -2649,7 +2633,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String?{
         if tableView == self.amenitiesTableView{
-            let amenitiesCount = self.viewModel?.viewListingArray.userAmenities?.count
+            let amenitiesCount = self.viewModel?.viewListingArray?.userAmenities?.count
            if (amenitiesCount! > 3) {
             return self.isShowMoreAmenitiesClicked ? "\((Utility.shared.getLanguage()?.value(forKey:"showallamenities"))!)" : "\((Utility.shared.getLanguage()?.value(forKey:"showallamenities"))!)"
                
@@ -2661,14 +2645,14 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
                }
            
         }else if tableView == self.userSpacesTableView{
-            let amenitiesCount = self.viewModel?.viewListingArray.userSpaces?.count
+            let amenitiesCount = self.viewModel?.viewListingArray?.userSpaces?.count
            if (amenitiesCount! > 3) {
             return self.isShowMoreUserSpaceClicked ? "\((Utility.shared.getLanguage()?.value(forKey: "showshare"))!)" : "\((Utility.shared.getLanguage()?.value(forKey: "showshare"))!)"
                
               
            }
         }else if tableView == self.safetyAmenitiesTableView{
-            let amenitiesCount = self.viewModel?.viewListingArray.userSafetyAmenities?.count
+            let amenitiesCount = self.viewModel?.viewListingArray?.userSafetyAmenities?.count
            if (amenitiesCount! > 3) {
             return self.isShowMoreSafetyAmenitiesClicked ? "\((Utility.shared.getLanguage()?.value(forKey: "showallsafety"))!)" :"\((Utility.shared.getLanguage()?.value(forKey: "showallsafety"))!)"
              
@@ -2679,7 +2663,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
         }
             
             else if tableView == self.tblBeds{
-                let amenitiesCount = self.viewModel?.viewListingArray.userBedsTypes?.count
+                let amenitiesCount = self.viewModel?.viewListingArray?.userBedsTypes?.count
                if (amenitiesCount! > 3) {
                 return self.isShowMoreBedsClicked ? "\((Utility.shared.getLanguage()?.value(forKey: "showallbed"))!)" :"\((Utility.shared.getLanguage()?.value(forKey: "showallbed"))!)"
                  
@@ -2697,13 +2681,13 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
             self.isShowMoreAmenitiesClicked = !self.isShowMoreAmenitiesClicked
             
             let houserulesObj = HouseRulesVC()
-            houserulesObj.ameneties = self.viewModel?.viewListingArray.userAmenities as! [ViewListingDetailsQuery.Data.ViewListing.Result.UserAmenity]
+            houserulesObj.ameneties = self.viewModel?.viewListingArray?.userAmenities as! [ViewListingDetailsQuery.Data.ViewListing.Results.UserAmenity]
             
             houserulesObj.titleString = "\(Utility.shared.getLanguage()?.value(forKey: "whatplaceoffer") ?? "What the place offer")"
             houserulesObj.modalPresentationStyle = .fullScreen
             self.present(houserulesObj, animated: true, completion: nil)
 //            self.amenitiesTableView.reloadData()
-//            if let amenitiesCount = self.viewModel?.viewListingArray.userAmenities?.count, amenitiesCount > 0{
+//            if let amenitiesCount = self.viewModel?.viewListingArray?.userAmenities?.count, amenitiesCount > 0{
 //                if self.isShowMoreAmenitiesClicked{
 //                    self.amenitiesTableHeightConstraint.constant = CGFloat((amenitiesCount * 34) + 110)
 //                }else{
@@ -2715,11 +2699,11 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
         }else if sender.tag == 2{
             self.isShowMoreUserSpaceClicked = !self.isShowMoreUserSpaceClicked
             let houserulesObj = HouseRulesVC()
-            houserulesObj.spaces = self.viewModel?.viewListingArray.userSpaces as! [ViewListingDetailsQuery.Data.ViewListing.Result.UserSpace]
+            houserulesObj.spaces = self.viewModel?.viewListingArray?.userSpaces as! [ViewListingDetailsQuery.Data.ViewListing.Results.UserSpace]
             houserulesObj.titleString = "\(Utility.shared.getLanguage()?.value(forKey: "userspace") ?? "Shared spaces")"
             houserulesObj.modalPresentationStyle = .fullScreen
             self.present(houserulesObj, animated: true, completion: nil)
-//            if let userSpaceCount = self.viewModel?.viewListingArray.userSpaces?.count, userSpaceCount > 0{
+//            if let userSpaceCount = self.viewModel?.viewListingArray?.userSpaces?.count, userSpaceCount > 0{
 //                if self.isShowMoreUserSpaceClicked{
 //                    self.userSpacesHeightConstraint.constant = CGFloat((userSpaceCount * 34)+110 )
 //                }else{
@@ -2737,7 +2721,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
             let houserulesObj = HouseRulesVC()
             
           
-            if let cgvh = self.viewModel?.viewListingArray.userBedsTypes{
+            if let cgvh = self.viewModel?.viewListingArray?.userBedsTypes{
                 houserulesObj.beds = cgvh
             }
                 
@@ -2752,7 +2736,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
         else{
             self.isShowMoreSafetyAmenitiesClicked = !self.isShowMoreSafetyAmenitiesClicked
             let houserulesObj = HouseRulesVC()
-            houserulesObj.safetyAmeneties = self.viewModel?.viewListingArray.userSafetyAmenities as! [ViewListingDetailsQuery.Data.ViewListing.Result.UserSafetyAmenity]
+            houserulesObj.safetyAmeneties = self.viewModel?.viewListingArray?.userSafetyAmenities as! [ViewListingDetailsQuery.Data.ViewListing.Results.UserSafetyAmenity]
             houserulesObj.titleString = "\(Utility.shared.getLanguage()?.value(forKey: "usersafety") ?? "Safety amenities")"
             houserulesObj.modalPresentationStyle = .fullScreen
             self.present(houserulesObj, animated: true, completion: nil)
@@ -2939,7 +2923,7 @@ extension UpdatedViewListing: AirbnbDatePickerDelegate, ContacthostVCDelegate, R
                         self.infoTitleLabel.attributedText = attributedString
                     }
                 })
-                if(self.viewModel?.viewListingArray.bookingType != nil && self.viewModel?.viewListingArray.bookingType! == "instant")
+                if(self.viewModel?.viewListingArray?.bookingType != nil && self.viewModel?.viewListingArray?.bookingType! == "instant")
                 {
                     self.checkAvailabilityBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey:"book") ?? "Book")", for: .normal)
                 }else{

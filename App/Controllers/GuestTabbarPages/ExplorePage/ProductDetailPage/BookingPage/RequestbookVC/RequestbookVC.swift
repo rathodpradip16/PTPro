@@ -37,14 +37,14 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     @IBOutlet weak var bookBtn: UIButton!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var requestTable: UITableView!
-     var viewListingArray = ViewListingDetailsQuery.Data.ViewListing.Result()
+    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
      var currencyvalue_from_API_base = String()
     var currency_Dict = NSDictionary()
      var lottieView: LottieAnimationView!
     public var selectedStartDate: Date?
     public var selectedEndDate: Date?
     var delegate:RequestbookVCDelegate?
-      var ProfileAPIArray = GetProfileQuery.Data.UserAccount.Result()
+    var ProfileAPIArray : GetProfileQuery.Data.UserAccount.Result?
     var addDateinLabel = String()
     var addDateoutLabel = String()
     var totalPriceLabel = String()
@@ -59,17 +59,8 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
      var guest_filter = Int()
    
     
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     
-    var getbillingArray = GetBillingCalculationQuery.Data.GetBillingCalculation.Result()
+    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     override func viewDidLoad() {
         super.viewDidLoad()
         offlineView.backgroundColor =  UIColor(named: "Button_Grey_Color")
@@ -97,7 +88,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             offlineView.isHidden = true
             self.bottomView.isHidden = false
             let fmt = DateFormatter()
@@ -109,7 +100,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         }
     }
     @IBAction func requestBookBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
              self.lottieanimation()
              let cell = view.viewWithTag((2) + 2000) as? checkTextviewCell
               Utility.shared.booking_message = (cell?.checkTxtview.text!)!
@@ -209,7 +200,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 //        self.topView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
 //        self.topView.layer.shadowOpacity = 0.3
 //        self.topView.layer.shadowPath = shadowPath1.cgPath
-        if(viewListingArray.bookingType! == "instant")
+        if(viewListingArray?.bookingType! == "instant")
         {
             self.bookBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"addpayment"))!)", for: .normal)
         }
@@ -230,9 +221,9 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
        if(section == 4)
        {
-        if(getbillingArray.cleaningPrice == 0)
+        if(getbillingArray?.cleaningPrice == 0)
         {
-            if(getbillingArray.discountLabel != nil && getbillingArray.discount != 0)
+            if(getbillingArray?.discountLabel != nil && getbillingArray?.discount != 0)
             {
                 return 3
             }
@@ -241,7 +232,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         }
         else
         {
-            if(getbillingArray.discountLabel != nil && getbillingArray.discount != 0 )
+            if(getbillingArray?.discountLabel != nil && getbillingArray?.discount != 0 )
             {
                 return 4
             }
@@ -294,18 +285,18 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             cell.selectionStyle = .none
             
             var listTypeString = ""
-            listTypeString = "\(viewListingArray.roomType ?? "")"
-            if ((viewListingArray.beds ?? 0) > 1){
-                listTypeString = listTypeString + " / " + "\(viewListingArray.beds ?? 0)" + " beds"
-            }else if ((viewListingArray.beds ?? 0) == 1){
-                listTypeString = listTypeString + " / " + "\(viewListingArray.beds ?? 0)" + " bed"
+            listTypeString = "\(viewListingArray?.roomType ?? "")"
+            if ((viewListingArray?.beds ?? 0) > 1){
+                listTypeString = listTypeString + " / " + "\(viewListingArray?.beds ?? 0)" + " beds"
+            }else if ((viewListingArray?.beds ?? 0) == 1){
+                listTypeString = listTypeString + " / " + "\(viewListingArray?.beds ?? 0)" + " bed"
             }
            
             cell.lblRoomType.text = listTypeString
             
             
            
-            cell.lblDescription.text = viewListingArray.title
+            cell.lblDescription.text = viewListingArray?.title
             
             
             
@@ -313,8 +304,8 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             
           
             
-            let value1 = Float(viewListingArray.reviewsCount ?? 0)
-            let value2 = Float(viewListingArray.reviewsStarRating ?? 0)
+            let value1 = Float(viewListingArray?.reviewsCount ?? 0)
+            let value2 = Float(viewListingArray?.reviewsStarRating ?? 0)
             if(value2 != 0.0){
                 let reviewcount = (value2/value1)
                 
@@ -340,13 +331,13 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             
             
             
-            if((viewListingArray.reviewsCount!) > 0)
+            if((viewListingArray?.reviewsCount! ?? 0) > 0)
             {
-                if((viewListingArray.reviewsCount!) == 1) {
-                    cell.lblReview.text = "\u{2022} \(viewListingArray.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)"
+                if((viewListingArray?.reviewsCount!) == 1) {
+                    cell.lblReview.text = "\u{2022} \(viewListingArray?.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)"
                 }
                 else {
-                cell.lblReview.text = "\u{2022} \(viewListingArray.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"reviews"))!)"
+                cell.lblReview.text = "\u{2022} \(viewListingArray?.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"reviews"))!)"
                 }
             }
             else
@@ -356,7 +347,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             }
             
           
-            if let imgURL = viewListingArray.listPhotos?[0]?.name {
+            if let imgURL = viewListingArray?.listPhotos?[0]?.name {
             cell.imgView.sd_setImage(with: URL(string: "\(IMAGE_LISTING_MEDIUM)\(imgURL)"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
                 cell.imgView.halfroundedCorners(corners:[.topLeft, .bottomRight] , radius: 10)
            print(imgURL)
@@ -370,10 +361,10 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             let inputFormatter = DateFormatter()
             inputFormatter.dateFormat = "yyyy-MM-dd"
            // inputFormatter.timeZone = TimeZone(abbreviation: "UTC")
-            if(getbillingArray.checkIn != nil) {
-            let showDate = inputFormatter.date(from:getbillingArray.checkIn!)
+            if(getbillingArray?.checkIn != nil) {
+                let showDate = inputFormatter.date(from:getbillingArray?.checkIn! ?? "")
             
-            let showDate2 = inputFormatter.date(from:getbillingArray.checkOut!)
+                let showDate2 = inputFormatter.date(from:getbillingArray?.checkOut! ?? "")
             inputFormatter.dateFormat = "MMM dd"
 //                if(Utility.shared.isRTLLanguage()) {
 //                    inputFormatter.locale = NSLocale(localeIdentifier:"en") as Locale
@@ -480,41 +471,41 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             currencysymbol = Utility.shared.getSymbol(forCurrencyCode:self.currencyvalue_from_API_base)!
         }
             
-            if(getbillingArray.cleaningPrice == 0)
+            if(getbillingArray?.cleaningPrice == 0)
             {
-                if(getbillingArray.discountLabel != nil && getbillingArray.discount != 0)
+                if(getbillingArray?.discountLabel != nil && getbillingArray?.discount != 0)
                 {
                     if(indexPath.row == 0)
                     {
-//                        cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(Utility.shared.numberofnights_Selected > 1 ? "s" : "")"
+//                        cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(Utility.shared.numberofnights_Selected > 1 ? "s" : "")"
                         
                         if Utility.shared.numberofnights_Selected > 1 {
-                            cell.priceLabel.text = "\(currencysymbol)\(getbillingArray.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                            cell.priceLabel.text = "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                         }else{
-                            cell.priceLabel.text = "\(currencysymbol)\(getbillingArray.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                            cell.priceLabel.text = "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                         }
                         
                         cell.priceLabel.sizeToFit()
-                        if(getbillingArray.isSpecialPriceAssigned == true)
+                        if(getbillingArray?.isSpecialPriceAssigned == true)
                         {
                             
                             cell.specialImage.isHidden = false
                             cell.specialImage.frame = CGRect(x: cell.priceLabel.frame.size.width+cell.priceLabel.frame.origin.x+5, y:17, width: 20, height: 20)
                         }
             
-                       // let calculated_Price = Double(String(format: "%.2f",(getbillingArray.basePrice! * Double(Utility.shared.numberofnights_Selected))))as! Double
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray.priceForDays != nil ? (getbillingArray.priceForDays!.clean) : "")"
+                       // let calculated_Price = Double(String(format: "%.2f",(getbillingArray?.basePrice! * Double(Utility.shared.numberofnights_Selected))))as! Double
+                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.priceForDays != nil ? (getbillingArray?.priceForDays!.clean) : "")"
                     }
                     else if(indexPath.row == 1)
                     {
                         cell.priceLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"servicefee"))!)"
                       
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray.guestServiceFee != nil ? (getbillingArray.guestServiceFee!.clean) : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.guestServiceFee != nil ? (getbillingArray?.guestServiceFee!.clean) : "")"
                     }
                     else{
-                        cell.priceLabel.text =  getbillingArray.discountLabel != nil ? getbillingArray.discountLabel!.capitalized : ""
+                        cell.priceLabel.text =  getbillingArray?.discountLabel != nil ? getbillingArray?.discountLabel!.capitalized : ""
                         
-                        cell.priceLeftLabel.text = "-\(currencysymbol)\(getbillingArray.discount != nil ? (getbillingArray.discount!.clean) : "")"
+                        cell.priceLeftLabel.text = "-\(currencysymbol)\(getbillingArray?.discount != nil ? (getbillingArray?.discount!.clean) : "")"
                     }
                     cell.priceLabelLeadingConstraint.constant = cell.specialImage.isHidden ? -20 : 5
                     return cell
@@ -523,29 +514,29 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 {
                     if(indexPath.row == 0)
                     {
-//                        cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(Utility.shared.numberofnights_Selected > 1 ? "s" : "")"
+//                        cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(Utility.shared.numberofnights_Selected > 1 ? "s" : "")"
                         
                         if Utility.shared.numberofnights_Selected > 1 {
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                         }else{
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                         }
                         cell.priceLabel.sizeToFit()
-                        if(getbillingArray.isSpecialPriceAssigned == true)
+                        if(getbillingArray?.isSpecialPriceAssigned == true)
                         {
                           
                             cell.specialImage.isHidden = false
                              cell.specialImage.frame = CGRect(x: cell.priceLabel.frame.size.width+cell.priceLabel.frame.origin.x+5, y:17, width: 20, height: 20)
                         }
                         
-                       // let calculated_Price = Double(String(format: "%.2f",(getbillingArray.basePrice! * Double(Utility.shared.numberofnights_Selected))))as! Double
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray.priceForDays != nil ? (getbillingArray.priceForDays!.clean) : "")"
+                       // let calculated_Price = Double(String(format: "%.2f",(getbillingArray?.basePrice! * Double(Utility.shared.numberofnights_Selected))))as! Double
+                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.priceForDays != nil ? (getbillingArray?.priceForDays!.clean) : "")"
                     }
                     else if(indexPath.row == 1)
                     {
                         cell.priceLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"servicefee"))!)"
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray.guestServiceFee != nil ? (getbillingArray.guestServiceFee!.clean) : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.guestServiceFee != nil ? (getbillingArray?.guestServiceFee!.clean) : "")"
                     }
                     cell.priceLabelLeadingConstraint.constant = cell.specialImage.isHidden ? -20 : 5
                     return cell
@@ -555,45 +546,45 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             }
             else{
                 
-                if(getbillingArray.discountLabel != nil &&  getbillingArray.discount != 0)
+                if(getbillingArray?.discountLabel != nil &&  getbillingArray?.discount != 0)
                 {
                     if(indexPath.row == 0)
                     {
-//                        cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(Utility.shared.numberofnights_Selected > 1 ? "s" : "")"
+//                        cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(Utility.shared.numberofnights_Selected > 1 ? "s" : "")"
                         
                         if Utility.shared.numberofnights_Selected > 1 {
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                         }else{
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                         }
                         
-                        let calculated_Price = Double(String(format: "%.2f",(getbillingArray.basePrice! * Double(Utility.shared.numberofnights_Selected))))as! Double
+                        let calculated_Price = Double(String(format: "%.2f",((getbillingArray?.basePrice! ?? 0.0) * Double(Utility.shared.numberofnights_Selected))))!
                         cell.priceLabel.sizeToFit()
-                        if(getbillingArray.isSpecialPriceAssigned == true)
+                        if(getbillingArray?.isSpecialPriceAssigned == true)
                         {
                            
                             cell.specialImage.isHidden = false
                              cell.specialImage.frame = CGRect(x: cell.priceLabel.frame.size.width+cell.priceLabel.frame.origin.x+5, y:17, width: 20, height: 20)
                         }
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray.priceForDays != nil ? (getbillingArray.priceForDays!.clean) : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.priceForDays != nil ? (getbillingArray?.priceForDays!.clean) : "")"
                     }
                     else if(indexPath.row == 1)
                     {
                         cell.priceLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"cleaningfee"))!)"
                     
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray.cleaningPrice != nil ? (getbillingArray.cleaningPrice!.clean) : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.cleaningPrice != nil ? (getbillingArray?.cleaningPrice!.clean) : "")"
                     }
                     else if(indexPath.row == 2)
                     {
                         cell.priceLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"servicefee"))!)"
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray.guestServiceFee != nil ? (getbillingArray.guestServiceFee!.clean) : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.guestServiceFee != nil ? (getbillingArray?.guestServiceFee!.clean) : "")"
                     }
                     else{
-                        cell.priceLabel.text =  getbillingArray.discountLabel != nil ? getbillingArray.discountLabel!.capitalized : ""
+                        cell.priceLabel.text =  getbillingArray?.discountLabel != nil ? getbillingArray?.discountLabel!.capitalized : ""
                         
-                        cell.priceLeftLabel.text = "-\(currencysymbol)\(getbillingArray.discount != nil ? (getbillingArray.discount!.clean) : "")"
+                        cell.priceLeftLabel.text = "-\(currencysymbol)\(getbillingArray?.discount != nil ? (getbillingArray?.discount!.clean) : "")"
                     }
                     cell.priceLabelLeadingConstraint.constant = cell.specialImage.isHidden ? -20 : 5
                     return cell
@@ -602,37 +593,37 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 else{
                     if(indexPath.row == 0)
                     {
-//                        cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(Utility.shared.numberofnights_Selected > 1 ? "s" : "")"
+//                        cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(Utility.shared.numberofnights_Selected > 1 ? "s" : "")"
                         
                         
                         if Utility.shared.numberofnights_Selected > 1 {
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                         }else{
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                         }
                         
-                        let calculated_Price = Double(String(format: "%.2f",(getbillingArray.basePrice! * Double(Utility.shared.numberofnights_Selected))))as! Double
+                        let calculated_Price = Double(String(format: "%.2f",((getbillingArray?.basePrice! ?? 0.0) * Double(Utility.shared.numberofnights_Selected))))as! Double
                         cell.priceLabel.sizeToFit()
-                        if(getbillingArray.isSpecialPriceAssigned == true)
+                        if(getbillingArray?.isSpecialPriceAssigned == true)
                         {
                            
                             cell.specialImage.isHidden = false
                              cell.specialImage.frame = CGRect(x: cell.priceLabel.frame.size.width+cell.priceLabel.frame.origin.x+5, y:17, width: 20, height: 20)
                         }
         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray.priceForDays != nil ? (getbillingArray.priceForDays!.clean) : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.priceForDays != nil ? (getbillingArray?.priceForDays!.clean) : "")"
                     }
                     else if(indexPath.row == 1)
                     {
                         cell.priceLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"cleaningfee"))!)"
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray.cleaningPrice != nil ? (getbillingArray.cleaningPrice!.clean) : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.cleaningPrice != nil ? (getbillingArray?.cleaningPrice!.clean) : "")"
                     }
                     else if(indexPath.row == 2)
                     {
                         cell.priceLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"servicefee"))!)"
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray.guestServiceFee != nil ? (getbillingArray.guestServiceFee!.clean) : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.guestServiceFee != nil ? (getbillingArray?.guestServiceFee!.clean) : "")"
                     }
                     cell.priceLabelLeadingConstraint.constant = cell.specialImage.isHidden ? -20 : 5
                     return cell
@@ -657,8 +648,8 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             {
                 currencysymbol = Utility.shared.getSymbol(forCurrencyCode:self.currencyvalue_from_API_base)!
             }
-            cell.totalPriceLabel.text = "\(currencysymbol)\(getbillingArray.total != nil ? (getbillingArray.total!.clean) : "")"
-            totalPriceLabel = "\(currencysymbol)\(getbillingArray.total != nil ? (getbillingArray.total!.clean) : "")"
+            cell.totalPriceLabel.text = "\(currencysymbol)\(getbillingArray?.total != nil ? (getbillingArray?.total!.clean) : "")"
+            totalPriceLabel = "\(currencysymbol)\(getbillingArray?.total != nil ? (getbillingArray?.total!.clean) : "")"
             if Utility.shared.isRTLLanguage(){
                 
                 cell.totalPriceLabel.textAlignment = .left
@@ -675,10 +666,10 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             cell.cancelpolicycontentLabel.font = UIFont(name: APP_FONT, size: 14)
             cell.cancelpolicyLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"cancellations"))!)"
             cell.cancelpolicycontentLabel.textColor = UIColor(named: "searchPlaces_TextColor")
-            let fullString =  "Cancellation Policy is '\(viewListingArray.listingData?.cancellation?.policyName ?? "")' and you can \(viewListingArray.listingData?.cancellation?.policyContent ?? "")"
+            let fullString =  "Cancellation Policy is '\(viewListingArray?.listingData?.cancellation?.policyName ?? "")' and you can \(viewListingArray?.listingData?.cancellation?.policyContent ?? "")"
 
             // Choose wwhat you want to be colored.
-            let coloredString = "'\(viewListingArray.listingData?.cancellation?.policyName! ?? "")'"
+            let coloredString = "'\(viewListingArray?.listingData?.cancellation?.policyName! ?? "")'"
 
             // Get the range of the colored string.
        let rangeOfColoredString = (fullString as! NSString).range(of: coloredString)
@@ -717,45 +708,49 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
      @objc func addinBtnTapped(_ sender: UIButton!) {
         Utility.shared.blocked_date_month.removeAllObjects()
-        for i in viewListingArray.fullBlockedDates!
-        {
-            let timestamp = i?.blockedDates
-            let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
-            let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
-            let dateFormatter = DateFormatter()
-            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-            dateFormatter.dateFormat = "dd-LL-YYYY" //Specify your format that you want
-            let dateFormatter1 = DateFormatter()
-            dateFormatter1.dateFormat = "LL"
-            dateFormatter1.timeZone = TimeZone(abbreviation: "UTC")
-            let date = "\(dateFormatter.string(from: newTime))"
-            if(i?.calendarStatus != "available")
-            {
-            Utility.shared.blocked_date_month.add("\(date)")
-            }
-            Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
-        }
-         
-         Utility.shared.fullcheckBlockedDateMonth.removeAllObjects()
-         for i in viewListingArray.blockedDates!
-         {
-             let timestamp = i?.blockedDates
-             let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
-             let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
-             let dateFormatter = DateFormatter()
-             dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-             dateFormatter.dateFormat = "dd-LL-YYYY" //Specify your format that you want
-             let dateFormatter1 = DateFormatter()
-             dateFormatter1.timeZone = TimeZone(abbreviation: "UTC")
-             dateFormatter1.dateFormat = "LL"
-             let date = "\(dateFormatter.string(from: newTime))"
-             if(i?.calendarStatus != "available")
+         if let blockedDates = viewListingArray?.blockedDates{
+             for i in blockedDates
              {
-             Utility.shared.fullcheckBlockedDateMonth.add("\(date)")
+                 let timestamp = i?.blockedDates
+                 let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
+                 let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
+                 let dateFormatter = DateFormatter()
+                 dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+                 dateFormatter.dateFormat = "dd-LL-YYYY" //Specify your format that you want
+                 let dateFormatter1 = DateFormatter()
+                 dateFormatter1.dateFormat = "LL"
+                 dateFormatter1.timeZone = TimeZone(abbreviation: "UTC")
+                 let date = "\(dateFormatter.string(from: newTime))"
+                 if(i?.calendarStatus != "available")
+                 {
+                     Utility.shared.blocked_date_month.add("\(date)")
+                 }
+                 Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
              }
          }
          
-         if let checkInDates = viewListingArray.checkInBlockedDates{
+         Utility.shared.fullcheckBlockedDateMonth.removeAllObjects()
+         if let blockedDates = viewListingArray?.blockedDates{
+             for i in blockedDates
+             {
+                 let timestamp = i?.blockedDates
+                 let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
+                 let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
+                 let dateFormatter = DateFormatter()
+                 dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+                 dateFormatter.dateFormat = "dd-LL-YYYY" //Specify your format that you want
+                 let dateFormatter1 = DateFormatter()
+                 dateFormatter1.timeZone = TimeZone(abbreviation: "UTC")
+                 dateFormatter1.dateFormat = "LL"
+                 let date = "\(dateFormatter.string(from: newTime))"
+                 if(i?.calendarStatus != "available")
+                 {
+                     Utility.shared.fullcheckBlockedDateMonth.add("\(date)")
+                 }
+             }
+         }
+         
+         if let checkInDates = viewListingArray?.checkInBlockedDates{
              Utility.shared.checkedInDates.removeAllObjects()
              for i in checkInDates{
                  let timestamp = i?.blockedDates
@@ -768,9 +763,9 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                  Utility.shared.checkedInDates.add(dateFormatter.string(from: newTime))
              }
          }
-        Utility.shared.minimumstay = (viewListingArray.listingData?.minNight != nil ? ((viewListingArray.listingData?.minNight!)!) : 0)
+        Utility.shared.minimumstay = (viewListingArray?.listingData?.minNight != nil ? ((viewListingArray?.listingData?.minNight!)!) : 0)
         Utility.shared.isfromcheckingPage = true
-        Utility.shared.maximum_days_notice = Utility.shared.maximum_notice_period(maximumnoticeperiod: (viewListingArray.listingData?.maxDaysNotice != nil ? ((viewListingArray.listingData?.maxDaysNotice!)!) : ""))!
+        Utility.shared.maximum_days_notice = Utility.shared.maximum_notice_period(maximumnoticeperiod: (viewListingArray?.listingData?.maxDaysNotice != nil ? ((viewListingArray?.listingData?.maxDaysNotice!)!) : ""))!
         let datePickerViewController = AirbnbDatePickerViewController(dateFrom: selectedStartDate, dateTo: selectedEndDate)
         datePickerViewController.delegate = self
          datePickerViewController.isFromEdit = true
@@ -804,7 +799,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
     @objc func guestBtnTapped(_ sender: UIButton!) {
         Utility.shared.isfromcheckingPage = true
-        Utility.shared.maximum_Count_for_booking = viewListingArray.personCapacity != nil ? viewListingArray.personCapacity! : 0
+        Utility.shared.maximum_Count_for_booking = viewListingArray?.personCapacity != nil ? (viewListingArray?.personCapacity!)! : 0
         let occupantController = AirbnbOccupantFilterController(adultCount: adultCount, childrenCount: childrenCount, infantCount: infantCount, hasPet: hasPet)
         occupantController.delegate = self
         let navigationController = UINavigationController(rootViewController: occupantController)
@@ -838,7 +833,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     @objc func handleTapGesture(sender: UITapGestureRecognizer) {
     let houserulesObj = HouseRulesVC()
-    houserulesObj.houserulesArray = viewListingArray.houseRules! as! [ViewListingDetailsQuery.Data.ViewListing.Result.HouseRule]
+    houserulesObj.houserulesArray = viewListingArray?.houseRules! as! [ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
     houserulesObj.titleString = "\((Utility.shared.getLanguage()?.value(forKey:"houserules"))!)"
     houserulesObj.modalPresentationStyle = .fullScreen
     self.present(houserulesObj, animated: true, completion: nil)
@@ -850,10 +845,10 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         let cancellationObj = CancellationVC()
        
       
-        cancellationObj.cancelpolicy = viewListingArray.listingData?.cancellation?.policyName ?? ""
+        cancellationObj.cancelpolicy = viewListingArray?.listingData?.cancellation?.policyName ?? ""
       
        
-        cancellationObj.cancelpolicy_content = viewListingArray.listingData?.cancellation?.policyContent ?? ""
+        cancellationObj.cancelpolicy_content = viewListingArray?.listingData?.cancellation?.policyContent ?? ""
      
 
         cancellationObj.modalPresentationStyle = .fullScreen
@@ -885,8 +880,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
     
     
-    func billingListAPICall(startDate:String,endDate:String)
-    {
+    func billingListAPICall(startDate:String,endDate:String){
         var currency = String()
         if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
         {
@@ -896,25 +890,29 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         {
             currency = Utility.shared.currencyvalue_from_API_base
         }
-        let billingListquery = GetBillingCalculationQuery(listId: viewListingArray.id!, startDate: startDate, endDate: endDate, guests: Utility.shared.guestCountToBeSend, convertCurrency:currency)
-        apollo_headerClient.fetch(query: billingListquery){(result,error) in
-            guard (result?.data?.getBillingCalculation?.result) != nil else{
-                self.view.makeToast(result?.data?.getBillingCalculation?.errorMessage)
-                return
+        let billingListquery = GetBillingCalculationQuery(listId: viewListingArray?.__data._data["id"] as! Int as Int, startDate: startDate, endDate: endDate, guests: Utility.shared.guestCountToBeSend, convertCurrency:currency)
+        Network.shared.apollo_headerClient.fetch(query: billingListquery){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getBillingCalculation?.result) != nil else{
+                    self.view.makeToast(result.data?.getBillingCalculation?.errorMessage)
+                    return
+                }
+                self.getbillingArray = (result.data?.getBillingCalculation?.result)!
+                Utility.shared.guestCountToBeSend = self.getbillingArray?.guests ?? Utility.shared.guestCountToBeSend
+                if self.isFromCalendar {
+                    self.isFromCalendar = false
+                    self.requestTable.reloadSections([1,3,4,5], with: .none)
+                }
+                else {
+                    self.requestTable.reloadData()
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            self.getbillingArray = (result?.data?.getBillingCalculation?.result)!
-            Utility.shared.guestCountToBeSend = self.getbillingArray.guests ?? Utility.shared.guestCountToBeSend
-            if self.isFromCalendar {
-                self.isFromCalendar = false
-                self.requestTable.reloadSections([1,3,4,5], with: .none)
-            }
-            else {
-                self.requestTable.reloadData()
-            }
-            
         }
-        
     }
+    
     func lottieanimation()
     {
 //        bookBtn.setTitle("", for:.normal)
@@ -931,104 +929,106 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     {
         let profileQuery = GetProfileQuery()
         
-        apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            
-            guard (result?.data?.userAccount?.result) != nil else
-            {
-                if result?.data?.userAccount?.status == 500{
-                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result?.data?.userAccount?.errorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                        UserDefaults.standard.removeObject(forKey: "user_token")
-                        UserDefaults.standard.removeObject(forKey: "user_id")
-                        UserDefaults.standard.removeObject(forKey: "password")
-                        UserDefaults.standard.removeObject(forKey: "currency_rate")
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        let welcomeObj = WelcomePageVC()
-                        appDelegate.setInitialViewController(initialView: welcomeObj)
-                    }))
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }else{
-                    self.lottieView.isHidden = true
-                    if(self.viewListingArray.bookingType! == "instant")
-                    {
-                        self.bookBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"addpayment"))!)", for: .normal)
-                    }
-                    else
-                    {
-                        self.bookBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"addpayment"))!)", for: .normal)
-                    }
-                    return
-                }
-                
-            }
-            self.lottieView.isHidden = true
-            
-            self.ProfileAPIArray = ((result?.data?.userAccount?.result)!)
-            
-            self.lottieView.isHidden = true
-            if(self.viewListingArray.bookingType! == "instant")
-            {
-                self.bookBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"addpayment"))!)", for: .normal)
-            }
-            else
-            {
-                self.bookBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"addpayment"))!)", for: .normal)
-            }
-            
-           
-            
-            if(self.ProfileAPIArray.verification?.isEmailConfirmed == true)
-            {
-                
-                if(self.ProfileAPIArray.picture == nil)
+        Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.userAccount?.result) != nil else
                 {
-                    Utility.shared.isprofilepictureVerified = true
+                    if result.data?.userAccount?.status == 500{
+                        let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.userAccount?.errorMessage, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                            UserDefaults.standard.removeObject(forKey: "user_token")
+                            UserDefaults.standard.removeObject(forKey: "user_id")
+                            UserDefaults.standard.removeObject(forKey: "password")
+                            UserDefaults.standard.removeObject(forKey: "currency_rate")
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            let welcomeObj = WelcomePageVC()
+                            appDelegate.setInitialViewController(initialView: welcomeObj)
+                        }))
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    }else{
+                        self.lottieView.isHidden = true
+                        if(self.viewListingArray?.bookingType! == "instant")
+                        {
+                            self.bookBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"addpayment"))!)", for: .normal)
+                        }
+                        else
+                        {
+                            self.bookBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"addpayment"))!)", for: .normal)
+                        }
+                        return
+                    }
+                    
+                }
+                self.lottieView.isHidden = true
+                
+                self.ProfileAPIArray = ((result.data?.userAccount?.result)!)
+                
+                self.lottieView.isHidden = true
+                if(self.viewListingArray?.bookingType! == "instant")
+                {
+                    self.bookBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"addpayment"))!)", for: .normal)
                 }
                 else
                 {
-                    Utility.shared.isprofilepictureVerified = false
+                    self.bookBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"addpayment"))!)", for: .normal)
                 }
                 
-               
                 
-                Utility.shared.bookingListimage = self.viewListingArray.listPhotoName != nil ? self.viewListingArray.listPhotoName! : ""
-                Utility.shared.bookingListname = self.viewListingArray.title != nil ? self.viewListingArray.title! : ""
-                if(self.guestLabel_text == "")
+                
+                if(self.ProfileAPIArray?.verification?.isEmailConfirmed == true)
                 {
-                    self.guestLabel_text = "1 \((Utility.shared.getLanguage()?.value(forKey:"guest"))!)"
+                    
+                    if(self.ProfileAPIArray?.picture == nil)
+                    {
+                        Utility.shared.isprofilepictureVerified = true
+                    }
+                    else
+                    {
+                        Utility.shared.isprofilepictureVerified = false
+                    }
+                    
+                    
+                    
+                    Utility.shared.bookingListimage = self.viewListingArray?.listPhotoName != nil ? (self.viewListingArray?.listPhotoName!)! : ""
+                    Utility.shared.bookingListname = self.viewListingArray?.title != nil ? (self.viewListingArray?.title!)! : ""
+                    if(self.guestLabel_text == "")
+                    {
+                        self.guestLabel_text = "1 \((Utility.shared.getLanguage()?.value(forKey:"guest"))!)"
+                    }
+                    Utility.shared.bookingdateLabel = "\(self.addDateinLabel) - \(self.addDateoutLabel), \(self.guestLabel_text)"
+                    
+                    if(Utility.shared.isprofilepictureVerified)
+                    {
+                        let bookingThreeObj = BookingStepThreeVC()
+                        
+                        bookingThreeObj.viewListingArray = self.viewListingArray
+                        bookingThreeObj.currencyvalue_from_API_base = self.currencyvalue_from_API_base
+                        bookingThreeObj.getbillingArray = self.getbillingArray
+                        bookingThreeObj.viewListingArray = self.viewListingArray
+                        bookingThreeObj.modalPresentationStyle = .fullScreen
+                        self.present(bookingThreeObj, animated: true, completion: nil)
+                    } else {
+                        let paymentSelectionPage = PaymentSelectionPage()
+                        paymentSelectionPage.currencyvalue_from_API_base = self.currencyvalue_from_API_base
+                        paymentSelectionPage.getbillingArray = self.getbillingArray
+                        paymentSelectionPage.viewListingArray = self.viewListingArray
+                        paymentSelectionPage.modalPresentationStyle = .fullScreen
+                        self.present(paymentSelectionPage, animated: true, completion: nil)
+                    }
+                    
+                    
+                    
                 }
-                Utility.shared.bookingdateLabel = "\(self.addDateinLabel) - \(self.addDateoutLabel), \(self.guestLabel_text)"
-                
-                if(Utility.shared.isprofilepictureVerified)
-                {
-                let bookingThreeObj = BookingStepThreeVC()
-                   
-                 bookingThreeObj.viewListingArray = self.viewListingArray
-                    bookingThreeObj.currencyvalue_from_API_base = self.currencyvalue_from_API_base
-                    bookingThreeObj.getbillingArray = self.getbillingArray
-                    bookingThreeObj.viewListingArray = self.viewListingArray
-                bookingThreeObj.modalPresentationStyle = .fullScreen
-                self.present(bookingThreeObj, animated: true, completion: nil)
-                } else {
-                let paymentSelectionPage = PaymentSelectionPage()
-                paymentSelectionPage.currencyvalue_from_API_base = self.currencyvalue_from_API_base
-                paymentSelectionPage.getbillingArray = self.getbillingArray
-                paymentSelectionPage.viewListingArray = self.viewListingArray
-                paymentSelectionPage.modalPresentationStyle = .fullScreen
-                self.present(paymentSelectionPage, animated: true, completion: nil)
+                else{
+                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"emailverifyalert"))!)")
+                    
                 }
-               
-               
-                 
-            }
-            else{
-                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"emailverifyalert"))!)")
-                
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
-        
-        
     }
     
     /*

@@ -5,22 +5,9 @@
 
 public class GetUnReadThreadCountQuery: GraphQLQuery {
   public static let operationName: String = "getUnReadThreadCount"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getUnReadThreadCount($threadId: Int) {
-        getUnReadThreadCount(threadId: $threadId) {
-          __typename
-          results {
-            __typename
-            isUnReadMessage
-            messageCount
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query getUnReadThreadCount($threadId: Int) { getUnReadThreadCount(threadId: $threadId) { __typename results { __typename isUnReadMessage messageCount } status errorMessage } }"#
     ))
 
   public var threadId: GraphQLNullable<Int>
@@ -33,10 +20,10 @@ public class GetUnReadThreadCountQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getUnReadThreadCount", GetUnReadThreadCount?.self, arguments: ["threadId": .variable("threadId")]),
     ] }
 
@@ -47,10 +34,11 @@ public class GetUnReadThreadCountQuery: GraphQLQuery {
     /// Parent Type: `UnreadThreadsCount`
     public struct GetUnReadThreadCount: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.UnreadThreadsCount }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UnreadThreadsCount }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", Results?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -65,10 +53,11 @@ public class GetUnReadThreadCountQuery: GraphQLQuery {
       /// Parent Type: `UnReadCount`
       public struct Results: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.UnReadCount }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UnReadCount }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("isUnReadMessage", Bool?.self),
           .field("messageCount", Int?.self),
         ] }

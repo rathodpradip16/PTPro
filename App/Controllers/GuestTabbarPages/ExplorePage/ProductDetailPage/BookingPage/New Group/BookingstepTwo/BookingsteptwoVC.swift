@@ -23,16 +23,7 @@ class BookingsteptwoVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     @IBOutlet weak var bookingtwoTV: UITableView!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var nextBtn: UIButton!
-    var viewListingArray = ViewListingDetailsQuery.Data.ViewListing.Result()
-    var apollo_client: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
+    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -183,49 +174,41 @@ class BookingsteptwoVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             if (Utility.shared.getCurrentUserID() != nil){
                 
                 let profileQuery = GetProfileQuery()
-                apollo_client = {
-                    let configuration = URLSessionConfiguration.default
-                    // Add additional headers as needed
-                    configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                    
-                    let url = URL(string:graphQLEndpoint)!
-                    
-                    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-                    
-                }()
                 
-                apollo_client.fetch(query: profileQuery, cachePolicy: .fetchIgnoringCacheData){ (result, error) in
-                    
-                    guard (result?.data?.userAccount?.result) != nil else {
-                        
-                        if result?.data?.userAccount?.status == 500{
-                            let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result?.data?.userAccount?.errorMessage, preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                                UserDefaults.standard.removeObject(forKey: "user_token")
-                                UserDefaults.standard.removeObject(forKey: "user_id")
-                                UserDefaults.standard.removeObject(forKey: "password")
-                                UserDefaults.standard.removeObject(forKey: "currency_rate")
-                                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                                let welcomeObj = WelcomePageVC()
-                                appDelegate.setInitialViewController(initialView: welcomeObj)
-                            }))
-                            self.present(alert, animated: true, completion: nil)
-                            return
-                        }else{
-                        print("Missing Data")
-                        return
+                Network.shared.apollo_headerClient.fetch(query: profileQuery, cachePolicy: .fetchIgnoringCacheData){ response in
+                    switch response {
+                    case .success(let result):
+                        guard (result.data?.userAccount?.result) != nil else {
+                            
+                            if result.data?.userAccount?.status == 500{
+                                let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.userAccount?.errorMessage, preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                                    UserDefaults.standard.removeObject(forKey: "user_token")
+                                    UserDefaults.standard.removeObject(forKey: "user_id")
+                                    UserDefaults.standard.removeObject(forKey: "password")
+                                    UserDefaults.standard.removeObject(forKey: "currency_rate")
+                                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                    let welcomeObj = WelcomePageVC()
+                                    appDelegate.setInitialViewController(initialView: welcomeObj)
+                                }))
+                                self.present(alert, animated: true, completion: nil)
+                                return
+                            }else{
+                                print("Missing Data")
+                                return
+                            }
                         }
-                    }
-                   
-    
-                    if (result?.data?.userAccount?.result?.picture) == nil {
-                        Utility.shared.isprofilepictureVerified = true
-                    }else{
+                        if (result.data?.userAccount?.result?.picture) == nil {
+                            Utility.shared.isprofilepictureVerified = true
+                        }else{
+                            
+                            Utility.shared.isprofilepictureVerified = false
+                        }
                         
-                        Utility.shared.isprofilepictureVerified = false
+                        self.bookingtwoTV.reloadData()
+                    case .failure(let error):
+                        self.view.makeToast(error.localizedDescription)
                     }
-                    
-                    self.bookingtwoTV.reloadData()
                 }
             }
         }else{

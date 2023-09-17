@@ -5,18 +5,9 @@
 
 public class ForgotPasswordMutation: GraphQLMutation {
   public static let operationName: String = "ForgotPassword"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation ForgotPassword($email: String!) {
-        userForgotPassword(email: $email) {
-          __typename
-          status
-          forgotLink
-          errorMessage
-        }
-      }
-      """
+      #"mutation ForgotPassword($email: String!) { userForgotPassword(email: $email) { __typename status forgotLink errorMessage } }"#
     ))
 
   public var email: String
@@ -29,10 +20,10 @@ public class ForgotPasswordMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("userForgotPassword", UserForgotPassword?.self, arguments: ["email": .variable("email")]),
     ] }
 
@@ -43,10 +34,11 @@ public class ForgotPasswordMutation: GraphQLMutation {
     /// Parent Type: `UserType`
     public struct UserForgotPassword: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.UserType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("forgotLink", String?.self),
         .field("errorMessage", String?.self),

@@ -32,18 +32,9 @@ class CalendarListingVC: UIViewController,UITableViewDelegate,UITableViewDataSou
     @IBOutlet weak var CalendarListingTable: UITableView!
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var topView: UIView!
-    var manageListingArray = [ManageListingsQuery.Data.ManageListing.Result]()
-    var inprogress_List_Array = [ManageListingsQuery.Data.ManageListing.Result]()
-    var completed_List_Array = [ManageListingsQuery.Data.ManageListing.Result]()
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
+    var manageListingArray = [ManageListingsQuery.Data.ManageListings.Result]()
+    var inprogress_List_Array = [ManageListingsQuery.Data.ManageListings.Result]()
+    var completed_List_Array = [ManageListingsQuery.Data.ManageListings.Result]()
   //  var selected_Array  = NSMutableArray()
      var lottieView: LottieAnimationView!
     var deleagte:CalendarListingVCProtocol!
@@ -94,36 +85,41 @@ class CalendarListingVC: UIViewController,UITableViewDelegate,UITableViewDataSou
     {
         
         let manageListingquery = ManageListingsQuery()
-        apollo_headerClient.fetch(query: manageListingquery,cachePolicy:.fetchIgnoringCacheData){ [self](result,error) in
-            guard (result?.data?.manageListings?.results) != nil else{
-                self.view.makeToast(result?.data?.manageListings?.errorMessage)
-                return
-            }
-            self.manageListingArray = ((result?.data?.manageListings?.results)!) as! [ManageListingsQuery.Data.ManageListing.Result]
-            for i in self.manageListingArray
-            {
-                if(i.isReady == false)
+        Network.shared.apollo_headerClient.fetch(query: manageListingquery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
+            switch response {
+            case .success(let result):
+                
+                guard (result.data?.manageListings?.results) != nil else{
+                    self.view.makeToast(result.data?.manageListings?.errorMessage)
+                    return
+                }
+                self.manageListingArray = ((result.data?.manageListings?.results)!) as! [ManageListingsQuery.Data.ManageListings.Result]
+                for i in self.manageListingArray
                 {
-                    self.inprogress_List_Array.append(i)
+                    if(i.isReady == false)
+                    {
+                        self.inprogress_List_Array.append(i)
+                    }
+                    else{
+                        self.completed_List_Array.append(i)
+                    }
                 }
-                else{
-                    self.completed_List_Array.append(i)
+                self.lottieView.isHidden = true
+                self.CalendarListingTable.hideSkeleton()
+                self.CalendarListingTable.reloadData()
+                for i in 0...completed_List_Array.count-1 {
+                    
+                    if(Utility.shared.host_selected_Array.contains(completed_List_Array[i].id!))
+                    {
+                        let indexPath = IndexPath(row:i,section: 0)
+                        
+                        self.CalendarListingTable.scrollToRow(at:indexPath, at: .none, animated: false)
+                        
+                    }
                 }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            self.lottieView.isHidden = true
-            self.CalendarListingTable.hideSkeleton()
-            self.CalendarListingTable.reloadData()
-            for i in 0...completed_List_Array.count-1 {
-                
-            if(Utility.shared.host_selected_Array.contains(completed_List_Array[i].id!))
-            {
-                let indexPath = IndexPath(row:i,section: 0)
-            
-                self.CalendarListingTable.scrollToRow(at:indexPath, at: .none, animated: false)
-                
-            }
-            }
-            
         }
         
     }

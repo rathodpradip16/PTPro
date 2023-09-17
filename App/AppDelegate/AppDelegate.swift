@@ -373,16 +373,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         let getStripeKey = GetPaymentSettingsQuery()
         
-        apollo.fetch(query: getStripeKey){(result,error) in
-            
-            if result == nil{
-                STPPaymentConfiguration.shared.publishableKey = STRIPE_PUBLISHABLE_KEY
-            }else{
-                STPPaymentConfiguration.shared.publishableKey = result?.data?.getPaymentSettings?.result?.publishableKey
-                
-                  STPPaymentConfiguration.shared.requiredBillingAddressFields = .none
+        apollo.fetch(query: getStripeKey){ response in
+            switch response {
+            case .success(let result):
+                if result == nil{
+                    STPPaymentConfiguration.shared.publishableKey = STRIPE_PUBLISHABLE_KEY
+                }else{
+                    STPPaymentConfiguration.shared.publishableKey = result.data?.getPaymentSettings?.result?.publishableKey
+                    STPPaymentConfiguration.shared.requiredBillingAddressFields = .none
+                }
+            case .failure(_): break
             }
-            
         }
     }
 
@@ -564,7 +565,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         let userdata = response.notification.request.content.userInfo
         if let textResponse =  response as? UNTextInputNotificationResponse {
-            let sendText =  textResponse.userText
+            let sendText:GraphQLNullable<String> = .some(textResponse.userText)
             print("Received text message: \(sendText)")
             var threadid = String()
             if let bedtypeInfo = userdata["content"] as? String
@@ -576,10 +577,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
                     
                 }
             }
-            
-            
-            
-            
         }
         
         
@@ -682,8 +679,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         completionHandler()
     }
-
-
+    
     func convertToDictionary(text: String) -> [String: Any]? {
         if let data = text.data(using: .utf8) {
             do {
@@ -694,157 +690,136 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         }
         return nil
     }
-    func sendMessageAPICall(threadid:Int,message:String)
+    
+    func sendMessageAPICall(threadid:Int,message:GraphQLNullable<String>)
     {
-        var apollo_headerClient: ApolloClient = {
-            let configuration = URLSessionConfiguration.default
-            // Add additional headers as needed
-            configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-            
-            let url = URL(string:graphQLEndpoint)!
-            
-            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-        }()
-        let sendMsgMutation = SendMessageMutation(threadId:threadid,content:message, type: "message")
+        let sendMsgMutation = SendMessageMutation(threadId: threadid, content: message , type: .some(""))
         
-        apollo_headerClient.perform(mutation: sendMsgMutation){(result,error) in
-            guard (result?.data?.sendMessage?.results) != nil else{
-                print("Missing Data")
-                return
-            }
-            print("sent")
-            let appstatechecker = UIApplication.shared.applicationState
-            if(appstatechecker == UIApplication.State.inactive)
-            {
-                if #available(iOS 10.0, *) {
-                    let center = UNUserNotificationCenter.current()
-                    center.removeAllPendingNotificationRequests() // To remove all pending notifications which are not delivered yet but scheduled.
-                    center.removeAllDeliveredNotifications() // To remove all delivered notifications
-                } else {
-                    UIApplication.shared.cancelAllLocalNotifications()
+        Network.shared.apollo_headerClient.perform(mutation: sendMsgMutation){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.sendMessage?.results) != nil else{
+                    print("Missing Data")
+                    return
                 }
+                print("sent")
+                let appstatechecker = UIApplication.shared.applicationState
+                if(appstatechecker == UIApplication.State.inactive)
+                {
+                    if #available(iOS 10.0, *) {
+                        let center = UNUserNotificationCenter.current()
+                        center.removeAllPendingNotificationRequests() // To remove all pending notifications which are not delivered yet but scheduled.
+                        center.removeAllDeliveredNotifications() // To remove all delivered notifications
+                    } else {
+                        UIApplication.shared.cancelAllLocalNotifications()
+                    }
+                }
+            case .failure(_): break
             }
-            
-            
         }
     }
+    
     func GetDefaultSettingAPICall()
     {
         if(Utility.shared.getCurrentUserToken() != nil)
         {
-        apollo_headerClient = {
-            let configuration = URLSessionConfiguration.default
-            // Add additional headers as needed
-            configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-            
-            let url = URL(string:graphQLEndpoint)!
-            
-            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-        }()
             let mostlistingquery = GetDefaultSettingQuery()
-            apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-                //RecommendedListing
-                guard (result?.data?.currency?.result) != nil else {
-                    print("Missing data")
-                    return
-                }
-                Utility.shared.currencyvalue_from_API_base = (result?.data?.currency?.result?.base)!
-                let currency_value = result?.data?.currency?.result?.rates
-                Utility.shared.currency_Dict = self.convertToDictionary(text: currency_value!)! as NSDictionary
-                
-                if let value = result?.data?.siteSettings?.results{
-                    for i in value{
-                        if (i?.name == "phoneNumberStatus"){
-                            Utility.shared.phoneNumberStatus = i?.value ?? ""
+            Network.shared.apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    //RecommendedListing
+                    guard (result.data?.currency?.result) != nil else {
+                        print("Missing data")
+                        return
+                    }
+                    Utility.shared.currencyvalue_from_API_base = (result.data?.currency?.result?.base)!
+                    let currency_value = result.data?.currency?.result?.rates
+                    Utility.shared.currency_Dict = self.convertToDictionary(text: currency_value!)! as NSDictionary
+                    
+                    if let value = result.data?.siteSettings?.results{
+                        for i in value{
+                            if (i?.name == "phoneNumberStatus"){
+                                Utility.shared.phoneNumberStatus = i?.value ?? ""
+                            }
                         }
                     }
-                }
-        }
+                case .failure(_): break
+            }
+            }
+            
         }
     }
     
     func profileAPICall()
     {
-        if Utility().isConnectedToNetwork(){
-        if(Utility.shared.getCurrentUserToken() != nil)
-        {
-        let profileQuery = GetProfileQuery()
-            apollo_headerClient = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                
-                let url = URL(string:graphQLEndpoint)!
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
-        apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            
-            guard (result?.data?.userAccount?.result) != nil else
+        if Utility.shared.isConnectedToNetwork(){
+            if(Utility.shared.getCurrentUserToken() != nil)
             {
-                print("Missing Data")
-                Utility.shared.setUserToken(userID: "")
-                return
-            }
-            
-            
-            Utility.shared.ProfileAPIArray = ((result?.data?.userAccount?.result)!)
-            Utility.shared.userName  = "\(Utility.shared.ProfileAPIArray.firstName != nil ? Utility.shared.ProfileAPIArray.firstName! : "User")!"
-            
-            
-            
-            if let theme = result?.data?.userAccount?.result?.appTheme {
-                Utility.shared.setAppTheme(Language:theme)
-                Utility.shared.selectedAppearance = theme
-            }
-            else {
-                Utility.shared.setAppTheme(Language:"auto")
-                Utility.shared.selectedAppearance = "auto"
-            }
-            
-            self.themeInitialSetUp()
-          
-            
-            if let profImage = Utility.shared.ProfileAPIArray.picture{
-                Utility.shared.pickedimageString = "\(IMAGE_AVATAR_MEDIUM)\(profImage)"
-            }
-            else {
-                Utility.shared.pickedimageString = "avatar"
-            }
-            
-            
-            Utility.shared.setEmail(email:(result?.data?.userAccount?.result?.email as AnyObject)as! NSString)
-         
-           
+                let profileQuery = GetProfileQuery()
+                Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+                    switch response {
+                    case .success(let result):
+                        guard (result.data?.userAccount?.result) != nil else
+                        {
+                            print("Missing Data")
+                            Utility.shared.setUserToken(userID: "")
+                            return
+                        }
+                        
+                        
+                        Utility.shared.ProfileAPIArray = ((result.data?.userAccount?.result)!)
+                        Utility.shared.userName  = "\(Utility.shared.ProfileAPIArray?.firstName != nil ? Utility.shared.ProfileAPIArray?.firstName! : "User")!"
+                        
+                        
+                        
+                        if let theme = result.data?.userAccount?.result?.appTheme {
+                            Utility.shared.setAppTheme(Language:theme)
+                            Utility.shared.selectedAppearance = theme
+                        }
+                        else {
+                            Utility.shared.setAppTheme(Language:"auto")
+                            Utility.shared.selectedAppearance = "auto"
+                        }
+                        
+                        self.themeInitialSetUp()
+                        
+                        
+                        if let profImage = Utility.shared.ProfileAPIArray?.picture{
+                            Utility.shared.pickedimageString = "\(IMAGE_AVATAR_MEDIUM)\(profImage)"
+                        }
+                        else {
+                            Utility.shared.pickedimageString = "avatar"
+                        }
+                        
+                        
+                        Utility.shared.setEmail(email:(result.data?.userAccount?.result?.email as AnyObject)as! NSString)
+                        break;
+                    case .failure(let error): break
+                    }
+                }                
             }
         }
-            
-        }
-        }
+    }
+
         
     
     func getcurrencyAPICall()
     {
         if(Utility.shared.getCurrentUserToken() != nil)
         {
-        apollo_headerClient = {
-            let configuration = URLSessionConfiguration.default
-            // Add additional headers as needed
-            configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-            
-            let url = URL(string:graphQLEndpoint)!
-            
-            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-        }()
-        let currencyQuery = GetCurrenciesListQuery()
-        apollo_headerClient.fetch(query: currencyQuery){(result,error) in
-            guard (result?.data?.getCurrencies?.results) != nil else{
-                print("Missing Data")
-                return
+            let currencyQuery = GetCurrenciesListQuery()
+            Network.shared.apollo_headerClient.fetch(query: currencyQuery){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getCurrencies?.results) != nil else{
+                        print("Missing Data")
+                        return
+                    }
+                    Utility.shared.currencyDataArray = ((result.data?.getCurrencies?.results)!) as! [GetCurrenciesListQuery.Data.GetCurrencies.Result]
+                    Utility.shared.currencyvalue = Utility.shared.currencyDataArray.first!.symbol!
+                case .failure(_): break
             }
-            Utility.shared.currencyDataArray = ((result?.data?.getCurrencies?.results)!) as! [GetCurrenciesListQuery.Data.GetCurrency.Result]
-            Utility.shared.currencyvalue = Utility.shared.currencyDataArray.first!.symbol!
-        }
+            }
         }
     }
 
@@ -853,67 +828,66 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     {
         let UserbanstatusQuery = UserBanStatusQuery()
         
-        apollo_headerClient.fetch(query: UserbanstatusQuery){(result,error) in
-            
-            if(result?.data?.getUserBanStatus?.status == 200)
-            {
-                if(((Utility.shared.getTabbar()) != nil) && Utility.shared.getTabbar() == true)
+        Network.shared.apollo_headerClient.fetch(query: UserbanstatusQuery){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.getUserBanStatus?.status,data == 200 {
+                    if(((Utility.shared.getTabbar()) != nil) && Utility.shared.getTabbar() == true)
+                    {
+                        Utility.shared.host_message_isfromHost = true
+                        self.addingElementsToObjects()
+                        //                    self.settingRootViewControllerFunction()
+                        Utility.shared.setHostTab(index: 0)
+                        self.HostTabbarInitialize(initialView: CustomHostTabbar())
+                    }
+                    else
+                    {
+                        Utility.shared.setTab(index: 0)
+                        self.GuestTabbarInitialize(initialView: CustomTabbar())
+                    }
+                    
+                    
+                    
+                }
+                else if(result.data?.getUserBanStatus == nil)
                 {
-                    Utility.shared.host_message_isfromHost = true
-                    self.addingElementsToObjects()
-//                    self.settingRootViewControllerFunction()
-                    Utility.shared.setHostTab(index: 0)
-                    self.HostTabbarInitialize(initialView: CustomHostTabbar())
+                    
+                    if(Utility.shared.getTabbar() != nil && Utility.shared.getTabbar() == true)
+                    {
+                        Utility.shared.host_message_isfromHost = true
+                        self.addingElementsToObjects()
+                        //                    self.settingRootViewControllerFunction()
+                        Utility.shared.setHostTab(index: 0)
+                        self.HostTabbarInitialize(initialView: CustomHostTabbar())
+                    }
+                    else
+                    {
+                        Utility.shared.setTab(index: 0)
+                        
+                        self.GuestTabbarInitialize(initialView: CustomTabbar())
+                    }
                 }
                 else
                 {
-                Utility.shared.setTab(index: 0)
-                self.GuestTabbarInitialize(initialView: CustomTabbar())
+                    
+                    if(Utility.shared.getTabbar() != nil && Utility.shared.getTabbar() == true)
+                    {
+                        Utility.shared.host_message_isfromHost = true
+                        self.addingElementsToObjects()
+                        //                    self.settingRootViewControllerFunction()
+                        Utility.shared.setHostTab(index: 0)
+                        self.HostTabbarInitialize(initialView: CustomHostTabbar())
+                    }
+                    else
+                    {
+                        Utility.shared.setTab(index: 0)
+                        
+                        self.GuestTabbarInitialize(initialView: CustomTabbar())
+                    }
                 }
-                
-
-                
+            case .failure(_): break
             }
-            else if(result?.data?.getUserBanStatus == nil)
-            {
-            
-                 if(Utility.shared.getTabbar() != nil && Utility.shared.getTabbar() == true)
-                {
-                    Utility.shared.host_message_isfromHost = true
-                    self.addingElementsToObjects()
-//                    self.settingRootViewControllerFunction()
-                     Utility.shared.setHostTab(index: 0)
-                     self.HostTabbarInitialize(initialView: CustomHostTabbar())
-                }
-                else
-                {
-            Utility.shared.setTab(index: 0)
-
-            self.GuestTabbarInitialize(initialView: CustomTabbar())
-                }
-            }
-            else
-            {
-           
-                if(Utility.shared.getTabbar() != nil && Utility.shared.getTabbar() == true)
-                {
-                    Utility.shared.host_message_isfromHost = true
-                    self.addingElementsToObjects()
-//                    self.settingRootViewControllerFunction()
-                    Utility.shared.setHostTab(index: 0)
-                    self.HostTabbarInitialize(initialView: CustomHostTabbar())
-                }
-                else
-                {
-            Utility.shared.setTab(index: 0)
-
-            self.GuestTabbarInitialize(initialView: CustomTabbar())
-                }
-            }
-            
-            
         }
-        
     }
         
     

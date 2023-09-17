@@ -74,7 +74,7 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
         return floor(view.frame.size.width / 7)
     }
     var collectionViewWidthConstraint: NSLayoutConstraint?
-    var viewListingArray = ViewListingDetailsQuery.Data.ViewListing.Result()
+    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
     
     var isSelectedstartDate  = Bool()
     
@@ -552,25 +552,25 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
                                            {
                                            let night = selctedDatesCountArray.count - 1
                                          
-                                               if((viewListingArray.listingData?.minNight != 0) || (viewListingArray.listingData?.maxNight != 0) )
+                                               if((viewListingArray?.listingData?.minNight != 0) || (viewListingArray?.listingData?.maxNight != 0) )
                                                {
-                                               if(night<(viewListingArray.listingData?.minNight!)!)
+                                                   if(night<(viewListingArray?.listingData?.minNight!)!)
                                                {
                                                    
-                                                   if viewListingArray.listingData!.minNight! > 1 {
-                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"nightrequire"))!) \(viewListingArray.listingData?.minNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                                                       if viewListingArray?.listingData!.minNight! ?? 0 > 1 {
+                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"nightrequire"))!) \(viewListingArray?.listingData?.minNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                                                    }else{
-                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"nightrequire"))!) \(viewListingArray.listingData?.minNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"nightrequire"))!) \(viewListingArray?.listingData?.minNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                                                    }
                                                footerView.isSaveEnabled = false
                                                }
-                                               else if(((viewListingArray.listingData?.maxNight!)! > 0) && (night > ((viewListingArray.listingData?.maxNight!)!)))
+                                                   else if(((viewListingArray?.listingData?.maxNight!)! > 0) && (night > ((viewListingArray?.listingData?.maxNight!)!)))
                                                {
                                                    
-                                                   if viewListingArray.listingData!.maxNight! > 1 {
-                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray.listingData?.maxNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                                                       if viewListingArray?.listingData!.maxNight! ?? 0 > 1 {
+                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray?.listingData?.maxNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                                                    }else{
-                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray.listingData?.maxNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray?.listingData?.maxNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                                                    }
                                                footerView.isSaveEnabled = false
                                                }
@@ -690,25 +690,25 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
                                            {
                                            let night = selctedDatesCountArray.count - 1
                                          
-                                               if((viewListingArray.listingData?.minNight != 0) || (viewListingArray.listingData?.maxNight != 0) )
+                                               if((viewListingArray?.listingData?.minNight != 0) || (viewListingArray?.listingData?.maxNight != 0) )
                                                {
-                                               if(night<(viewListingArray.listingData?.minNight!)!)
+                                               if(night<(viewListingArray?.listingData?.minNight!)!)
                                                {
                                                    
-                                                   if viewListingArray.listingData!.minNight! > 1 {
-                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"minimumstay"))!) \(viewListingArray.listingData?.minNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                                                   if viewListingArray?.listingData!.minNight! ?? 0 > 1 {
+                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"minimumstay"))!) \(viewListingArray?.listingData?.minNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                                                    }else{
-                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"minimumstay"))!) \(viewListingArray.listingData?.minNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"minimumstay"))!) \(viewListingArray?.listingData?.minNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                                                    }
                                                footerView.isSaveEnabled = false
                                                }
-                                               else if(((viewListingArray.listingData?.maxNight!)! > 0) && (night > ((viewListingArray.listingData?.maxNight!)!)))
+                                               else if(((viewListingArray?.listingData?.maxNight!)! > 0) && (night > ((viewListingArray?.listingData?.maxNight!)!)))
                                                {
                                                    
-                                                   if viewListingArray.listingData!.maxNight! > 1 {
-                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray.listingData?.maxNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                                                   if viewListingArray?.listingData!.maxNight! ?? 0 > 1 {
+                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray?.listingData?.maxNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                                                    }else{
-                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray.listingData?.maxNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                                                       Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray?.listingData?.maxNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                                                    }
                                                footerView.isSaveEnabled = false
                                                }
@@ -956,16 +956,16 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
                                     
                                    // let month = (night % 30)
                               
-                                    if((viewListingArray.listingData?.minNight != 0) || (viewListingArray.listingData?.maxNight != 0) )
+                                    if((viewListingArray?.listingData?.minNight != 0) || (viewListingArray?.listingData?.maxNight != 0) )
                                     {
-                                        if(night<((viewListingArray.listingData?.minNight!)!))
+                                        if(night<((viewListingArray?.listingData?.minNight!)!))
                                     {
-                                        Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"minimumstay"))!) \(viewListingArray.listingData?.minNight! ?? 0) \(viewListingArray.listingData!.minNight! > 1 ? "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")")"
+                                            Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"minimumstay"))!) \(viewListingArray?.listingData?.minNight! ?? 0) \(viewListingArray?.listingData!.minNight! ?? 0 > 1 ? "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")")"
                                     footerView.isSaveEnabled = false
                                     }
-                                    else if(((viewListingArray.listingData?.maxNight!)! > 0) && (night > ((viewListingArray.listingData?.maxNight!)!)))
+                                    else if(((viewListingArray?.listingData?.maxNight!)! > 0) && (night > ((viewListingArray?.listingData?.maxNight!)!)))
                                     {
-                                    Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray.listingData?.maxNight! ?? 0) \(viewListingArray.listingData!.maxNight! > 1 ? "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")")"
+                                        Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray?.listingData?.maxNight! ?? 0) \(viewListingArray?.listingData!.maxNight! ?? 0 > 1 ? "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")")"
                                     footerView.isSaveEnabled = false
                                     }
                                     else{
@@ -1093,16 +1093,16 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
                                     
                                    // let month = (night % 30)
                               
-                                    if((viewListingArray.listingData?.minNight != 0) || (viewListingArray.listingData?.maxNight != 0) )
+                                    if((viewListingArray?.listingData?.minNight != 0) || (viewListingArray?.listingData?.maxNight != 0) )
                                     {
-                                        if(night<((viewListingArray.listingData?.minNight!)!))
+                                        if(night<((viewListingArray?.listingData?.minNight!)!))
                                     {
-                                        Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"minimumstay"))!) \(viewListingArray.listingData?.minNight! ?? 0) \(viewListingArray.listingData!.minNight! > 1 ? "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")")"
+                                            Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"minimumstay"))!) \(viewListingArray?.listingData?.minNight! ?? 0) \(viewListingArray?.listingData!.minNight! ?? 0 > 1 ? "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")")"
                                     footerView.isSaveEnabled = false
                                     }
-                                    else if(((viewListingArray.listingData?.maxNight!)! > 0) && (night > ((viewListingArray.listingData?.maxNight!)!)))
+                                    else if(((viewListingArray?.listingData?.maxNight!)! > 0) && (night > ((viewListingArray?.listingData?.maxNight!)!)))
                                     {
-                                    Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray.listingData?.maxNight! ?? 0) \(viewListingArray.listingData!.maxNight! > 1 ? "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")")"
+                                        Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray?.listingData?.maxNight! ?? 0) \(viewListingArray?.listingData!.maxNight! ?? 0 > 1 ? "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")")"
                                     footerView.isSaveEnabled = false
                                     }
                                     else{
@@ -1214,16 +1214,16 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
                             
                            // let month = (night % 30)
                       
-                            if((viewListingArray.listingData?.minNight != 0) || (viewListingArray.listingData?.maxNight != 0) )
+                            if((viewListingArray?.listingData?.minNight != 0) || (viewListingArray?.listingData?.maxNight != 0) )
                             {
-                                if(night<((viewListingArray.listingData?.minNight!)!))
+                                if(night<((viewListingArray?.listingData?.minNight!)!))
                             {
-                                Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"minimumstay"))!) \(viewListingArray.listingData?.minNight! ?? 0) \(viewListingArray.listingData!.minNight! > 1 ? "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")")"
+                                    Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"minimumstay"))!) \(viewListingArray?.listingData?.minNight! ?? 0) \(viewListingArray?.listingData!.minNight! ?? 0 > 1 ? "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")")"
                             footerView.isSaveEnabled = false
                             }
-                            else if(((viewListingArray.listingData?.maxNight!)! > 0) && (night > ((viewListingArray.listingData?.maxNight!)!)))
+                            else if(((viewListingArray?.listingData?.maxNight!)! > 0) && (night > ((viewListingArray?.listingData?.maxNight!)!)))
                             {
-                            Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray.listingData?.maxNight! ?? 0) \(viewListingArray.listingData!.maxNight! > 1 ? "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")")"
+                                Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray?.listingData?.maxNight! ?? 0) \(viewListingArray?.listingData!.maxNight! ?? 0 > 1 ? "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")")"
                             footerView.isSaveEnabled = false
                             }
                             else{
@@ -1338,16 +1338,16 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
                             
                            // let month = (night % 30)
                       
-                            if((viewListingArray.listingData?.minNight != 0) || (viewListingArray.listingData?.maxNight != 0) )
+                            if((viewListingArray?.listingData?.minNight != 0) || (viewListingArray?.listingData?.maxNight != 0) )
                             {
-                                if(night<((viewListingArray.listingData?.minNight!)!))
+                                if(night<((viewListingArray?.listingData?.minNight!)!))
                             {
-                                Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"minimumstay"))!) \(viewListingArray.listingData?.minNight! ?? 0) \(viewListingArray.listingData!.minNight! > 1 ? "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")")"
+                                    Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"minimumstay"))!) \(viewListingArray?.listingData?.minNight! ?? 0) \(viewListingArray?.listingData!.minNight! ?? 0 > 1 ? "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey:"days") ?? "days")")"
                             footerView.isSaveEnabled = false
                             }
-                            else if(((viewListingArray.listingData?.maxNight!)! > 0) && (night > ((viewListingArray.listingData?.maxNight!)!)))
+                            else if(((viewListingArray?.listingData?.maxNight!)! > 0) && (night > ((viewListingArray?.listingData?.maxNight!)!)))
                             {
-                            Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray.listingData?.maxNight! ?? 0) \(viewListingArray.listingData!.maxNight! > 1 ? "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")")"
+                                Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"maximumstay"))!) \(viewListingArray?.listingData?.maxNight! ?? 0) \(viewListingArray?.listingData!.maxNight! ?? 0 > 1 ? "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")" : "\(Utility.shared.getLanguage()?.value(forKey: "days") ?? "days")")"
                             footerView.isSaveEnabled = false
                             }
                             else{
@@ -1582,7 +1582,7 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
                 
                 if(Utility.shared.checkedInDates.contains(datevalue) && Utility.shared.fullcheckBlockedDateMonth.contains(datevalue)){
                  
-                 if let blockedDates = viewListingArray.blockedDates {
+                 if let blockedDates = viewListingArray?.blockedDates {
                      for i in blockedDates
                      {
                          let timestamp = i?.blockedDates
@@ -1849,11 +1849,11 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
         endDateSelected = false
         selectedEndDate = nil
         if !isFromFilter {
-        if let data  = viewListingArray.listingData {
-        if viewListingArray.listingData!.minNight! > 1 {
-            Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"nightrequire"))!) \(viewListingArray.listingData?.minNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+        if let data  = viewListingArray?.listingData {
+            if viewListingArray?.listingData!.minNight! ?? 0 > 1 {
+            Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"nightrequire"))!) \(viewListingArray?.listingData?.minNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
         }else{
-            Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"nightrequire"))!) \(viewListingArray.listingData?.minNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+            Blocked_Selected_String = "\((Utility.shared.getLanguage()?.value(forKey:"nightrequire"))!) \(viewListingArray?.listingData?.minNight! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
         }
         }
         }

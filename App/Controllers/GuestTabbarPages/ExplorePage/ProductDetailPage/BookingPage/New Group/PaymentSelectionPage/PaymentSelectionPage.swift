@@ -27,31 +27,22 @@ class PaymentSelectionPage: UIViewController {
     var selectedPaymentType: Int = 0
     var inputPickerView = UIPickerView()
     var inputUIView = UIView()
-    var currencyPaymentTypes: [GetCurrenciesListQuery.Data.GetCurrency.Result]? = []
+    var currencyPaymentTypes: [GetCurrenciesListQuery.Data.GetCurrencies.Result]? = []
     var selectedCurrency = ""
     
-    var getpaymentmethodsArray = [GetPaymentMethodsQuery.Data.GetPaymentMethod.Result]()
-    var getpaymentmethodsArrayFilter = [GetPaymentMethodsQuery.Data.GetPaymentMethod.Result]()
+    var getpaymentmethodsArray = [GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
+    var getpaymentmethodsArrayFilter = [GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
     
     @IBOutlet var lblPaymentType: UILabel!
     var braintreeClient: BTAPIClient!
     var lottieWholeView = UIView()
     var lottieView =  LottieAnimationView()
     
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-       
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     
     
     var currencyvalue_from_API_base = ""
-    var getbillingArray = GetBillingCalculationQuery.Data.GetBillingCalculation.Result()
-    var viewListingArray = ViewListingDetailsQuery.Data.ViewListing.Result()
+    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
+    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
     var reservID = 0
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,26 +63,29 @@ class PaymentSelectionPage: UIViewController {
         
         self.lottieAnimation()
         let getpayoutquery = GetPaymentMethodsQuery()
-        apollo_headerClient.fetch(query: getpayoutquery,cachePolicy:.fetchIgnoringCacheData){ [self](result,error) in
-            guard (result?.data?.getPaymentMethods?.results) != nil else{
-                print("Missing Data")
-                 self.lottieView.isHidden = true
+        Network.shared.apollo_headerClient.fetch(query: getpayoutquery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getPaymentMethods?.results) != nil else{
+                    print("Missing Data")
+                    self.lottieView.isHidden = true
+                    self.lottieWholeView.isHidden = true
+                    self.view.makeToast(result.data?.getPaymentMethods?.errorMessage)
+                    return
+                }
+                
+                self.lottieView.isHidden = true
                 self.lottieWholeView.isHidden = true
-                self.view.makeToast(result?.data?.getPaymentMethods?.errorMessage)
-                return
+                self.getpaymentmethodsArray = ((result.data?.getPaymentMethods?.results)!) as! [GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]
+                getpaymentmethodsArrayFilter  =  getpaymentmethodsArray.filter { result in
+                    result.isEnable == true
+                }
+                
+                self.tableView.reloadData()
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            
-             self.lottieView.isHidden = true
-            self.lottieWholeView.isHidden = true
-            self.getpaymentmethodsArray = ((result?.data?.getPaymentMethods?.results)!) as! [GetPaymentMethodsQuery.Data.GetPaymentMethod.Result]
-            getpaymentmethodsArrayFilter  =  getpaymentmethodsArray.filter { result in
-                result.isEnable == true
-            }
-            
-            self.tableView.reloadData()
-            
         }
-        
     }
     
     
@@ -238,37 +232,36 @@ class PaymentSelectionPage: UIViewController {
         self.present(navigationController, animated: true)
     }
     
-    func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
-        let confirmpaymentmutation = ConfirmReservationMutation(reservationId: reservationId, paymentIntentId: paymentIntentId)
-        apollo_headerClient.perform(mutation: confirmpaymentmutation){(result,error) in
-            
-            if(result?.data?.confirmReservation?.status == 200)
-            {
+func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
+    let confirmpaymentmutation = ConfirmReservationMutation(reservationId: reservationId, paymentIntentId: paymentIntentId)
+    Network.shared.apollo_headerClient.perform(mutation: confirmpaymentmutation){ response in
+        switch response {
+        case .success(let result):
+            if let data = result.data?.confirmReservation?.status,data == 200 {
                 self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"paymentsuccess"))!)")
-                           if #available(iOS 11.0, *) {
-                               Utility.shared.PreApprovedID = false
-                               let itenaryPageObj = BookingItenaryVC()
-                               Utility.shared.isfromTripsPage = false
-                               itenaryPageObj.getbillingArray = self.getbillingArray
-                               itenaryPageObj.currencyvalue_from_API_base = self.currencyvalue_from_API_base
-                               itenaryPageObj.createReservationAPICall(reservationid:reservationId)
-                               self.lottieWholeView.isHidden = true
-                               self.lottieView.isHidden = true
-                               Utility.shared.guestc = ""
-                            itenaryPageObj.isFromReviewPage = false
-                               itenaryPageObj.modalPresentationStyle = .fullScreen
-                               self.present(itenaryPageObj, animated: true, completion: nil)
-                           } else {
-                               // Fallback on earlier versions
-                           }
-            }
-            else if(result?.data?.confirmReservation?.status == 400)
+                if #available(iOS 11.0, *) {
+                    Utility.shared.PreApprovedID = false
+                    let itenaryPageObj = BookingItenaryVC()
+                    Utility.shared.isfromTripsPage = false
+                    itenaryPageObj.getbillingArray = self.getbillingArray
+                    itenaryPageObj.currencyvalue_from_API_base = self.currencyvalue_from_API_base
+                    itenaryPageObj.createReservationAPICall(reservationid:reservationId)
+                    self.lottieWholeView.isHidden = true
+                    self.lottieView.isHidden = true
+                    Utility.shared.guestc = ""
+                    itenaryPageObj.isFromReviewPage = false
+                    itenaryPageObj.modalPresentationStyle = .fullScreen
+                    self.present(itenaryPageObj, animated: true, completion: nil)
+                } else {
+                    // Fallback on earlier versions
+                }
+            } else if(result.data?.confirmReservation?.status == 400)
             {
                 self.handlePayment(reservationId:reservationId, paymentIntentId: paymentIntentId)
-            }else if result?.data?.confirmReservation?.status == 500{
+            }else if result.data?.confirmReservation?.status == 500{
                 self.lottieWholeView.isHidden = true
                 self.lottieView.isHidden = true
-                let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result?.data?.confirmReservation?.errorMessage, preferredStyle: .alert)
+                let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.confirmReservation?.errorMessage, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
                     UserDefaults.standard.removeObject(forKey: "user_token")
                     UserDefaults.standard.removeObject(forKey: "user_id")
@@ -281,69 +274,70 @@ class PaymentSelectionPage: UIViewController {
                 self.present(alert, animated: true, completion: nil)
                 return
             }
+        case .failure(let error):
+            self.view.makeToast(error.localizedDescription)
         }
     }
+}
     
     func PaymentAPICall(cardtoken:String)
+    {
+        var currency_con = String()
+        if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
         {
-            var currency_con = String()
-            if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
-            {
-                currency_con = Utility.shared.getPreferredCurrency()!
-            }
-            else
-            {
-                currency_con = self.currencyvalue_from_API_base
-            }
-            var discountLabel = String()
-            if(getbillingArray.discountLabel == nil)
-            {
-              discountLabel = ""
-            }
-            else
-            {
-              discountLabel = getbillingArray.discountLabel!
-            }
+            currency_con = Utility.shared.getPreferredCurrency()!
+        }
+        else
+        {
+            currency_con = self.currencyvalue_from_API_base
+        }
+        var discountLabel = String()
+        if(getbillingArray?.discountLabel == nil)
+        {
+            discountLabel = ""
+        }
+        else
+        {
+            discountLabel = getbillingArray?.discountLabel! ?? ""
+        }
+        
+        
+        var bookedArrayType = String()
+        if Utility.shared.PreApprovedID{
             
+            bookedArrayType = "instant"
             
-            var bookedArrayType = String()
-            if Utility.shared.PreApprovedID{
+        }else{
+            
+            bookedArrayType = viewListingArray?.bookingType! ?? ""
+            
+        }
+        
+        let paymentMutation = CreateReservationMutation(listId: viewListingArray?.__data._data["id"] as? Int ?? 0, checkIn: getbillingArray?.checkIn! ?? "", checkOut: getbillingArray?.checkOut! ?? "", guests: Utility.shared.guestCountToBeSend, message: Utility.shared.booking_message, basePrice: getbillingArray?.averagePrice! ?? 0.0, cleaningPrice: getbillingArray?.cleaningPrice! ?? 0.0, currency: getbillingArray?.currency! ?? "", discount: .some(getbillingArray?.discount! ?? 0.0), discountType: .some(getbillingArray?.discountLabel ?? ""), guestServiceFee: .some(getbillingArray?.guestServiceFee! ?? 0.0), hostServiceFee: .some( getbillingArray?.hostServiceFee! ?? 0.0), total: getbillingArray?.total! ?? 0.0, bookingType: .some(bookedArrayType), cardToken: cardtoken, paymentType: .some(self.selectedPaymentType == 1 ? 2 : self.selectedPaymentType), convCurrency: currency_con, averagePrice: .some(getbillingArray?.averagePrice! ?? 0.0), nights: .some(getbillingArray?.nights! ?? 0), paymentCurrency: .some(self.selectedCurrency))
                 
-                bookedArrayType = "instant"
-                
-            }else{
-                
-                bookedArrayType = viewListingArray.bookingType!
-                
-            }
-            
-            
-            let paymentMutation = CreateReservationMutation(listId: viewListingArray.id!, checkIn: getbillingArray.checkIn!, checkOut: getbillingArray.checkOut!, guests: Utility.shared.guestCountToBeSend, message: Utility.shared.booking_message, basePrice: getbillingArray.averagePrice!, cleaningPrice: getbillingArray.cleaningPrice!, currency: getbillingArray.currency!, discount: getbillingArray.discount!,discountType:getbillingArray.discountLabel, guestServiceFee: getbillingArray.guestServiceFee!, hostServiceFee: getbillingArray.hostServiceFee!, total: getbillingArray.total!, bookingType: bookedArrayType, cardToken: cardtoken, paymentType: self.selectedPaymentType == 1 ? 2 : self.selectedPaymentType, convCurrency: currency_con,averagePrice:getbillingArray.averagePrice!, nights:getbillingArray.nights!, paymentCurrency: self.selectedCurrency)
-            
-            print(paymentMutation.variables);
-            
-            apollo_headerClient.perform(mutation: paymentMutation){ (result,error) in
-                if(result?.data?.createReservation?.status == 400)
-                {
+        Network.shared.apollo_headerClient.perform(mutation: paymentMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createReservation?.status,data == 400 {
                     self.lottieWholeView.isHidden = true
                     self.lottieView.isHidden = true
-                    if(result?.data?.createReservation?.reservationId != nil && result?.data?.createReservation?.paymentIntentSecret != nil)
+                    if(result.data?.createReservation?.reservationId != nil && result.data?.createReservation?.paymentIntentSecret != nil)
                     {
-                    self.handlePayment(reservationId: (result?.data?.createReservation?.reservationId!)!, paymentIntentId: (result?.data?.createReservation?.paymentIntentSecret!)!)
+                        self.handlePayment(reservationId: (result.data?.createReservation?.reservationId!)!, paymentIntentId: (result.data?.createReservation?.paymentIntentSecret!)!)
                     }
                     else{
-                        print("Response : \(String(describing: result?.data?.createReservation))")
+                        print("Response : \(String(describing: result.data?.createReservation))")
                         
                         
-                     self.view.makeToast(result?.data?.createReservation?.errorMessage!)
+                        self.view.makeToast(result.data?.createReservation?.errorMessage!)
                     }
                     print("Missing Data")
                     
                     return
-                }else if result?.data?.createReservation?.status == 500{
+                }else if result.data?.createReservation?.status == 500{
                     self.lottieWholeView.isHidden = true
                     self.lottieView.isHidden = true
-                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result?.data?.createReservation?.errorMessage, preferredStyle: .alert)
+                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.createReservation?.errorMessage, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
                         UserDefaults.standard.removeObject(forKey: "user_token")
                         UserDefaults.standard.removeObject(forKey: "user_id")
@@ -358,45 +352,44 @@ class PaymentSelectionPage: UIViewController {
                 }else{
                     Utility.shared.guestCountToBeSend = 1
                     if self.selectedPaymentType == 0 { //For PayPal
-                        if result?.data?.createReservation?.results?.paymentState == "pending"{
+                        if result.data?.createReservation?.results?.paymentState == "pending"{
                             let webviewObj = WebviewVC()
-                           
-                            self.reservID = result?.data?.createReservation?.results?.id ?? 0
+                            
+                            self.reservID = result.data?.createReservation?.results?.id ?? 0
                             webviewObj.isForPayPal = true
                             webviewObj.delegate = self
-                            webviewObj.webstring = result?.data?.createReservation?.redirectUrl ?? ""
+                            webviewObj.webstring = result.data?.createReservation?.redirectUrl ?? ""
                             webviewObj.pageTitle = ""
-                             webviewObj.modalPresentationStyle = .fullScreen
-                            webviewObj.webviewRedirection(webviewString:result?.data?.createReservation?.redirectUrl ?? "")
-                             self.present(webviewObj, animated: true, completion: nil)
+                            webviewObj.modalPresentationStyle = .fullScreen
+                            webviewObj.webviewRedirection(webviewString:result.data?.createReservation?.redirectUrl ?? "")
+                            self.present(webviewObj, animated: true, completion: nil)
                         }else{
                             
                         }
                     }else{
-                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"paymentsuccess"))!)")
-                if #available(iOS 11.0, *) {
-                    Utility.shared.PreApprovedID = false
-                    let itenaryPageObj = BookingItenaryVC()
-                    Utility.shared.isfromTripsPage = false
-                    itenaryPageObj.getbillingArray = self.getbillingArray
-                    itenaryPageObj.currencyvalue_from_API_base = self.currencyvalue_from_API_base
-                    itenaryPageObj.isFromReviewPage = false
-                    itenaryPageObj.createReservationAPICall(reservationid: (result?.data?.createReservation?.results?.id!)!)
-                    self.lottieWholeView.isHidden = true
-                    self.lottieView.isHidden = true
-                    itenaryPageObj.modalPresentationStyle = .fullScreen
-                    Utility.shared.guestc = ""
-                    self.present(itenaryPageObj, animated: true, completion: nil)
-                } else {
-                    // Fallback on earlier versions
-                }
+                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"paymentsuccess"))!)")
+                        if #available(iOS 11.0, *) {
+                            Utility.shared.PreApprovedID = false
+                            let itenaryPageObj = BookingItenaryVC()
+                            Utility.shared.isfromTripsPage = false
+                            itenaryPageObj.getbillingArray = self.getbillingArray
+                            itenaryPageObj.currencyvalue_from_API_base = self.currencyvalue_from_API_base
+                            itenaryPageObj.isFromReviewPage = false
+                            itenaryPageObj.createReservationAPICall(reservationid: (result.data?.createReservation?.results?.id!)!)
+                            self.lottieWholeView.isHidden = true
+                            self.lottieView.isHidden = true
+                            itenaryPageObj.modalPresentationStyle = .fullScreen
+                            Utility.shared.guestc = ""
+                            self.present(itenaryPageObj, animated: true, completion: nil)
+                        } else {
+                            // Fallback on earlier versions
+                        }
                     }
                 }
+            case .failure(_): break
             }
-            
-            
-            
         }
+    }
     
     @objc func dismissgenderPicker(text:Int) {
         view.endEditing(true)
@@ -579,62 +572,56 @@ extension PaymentSelectionPage: UITextFieldDelegate , WebviewVCDelegate{
     
     
     func ConfirmPayPal(paymentID: String, PayerID: String){
-        
-        
         let confirmPayPal = ConfirmPayPalExecuteMutation(paymentId: paymentID, payerId: PayerID)
         
-        apollo_headerClient.perform(mutation: confirmPayPal){(result,error) in
-            guard let result = result , error == nil else {
-                self.lottieView.isHidden = true
-                self.lottieWholeView.isHidden = true
-                self.view.makeToast(error?.localizedDescription)
-                return
-            }
-            
-            if result.data?.confirmPayPalExecute?.status == 200 {
-                if #available(iOS 11.0, *) {
-                    Utility.shared.PreApprovedID = false
-                    self.lottieView.isHidden = true
+        Network.shared.apollo_headerClient.perform(mutation: confirmPayPal){ response in
+            switch response {
+            case .success(let result):
+                if result.data?.confirmPayPalExecute?.status == 200 {
+                    if #available(iOS 11.0, *) {
+                        Utility.shared.PreApprovedID = false
+                        self.lottieView.isHidden = true
+                        self.lottieWholeView.isHidden = true
+                        let itenaryPageObj = BookingItenaryVC()
+                        Utility.shared.isfromTripsPage = false
+                        itenaryPageObj.getbillingArray = self.getbillingArray
+                        itenaryPageObj.currencyvalue_from_API_base = self.currencyvalue_from_API_base
+                        itenaryPageObj.isFromReviewPage = false
+                        itenaryPageObj.createReservationAPICall(reservationid: self.reservID)
+                        self.lottieWholeView.isHidden = true
+                        self.lottieView.isHidden = true
+                        Utility.shared.guestc = ""
+                        itenaryPageObj.modalPresentationStyle = .fullScreen
+                        self.present(itenaryPageObj, animated: true, completion: nil)
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                }else if result.data?.confirmPayPalExecute?.status == 500{
                     self.lottieWholeView.isHidden = true
-                    let itenaryPageObj = BookingItenaryVC()
-                    Utility.shared.isfromTripsPage = false
-                    itenaryPageObj.getbillingArray = self.getbillingArray
-                    itenaryPageObj.currencyvalue_from_API_base = self.currencyvalue_from_API_base
-                    itenaryPageObj.isFromReviewPage = false
-                    itenaryPageObj.createReservationAPICall(reservationid: self.reservID)
-                    self.lottieWholeView.isHidden = true
                     self.lottieView.isHidden = true
-                    Utility.shared.guestc = ""
-                    itenaryPageObj.modalPresentationStyle = .fullScreen
-                    self.present(itenaryPageObj, animated: true, completion: nil)
-                } else {
-                    // Fallback on earlier versions
+                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.confirmPayPalExecute?.errorMessage, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                        UserDefaults.standard.removeObject(forKey: "user_token")
+                        UserDefaults.standard.removeObject(forKey: "user_id")
+                        UserDefaults.standard.removeObject(forKey: "password")
+                        UserDefaults.standard.removeObject(forKey: "currency_rate")
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        let welcomeObj = WelcomePageVC()
+                        appDelegate.setInitialViewController(initialView: welcomeObj)
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                }else{
+                    self.view.makeToast(result.data?.confirmPayPalExecute?.errorMessage ?? "")
                 }
-            }else if result.data?.confirmPayPalExecute?.status == 500{
-                self.lottieWholeView.isHidden = true
+            case .failure(let error):
                 self.lottieView.isHidden = true
-                let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.confirmPayPalExecute?.errorMessage, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                    UserDefaults.standard.removeObject(forKey: "user_token")
-                    UserDefaults.standard.removeObject(forKey: "user_id")
-                    UserDefaults.standard.removeObject(forKey: "password")
-                    UserDefaults.standard.removeObject(forKey: "currency_rate")
-                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                    let welcomeObj = WelcomePageVC()
-                    appDelegate.setInitialViewController(initialView: welcomeObj)
-                }))
-                self.present(alert, animated: true, completion: nil)
-                return
-            }else{
-                self.view.makeToast(result.data?.confirmPayPalExecute?.errorMessage ?? "")
+                self.lottieWholeView.isHidden = true
+                self.view.makeToast(error.localizedDescription)
             }
-            
         }
-        
-        
-        
-            
     }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.inputPickerView.reloadAllComponents()
     }

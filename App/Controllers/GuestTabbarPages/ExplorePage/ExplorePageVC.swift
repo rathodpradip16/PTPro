@@ -21,103 +21,97 @@ import FlexiblePageControl
 import PTProAPI
 
 class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,AirbnbDatePickerDelegate,AirbnbOccupantFilterControllerDelegate,UIScrollViewDelegate,WhishlistPageVCProtocol, SkeletonCollectionViewDataSource, ListVCProtocol {
+    
     func UpdateWhishlistCall(listId: Int, status: Bool) {
         self.lottieAnimation()
         if(isFilterEnable)
         {
-        FilterArray.removeAll()
-        PageIndex = 1
+            FilterArray.removeAll()
+            PageIndex = 1
             collectionViewFilterPage?.prepareSkeleton(completion: { [self] done in
                 self.collectionViewFilterPage?.isSkeletonable = true
                 self.collectionViewFilterPage?.showAnimatedGradientSkeleton()
             })
             
-           
-        self.searchListingAPICall()
+            
+            self.searchListingAPICall()
         }
         else
         {
-            let whishlistQuery = GetAllWishListGroupQuery()
-            apollo_headerClient.fetch(query: whishlistQuery,cachePolicy:.fetchIgnoringCacheData){ [self] (result,error) in
-                guard (result?.data?.getAllWishListGroup?.results) != nil else{
-                  
-                  
-                    return
-                }
-                    self.whishlistarray = ((result?.data?.getAllWishListGroup?.results)!) as! [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
+            let whishlistQuery = GetAllWishListGroupQuery(currentPage: .none)
+            Network.shared.apollo_headerClient.fetch(query: whishlistQuery,cachePolicy:.fetchIgnoringCacheData){ [self]  response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getAllWishListGroup?.results) != nil else{
+                        return
+                    }
+                    self.whishlistarray = ((result.data?.getAllWishListGroup?.results)!) as! [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
                     if(self.whishlistarray.count>0)
                     {
                         if(mostListingArray.count > 0) {
-                        for index in 0...mostListingArray.count - 1 {
-                            if(mostListingArray[index].id == listId) {
-                                if(!mostListingArray[index].isListOwner!) {
-                                
-                                if(status != mostwishlist_Array[index] as! Bool) {
-                                    for wishindex in 0...whishlistarray.count - 1 {
-                                    if((whishlistarray[wishindex].wishListIds?.contains(listId))!)
-                                    {
-                                        mostwishlist_Array[index] = 1
-                                        break
+                            for index in 0...mostListingArray.count - 1 {
+                                if(mostListingArray[index].id == listId) {
+                                    if(!mostListingArray[index].isListOwner!) {
+                                        
+                                        if(status != mostwishlist_Array[index] as! Bool) {
+                                            for wishindex in 0...whishlistarray.count - 1 {
+                                                if((whishlistarray[wishindex].wishListIds?.contains(listId))!)
+                                                {
+                                                    mostwishlist_Array[index] = 1
+                                                    break
+                                                }
+                                                
+                                                else {
+                                                    mostwishlist_Array[index] = 0
+                                                }
+                                            }
+                                            let indexPath = IndexPath(row: index, section: 0)
+                                            self.mostViewedCOllectionView.reloadItems(at: [indexPath])
+                                        }
+                                        else {
+                                            
+                                        }
+                                        
                                     }
-                               
-                                else {
-                                    mostwishlist_Array[index] = 0
                                 }
-                                }
-                                    let indexPath = IndexPath(row: index, section: 0)
-                                    self.mostViewedCOllectionView.reloadItems(at: [indexPath])
-                                }
-                                else {
-
-                                }
-                                
                             }
-                            }
-                        }
                         }
                         
                         
                         if(recommendListingArray.count > 0) {
                             
-                        for index in 0...recommendListingArray.count - 1 {
-                            if(recommendListingArray[index].id == listId) {
-                                if(!recommendListingArray[index].isListOwner!) {
-                                for wishindex in 0...whishlistarray.count - 1 {
-                                if((whishlistarray[wishindex].wishListIds?.contains(listId))!)
-                                {
-                                    wishlistArray[index] = 1
-                                    break
+                            for index in 0...recommendListingArray.count - 1 {
+                                if(recommendListingArray[index].id == listId) {
+                                    if(!recommendListingArray[index].isListOwner!) {
+                                        for wishindex in 0...whishlistarray.count - 1 {
+                                            if((whishlistarray[wishindex].wishListIds?.contains(listId))!)
+                                            {
+                                                wishlistArray[index] = 1
+                                                break
+                                            }
+                                            
+                                            else {
+                                                wishlistArray[index] = 0
+                                            }
+                                        }
+                                        
+                                        let indexPath = IndexPath(row: index, section: 0)
+                                        self.recommendedCollectionView.reloadItems(at: [indexPath])
+                                        
+                                    }
                                 }
-                           
-                            else {
-                                wishlistArray[index] = 0
-                            }
+                                else {
+                                    
                                 }
-                                
-                                let indexPath = IndexPath(row: index, section: 0)
-                            self.recommendedCollectionView.reloadItems(at: [indexPath])
-
-                            }
-                            }
-                            else {
-
-                            }
                             }
                         }
-                        }
-                      
-                        
-                        
                     }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-         
-              
-            
-          
-            
-           
-            
-       // self.MostViewedListingAPICall()
+            }
+        }
+        // self.MostViewedListingAPICall()
         
         self.scrollToBottom()
     }
@@ -243,11 +237,11 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
     var FilterArray = [SearchListingQuery.Data.SearchListing.Result]()
     var recommendListingArray = [GetDefaultSettingQuery.Data.GetRecommend.Result]()
     var mostListingArray = [GetDefaultSettingQuery.Data.GetMostViewedListing.Result]()
-    var currencyvalue_from_API = GetDefaultSettingQuery.Data.Currency.Result()
+var currencyvalue_from_API : GetDefaultSettingQuery.Data.Currency.Result?
     var RoomsFilterArray = [GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]()
-    var getsearchPriceArray = GetDefaultSettingQuery.Data.GetSearchSetting.Result()
+var getsearchPriceArray : GetDefaultSettingQuery.Data.GetSearchSettings.Results?
     
-    var populardestinationArray = [GetPopularLocationsQuery.Data.GetPopularLocation.Result]()
+    var populardestinationArray = [GetPopularLocationsQuery.Data.GetPopularLocations.Result]()
     var currency_Dict = NSDictionary()
     var adultCount: Int = 1
     var childrenCount: Int = 0
@@ -310,50 +304,42 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
         // Do any additional setup after loading the view.
     }
     func profileAPICall()
-    {
-        if Utility().isConnectedToNetwork(){
+{
+    if Utility.shared.isConnectedToNetwork(){
         if(Utility.shared.getCurrentUserToken() != nil)
         {
-        let profileQuery = GetProfileQuery()
-            apollo_headerClient = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                
-                let url = URL(string:graphQLEndpoint)!
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
-        apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            
-            guard (result?.data?.userAccount?.result) != nil else
-            {
-                print("Missing Data")
-                Utility.shared.setUserToken(userID: "")
-                return
-            }
-            
-            
-            Utility.shared.ProfileAPIArray = ((result?.data?.userAccount?.result)!)
-            Utility.shared.userName  = "\(Utility.shared.ProfileAPIArray.firstName != nil ? Utility.shared.ProfileAPIArray.firstName! : "User")!"
-          
-            
-            if let profImage = Utility.shared.ProfileAPIArray.picture{
-                Utility.shared.pickedimageString = "\(IMAGE_AVATAR_MEDIUM)\(profImage)"
-            }
-            else {
-                Utility.shared.pickedimageString = "avatar"
-            }
-            
-            
-            Utility.shared.setEmail(email:(result?.data?.userAccount?.result?.email as AnyObject)as! NSString)
-         
-           
+            let profileQuery = GetProfileQuery()
+            Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.userAccount?.result) != nil else
+                    {
+                        print("Missing Data")
+                        Utility.shared.setUserToken(userID: "")
+                        return
+                    }
+                    
+                    
+                    Utility.shared.ProfileAPIArray = ((result.data?.userAccount?.result)!)
+                    Utility.shared.userName  = "\(Utility.shared.ProfileAPIArray?.firstName != nil ? Utility.shared.ProfileAPIArray?.firstName! : "User")!"
+                    
+                    
+                    if let profImage = Utility.shared.ProfileAPIArray?.picture{
+                        Utility.shared.pickedimageString = "\(IMAGE_AVATAR_MEDIUM)\(profImage)"
+                    }
+                    else {
+                        Utility.shared.pickedimageString = "avatar"
+                    }
+                    
+                    
+                    Utility.shared.setEmail(email:(result.data?.userAccount?.result?.email as AnyObject)as! NSString)
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
             }
         }
-            
-        }
-        }
+    }
+}
     
     func setUpdatedView(){
         
@@ -571,15 +557,6 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
     {
         if((Utility.shared.getCurrentUserToken()) != nil)
         {
-            apollo_headerClient = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                
-                let url = URL(string:graphQLEndpoint)!
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
         }
         else{
             apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
@@ -617,35 +594,39 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
     }
     
     
-    func checkForUpdate(){
-        
-        let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-        let appVersionUpdate = GetApplicationVersionInfoQuery(appType: "iosVersion", version: currentVersion)
-        
-        
-        apollo.fetch(query: appVersionUpdate){(result,error) in
-            
+func checkForUpdate(){
+    
+    let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+    let appVersionUpdate = GetApplicationVersionInfoQuery(appType: "iosVersion", version: currentVersion)
+    
+    
+    apollo.fetch(query: appVersionUpdate){ response in
+        switch response {
+        case .success(let result):
             if result != nil{
-                if (result?.data?.getApplicationVersionInfo?.status == 400){
+                if (result.data?.getApplicationVersionInfo?.status == 400){
                     
                     let deleteObj = ForceUpdateViewController()
-                    deleteObj.descriptionString = result?.data?.getApplicationVersionInfo?.errorMessage ?? ""
-                    deleteObj.appStoreURL = result?.data?.getApplicationVersionInfo?.result?.appStoreUrl ?? ""
+                    deleteObj.descriptionString = result.data?.getApplicationVersionInfo?.errorMessage ?? ""
+                    deleteObj.appStoreURL = result.data?.getApplicationVersionInfo?.result?.appStoreUrl ?? ""
                     deleteObj.modalPresentationStyle = .overFullScreen
                     self.present(deleteObj, animated: false, completion: nil)
                     
-//                    let alertController = UIAlertController(title: "RentALL", message: result?.data?.getApplicationVersionInfo?.errorMessage, preferredStyle: .alert)
-//                    alertController.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey:"Update") ?? "Update")", style: .default, handler: { action in
-//
-                        
-//
-//                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//                    appDelegate.window?.rootViewController?.present(alertController, animated: true, completion: nil)
+                    //                    let alertController = UIAlertController(title: "RentALL", message: result.data?.getApplicationVersionInfo?.errorMessage, preferredStyle: .alert)
+                    //                    alertController.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey:"Update") ?? "Update")", style: .default, handler: { action in
+                    //
+                    
+                    //
+                    //                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    //                    appDelegate.window?.rootViewController?.present(alertController, animated: true, completion: nil)
                 }
             }
-            
+        case .failure(let error):
+            self.view.makeToast(error.localizedDescription)
         }
+        
     }
+}
     
     @IBAction func onClickFilterBtn(_ sender: UIButton) {
         let morefilterObj = MoreFilterVC()
@@ -661,97 +642,93 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
         self.lottieAnimation()
         if(isFilterEnable)
         {
-        FilterArray.removeAll()
-        PageIndex = 1
+            FilterArray.removeAll()
+            PageIndex = 1
             collectionViewFilterPage?.prepareSkeleton(completion: { [self] done in
                 self.collectionViewFilterPage?.isSkeletonable = true
                 self.collectionViewFilterPage?.showAnimatedGradientSkeleton()
             })
-        self.searchListingAPICall()
+            self.searchListingAPICall()
         }
         else
         {
-            let whishlistQuery = GetAllWishListGroupQuery()
-            apollo_headerClient.fetch(query: whishlistQuery,cachePolicy:.fetchIgnoringCacheData){ [self] (result,error) in
-                guard (result?.data?.getAllWishListGroup?.results) != nil else{
-                  
-                  
-                    return
-                }
-                    self.whishlistarray = ((result?.data?.getAllWishListGroup?.results)!) as! [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
+            let whishlistQuery = GetAllWishListGroupQuery(currentPage: .none)
+            Network.shared.apollo_headerClient.fetch(query: whishlistQuery,cachePolicy:.fetchIgnoringCacheData){ [self]  response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getAllWishListGroup?.results) != nil else{
+                        
+                        
+                        return
+                    }
+                    self.whishlistarray = ((result.data?.getAllWishListGroup?.results)!) as! [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
                     if(self.whishlistarray.count>0)
                     {
                         if(mostListingArray.count > 0) {
-                        for index in 0...mostListingArray.count - 1 {
-                            if(mostListingArray[index].id == listId) {
-                                if(!mostListingArray[index].isListOwner!) {
-                                
-                                if(status != mostwishlist_Array[index] as! Bool) {
-                                    for wishindex in 0...whishlistarray.count - 1 {
-                                    if((whishlistarray[wishindex].wishListIds?.contains(listId))!)
-                                    {
-                                        mostwishlist_Array[index] = 1
-                                        break
+                            for index in 0...mostListingArray.count - 1 {
+                                if(mostListingArray[index].id == listId) {
+                                    if(!mostListingArray[index].isListOwner!) {
+                                        
+                                        if(status != mostwishlist_Array[index] as! Bool) {
+                                            for wishindex in 0...whishlistarray.count - 1 {
+                                                if((whishlistarray[wishindex].wishListIds?.contains(listId))!)
+                                                {
+                                                    mostwishlist_Array[index] = 1
+                                                    break
+                                                }
+                                                
+                                                else {
+                                                    mostwishlist_Array[index] = 0
+                                                }
+                                            }
+                                            let indexPath = IndexPath(row: index, section: 0)
+                                            self.mostViewedCOllectionView.reloadItems(at: [indexPath])
+                                        }
+                                        else {
+                                            
+                                        }
+                                        
                                     }
-                               
-                                else {
-                                    mostwishlist_Array[index] = 0
                                 }
-                                }
-                                    let indexPath = IndexPath(row: index, section: 0)
-                                    self.mostViewedCOllectionView.reloadItems(at: [indexPath])
-                                }
-                                else {
-
-                                }
-                                
                             }
-                            }
-                        }
                         }
                         
                         
                         if(recommendListingArray.count > 0) {
                             
-                        for index in 0...recommendListingArray.count - 1 {
-                            if(recommendListingArray[index].id == listId) {
-                                if(!recommendListingArray[index].isListOwner!) {
-                                for wishindex in 0...whishlistarray.count - 1 {
-                                if((whishlistarray[wishindex].wishListIds?.contains(listId))!)
-                                {
-                                    wishlistArray[index] = 1
-                                    break
+                            for index in 0...recommendListingArray.count - 1 {
+                                if(recommendListingArray[index].id == listId) {
+                                    if(!recommendListingArray[index].isListOwner!) {
+                                        for wishindex in 0...whishlistarray.count - 1 {
+                                            if((whishlistarray[wishindex].wishListIds?.contains(listId))!)
+                                            {
+                                                wishlistArray[index] = 1
+                                                break
+                                            }
+                                            
+                                            else {
+                                                wishlistArray[index] = 0
+                                            }
+                                        }
+                                        
+                                        let indexPath = IndexPath(row: index, section: 0)
+                                        self.recommendedCollectionView.reloadItems(at: [indexPath])
+                                        
+                                    }
                                 }
-                           
-                            else {
-                                wishlistArray[index] = 0
-                            }
+                                else {
+                                    
                                 }
-                                
-                                let indexPath = IndexPath(row: index, section: 0)
-                            self.recommendedCollectionView.reloadItems(at: [indexPath])
-
-                            }
-                            }
-                            else {
-
-                            }
                             }
                         }
-                        }
-                      
-                        
-                        
                     }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-         
-              
-            
-          
-            
-           
-            
-       // self.MostViewedListingAPICall()
+                
+            }
+        }
+        // self.MostViewedListingAPICall()
         
         self.scrollToBottom()
     }
@@ -1105,7 +1082,7 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
         
     }
     @IBAction func retyBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
             
             if guest_filter != 0 || Utility.shared.selectedEndDate_filter != "" || Utility.shared.selectedstartDate_filter != "" || isFilterEnable == true{
                 offlineView.isHidden = true
@@ -1138,6 +1115,7 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
     */
 
 }
+
 extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int{
@@ -1676,7 +1654,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
                 let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)
                 let from_currency = self.recommendListingArray[indexPath.row].listingData?.currency
                 let currency_amount = self.recommendListingArray[indexPath.row].listingData?.basePrice != nil ? self.recommendListingArray[indexPath.row].listingData?.basePrice : 0
-                let price_value = Utility.shared.getCurrencyRate(basecurrency:currencyvalue_from_API.base!, fromCurrency:from_currency!, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount!)
+                let price_value = Utility.shared.getCurrencyRate(basecurrency:currencyvalue_from_API?.base! ?? "", fromCurrency:from_currency!, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount!)
                 let restricted_price =  Double(String(format: "%.2f",price_value))
                 cell.listPriceLabel.text =  "\(currencysymbol!)\(restricted_price!.clean) / \(Utility.shared.getLanguage()?.value(forKey:"night") ?? "Night")"
                 
@@ -1721,10 +1699,10 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
             }
             else
             {
-                let currencysymbol = Utility.shared.getSymbol(forCurrencyCode:self.currencyvalue_from_API.base!)
+                let currencysymbol = Utility.shared.getSymbol(forCurrencyCode:self.currencyvalue_from_API?.base! ?? "")
                 let from_currency = self.recommendListingArray[indexPath.row].listingData?.currency
                 let currency_amount = self.recommendListingArray[indexPath.row].listingData?.basePrice != nil ? self.recommendListingArray[indexPath.row].listingData?.basePrice : 0
-                let price_value = Utility.shared.getCurrencyRate(basecurrency:currencyvalue_from_API.base!, fromCurrency:from_currency!, toCurrency:self.currencyvalue_from_API.base!, CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount!)
+                let price_value = Utility.shared.getCurrencyRate(basecurrency:currencyvalue_from_API?.base! ?? "", fromCurrency:from_currency!, toCurrency:self.currencyvalue_from_API?.base! ?? "", CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount!)
                 let restricted_price =  Double(String(format: "%.2f",price_value))
                 cell.listPriceLabel.text = "\(currencysymbol!)\(restricted_price!.clean) / \(Utility.shared.getLanguage()?.value(forKey:"night") ?? "Night")"
                 let attributes = [
@@ -1848,7 +1826,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
             }
             let from_currency = self.mostListingArray[indexPath.row].listingData?.currency
             let currency_amount = self.mostListingArray[indexPath.row].listingData?.basePrice != nil ? self.mostListingArray[indexPath.row].listingData?.basePrice : 0
-            let price_value = Utility.shared.getCurrencyRate(basecurrency:currencyvalue_from_API.base!, fromCurrency:from_currency!, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount!)
+            let price_value = Utility.shared.getCurrencyRate(basecurrency:currencyvalue_from_API?.base! ?? "", fromCurrency:from_currency!, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount!)
             let restricted_price =  Double(String(format: "%.2f",price_value))
             cell.listPriceLabel.text = "\(currencysymbol)\(restricted_price!.clean) / \(Utility.shared.getLanguage()?.value(forKey:"night") ?? "Night")"
             let attributes = [
@@ -1891,12 +1869,12 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
         }
         else
         {
-            let currencysymbol = Utility.shared.getSymbol(forCurrencyCode:self.currencyvalue_from_API.base!)
+            let currencysymbol = Utility.shared.getSymbol(forCurrencyCode:self.currencyvalue_from_API?.base! ?? "")
             
             
             let from_currency = self.mostListingArray[indexPath.row].listingData?.currency
             let currency_amount = self.mostListingArray[indexPath.row].listingData?.basePrice != nil ? self.mostListingArray[indexPath.row].listingData?.basePrice : 0
-            let price_value = Utility.shared.getCurrencyRate(basecurrency:currencyvalue_from_API.base!, fromCurrency:from_currency!, toCurrency:self.currencyvalue_from_API.base!, CurrencyRate: Utility.shared.currency_Dict, amount:currency_amount!)
+            let price_value = Utility.shared.getCurrencyRate(basecurrency:currencyvalue_from_API?.base! ?? "", fromCurrency:from_currency!, toCurrency:self.currencyvalue_from_API?.base! ?? "", CurrencyRate: Utility.shared.currency_Dict, amount:currency_amount!)
             let restricted_price =  Double(String(format: "%.2f",price_value))
             cell.listPriceLabel.text = "\(currencysymbol!)\(restricted_price!.clean) / \(Utility.shared.getLanguage()?.value(forKey:"night") ?? "Night")"
             let attributes = [
@@ -2275,7 +2253,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     @objc func likeBtnTapped(_ sender: UIButton!)
     {
 
- if Utility().isConnectedToNetwork(){
+ if Utility.shared.isConnectedToNetwork(){
         if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
         {
             let welcomeObj = WelcomePageVC()
@@ -2321,7 +2299,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     }
     @objc func most_likeBtnTapped(_ sender: UIButton!)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
         {
             let welcomeObj = WelcomePageVC()
@@ -2364,7 +2342,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     }
     @objc func filter_likeBtnTapped(_ sender: UIButton!)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
         {
             let welcomeObj = WelcomePageVC()
@@ -2469,67 +2447,68 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     
     func popularAPICall() {
         
-        if Utility().isConnectedToNetwork(){
-        let mostlistingquery = GetPopularLocationsQuery()
-//            self.scrollView.isHidden = true
-            apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){ [self](result,error) in
-                self.popularCollectionView.isSkeletonable = false
-            self.popularCollectionView.hideSkeleton()
-            //MostViewListing
-                guard let mostListingValue = result?.data?.getPopularLocations?.results else {
-                print("Missing data")
-                    self.popularListingTitle.text = ""
-                    self.popularListingTitle.isHidden = true
-                    self.popularCollectionView.isHidden = true
-                    self.popularListTitleTopConstraint.constant = 0
-                    self.popularCollectionTopConstraint.constant = 0
-                    self.popularCollectionHeightConstraint.constant = 0
-                return
-            }
-            
-           
-           
-            
-                self.populardestinationArray = (result?.data?.getPopularLocations?.results) as! [GetPopularLocationsQuery.Data.GetPopularLocation.Result]
-
-           
-                
-                if self.populardestinationArray.count > 0{
-                    self.popularListingTitle.text = "\(Utility.shared.getLanguage()?.value(forKey: "populardest") ?? "Popular Locations")"
-                    self.popularListingTitle.isHidden = false
-                    self.popularCollectionView.isHidden = false
-                    self.popularListTitleTopConstraint.constant = 20
-                    self.popularCollectionTopConstraint.constant = 15
-                    self.popularCollectionHeightConstraint.constant = 200
-                }else{
-                    self.popularListingTitle.text = ""
-                    self.popularListingTitle.isHidden = true
-                    self.popularCollectionView.isHidden = true
-                    self.popularListTitleTopConstraint.constant = 0
-                    self.popularCollectionTopConstraint.constant = 0
-                    self.popularCollectionHeightConstraint.constant = 0
-                }
-                
-                self.popularCollectionView.reloadData()
+        if Utility.shared.isConnectedToNetwork(){
+            let mostlistingquery = GetPopularLocationsQuery()
+            //            self.scrollView.isHidden = true
+            Network.shared.apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
                 self.popularCollectionView.isSkeletonable = false
                 self.popularCollectionView.hideSkeleton()
-                            //self.popularCollectionView.isSkeletonable = false
                 
-                self.popularCollectionView.performBatchUpdates(nil, completion: {
-                                    (result) in
-                                    if(Utility.shared.isRTLLanguage()){
-                                    if (self.populardestinationArray.count > 0){
-                                        self.popularCollectionView.scrollToItem(at:IndexPath(item:0, section: 0), at: .right, animated: true)
-                                    }
-                                    
-                                       
-                                    }
-                                    
-                                
-                                })
-            
-        
-    }
+                switch response {
+                case .success(let result):
+                    //MostViewListing
+                    guard let mostListingValue = result.data?.getPopularLocations?.results else {
+                        print("Missing data")
+                        self.popularListingTitle.text = ""
+                        self.popularListingTitle.isHidden = true
+                        self.popularCollectionView.isHidden = true
+                        self.popularListTitleTopConstraint.constant = 0
+                        self.popularCollectionTopConstraint.constant = 0
+                        self.popularCollectionHeightConstraint.constant = 0
+                        return
+                    }
+                                        
+                    self.populardestinationArray = (result.data?.getPopularLocations?.results) as! [GetPopularLocationsQuery.Data.GetPopularLocations.Result]
+                    
+                    
+                    
+                    if self.populardestinationArray.count > 0{
+                        self.popularListingTitle.text = "\(Utility.shared.getLanguage()?.value(forKey: "populardest") ?? "Popular Locations")"
+                        self.popularListingTitle.isHidden = false
+                        self.popularCollectionView.isHidden = false
+                        self.popularListTitleTopConstraint.constant = 20
+                        self.popularCollectionTopConstraint.constant = 15
+                        self.popularCollectionHeightConstraint.constant = 200
+                    }else{
+                        self.popularListingTitle.text = ""
+                        self.popularListingTitle.isHidden = true
+                        self.popularCollectionView.isHidden = true
+                        self.popularListTitleTopConstraint.constant = 0
+                        self.popularCollectionTopConstraint.constant = 0
+                        self.popularCollectionHeightConstraint.constant = 0
+                    }
+                    
+                    self.popularCollectionView.reloadData()
+                    self.popularCollectionView.isSkeletonable = false
+                    self.popularCollectionView.hideSkeleton()
+                    //self.popularCollectionView.isSkeletonable = false
+                    
+                    self.popularCollectionView.performBatchUpdates(nil, completion: {
+                        (result) in
+                        if(Utility.shared.isRTLLanguage()){
+                            if (self.populardestinationArray.count > 0){
+                                self.popularCollectionView.scrollToItem(at:IndexPath(item:0, section: 0), at: .right, animated: true)
+                            }
+                            
+                            
+                        }
+                        
+                        
+                    })
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
+            }
         }
         else {
             popularCollectionView?.prepareSkeleton(completion: { [self] done in
@@ -2548,305 +2527,309 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
         self.collectionViewFilterPage?.isSkeletonable = false
         self.collectionViewFilterPage?.hideSkeleton()
         
-        if Utility().isConnectedToNetwork(){
-         self.exploreTV.isHidden = true
+        if Utility.shared.isConnectedToNetwork(){
+            self.exploreTV.isHidden = true
             self.offlineView.isHidden = true
-//            self.becomeAHostView.isHidden = true
-//            self.becomeAHostTopConstraint.constant = 0
-//            self.becomeAHostHeightConstraint.constant = 0
+            //            self.becomeAHostView.isHidden = true
+            //            self.becomeAHostTopConstraint.constant = 0
+            //            self.becomeAHostHeightConstraint.constant = 0
             self.getImageBannerFromAdmin()
             Utility.shared.selectedstartDate = ""
             Utility.shared.selectedEndDate = ""
-        let mostlistingquery = GetDefaultSettingQuery()
-//            self.scrollView.isHidden = true
-            apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){ [self](result,error) in
-          //RecommendedListing
-            self.scrollView.isHidden = false
-            self.scrollView.contentOffset = CGPoint(x: 0, y: 0)
-            self.searchViewTopConstraint.constant = 20
-            self.exploreTitleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey: "Explore_Title") ?? "Explore the world! By Travelling")"
-            self.exploreTitleLabel.isHidden = false
-            guard let recommendeListingValue = result?.data?.getRecommend?.results else{
-                print("Missing Data")
-                if result?.data?.getRecommend?.status == 500{
-                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message:result?.data?.getMostViewedListing?.errorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                        UserDefaults.standard.removeObject(forKey: "user_token")
-                        UserDefaults.standard.removeObject(forKey: "user_id")
-                        UserDefaults.standard.removeObject(forKey: "password")
-                        UserDefaults.standard.removeObject(forKey: "currency_rate")
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        let welcomeObj = WelcomePageVC()
-                        appDelegate.setInitialViewController(initialView: welcomeObj)
-                    }))
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }
-                
-                return
-            }
-                self.searchBackBtn.backgroundColor =  UIColor(named: "viewBG")
-            self.searchBackBtn.setImage(#imageLiteral(resourceName: "Magnyfy_glass"), for: .normal)
-                self.locationLabel.textColor =  UIColor(named: "Title_Header")
-                headerView.backgroundColor = UIColor(named: "becomeAHostStep_Color")
-                self.newFilterBtn.layer.shadowOpacity = 0.3
-                self.searchView.layer.shadowOpacity = 0.2
-                
-//            self.lottieView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-//            self.lottieView.isHidden = true
-            self.isAnimationCompleted = true
-                self.popularCollectionView.isSkeletonable = false
-                self.recommendedCollectionView.isSkeletonable = false
-                self.mostViewedCOllectionView.isSkeletonable = false
-            self.popularCollectionView.hideSkeleton()
-            self.recommendedCollectionView.hideSkeleton()
-            self.mostViewedCOllectionView.hideSkeleton()
-            self.homeTitleArray.removeAllObjects()
-            self.homePriceArray.removeAllObjects()
-            self.homeImageArray.removeAllObjects()
-            self.bookingTypeArray.removeAllObjects()
-            self.reviewcount_Array.removeAllObjects()
-            self.reviewStart_ratingArray.removeAllObjects()
-            self.entirehomeArray.removeAllObjects()
-            self.wishlistArray.removeAllObjects()
-            self.recommendListingArray = ((result?.data?.getRecommend?.results)!) as! [GetDefaultSettingQuery.Data.GetRecommend.Result]
-            if self.recommendListingArray.count > 0{
-                self.recommendedTitle.text = "\(Utility.shared.getLanguage()?.value(forKey: "recommended") ?? "Recommended")"
-                self.recommendedTitle.isHidden = false
-                self.recommendedCollectionView.isHidden = false
-                self.recommendedCollectionHeightConstraint.constant = 300
-                
-                self.recommendedTotalPage  = (self.recommendListingArray.count - 1)
-                recommendedPageControl.pageIndicatorTintColor = UIColor(named: "Review_Page_Line_Color")!
-                recommendedPageControl.currentPageIndicatorTintColor = Theme.Button_BG
-                recommendedPageControl.numberOfPages = self.recommendedTotalPage
-                recommendedPageControl.setCurrentPage(at: 0)
-                let config = FlexiblePageControl.Config(
-                    displayCount: self.recommendedTotalPage,
-                    dotSize: 8,
-                    dotSpace: 4,
-                    smallDotSizeRatio: 0.5,
-                    mediumDotSizeRatio: 0.7
-                )
-
-                recommendedPageControl.setConfig(config)
-                self.recommendedCollectionView.reloadData()
-            }else{
-                self.recommendedTitle.text = ""
-                self.recommendedTitle.isHidden = true
-                self.recommendedCollectionView.isHidden = true
-                self.recommendedCollectionHeightConstraint.constant = 0
-            }
-            for i in recommendeListingValue {
-                self.homeTitleArray.add(i?.title as Any)
-                self.homeImageArray.add(i?.listPhotoName as Any)
-                self.homePriceArray.add(i?.listingData?.basePrice as Any)
-                self.reviewcount_Array.add(i?.reviewsCount as Any)
-                self.reviewStart_ratingArray.add(i?.reviewsStarRating as Any)
-                self.entirehomeArray.add(i?.roomType as Any)
-                self.wishlistArray.add(i?.wishListStatus as Any)
-                self.bookingTypeArray.add(i?.bookingType as Any)
-                
-            }
-            
-                
-                //Currencyvalueget
-                
-                guard (result?.data?.currency?.result) != nil else {
-                    print("Missing data")
-                    return
-                }
-                self.currencyvalue_from_API = (result?.data?.currency?.result)!
-                Utility.shared.currencyvalue_from_API_base = (result?.data?.currency?.result?.base)!
-                 let currency_value = result?.data?.currency?.result?.rates
-                self.currency_Dict = self.convertToDictionary(text: currency_value!)! as NSDictionary
-                Utility.shared.currency_Dict = self.convertToDictionary(text: currency_value!)! as NSDictionary
-            
-            //MostViewListing
-            guard let mostListingValue = result?.data?.getMostViewedListing?.results else {
-                print("Missing data")
-                
-                
-               
-                return
-            }
-            self.mosthomeImageArray.removeAllObjects()
-            self.mosthomeTitleArray.removeAllObjects()
-            self.mosthomePriceArray.removeAllObjects()
-            self.mostreviewcount_Array.removeAllObjects()
-            self.mostreviewStart_ratingArray.removeAllObjects()
-            self.most_entirehomeArray.removeAllObjects()
-            self.mostwishlist_Array.removeAllObjects()
-            self.mostbookingTypeArray.removeAllObjects()
-            
-            self.mostListingArray = ((result?.data?.getMostViewedListing?.results)!) as! [GetDefaultSettingQuery.Data.GetMostViewedListing.Result]
-                
-                
-                
-                for i in mostListingValue {
-                    self.mosthomeTitleArray.add(i?.title as Any)
-                    self.mosthomePriceArray.add(i?.listingData?.basePrice as Any)
-                    self.mosthomeImageArray.add(i?.listPhotoName as Any)
-                    self.mostreviewcount_Array.add(i?.reviewsCount as Any)
-                    self.mostreviewStart_ratingArray.add(i?.reviewsStarRating as Any)
-                    self.most_entirehomeArray.add(i?.roomType as Any)
-                    self.mostwishlist_Array.add(i?.wishListStatus as Any)
-                    self.mostbookingTypeArray.add(i?.bookingType as Any)
-                    
-                }
-                
-                
-            if self.mostListingArray.count > 0{
-                self.mostViewedTitle.text = "\(Utility.shared.getLanguage()?.value(forKey: "mostviewed") ?? "Most viewed")"
-                self.mostViewedTitle.isHidden = false
-                self.mostViewedCOllectionView.isHidden = false
-                self.mostViewedCOllectionHeightConstraint.constant = 200
-                self.mostViewedTitleTopConstraint.constant = 30
-                self.mostViewedCollectionTopConstraint.constant = 20
-                
-                
-                self.mostViewedTotalPage  = self.mostListingArray.count
-                mostViewedPageControl.inactiveTintColor = UIColor(named: "Review_Page_Line_Color")!
-                mostViewedPageControl.currentPageTintColor = Theme.Button_BG
-                self.mostViewedPageControl.radius = 4
-                self.mostViewedPageControl.padding = 6
-                mostViewedPageControl.numberOfPages = 0
-               
-                
-                mostViewedPageControl.currentPage = 0
-               
-                mostViewedCOllectionView.performBatchUpdates({
-                    
-                   
-                    
-                    self.mostViewedCOllectionView.reloadData()
-                    }
-                
-                , completion: {
-                    (result) in
-                    let height = self.mostViewedCOllectionView.collectionViewLayout.collectionViewContentSize.height
-                    self.mostViewedCOllectionHeightConstraint.constant = height
-                   self.view.setNeedsLayout()
-                    self.view.layoutIfNeeded()
-                })
-                
-                
-//                self.populardestinationArray = (self.mostListingArray[0].popularLocationListing) as! [GetDefaultSettingQuery.Data.GetMostViewedListing.Result.PopularLocationListing]
-////                self.popularCollectionView.hideSkeleton()
-////                self.popularCollectionView.isSkeletonable = false
-//                self.popularCollectionView.reloadData()
-                
-//                self.popularCollectionView.performBatchUpdates(nil, completion: {
-//                                    (result) in
-//                                    if(Utility.shared.isRTLLanguage()){
-//                                    if (self.populardestinationArray.count > 0){
-//                                        self.popularCollectionView.scrollToItem(at:IndexPath(item:0, section: 0), at: .right, animated: true)
-//                                    }
-//
-//                                        if (self.mostListingArray.count > 0){
-//                                        self.mostViewedCOllectionView.scrollToItem(at:IndexPath(item:0, section: 0), at: .right, animated: true)
-//                                    }
-//
-//                                    if (self.recommendListingArray.count > 0){
-//                                        self.recommendedCollectionView.scrollToItem(at:IndexPath(item:0, section: 0), at: .right, animated: true)
-//                                    }
-//                                    }
-//
-//
-//                                })
-                
-            }else{
-                self.mostViewedTitle.text = ""
-                self.mostViewedTitle.isHidden = true
-                self.mostViewedCOllectionView.isHidden = true
-                self.mostViewedTitleTopConstraint.constant = 0
-                self.mostViewedCollectionTopConstraint.constant = 0
-                self.mostViewedCOllectionHeightConstraint.constant = 0
-            }
-            
-            
-            
-            
-            
-            
-            guard (result?.data?.getListingSettingsCommon?.results) != nil else{
-                return
-            }
-            self.RoomsFilterArray = ((result?.data?.getListingSettingsCommon?.results)!) as! [GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]
-            if let endval = (self.RoomsFilterArray[1].listSettings?[0]?.endValue) {
-                 Utility.shared.maximum_guest_count = endval
-            }
-            if let startVal = (self.RoomsFilterArray[1].listSettings?[0]?.startValue) {
-                Utility.shared.min_filter_guest_count = startVal
-                
-               
-                Utility.shared.showbedRoomCount = false
-//                Utility.shared.filterCount = startVal
-            }
-                
-                if let startVal = (self.RoomsFilterArray[4].listSettings?[0]?.startValue) {
-                    Utility.shared.min_filter_bedroom_count = 0
-                    
-                  
-                    Utility.shared.showbedRoomCount = false
-    //                Utility.shared.filterCount = startVal
-                }
-                if let startVal = (self.RoomsFilterArray[5].listSettings?[0]?.startValue) {
-                    Utility.shared.min_filter_bed_count = 0
-                    
-                  
-                    Utility.shared.showbedCount = false
-    //                Utility.shared.filterCount = startVal
-                }
-                if let startVal = (self.RoomsFilterArray[7].listSettings?[0]?.startValue) {
-                    Utility.shared.min_filter_bath_count = 0
-                    
-                  
-                    Utility.shared.showbathCount = false
-    //                Utility.shared.filterCount = startVal
-                }
-                   
-                
-              
-                
-                
-            
-            self.getsearchPriceArray = ((result?.data?.getSearchSettings?.results)!)
-            
-            
-//            self.lottieView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-//            self.lottieView.isHidden = true
-            self.isAnimationCompleted = true
-            self.popularCollectionView.hideSkeleton()
-                self.popularCollectionView.isSkeletonable = false
-            if((result?.data?.getRecommend?.results?.count == 0) && (result?.data?.getMostViewedListing?.results?.count == 0)) {
-                self.exploreTV.isHidden = true
-                self.NoresultView.isHidden = false
-                self.scrollView.isHidden = true
-                
-                self.NoViewNoresult.isHidden = true
-                self.noViewFirstText.isHidden = true
-                self.noViewSecondText.isHidden = true
-                self.NoViewthirdText.isHidden = true
-                self.NoListingFoundImage.isHidden = false
-                self.NoListingFoundTitle.isHidden = false
-                self.floatingMapView.isHidden = true
-                self.NoresultView.frame = CGRect(x: 0, y: self.headerView.frame.size.height+self.headerView.frame.origin.y+25, width: FULLWIDTH, height:FULLHEIGHT-110)
-            }
-            else
-            {
-                self.exploreTV.isHidden = true
-                self.NoresultView.isHidden = true
+            let mostlistingquery = GetDefaultSettingQuery()
+            //            self.scrollView.isHidden = true
+            Network.shared.apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
                 self.scrollView.isHidden = false
+                self.scrollView.contentOffset = CGPoint(x: 0, y: 0)
+                self.searchViewTopConstraint.constant = 20
+                self.exploreTitleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey: "Explore_Title") ?? "Explore the world! By Travelling")"
+                self.exploreTitleLabel.isHidden = false
+                switch response {
+                case .success(let result):
+                    guard let recommendeListingValue = result.data?.getRecommend?.results else{
+                        print("Missing Data")
+                        if result.data?.getRecommend?.status == 500{
+                            let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message:result.data?.getMostViewedListing?.errorMessage, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                                UserDefaults.standard.removeObject(forKey: "user_token")
+                                UserDefaults.standard.removeObject(forKey: "user_id")
+                                UserDefaults.standard.removeObject(forKey: "password")
+                                UserDefaults.standard.removeObject(forKey: "currency_rate")
+                                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                let welcomeObj = WelcomePageVC()
+                                appDelegate.setInitialViewController(initialView: welcomeObj)
+                            }))
+                            self.present(alert, animated: true, completion: nil)
+                            return
+                        }
+                        
+                        return
+                    }
+                    self.searchBackBtn.backgroundColor =  UIColor(named: "viewBG")
+                    self.searchBackBtn.setImage(#imageLiteral(resourceName: "Magnyfy_glass"), for: .normal)
+                    self.locationLabel.textColor =  UIColor(named: "Title_Header")
+                    headerView.backgroundColor = UIColor(named: "becomeAHostStep_Color")
+                    self.newFilterBtn.layer.shadowOpacity = 0.3
+                    self.searchView.layer.shadowOpacity = 0.2
+                    
+                    //            self.lottieView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+                    //            self.lottieView.isHidden = true
+                    self.isAnimationCompleted = true
+                    self.popularCollectionView.isSkeletonable = false
+                    self.recommendedCollectionView.isSkeletonable = false
+                    self.mostViewedCOllectionView.isSkeletonable = false
+                    self.popularCollectionView.hideSkeleton()
+                    self.recommendedCollectionView.hideSkeleton()
+                    self.mostViewedCOllectionView.hideSkeleton()
+                    self.homeTitleArray.removeAllObjects()
+                    self.homePriceArray.removeAllObjects()
+                    self.homeImageArray.removeAllObjects()
+                    self.bookingTypeArray.removeAllObjects()
+                    self.reviewcount_Array.removeAllObjects()
+                    self.reviewStart_ratingArray.removeAllObjects()
+                    self.entirehomeArray.removeAllObjects()
+                    self.wishlistArray.removeAllObjects()
+                    self.recommendListingArray = ((result.data?.getRecommend?.results)!) as! [GetDefaultSettingQuery.Data.GetRecommend.Result]
+                    if self.recommendListingArray.count > 0{
+                        self.recommendedTitle.text = "\(Utility.shared.getLanguage()?.value(forKey: "recommended") ?? "Recommended")"
+                        self.recommendedTitle.isHidden = false
+                        self.recommendedCollectionView.isHidden = false
+                        self.recommendedCollectionHeightConstraint.constant = 300
+                        
+                        self.recommendedTotalPage  = (self.recommendListingArray.count - 1)
+                        recommendedPageControl.pageIndicatorTintColor = UIColor(named: "Review_Page_Line_Color")!
+                        recommendedPageControl.currentPageIndicatorTintColor = Theme.Button_BG
+                        recommendedPageControl.numberOfPages = self.recommendedTotalPage
+                        recommendedPageControl.setCurrentPage(at: 0)
+                        let config = FlexiblePageControl.Config(
+                            displayCount: self.recommendedTotalPage,
+                            dotSize: 8,
+                            dotSpace: 4,
+                            smallDotSizeRatio: 0.5,
+                            mediumDotSizeRatio: 0.7
+                        )
+                        
+                        recommendedPageControl.setConfig(config)
+                        self.recommendedCollectionView.reloadData()
+                    }else{
+                        self.recommendedTitle.text = ""
+                        self.recommendedTitle.isHidden = true
+                        self.recommendedCollectionView.isHidden = true
+                        self.recommendedCollectionHeightConstraint.constant = 0
+                    }
+                    for i in recommendeListingValue {
+                        self.homeTitleArray.add(i?.title as Any)
+                        self.homeImageArray.add(i?.listPhotoName as Any)
+                        self.homePriceArray.add(i?.listingData?.basePrice as Any)
+                        self.reviewcount_Array.add(i?.reviewsCount as Any)
+                        self.reviewStart_ratingArray.add(i?.reviewsStarRating as Any)
+                        self.entirehomeArray.add(i?.roomType as Any)
+                        self.wishlistArray.add(i?.wishListStatus as Any)
+                        self.bookingTypeArray.add(i?.bookingType as Any)
+                        
+                    }
+                    
+                    
+                    //Currencyvalueget
+                    
+                    guard (result.data?.currency?.result) != nil else {
+                        print("Missing data")
+                        return
+                    }
+                    self.currencyvalue_from_API = (result.data?.currency?.result)!
+                    Utility.shared.currencyvalue_from_API_base = (result.data?.currency?.result?.base)!
+                    let currency_value = result.data?.currency?.result?.rates
+                    self.currency_Dict = self.convertToDictionary(text: currency_value!)! as NSDictionary
+                    Utility.shared.currency_Dict = self.convertToDictionary(text: currency_value!)! as NSDictionary
+                    
+                    //MostViewListing
+                    guard let mostListingValue = result.data?.getMostViewedListing?.results else {
+                        print("Missing data")
+                        
+                        
+                        
+                        return
+                    }
+                    self.mosthomeImageArray.removeAllObjects()
+                    self.mosthomeTitleArray.removeAllObjects()
+                    self.mosthomePriceArray.removeAllObjects()
+                    self.mostreviewcount_Array.removeAllObjects()
+                    self.mostreviewStart_ratingArray.removeAllObjects()
+                    self.most_entirehomeArray.removeAllObjects()
+                    self.mostwishlist_Array.removeAllObjects()
+                    self.mostbookingTypeArray.removeAllObjects()
+                    
+                    self.mostListingArray = ((result.data?.getMostViewedListing?.results)!) as! [GetDefaultSettingQuery.Data.GetMostViewedListing.Result]
+                    
+                    
+                    
+                    for i in mostListingValue {
+                        self.mosthomeTitleArray.add(i?.title as Any)
+                        self.mosthomePriceArray.add(i?.listingData?.basePrice as Any)
+                        self.mosthomeImageArray.add(i?.listPhotoName as Any)
+                        self.mostreviewcount_Array.add(i?.reviewsCount as Any)
+                        self.mostreviewStart_ratingArray.add(i?.reviewsStarRating as Any)
+                        self.most_entirehomeArray.add(i?.roomType as Any)
+                        self.mostwishlist_Array.add(i?.wishListStatus as Any)
+                        self.mostbookingTypeArray.add(i?.bookingType as Any)
+                        
+                    }
+                    
+                    
+                    if self.mostListingArray.count > 0{
+                        self.mostViewedTitle.text = "\(Utility.shared.getLanguage()?.value(forKey: "mostviewed") ?? "Most viewed")"
+                        self.mostViewedTitle.isHidden = false
+                        self.mostViewedCOllectionView.isHidden = false
+                        self.mostViewedCOllectionHeightConstraint.constant = 200
+                        self.mostViewedTitleTopConstraint.constant = 30
+                        self.mostViewedCollectionTopConstraint.constant = 20
+                        
+                        
+                        self.mostViewedTotalPage  = self.mostListingArray.count
+                        mostViewedPageControl.inactiveTintColor = UIColor(named: "Review_Page_Line_Color")!
+                        mostViewedPageControl.currentPageTintColor = Theme.Button_BG
+                        self.mostViewedPageControl.radius = 4
+                        self.mostViewedPageControl.padding = 6
+                        mostViewedPageControl.numberOfPages = 0
+                        
+                        
+                        mostViewedPageControl.currentPage = 0
+                        
+                        mostViewedCOllectionView.performBatchUpdates({
+                            
+                            
+                            
+                            self.mostViewedCOllectionView.reloadData()
+                        }
+                                                                     
+                                                                     , completion: {
+                            (result) in
+                            let height = self.mostViewedCOllectionView.collectionViewLayout.collectionViewContentSize.height
+                            self.mostViewedCOllectionHeightConstraint.constant = height
+                            self.view.setNeedsLayout()
+                            self.view.layoutIfNeeded()
+                        })
+                        
+                        
+                        //                self.populardestinationArray = (self.mostListingArray[0].popularLocationListing) as! [GetDefaultSettingQuery.Data.GetMostViewedListing.Result.PopularLocationListing]
+                        ////                self.popularCollectionView.hideSkeleton()
+                        ////                self.popularCollectionView.isSkeletonable = false
+                        //                self.popularCollectionView.reloadData()
+                        
+                        //                self.popularCollectionView.performBatchUpdates(nil, completion: {
+                        //                                    (result) in
+                        //                                    if(Utility.shared.isRTLLanguage()){
+                        //                                    if (self.populardestinationArray.count > 0){
+                        //                                        self.popularCollectionView.scrollToItem(at:IndexPath(item:0, section: 0), at: .right, animated: true)
+                        //                                    }
+                        //
+                        //                                        if (self.mostListingArray.count > 0){
+                        //                                        self.mostViewedCOllectionView.scrollToItem(at:IndexPath(item:0, section: 0), at: .right, animated: true)
+                        //                                    }
+                        //
+                        //                                    if (self.recommendListingArray.count > 0){
+                        //                                        self.recommendedCollectionView.scrollToItem(at:IndexPath(item:0, section: 0), at: .right, animated: true)
+                        //                                    }
+                        //                                    }
+                        //
+                        //
+                        //                                })
+                        
+                    }else{
+                        self.mostViewedTitle.text = ""
+                        self.mostViewedTitle.isHidden = true
+                        self.mostViewedCOllectionView.isHidden = true
+                        self.mostViewedTitleTopConstraint.constant = 0
+                        self.mostViewedCollectionTopConstraint.constant = 0
+                        self.mostViewedCOllectionHeightConstraint.constant = 0
+                    }
+                    
+                    
+                    
+                    
+                    
+                    
+                    guard (result.data?.getListingSettingsCommon?.results) != nil else{
+                        return
+                    }
+                    self.RoomsFilterArray = ((result.data?.getListingSettingsCommon?.results)!) as! [GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]
+                    if let endval = (self.RoomsFilterArray[1].listSettings?[0]?.endValue) {
+                        Utility.shared.maximum_guest_count = endval
+                    }
+                    if let startVal = (self.RoomsFilterArray[1].listSettings?[0]?.startValue) {
+                        Utility.shared.min_filter_guest_count = startVal
+                        
+                        
+                        Utility.shared.showbedRoomCount = false
+                        //                Utility.shared.filterCount = startVal
+                    }
+                    
+                    if let startVal = (self.RoomsFilterArray[4].listSettings?[0]?.startValue) {
+                        Utility.shared.min_filter_bedroom_count = 0
+                        
+                        
+                        Utility.shared.showbedRoomCount = false
+                        //                Utility.shared.filterCount = startVal
+                    }
+                    if let startVal = (self.RoomsFilterArray[5].listSettings?[0]?.startValue) {
+                        Utility.shared.min_filter_bed_count = 0
+                        
+                        
+                        Utility.shared.showbedCount = false
+                        //                Utility.shared.filterCount = startVal
+                    }
+                    if let startVal = (self.RoomsFilterArray[7].listSettings?[0]?.startValue) {
+                        Utility.shared.min_filter_bath_count = 0
+                        
+                        
+                        Utility.shared.showbathCount = false
+                        //                Utility.shared.filterCount = startVal
+                    }
+                    
+                    
+                    
+                    
+                    
+                    
+                    self.getsearchPriceArray = ((result.data?.getSearchSettings?.results)!)
+                    
+                    
+                    //            self.lottieView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+                    //            self.lottieView.isHidden = true
+                    self.isAnimationCompleted = true
+                    self.popularCollectionView.hideSkeleton()
+                    self.popularCollectionView.isSkeletonable = false
+                    if((result.data?.getRecommend?.results?.count == 0) && (result.data?.getMostViewedListing?.results?.count == 0)) {
+                        self.exploreTV.isHidden = true
+                        self.NoresultView.isHidden = false
+                        self.scrollView.isHidden = true
+                        
+                        self.NoViewNoresult.isHidden = true
+                        self.noViewFirstText.isHidden = true
+                        self.noViewSecondText.isHidden = true
+                        self.NoViewthirdText.isHidden = true
+                        self.NoListingFoundImage.isHidden = false
+                        self.NoListingFoundTitle.isHidden = false
+                        self.floatingMapView.isHidden = true
+                        self.NoresultView.frame = CGRect(x: 0, y: self.headerView.frame.size.height+self.headerView.frame.origin.y+25, width: FULLWIDTH, height:FULLHEIGHT-110)
+                    }
+                    else
+                    {
+                        self.exploreTV.isHidden = true
+                        self.NoresultView.isHidden = true
+                        self.scrollView.isHidden = false
+                    }
+                    self.floatingMapView.isHidden = true
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
             }
-            self.floatingMapView.isHidden = true
-        }
         }
         
         else{
             self.exploreTV.isHidden = true
-//            self.lottieView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-//            self.lottieView.isHidden = true
+            //            self.lottieView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+            //            self.lottieView.isHidden = true
             self.popularCollectionView.showAnimatedSkeleton()
             self.recommendedCollectionView.showAnimatedSkeleton()
             self.mostViewedCOllectionView.showAnimatedSkeleton()
@@ -2882,47 +2865,50 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     
     func getImageBannerFromAdmin(){
         let getImageBanner = GetImageBannerQuery()
-        apollo_headerClient.fetch(query: getImageBanner,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            if let response = result{
+        Network.shared.apollo_headerClient.fetch(query: getImageBanner,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getImageBanner?.result) != nil else {
+                    self.becomeAHostView.isHidden = true
+                    self.becomeAHostTopConstraint.constant = 0
+                    self.becomeAHostHeightConstraint.constant = 0
+                    return
+                }
                 self.becomeAHostView.isHidden = false
                 self.becomeAHostTopConstraint.constant = 20
                 self.becomeAHostHeightConstraint.constant = 285
                 self.becomeAHostView.isSkeletonable = false
                 self.becomeAHostView.hideSkeleton()
-//                self.hostTitleLabel.text = "\(response.data?.getImageBanner?.result?.title ?? "") \(response.data?.getImageBanner?.result?.description ?? "")"
-                
-                
+                //                self.hostTitleLabel.text = "\(response.data?.getImageBanner?.result?.title ?? "") \(response.data?.getImageBanner?.result?.description ?? "")"
                 
                 let attributes = [
                     NSAttributedString.Key.font: UIFont(name: APP_FONT_SEMIBOLD, size: 24.0),
                     NSAttributedString.Key.foregroundColor: Theme.Button_BG
                 ]
-                let attributedString = NSMutableAttributedString(string: "\(response.data?.getImageBanner?.result?.title ?? "") "  , attributes: attributes as [NSAttributedString.Key : Any])
+                let attributedString = NSMutableAttributedString(string: "\(result.data?.getImageBanner?.result?.title ?? "") "  , attributes: attributes as [NSAttributedString.Key : Any])
                 let attributes2 = [
                     NSAttributedString.Key.font: UIFont(name: APP_FONT_SEMIBOLD, size: 24.0),
                     NSAttributedString.Key.foregroundColor: UIColor.white
                 ]
-                let attributedString2 = NSMutableAttributedString(string: "\(response.data?.getImageBanner?.result?.description ?? "")", attributes: attributes2 as [NSAttributedString.Key : Any])
+                let attributedString2 = NSMutableAttributedString(string: "\(result.data?.getImageBanner?.result?.description ?? "")", attributes: attributes2 as [NSAttributedString.Key : Any])
                 
                 attributedString.append(attributedString2)
                 
                 self.hostTitleLabel.attributedText = attributedString
                 
                 
-                self.hostBtn.setTitle(response.data?.getImageBanner?.result?.buttonLabel ?? "Host", for: .normal)
-                if let imageBanner = response.data?.getImageBanner?.result?.image{
+                self.hostBtn.setTitle(result.data?.getImageBanner?.result?.buttonLabel ?? "Host", for: .normal)
+                if let imageBanner = result.data?.getImageBanner?.result?.image{
                     self.hostSamepleImageView.sd_setImage(with: URL(string: "\(Banner_URL)\(imageBanner)"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
                 }
                 if Utility.shared.isRTLLanguage(){
                     self.hostTransparentImageView.performRTLTransform()
                 }
-            }else{
-                self.becomeAHostView.isHidden = true
-                self.becomeAHostTopConstraint.constant = 0
-                self.becomeAHostHeightConstraint.constant = 0
+            case .failure(_): break
             }
         }
     }
+
     func convertToDictionary(text: String) -> [String: Any]? {
         if let data = text.data(using: .utf8) {
             do {
@@ -2935,226 +2921,226 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     }
     
     func searchListingAPICall()
-    {
-         if Utility().isConnectedToNetwork(){
-//            self.lottieAnimation()
-         self.exploreTV.isHidden = true
-         self.offlineView.isHidden = true
-         self.NoresultView.isHidden = true
-            
-            var searchListingquery = SearchListingQuery()
-            
-            var lat = Double()
-            var lon = Double()
-            var bookingtype = String()
-            
-            if((Utility.shared.searchLocationDict.value(forKey: "lat") != nil) && (Utility.shared.searchLocationDict.value(forKey: "lon") != nil))
-            {
-                lat  = Utility.shared.searchLocationDict.value(forKey: "lat") as! Double
-                lon  = Utility.shared.searchLocationDict.value(forKey: "lon") as! Double
-            }
-            else{
-                lat = 0.0
-                lon = 0.0
-            }
-             if(Utility.shared.filterCount != 0)
-             {
-                 guest_filter = Utility.shared.filterCount
-             }
-            
-            if(Utility.shared.amenitiesArray.count == 0)
-            {
-                Utility.shared.amenitiesArray = []
-            }
-            if(Utility.shared.roomtypeArray.count == 0)
-            {
-                Utility.shared.roomtypeArray = []
-            }
-            if(Utility.shared.facilitiesArray.count == 0)
-            {
-                Utility.shared.facilitiesArray = []
-            }
-            if(Utility.shared.houseRulesArray.count == 0)
-            {
-                Utility.shared.houseRulesArray = []
-            }
-            if(Utility.shared.roomtypeArray.count == 0)
-            {
-                Utility.shared.roomtypeArray = []
-            }
-            if(Utility.shared.priceRangeArray.count == 0)
-            {
-                Utility.shared.priceRangeArray = []
-            }
-            if(Utility.shared.locationfromSearch == nil)
-            {
-                Utility.shared.locationfromSearch = ""
-            }
-            if(Utility.shared.isSwitchEnable == true)
-            {
-               bookingtype = "instant"
-            }
-            var currency = String()
-            if(Utility.shared.getPreferredCurrency() == nil)
-            {
-                currency = Utility.shared.currencyvalue_from_API_base
-            }
-            else{
-                currency = Utility.shared.getPreferredCurrency()!
-            }
-            
-            self.collectionViewFilterPage.isHidden = PageIndex == 1 ? false : false
-            searchListingquery = SearchListingQuery(personCapacity: guest_filter, currentPage: PageIndex, dates: "'\( Utility.shared.selectedstartDate_filter)' AND '\(Utility.shared.selectedEndDate_filter)'", lat: 0, lng: 0, amenities: Utility.shared.amenitiesArray as? [Int], beds: Utility.shared.beds_count as Int, bedrooms: Utility.shared.bedrooms_count as Int, bathrooms:Utility.shared.bathroom_count as Int, roomType: Utility.shared.roomtypeArray as? [Int], spaces:(Utility.shared.facilitiesArray as! [Int]), houseRules:(Utility.shared.houseRulesArray as! [Int]), priceRange:Utility.shared.priceRangeArray as! [Int],bookingType: bookingtype, address:Utility.shared.locationfromSearch!,currency:currency)
-             self.scrollView.isHidden = true
-        apollo_headerClient.fetch(query: searchListingquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            
+{
+    if Utility.shared.isConnectedToNetwork(){
+        //            self.lottieAnimation()
+        self.exploreTV.isHidden = true
+        self.offlineView.isHidden = true
+        self.NoresultView.isHidden = true
+                
+        var lat = Double()
+        var lon = Double()
+        var bookingtype = String()
+        
+        if((Utility.shared.searchLocationDict.value(forKey: "lat") != nil) && (Utility.shared.searchLocationDict.value(forKey: "lon") != nil))
+        {
+            lat  = Utility.shared.searchLocationDict.value(forKey: "lat") as! Double
+            lon  = Utility.shared.searchLocationDict.value(forKey: "lon") as! Double
+        }
+        else{
+            lat = 0.0
+            lon = 0.0
+        }
+        if(Utility.shared.filterCount != 0)
+        {
+            guest_filter = Utility.shared.filterCount
+        }
+        
+        if(Utility.shared.amenitiesArray.count == 0)
+        {
+            Utility.shared.amenitiesArray = []
+        }
+        if(Utility.shared.roomtypeArray.count == 0)
+        {
+            Utility.shared.roomtypeArray = []
+        }
+        if(Utility.shared.facilitiesArray.count == 0)
+        {
+            Utility.shared.facilitiesArray = []
+        }
+        if(Utility.shared.houseRulesArray.count == 0)
+        {
+            Utility.shared.houseRulesArray = []
+        }
+        if(Utility.shared.roomtypeArray.count == 0)
+        {
+            Utility.shared.roomtypeArray = []
+        }
+        if(Utility.shared.priceRangeArray.count == 0)
+        {
+            Utility.shared.priceRangeArray = []
+        }
+        if(Utility.shared.locationfromSearch == nil)
+        {
+            Utility.shared.locationfromSearch = ""
+        }
+        if(Utility.shared.isSwitchEnable == true)
+        {
+            bookingtype = "instant"
+        }
+        var currency = String()
+        if(Utility.shared.getPreferredCurrency() == nil)
+        {
+            currency = Utility.shared.currencyvalue_from_API_base
+        }
+        else{
+            currency = Utility.shared.getPreferredCurrency()!
+        }
+        
+        self.collectionViewFilterPage.isHidden = PageIndex == 1 ? false : false
+        var searchListingquery = SearchListingQuery(personCapacity: .some(guest_filter), currentPage: .some(PageIndex), dates:  .some("'\( Utility.shared.selectedstartDate_filter)' AND '\(Utility.shared.selectedEndDate_filter)'"), lat: 0, lng: 0, amenities: .some(Utility.shared.amenitiesArray as! [Int]), beds: .some(Utility.shared.beds_count as Int), bedrooms:.some(Utility.shared.bedrooms_count as Int), bathrooms:.some(Utility.shared.bathroom_count as Int), roomType: .some((Utility.shared.roomtypeArray as? [Int] ?? [])), spaces:.some(Utility.shared.facilitiesArray as! [Int]), houseRules: .some(Utility.shared.houseRulesArray as! [Int]), priceRange: .some(Utility.shared.priceRangeArray as! [Int]), geoType: .none, geography:.none , bookingType: .some(bookingtype), address: .some(Utility.shared.locationfromSearch),currency: .some(currency))
+        self.scrollView.isHidden = true
+        Network.shared.apollo_headerClient.fetch(query: searchListingquery,cachePolicy:.fetchIgnoringCacheData){ response in
             self.scrollView.isHidden = false
             self.searchViewTopConstraint.constant = 0
             self.exploreTitleLabel.text = ""
             self.exploreTitleLabel.isHidden = true
-          guard let searchListingValues = result?.data?.searchListing?.results else{
-                print("Missing Data")
-              
-              self.collectionViewFilterPage.hideSkeleton()
-              self.collectionViewFilterPage?.isSkeletonable = false
-          
-              self.isFilterEnable = true
-              self.searchBackBtn.backgroundColor =  UIColor(named: "viewBG")
-              self.searchBackBtn.setImage(#imageLiteral(resourceName: "back_black"), for: .normal)
-             
-              self.locationLabel.textColor = UIColor(named: "Title_Header")
-              self.headerView.backgroundColor =  UIColor(named: "becomeAHostStep_Color")
-          self.exploreTV.isHidden = true
-              self.collectionViewFilterPage.isHidden = true
-          self.NoresultView.isHidden = false
-              self.scrollView.isHidden = true
-              self.NoViewNoresult.isHidden = false
-              self.noViewFirstText.isHidden = false
-              self.noViewSecondText.isHidden = false
-              self.NoViewthirdText.isHidden = false
-              self.NoListingFoundImage.image = #imageLiteral(resourceName: "NoSearchImg")
-              self.NoListingFoundTitle.isHidden = true
-              self.floatingMapView.isHidden = true
-//                self.lottieView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-//               self.lottieView.isHidden = true
-          self.NoresultView.frame = CGRect(x: 0, y: self.headerView.frame.size.height+self.headerView.frame.origin.y+25, width: FULLWIDTH, height:FULLHEIGHT-110)
-
-//            self.lottieView.isHidden = true
-//            self.view.makeToast(result?.data?.searchListing?.errorMessage)
-                return
-            }
-         
-            if((result?.data?.searchListing?.count)!>0) {
-            self.NoresultView.isHidden = true
-                self.scrollView.isHidden = false
-            self.exploreTV.isHidden = true
-                self.collectionViewFilterPage.isSkeletonable = false
-                self.collectionViewFilterPage.hideSkeleton()
-                self.floatingMapView.isHidden = false
-                self.isFilterEnable = true
-                self.newFilterBtn.layer.shadowOpacity = 0.0
-                self.searchView.layer.shadowOpacity = 0.0
-                self.searchBackBtn.backgroundColor =  UIColor(named: "viewBG")
-                self.headerView.backgroundColor =  UIColor(named: "becomeAHostStep_Color")
-                self.locationLabel.textColor =  UIColor(named: "Title_Header")
-                if(Utility.shared.isRTLLanguage()){
+            
+            switch response {
+            case .success(let result):
+                guard let searchListingValues = result.data?.searchListing?.results else{
+                    print("Missing Data")
                     
+                    self.collectionViewFilterPage.hideSkeleton()
+                    self.collectionViewFilterPage?.isSkeletonable = false
+                    
+                    self.isFilterEnable = true
+                    self.searchBackBtn.backgroundColor =  UIColor(named: "viewBG")
                     self.searchBackBtn.setImage(#imageLiteral(resourceName: "back_black"), for: .normal)
                     
-                    self.searchBackBtn.rotateImageViewofBtn()
-                }else{
+                    self.locationLabel.textColor = UIColor(named: "Title_Header")
+                    self.headerView.backgroundColor =  UIColor(named: "becomeAHostStep_Color")
+                    self.exploreTV.isHidden = true
+                    self.collectionViewFilterPage.isHidden = true
+                    self.NoresultView.isHidden = false
+                    self.scrollView.isHidden = true
+                    self.NoViewNoresult.isHidden = false
+                    self.noViewFirstText.isHidden = false
+                    self.noViewSecondText.isHidden = false
+                    self.NoViewthirdText.isHidden = false
+                    self.NoListingFoundImage.image = #imageLiteral(resourceName: "NoSearchImg")
+                    self.NoListingFoundTitle.isHidden = true
+                    self.floatingMapView.isHidden = true
+                    //                self.lottieView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+                    //               self.lottieView.isHidden = true
+                    self.NoresultView.frame = CGRect(x: 0, y: self.headerView.frame.size.height+self.headerView.frame.origin.y+25, width: FULLWIDTH, height:FULLHEIGHT-110)
+                    
+                    //            self.lottieView.isHidden = true
+                    //            self.view.makeToast(result.data?.searchListing?.errorMessage)
+                    return
+                }
+                
+                if((result.data?.searchListing?.count)!>0) {
+                    self.NoresultView.isHidden = true
+                    self.scrollView.isHidden = false
+                    self.exploreTV.isHidden = true
+                    self.collectionViewFilterPage.isSkeletonable = false
+                    self.collectionViewFilterPage.hideSkeleton()
+                    self.floatingMapView.isHidden = false
+                    self.isFilterEnable = true
+                    self.newFilterBtn.layer.shadowOpacity = 0.0
+                    self.searchView.layer.shadowOpacity = 0.0
+                    self.searchBackBtn.backgroundColor =  UIColor(named: "viewBG")
+                    self.headerView.backgroundColor =  UIColor(named: "becomeAHostStep_Color")
+                    self.locationLabel.textColor =  UIColor(named: "Title_Header")
+                    if(Utility.shared.isRTLLanguage()){
+                        
+                        self.searchBackBtn.setImage(#imageLiteral(resourceName: "back_black"), for: .normal)
+                        
+                        self.searchBackBtn.rotateImageViewofBtn()
+                    }else{
+                        self.searchBackBtn.setImage(#imageLiteral(resourceName: "back_black"), for: .normal)
+                        
+                    }
+                    
+                    
+                    
+                    
+                    
+                    if(result.data?.searchListing?.currentPage == 1){
+                        self.FilterArray.removeAll()
+                    }
+                    
+                    self.FilterArray.append(contentsOf: ((result.data?.searchListing?.results)!) as! [SearchListingQuery.Data.SearchListing.Result])
+                    
+                    self.collectionViewFilterPage.isHidden = false
+                    self.totalListcount = (result.data?.searchListing?.count)!
+                    //                self.lottieView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+                    //            self.lottieView.isHidden = true
+                    
+                    self.exploreTV?.reloadData()
+                    
+                    
+                    self.collectionViewFilterPage.reloadData()
+                    if (result.data?.searchListing?.currentPage == 1){
+                        self.collectionViewFilterPage.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
+                    }
+                    
+                    if self.FilterArray.count != 0 {
+                        self.viewDidLayoutSubviews()
+                    }
+                    
+                }
+                else {
+                    self.collectionViewFilterPage?.isSkeletonable = false
+                    self.collectionViewFilterPage.hideSkeleton()
+                    self.isFilterEnable = true
+                    self.searchBackBtn.backgroundColor =  UIColor(named: "viewBG")
                     self.searchBackBtn.setImage(#imageLiteral(resourceName: "back_black"), for: .normal)
-                  
+                    
+                    self.locationLabel.textColor =  UIColor(named: "Title_Header")
+                    self.headerView.backgroundColor =  UIColor(named: "becomeAHostStep_Color")
+                    self.exploreTV.isHidden = true
+                    self.collectionViewFilterPage.isHidden = true
+                    self.NoresultView.isHidden = false
+                    self.scrollView.isHidden = true
+                    self.NoViewNoresult.isHidden = false
+                    self.noViewFirstText.isHidden = false
+                    self.noViewSecondText.isHidden = false
+                    self.NoViewthirdText.isHidden = false
+                    self.NoListingFoundImage.image = #imageLiteral(resourceName: "NoSearchImg")
+                    self.NoListingFoundTitle.isHidden = true
+                    self.floatingMapView.isHidden = true
+                    //                self.lottieView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+                    //               self.lottieView.isHidden = true
+                    self.NoresultView.frame = CGRect(x: 0, y: self.headerView.frame.size.height+self.headerView.frame.origin.y+25, width: FULLWIDTH, height:FULLHEIGHT-110)
+                    
                 }
-                
-                
-               
-                   
-                
-                if(result?.data?.searchListing?.currentPage == 1){
-                    self.FilterArray.removeAll()
-                }
-            
-              self.FilterArray.append(contentsOf: ((result?.data?.searchListing?.results)!) as! [SearchListingQuery.Data.SearchListing.Result])
-               
-            self.collectionViewFilterPage.isHidden = false
-            self.totalListcount = (result?.data?.searchListing?.count)!
-//                self.lottieView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-//            self.lottieView.isHidden = true
-               
-                     self.exploreTV?.reloadData()
-    
-                
-                self.collectionViewFilterPage.reloadData()
-                if (result?.data?.searchListing?.currentPage == 1){
-                    self.collectionViewFilterPage.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
-                }
-                
-                if self.FilterArray.count != 0 {
-                    self.viewDidLayoutSubviews()
-                }
-                
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            else {
-                self.collectionViewFilterPage?.isSkeletonable = false
-                self.collectionViewFilterPage.hideSkeleton()
-                self.isFilterEnable = true
-                self.searchBackBtn.backgroundColor =  UIColor(named: "viewBG")
-                self.searchBackBtn.setImage(#imageLiteral(resourceName: "back_black"), for: .normal)
-                
-                self.locationLabel.textColor =  UIColor(named: "Title_Header")
-                self.headerView.backgroundColor =  UIColor(named: "becomeAHostStep_Color")
-            self.exploreTV.isHidden = true
-                self.collectionViewFilterPage.isHidden = true
-            self.NoresultView.isHidden = false
-                self.scrollView.isHidden = true
-                self.NoViewNoresult.isHidden = false
-                self.noViewFirstText.isHidden = false
-                self.noViewSecondText.isHidden = false
-                self.NoViewthirdText.isHidden = false
-                self.NoListingFoundImage.image = #imageLiteral(resourceName: "NoSearchImg")
-                self.NoListingFoundTitle.isHidden = true
-                self.floatingMapView.isHidden = true
-//                self.lottieView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-//               self.lottieView.isHidden = true
-            self.NoresultView.frame = CGRect(x: 0, y: self.headerView.frame.size.height+self.headerView.frame.origin.y+25, width: FULLWIDTH, height:FULLHEIGHT-110)
-            
-            }
-           
-            
-            
         }
-        }
-         else{
-            self.exploreTV.isHidden = true
-            self.offlineView.isHidden = false
-             
-             collectionViewFilterPage?.prepareSkeleton(completion: { [self] done in
-                 self.collectionViewFilterPage?.isSkeletonable = true
-                 self.collectionViewFilterPage?.showAnimatedGradientSkeleton()
-             })
-//             self.collectionViewFilterPage.isHidden = true
-            let shadowSize2 : CGFloat = 3.0
-            let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
-                                                        y: -shadowSize2 / 2,
-                                                        width: self.offlineView.frame.size.width + shadowSize2,
-                                                        height: self.offlineView.frame.size.height + shadowSize2))
-            
-            self.offlineView.layer.masksToBounds = false
-            self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
-            self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-            self.offlineView.layer.shadowOpacity = 0.3
-            self.offlineView.layer.shadowPath = shadowPath2.cgPath
-            if IS_IPHONE_X || IS_IPHONE_XR {
-                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-150, width: FULLWIDTH, height: 55)
-            }else{
-                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: FULLWIDTH, height: 55)
-            }
-            
-           
+    }
+    else{
+        self.exploreTV.isHidden = true
+        self.offlineView.isHidden = false
+        
+        collectionViewFilterPage?.prepareSkeleton(completion: { [self] done in
+            self.collectionViewFilterPage?.isSkeletonable = true
+            self.collectionViewFilterPage?.showAnimatedGradientSkeleton()
+        })
+        //             self.collectionViewFilterPage.isHidden = true
+        let shadowSize2 : CGFloat = 3.0
+        let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
+                                                    y: -shadowSize2 / 2,
+                                                    width: self.offlineView.frame.size.width + shadowSize2,
+                                                    height: self.offlineView.frame.size.height + shadowSize2))
+        
+        self.offlineView.layer.masksToBounds = false
+        self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
+        self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        self.offlineView.layer.shadowOpacity = 0.3
+        self.offlineView.layer.shadowPath = shadowPath2.cgPath
+        if IS_IPHONE_X || IS_IPHONE_XR {
+            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-150, width: FULLWIDTH, height: 55)
+        }else{
+            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: FULLWIDTH, height: 55)
         }
         
+        
     }
+    
+}
     //MARK ******************************************* IMAGESCROLLER DELEGATE METHODS **************************************************************>
     
 

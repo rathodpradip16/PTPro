@@ -5,29 +5,9 @@
 
 public class UpdateListingStep2Mutation: GraphQLMutation {
   public static let operationName: String = "UpdateListingStep2"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation UpdateListingStep2($id: Int, $description: String, $title: String, $coverPhoto: Int) {
-        updateListingStep2(
-          id: $id
-          description: $description
-          title: $title
-          coverPhoto: $coverPhoto
-        ) {
-          __typename
-          status
-          results {
-            __typename
-            id
-            title
-            description
-            coverPhoto
-          }
-          errorMessage
-        }
-      }
-      """
+      #"mutation UpdateListingStep2($id: Int, $description: String, $title: String, $coverPhoto: Int) { updateListingStep2( id: $id description: $description title: $title coverPhoto: $coverPhoto ) { __typename status results { __typename id title description coverPhoto } errorMessage } }"#
     ))
 
   public var id: GraphQLNullable<Int>
@@ -56,10 +36,10 @@ public class UpdateListingStep2Mutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("updateListingStep2", UpdateListingStep2?.self, arguments: [
         "id": .variable("id"),
         "description": .variable("description"),
@@ -75,10 +55,11 @@ public class UpdateListingStep2Mutation: GraphQLMutation {
     /// Parent Type: `EditListingResponse`
     public struct UpdateListingStep2: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.EditListingResponse }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.EditListingResponse }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("results", Results?.self),
         .field("errorMessage", String?.self),
@@ -93,10 +74,11 @@ public class UpdateListingStep2Mutation: GraphQLMutation {
       /// Parent Type: `EditListing`
       public struct Results: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.EditListing }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.EditListing }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("title", String?.self),
           .field("description", String?.self),

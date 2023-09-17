@@ -5,32 +5,19 @@
 
 public class GetPaymentSettingsQuery: GraphQLQuery {
   public static let operationName: String = "getPaymentSettings"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getPaymentSettings {
-        getPaymentSettings {
-          __typename
-          status
-          errorMessage
-          result {
-            __typename
-            secretKey
-            publishableKey
-          }
-        }
-      }
-      """
+      #"query getPaymentSettings { getPaymentSettings { __typename status errorMessage result { __typename secretKey publishableKey } } }"#
     ))
 
   public init() {}
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getPaymentSettings", GetPaymentSettings?.self),
     ] }
 
@@ -41,10 +28,11 @@ public class GetPaymentSettingsQuery: GraphQLQuery {
     /// Parent Type: `GetPaymentKey`
     public struct GetPaymentSettings: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.GetPaymentKey }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.GetPaymentKey }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
         .field("result", Result?.self),
@@ -59,10 +47,11 @@ public class GetPaymentSettingsQuery: GraphQLQuery {
       /// Parent Type: `StripeKeysType`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.StripeKeysType }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.StripeKeysType }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("secretKey", String?.self),
           .field("publishableKey", String?.self),
         ] }

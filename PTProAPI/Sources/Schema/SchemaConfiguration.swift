@@ -8,6 +8,10 @@
 import ApolloAPI
 
 public enum SchemaConfiguration: ApolloAPI.SchemaConfiguration {
+    public static func cacheKeyInfo(for type: ApolloAPI.Object, object: ApolloAPI.ObjectData) -> ApolloAPI.CacheKeyInfo? {
+        return nil
+    }
+    
   public static func cacheKeyInfo(for type: Object, object: JSONObject) -> CacheKeyInfo? {
 
       return nil

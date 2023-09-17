@@ -33,15 +33,6 @@ class PaypalPayoutVC: UIViewController,UITableViewDataSource,UITableViewDelegate
     var payemail = String()
     var gettingCurrencyString = String()
     var currencycode = String()
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     var paypal_Array = [String]()
     var lottieView: LottieAnimationView!
     override func viewDidLoad() {
@@ -58,13 +49,13 @@ class PaypalPayoutVC: UIViewController,UITableViewDataSource,UITableViewDelegate
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
              self.finishBtn.isHidden = false
             self.offlineView.isHidden = true
         }
     }
     @IBAction func finishBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
                 self.view.endEditing(true)
                 if(payemail == "")
                 {
@@ -179,25 +170,26 @@ finishBtn.titleLabel?.font = UIFont(name: APP_FONT_MEDIUM, size: 18)
     
     func finishAPICall()
     {
-        let addpayoutmutation = AddPayoutMutation(methodId: 1, payEmail: payemail, address1: Utility.shared.payout_Address_Dict["address1"] as? String ?? "", address2: Utility.shared.payout_Address_Dict["address2"] as? String ?? "", city: Utility.shared.payout_Address_Dict["city"] as? String ?? "", state: Utility.shared.payout_Address_Dict["state"] as? String ?? "", country: Utility.shared.selected_Countrycode_Payout, zipcode: Utility.shared.payout_Address_Dict["zipcode"] as? String ?? "", currency: currencycode)
-        apollo_headerClient.perform(mutation: addpayoutmutation){(result,error) in
-            if(result?.data?.addPayout?.status == 200)
-            {
-                self.lottieView.isHidden = true
-                let payoutObj = PayoutPreferenceVC()
-                Utility.shared.isfrom_payoutcurrency = true
-                payoutObj.modalPresentationStyle = .fullScreen
-                self.present(payoutObj, animated: true, completion: nil)
+        let addpayoutmutation = AddPayoutMutation(methodId: 1, payEmail: payemail, address1: Utility.shared.payout_Address_Dict["address1"] as? String ?? "", address2: Utility.shared.payout_Address_Dict["address2"] as? String ?? "", city: Utility.shared.payout_Address_Dict["city"] as? String ?? "", state: Utility.shared.payout_Address_Dict["state"] as? String ?? "", country: Utility.shared.selected_Countrycode_Payout, zipcode: Utility.shared.payout_Address_Dict["zipcode"] as? String ?? "", currency: currencycode, firstname: .none, lastname: .none, accountNumber: .none, routingNumber: .none, businessType: .none, accountToken: .none, personToken: .none)
+        
+        Network.shared.apollo_headerClient.perform(mutation: addpayoutmutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.addPayout?.status,data == 200 {
+                    self.lottieView.isHidden = true
+                    let payoutObj = PayoutPreferenceVC()
+                    Utility.shared.isfrom_payoutcurrency = true
+                    payoutObj.modalPresentationStyle = .fullScreen
+                    self.present(payoutObj, animated: true, completion: nil)
+                } else {
+                    self.lottieView.isHidden = true
+                    self.view.makeToast(result.data?.addPayout?.errorMessage!)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            else
-            {
-                self.lottieView.isHidden = true
-               
-                
-                self.view.makeToast(result?.data?.addPayout?.errorMessage!)
-            }
-            
-        }
+        }    
+        
     }
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2

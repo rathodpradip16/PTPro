@@ -5,69 +5,9 @@
 
 public class CancellationDataQuery: GraphQLQuery {
   public static let operationName: String = "CancellationData"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query CancellationData($reservationId: Int!, $userType: String!, $currency: String) {
-        cancelReservationData(
-          reservationId: $reservationId
-          userType: $userType
-          currency: $currency
-        ) {
-          __typename
-          results {
-            __typename
-            reservationId
-            cancellationPolicy
-            nonRefundableNightPrice
-            refundToGuest
-            payoutToHost
-            guestServiceFee
-            hostServiceFee
-            startedIn
-            stayingFor
-            total
-            listId
-            guests
-            threadId
-            checkIn
-            checkOut
-            currency
-            cancelledBy
-            listTitle
-            confirmationCode
-            hostEmail
-            guestName
-            hostName
-            guestProfilePicture
-            hostProfilePicture
-            isSpecialPriceAverage
-            listData {
-              __typename
-              title
-              id
-              roomType
-              beds
-              reviewsCount
-              reviewsStarRating
-              bookingType
-              listPhotos {
-                __typename
-                id
-                name
-              }
-              listingData {
-                __typename
-                basePrice
-                currency
-              }
-            }
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query CancellationData($reservationId: Int!, $userType: String!, $currency: String) { cancelReservationData( reservationId: $reservationId userType: $userType currency: $currency ) { __typename results { __typename reservationId cancellationPolicy nonRefundableNightPrice refundToGuest payoutToHost guestServiceFee hostServiceFee startedIn stayingFor total listId guests threadId checkIn checkOut currency cancelledBy listTitle confirmationCode hostEmail guestName hostName guestProfilePicture hostProfilePicture isSpecialPriceAverage listData { __typename title id roomType beds reviewsCount reviewsStarRating bookingType listPhotos { __typename id name } listingData { __typename basePrice currency } } } status errorMessage } }"#
     ))
 
   public var reservationId: Int
@@ -92,10 +32,10 @@ public class CancellationDataQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("cancelReservationData", CancelReservationData?.self, arguments: [
         "reservationId": .variable("reservationId"),
         "userType": .variable("userType"),
@@ -110,10 +50,11 @@ public class CancellationDataQuery: GraphQLQuery {
     /// Parent Type: `CancellationResponse`
     public struct CancelReservationData: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.CancellationResponse }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.CancellationResponse }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", Results?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -128,10 +69,11 @@ public class CancellationDataQuery: GraphQLQuery {
       /// Parent Type: `ReservationCancel`
       public struct Results: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.ReservationCancel }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ReservationCancel }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("reservationId", Int?.self),
           .field("cancellationPolicy", String?.self),
           .field("nonRefundableNightPrice", Double?.self),
@@ -192,10 +134,11 @@ public class CancellationDataQuery: GraphQLQuery {
         /// Parent Type: `ShowListing`
         public struct ListData: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.ShowListing }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ShowListing }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("title", String?.self),
             .field("id", Int?.self),
             .field("roomType", String?.self),
@@ -222,10 +165,11 @@ public class CancellationDataQuery: GraphQLQuery {
           /// Parent Type: `ListPhotosData`
           public struct ListPhoto: PTProAPI.SelectionSet {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ParentType { PTProAPI.Objects.ListPhotosData }
-            public static var __selections: [Selection] { [
+            public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ListPhotosData }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
               .field("id", Int?.self),
               .field("name", String?.self),
             ] }
@@ -239,10 +183,11 @@ public class CancellationDataQuery: GraphQLQuery {
           /// Parent Type: `ListingData`
           public struct ListingData: PTProAPI.SelectionSet {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ParentType { PTProAPI.Objects.ListingData }
-            public static var __selections: [Selection] { [
+            public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ListingData }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
               .field("basePrice", Double?.self),
               .field("currency", String?.self),
             ] }

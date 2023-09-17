@@ -129,20 +129,21 @@ class AmenitiesViewController: BaseHostTableviewController,UICollectionViewDeleg
     
     override func setDropdownList() {
         //Utility.shared.selectedAmenityIdList.removeAllObjects()
-        let amenitiesList = (Utility.shared.getListSettingsArray.amenities?.listSettings!)!
-        for i in 0..<amenitiesList.count
-        {
-            var amenityInfo = [String : Any]()
-            amenityInfo.updateValue(amenitiesList[i]!.itemName!, forKey: "itemName")
-            amenityInfo.updateValue(amenitiesList[i]!.id!, forKey: "id")
-            if let image = amenitiesList[i]!.image {
-                amenityInfo.updateValue(image, forKey: "image")
-            }
-            else {
+        if let amenitiesList = (Utility.shared.getListSettingsArray?.amenities?.listSettings){
+            for i in 0..<amenitiesList.count
+            {
+                var amenityInfo = [String : Any]()
+                amenityInfo.updateValue(amenitiesList[i]!.itemName!, forKey: "itemName")
+                amenityInfo.updateValue(amenitiesList[i]!.id!, forKey: "id")
+                if let image = amenitiesList[i]!.image {
+                    amenityInfo.updateValue(image, forKey: "image")
+                }
+                else {
+                    
+                }
                 
+                amenityList.append(amenityInfo)
             }
-           
-            amenityList.append(amenityInfo)
         }
         if Utility.shared.step1ValuesInfo.keys.contains("amenities")
         {
@@ -150,7 +151,7 @@ class AmenitiesViewController: BaseHostTableviewController,UICollectionViewDeleg
             {
                 for i in 0..<typeInfo.count
                 {
-                    if let userAmenityTypes = typeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetail.Result.UserAmenity
+                    if let userAmenityTypes = typeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserAmenity
                     {
                         if amenityList.contains(where: { (item) -> Bool in
                             (item["itemName"] as? String == (userAmenityTypes.itemName!))
@@ -174,6 +175,7 @@ class AmenitiesViewController: BaseHostTableviewController,UICollectionViewDeleg
         amenitiesCollection.reloadData()
         //tableView.reloadData()
     }
+    
     override func registerCells() {
         tableView.register(UINib(nibName: "AmenitiesCell", bundle: nil), forCellReuseIdentifier: "AmenitiesCell")
         
@@ -191,7 +193,7 @@ class AmenitiesViewController: BaseHostTableviewController,UICollectionViewDeleg
     //IBActions
     
     @IBAction func RedirectNextPage(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         Utility.shared.step1ValuesInfo.updateValue(Utility.shared.selectedAmenityIdList, forKey: "amenities")
         let amenities = SafeAmenitiesViewController()
         self.view.window?.backgroundColor = UIColor.white
@@ -205,7 +207,7 @@ class AmenitiesViewController: BaseHostTableviewController,UICollectionViewDeleg
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
             
             self.offlineUIView.isHidden = true
         }
@@ -246,7 +248,7 @@ class AmenitiesViewController: BaseHostTableviewController,UICollectionViewDeleg
     }
     
     @IBAction func saveandexit(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.lottieViewanimation()
       Utility.shared.step1ValuesInfo.updateValue(Utility.shared.selectedAmenityIdList, forKey: "amenities")
             super.updateListingAPICall{ (success) -> Void in

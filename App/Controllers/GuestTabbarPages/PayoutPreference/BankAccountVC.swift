@@ -39,15 +39,6 @@ class BankAccountVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     var accountypeLabelPrevious = String()
     var accountypeLabelPreviousCell = String()
     var companyTypeArray = [String]()
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     var lottieView: LottieAnimationView!
     
     var lottieWholeView = UIView()
@@ -86,7 +77,7 @@ class BankAccountVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
 
     @IBAction func finishBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         self.view.endEditing(true)
             
         if(accountypeLabel == "\(Utility.shared.getLanguage()?.value(forKey: "Company") ?? "Company")")
@@ -213,7 +204,7 @@ class BankAccountVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         }
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
             self.finishBtn.isHidden = false
              self.offlineView.isHidden = true
         }
@@ -258,27 +249,27 @@ class BankAccountVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     {
         self.lottiewholeAnimation()
         
-        let setPayoutMutation = ConfirmPayoutMutation(currentAccountId:accountid)
-        apollo_headerClient.perform(mutation:setPayoutMutation){(result,error) in
-                if(result?.data?.confirmPayout?.status == 200)
-                {
+        let setPayoutMutation = ConfirmPayoutMutation(currentAccountId:.some(accountid))
+        Network.shared.apollo_headerClient.perform(mutation:setPayoutMutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.confirmPayout?.status,data == 200 {
                     self.lottieWholeView.isHidden = true
                     self.lottieView1.isHidden = true
-                                    let payoutObj = PayoutPreferenceVC()
-                                                    Utility.shared.isfrom_payoutcurrency = true
-                                                     payoutObj.modalPresentationStyle = .fullScreen
-                                                    self.present(payoutObj, animated: true, completion: nil)
-                }
-                else
-                {
+                    let payoutObj = PayoutPreferenceVC()
+                    Utility.shared.isfrom_payoutcurrency = true
+                    payoutObj.modalPresentationStyle = .fullScreen
+                    self.present(payoutObj, animated: true, completion: nil)
+                } else {
                     self.lottieWholeView.isHidden = true
                     self.lottieView1.isHidden = true
-                    self.view.makeToast(result?.data?.confirmPayout?.errorMessage)
+                    self.view.makeToast(result.data?.confirmPayout?.errorMessage)
                 }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            
-            
         }
+    }
     
     @objc func autoscroll()
     {
@@ -480,40 +471,34 @@ class BankAccountVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         {
             Utility.shared.setEmail(email: "demo@radicalstart.com")
         }
-        let addpayoutmutation = AddPayoutMutation(methodId: 2, payEmail:"\(Utility.shared.getEmail())", address1:"\(Utility.shared.payout_Address_Dict["address1"]!)", address2:"\(Utility.shared.payout_Address_Dict["address2"] ?? "")", city:Utility.shared.payout_Address_Dict["city"] as! String, state:Utility.shared.payout_Address_Dict["state"] as! String, country:Utility.shared.selected_Countrycode_Payout, zipcode:Utility.shared.payout_Address_Dict["zipcode"] as! String, currency:self.getpaymentmethodCurrency, firstname: bankaccount_Dict["firstnam?"] as? String, lastname: bankaccount_Dict["lastname"] as? String, accountNumber: bankaccount_Dict["accnum"] as? String, routingNumber: bankaccount_Dict["routingnum"] as? String,businessType:bankaccount_Dict["accounttype"] as! String, accountToken: self.bankToken, personToken: self.personToken)
+        let addpayoutmutation = AddPayoutMutation(methodId: 2,
+                                                  payEmail: "\(Utility.shared.getEmail())", address1:"\(Utility.shared.payout_Address_Dict["address1"]!)", address2:"\(Utility.shared.payout_Address_Dict["address2"] ?? "")", city:Utility.shared.payout_Address_Dict["city"] as! String, state:Utility.shared.payout_Address_Dict["state"] as! String, country:Utility.shared.selected_Countrycode_Payout, zipcode:Utility.shared.payout_Address_Dict["zipcode"] as! String, currency:self.getpaymentmethodCurrency, firstname: .some(bankaccount_Dict["firstnam?"] as! String), lastname: .some(bankaccount_Dict["lastname"] as! String), accountNumber: .some(bankaccount_Dict["accnum"] as! String), routingNumber: .some(bankaccount_Dict["routingnum"] as! String), businessType:.some(bankaccount_Dict["accounttype"] as! String), accountToken: .some(self.bankToken) , personToken: .some(self.personToken))
         
-        apollo_headerClient.perform(mutation: addpayoutmutation){(result,error) in
-            if(result?.data?.addPayout?.status == 200)
-            {
-                self.lottieView.isHidden = true
-                let webviewObj = WebviewVC()
-                webviewObj.delegate = self
-                webviewObj.webstring = (result?.data?.addPayout?.connectUrl)!
-                webviewObj.modalPresentationStyle = .fullScreen
-                webviewObj.succesURL = (result?.data?.addPayout?.successUrl)!
-                webviewObj.failureURL = (result?.data?.addPayout?.failureUrl)!
-                webviewObj.webviewRedirection(webviewString:(result?.data?.addPayout?.connectUrl!)!)
-                webviewObj.accountID = (result?.data?.addPayout?.stripeAccountId!)!
-                webviewObj.pageTitle = ""
-                self.accountID = (result?.data?.addPayout?.stripeAccountId!)!
-                self.present(webviewObj, animated: true, completion: nil)
-//                let payoutObj = PayoutPreferenceVC()
-//                Utility.shared.isfrom_payoutcurrency = true
-//                 payoutObj.modalPresentationStyle = .fullScreen
-//                self.present(payoutObj, animated: true, completion: nil)
-               
+        Network.shared.apollo_headerClient.perform(mutation: addpayoutmutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.addPayout?.status,data == 200 {
+                    self.lottieView.isHidden = true
+                    let webviewObj = WebviewVC()
+                    webviewObj.delegate = self
+                    webviewObj.webstring = (result.data?.addPayout?.connectUrl)!
+                    webviewObj.modalPresentationStyle = .fullScreen
+                    webviewObj.succesURL = (result.data?.addPayout?.successUrl)!
+                    webviewObj.failureURL = (result.data?.addPayout?.failureUrl)!
+                    webviewObj.webviewRedirection(webviewString:(result.data?.addPayout?.connectUrl!)!)
+                    webviewObj.accountID = (result.data?.addPayout?.stripeAccountId!)!
+                    webviewObj.pageTitle = ""
+                    self.accountID = (result.data?.addPayout?.stripeAccountId!)!
+                    self.present(webviewObj, animated: true, completion: nil)
+                } else {
+                    self.lottieView.isHidden = true
+                    self.finishBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"finish"))!)", for: .normal)
+                    self.view.makeToast(result.data?.addPayout?.errorMessage!)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            else
-            {
-            self.lottieView.isHidden = true
-            self.finishBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"finish"))!)", for: .normal)
-                
-              
-                
-            self.view.makeToast(result?.data?.addPayout?.errorMessage!)
-            }
-        
-    }
+        }
     }
     @objc func keyboardWillShow(sender: NSNotification) {
         let info = sender.userInfo!

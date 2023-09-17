@@ -5,37 +5,9 @@
 
 public class PreapproveMutation: GraphQLMutation {
   public static let operationName: String = "preapprove"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation preapprove($threadId: Int!, $content: String, $type: String, $startDate: String, $endDate: String, $personCapacity: Int, $reservationId: Int) {
-        sendMessage(
-          threadId: $threadId
-          content: $content
-          type: $type
-          startDate: $startDate
-          endDate: $endDate
-          personCapacity: $personCapacity
-          reservationId: $reservationId
-        ) {
-          __typename
-          results {
-            __typename
-            id
-            sentBy
-            content
-            type
-            reservationId
-            startDate
-            endDate
-            createdAt
-            personCapacity
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"mutation preapprove($threadId: Int!, $content: String, $type: String, $startDate: String, $endDate: String, $personCapacity: Int, $reservationId: Int) { sendMessage( threadId: $threadId content: $content type: $type startDate: $startDate endDate: $endDate personCapacity: $personCapacity reservationId: $reservationId ) { __typename results { __typename id sentBy content type reservationId startDate endDate createdAt personCapacity } status errorMessage } }"#
     ))
 
   public var threadId: Int
@@ -76,10 +48,10 @@ public class PreapproveMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("sendMessage", SendMessage?.self, arguments: [
         "threadId": .variable("threadId"),
         "content": .variable("content"),
@@ -98,10 +70,11 @@ public class PreapproveMutation: GraphQLMutation {
     /// Parent Type: `SendMessage`
     public struct SendMessage: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.SendMessage }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.SendMessage }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", Results?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -116,10 +89,11 @@ public class PreapproveMutation: GraphQLMutation {
       /// Parent Type: `ThreadItems`
       public struct Results: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.ThreadItems }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ThreadItems }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("sentBy", String?.self),
           .field("content", String?.self),

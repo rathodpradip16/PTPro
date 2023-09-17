@@ -5,24 +5,9 @@
 
 public class EditProfileMutation: GraphQLMutation {
   public static let operationName: String = "EditProfile"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation EditProfile($userId: String!, $fieldName: String!, $fieldValue: String, $deviceType: String!, $deviceId: String!) {
-        userUpdate(
-          userId: $userId
-          fieldName: $fieldName
-          fieldValue: $fieldValue
-          deviceType: $deviceType
-          deviceId: $deviceId
-        ) {
-          __typename
-          status
-          errorMessage
-          userToken
-        }
-      }
-      """
+      #"mutation EditProfile($userId: String!, $fieldName: String!, $fieldValue: String, $deviceType: String!, $deviceId: String!) { userUpdate( userId: $userId fieldName: $fieldName fieldValue: $fieldValue deviceType: $deviceType deviceId: $deviceId ) { __typename status errorMessage userToken } }"#
     ))
 
   public var userId: String
@@ -55,10 +40,10 @@ public class EditProfileMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("userUpdate", UserUpdate?.self, arguments: [
         "userId": .variable("userId"),
         "fieldName": .variable("fieldName"),
@@ -75,10 +60,11 @@ public class EditProfileMutation: GraphQLMutation {
     /// Parent Type: `UserType`
     public struct UserUpdate: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.UserType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
         .field("userToken", String?.self),

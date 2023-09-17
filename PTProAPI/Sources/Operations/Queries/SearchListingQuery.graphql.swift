@@ -5,82 +5,9 @@
 
 public class SearchListingQuery: GraphQLQuery {
   public static let operationName: String = "SearchListing"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query SearchListing($personCapacity: Int, $currentPage: Int, $dates: String, $lat: Float, $lng: Float, $amenities: [Int], $beds: Int, $bedrooms: Int, $bathrooms: Int, $roomType: [Int], $spaces: [Int], $houseRules: [Int], $priceRange: [Int], $geoType: String, $geography: String, $bookingType: String, $address: String, $currency: String) {
-        SearchListing(
-          personCapacity: $personCapacity
-          currentPage: $currentPage
-          dates: $dates
-          lat: $lat
-          lng: $lng
-          amenities: $amenities
-          beds: $beds
-          bedrooms: $bedrooms
-          bathrooms: $bathrooms
-          roomType: $roomType
-          spaces: $spaces
-          houseRules: $houseRules
-          priceRange: $priceRange
-          geoType: $geoType
-          geography: $geography
-          bookingType: $bookingType
-          address: $address
-          currency: $currency
-        ) {
-          __typename
-          currentPage
-          count
-          results {
-            __typename
-            id
-            title
-            personCapacity
-            lat
-            lng
-            beds
-            bookingType
-            coverPhoto
-            roomType
-            reviewsCount
-            reviewsStarRating
-            listPhotoName
-            listPhotos {
-              __typename
-              id
-              name
-              type
-              status
-            }
-            listingPhotos {
-              __typename
-              id
-              name
-              type
-              status
-            }
-            listingData {
-              __typename
-              basePrice
-              currency
-            }
-            settingsData {
-              __typename
-              listsettings {
-                __typename
-                id
-                itemName
-              }
-            }
-            wishListStatus
-            isListOwner
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query SearchListing($personCapacity: Int, $currentPage: Int, $dates: String, $lat: Float, $lng: Float, $amenities: [Int], $beds: Int, $bedrooms: Int, $bathrooms: Int, $roomType: [Int], $spaces: [Int], $houseRules: [Int], $priceRange: [Int], $geoType: String, $geography: String, $bookingType: String, $address: String, $currency: String) { SearchListing( personCapacity: $personCapacity currentPage: $currentPage dates: $dates lat: $lat lng: $lng amenities: $amenities beds: $beds bedrooms: $bedrooms bathrooms: $bathrooms roomType: $roomType spaces: $spaces houseRules: $houseRules priceRange: $priceRange geoType: $geoType geography: $geography bookingType: $bookingType address: $address currency: $currency ) { __typename currentPage count results { __typename id title personCapacity lat lng beds bookingType coverPhoto roomType reviewsCount reviewsStarRating listPhotoName listPhotos { __typename id name type status } listingPhotos { __typename id name type status } listingData { __typename basePrice currency } settingsData { __typename listsettings { __typename id itemName } } wishListStatus isListOwner } status errorMessage } }"#
     ))
 
   public var personCapacity: GraphQLNullable<Int>
@@ -165,10 +92,10 @@ public class SearchListingQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("SearchListing", SearchListing?.self, arguments: [
         "personCapacity": .variable("personCapacity"),
         "currentPage": .variable("currentPage"),
@@ -198,10 +125,11 @@ public class SearchListingQuery: GraphQLQuery {
     /// Parent Type: `SearchListing`
     public struct SearchListing: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.SearchListing }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.SearchListing }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("currentPage", Int?.self),
         .field("count", Int?.self),
         .field("results", [Result?]?.self),
@@ -220,10 +148,11 @@ public class SearchListingQuery: GraphQLQuery {
       /// Parent Type: `ShowListing`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.ShowListing }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ShowListing }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("title", String?.self),
           .field("personCapacity", Int?.self),
@@ -268,10 +197,11 @@ public class SearchListingQuery: GraphQLQuery {
         /// Parent Type: `ListPhotosData`
         public struct ListPhoto: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.ListPhotosData }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ListPhotosData }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("name", String?.self),
             .field("type", String?.self),
@@ -289,10 +219,11 @@ public class SearchListingQuery: GraphQLQuery {
         /// Parent Type: `ListPhotosData`
         public struct ListingPhoto: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.ListPhotosData }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ListPhotosData }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("name", String?.self),
             .field("type", String?.self),
@@ -310,10 +241,11 @@ public class SearchListingQuery: GraphQLQuery {
         /// Parent Type: `ListingData`
         public struct ListingData: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.ListingData }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ListingData }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("basePrice", Double?.self),
             .field("currency", String?.self),
           ] }
@@ -327,10 +259,11 @@ public class SearchListingQuery: GraphQLQuery {
         /// Parent Type: `UserListingData`
         public struct SettingsDatum: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.UserListingData }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserListingData }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("listsettings", Listsettings?.self),
           ] }
 
@@ -341,10 +274,11 @@ public class SearchListingQuery: GraphQLQuery {
           /// Parent Type: `SingleListSettings`
           public struct Listsettings: PTProAPI.SelectionSet {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ParentType { PTProAPI.Objects.SingleListSettings }
-            public static var __selections: [Selection] { [
+            public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.SingleListSettings }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
               .field("id", Int?.self),
               .field("itemName", String?.self),
             ] }

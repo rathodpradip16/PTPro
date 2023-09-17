@@ -150,7 +150,7 @@ class BathroomsListingViewController: BaseHostTableviewController {
     func setBathroomsCount()
     {
         var incrVal = 1.0
-        let bathrooms = Utility.shared.getListSettingsArray.bathrooms?.listSettings != nil ? (Utility.shared.getListSettingsArray.bathrooms?.listSettings![0]?.endValue)! : 0
+        let bathrooms = Utility.shared.getListSettingsArray?.bathrooms?.listSettings != nil ? (Utility.shared.getListSettingsArray?.bathrooms?.listSettings![0]?.endValue)! : 0
         let valcount = bathrooms + bathrooms - 1
         for i in 0..<valcount
         {
@@ -174,7 +174,7 @@ class BathroomsListingViewController: BaseHostTableviewController {
     
     func setBathroomType()
     {
-        let typeListSettings = (Utility.shared.getListSettingsArray.bathroomType?.listSettings!)!
+        let typeListSettings = (Utility.shared.getListSettingsArray?.bathroomType?.listSettings!)!
         for item in typeListSettings
         {
             bathroomTypeArr.append((item?.itemName)!)
@@ -186,7 +186,7 @@ class BathroomsListingViewController: BaseHostTableviewController {
             bathroomTypeLbl = bathroomTypeArr.first != nil ? bathroomTypeArr.first! : ""
             pickerView.selectRow(0, inComponent: 0, animated: true)
             
-            Utility.shared.step1ValuesInfo.updateValue(((Utility.shared.getListSettingsArray.bathroomType?.listSettings!.count)! > 0 ? ((Utility.shared.getListSettingsArray.bathroomType?.listSettings!.first??.id!)!) : 0), forKey: "bathroomType")
+            Utility.shared.step1ValuesInfo.updateValue(((Utility.shared.getListSettingsArray?.bathroomType?.listSettings!.count)! > 0 ? ((Utility.shared.getListSettingsArray?.bathroomType?.listSettings!.first??.id!)!) : 0), forKey: "bathroomType")
         }else{
             _ = typeListSettings.filter({ (item) -> Bool in
                 if (Utility.shared.step1ValuesInfo["bathroomType"]! as? Int) == item?.id
@@ -206,7 +206,7 @@ class BathroomsListingViewController: BaseHostTableviewController {
             } else {
                 bathroomTypeLbl = bathroomTypeArr.first != nil ? bathroomTypeArr.first! : ""
                 pickerView.selectRow(0, inComponent: 0, animated: true)
-            Utility.shared.step1ValuesInfo.updateValue(((Utility.shared.getListSettingsArray.bathroomType?.listSettings!.count)! > 0 ? ((Utility.shared.getListSettingsArray.bathroomType?.listSettings!.first??.id!)!) : 0), forKey: "bathroomType")
+            Utility.shared.step1ValuesInfo.updateValue(((Utility.shared.getListSettingsArray?.bathroomType?.listSettings!.count)! > 0 ? ((Utility.shared.getListSettingsArray?.bathroomType?.listSettings!.first??.id!)!) : 0), forKey: "bathroomType")
             }
         }
     }
@@ -225,14 +225,14 @@ class BathroomsListingViewController: BaseHostTableviewController {
     
     //IBActions
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
         
     }
     
     @IBAction func RedirectNextPage(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         if(Double(bathroomJSONValue) < 1)
         {
           Utility.shared.step1ValuesInfo.updateValue(Double(1),forKey: "bathrooms")
@@ -310,7 +310,7 @@ class BathroomsListingViewController: BaseHostTableviewController {
         self.lottieView1.play()
     }
     @IBAction func saveandexit(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.lottieViewanimation()
             if(Double(bathroomJSONValue) < 1)
             {
@@ -599,7 +599,7 @@ class BathroomsListingViewController: BaseHostTableviewController {
             bathroomTypeLbl = bathroomTypeArr[row]
         }
         pickerView.selectRow(row, inComponent: component, animated: true)
-        Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray.bathroomType?.listSettings![row]!.id!)!, forKey: "bathroomType")
+        Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray?.bathroomType?.listSettings![row]!.id!)!, forKey: "bathroomType")
     }
     
     //MARK: - UITextFieldDelegates

@@ -22,27 +22,14 @@ class ReviewShowVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     @IBOutlet weak var starRatingView: CosmosView!
     @IBOutlet weak var reviewTitleView: UILabel!
     @IBOutlet weak var reviewHeaderHeightConstraint: NSLayoutConstraint!
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
-        {
-       // Replace `<token>`
-        }
-        else {
-            configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"]
-        }
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
-    var reiewListingArray = [UserReviewsQuery.Data.UserReview.Result]()
+
+    var reiewListingArray = [UserReviewsQuery.Data.UserReviews.Result]()
     var profileID = Int()
     var pageIndex : Int = 1
     var reviewcount = Int()
     var isForProfileReviews = false
     
-    var propertyReviewArray = [GetPropertyReviewsQuery.Data.GetPropertyReview.Result]()
+    var propertyReviewArray = [GetPropertyReviewsQuery.Data.GetPropertyReviews.Result]()
     var propertyReviewsCount = 0
     var reviewTitle = ""
     var isMoveToCell = true
@@ -89,23 +76,30 @@ class ReviewShowVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
 
     func getPropertyReviewsAPICall(lisId:Int){
         
-     let propertyReviewsQuery = GetPropertyReviewsQuery(currentPage: pageIndex, listId: profileID)
-        apollo_headerClient.fetch(query: propertyReviewsQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            guard (result?.data?.getPropertyReviews?.results) != nil else{
-                self.view.makeToast(result?.data?.getPropertyReviews?.errorMessage)
-                return
-            }
-            
-            if result?.data?.getPropertyReviews?.currentPage == 1{
-                self.propertyReviewArray.removeAll()
-            }
-            self.propertyReviewsCount = result?.data?.getPropertyReviews?.count ?? 0
-            self.propertyReviewArray.append(contentsOf: ((result?.data?.getPropertyReviews?.results)!) as! [GetPropertyReviewsQuery.Data.GetPropertyReview.Result] )
-             self.reviewTable.reloadData()
-            
-            
-            if self.isMoveToCell{
-                self.reviewTable.scrollToRow(at: IndexPath(row: self.moveToIndex, section: 0), at: .top, animated: true)
+        let propertyReviewsQuery = GetPropertyReviewsQuery(currentPage: pageIndex, listId: profileID)
+        Network.shared.apollo_headerClient.fetch(query: propertyReviewsQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                
+                guard (result.data?.getPropertyReviews?.results) != nil else{
+                    self.view.makeToast(result.data?.getPropertyReviews?.errorMessage)
+                    return
+                }
+                
+                if result.data?.getPropertyReviews?.currentPage == 1{
+                    self.propertyReviewArray.removeAll()
+                }
+                self.propertyReviewsCount = result.data?.getPropertyReviews?.count ?? 0
+                self.propertyReviewArray.append(contentsOf: ((result.data?.getPropertyReviews?.results)!) as! [GetPropertyReviewsQuery.Data.GetPropertyReviews.Result] )
+                self.reviewTable.reloadData()
+                
+                
+                if self.isMoveToCell{
+                    self.reviewTable.scrollToRow(at: IndexPath(row: self.moveToIndex, section: 0), at: .top, animated: true)
+                }
+                
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
@@ -385,26 +379,30 @@ class ReviewShowVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
         return UITableView.automaticDimension
     }
     func reviewcountAPICall(profileid:Int)
-      {
-          let reviewListquery = UserReviewsQuery(ownerType: "others", currentPage:pageIndex, profileId: profileid)
-          
-          apollo_headerClient.fetch(query: reviewListquery){(result,error) in
-              
-              
-            guard (result?.data?.userReviews?.results) != nil else{
-                  print("Missing Data")
-                  return
-              }
-            self.reiewListingArray.append(contentsOf: ((result?.data?.userReviews?.results)!) as! [UserReviewsQuery.Data.UserReview.Result])
-       
+    {
+        let reviewListquery = UserReviewsQuery(ownerType: "others", currentPage:.some(pageIndex), profileId:.some(profileid))
+        
+        Network.shared.apollo_headerClient.fetch(query: reviewListquery){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.userReviews?.results) != nil else{
+                    print("Missing Data")
+                    return
+                }
+                self.reiewListingArray.append(contentsOf: ((result.data?.userReviews?.results)!) as! [UserReviewsQuery.Data.UserReviews.Result])
+                
+                
+                //   self.reiewListingArray = (result.data?.userReviews?.results)! as! [UserReviewsQuery.Data.UserReview.Result]
+                
+                self.reviewTable.reloadData()
+                // self.timestampconvert(timestamp:)
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
             
-           //   self.reiewListingArray = (result?.data?.userReviews?.results)! as! [UserReviewsQuery.Data.UserReview.Result]
-             
-            self.reviewTable.reloadData()
-            // self.timestampconvert(timestamp:)
-          }
-          
-      }
+        }
+        
+    }
     func timestampconvert(timestamp:String) -> String
       {
           let timestamValue = Int(timestamp)!/1000

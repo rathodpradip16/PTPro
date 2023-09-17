@@ -87,7 +87,7 @@ class FirstLastnamePageVC: UIViewController {
     
     @IBAction func nextBtnTapped(_ sender: Any) {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.offlineView.isHidden = true
         self.bottomGoView.isHidden = false
         lastNameTF.resignFirstResponder()
@@ -146,7 +146,7 @@ class FirstLastnamePageVC: UIViewController {
         }
     }
     @IBAction func retryTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.offlineView.isHidden = true
         self.lottieWholeView.isHidden = false
         self.lottieWholeView.frame = CGRect(x: 0, y: 0, width: FULLWIDTH, height: FULLHEIGHT)

@@ -65,19 +65,10 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
     
     
     
-    var manageListingArray = [ManageListingsQuery.Data.ManageListing.Result]()
-    var inprogress_List_Array = [ManageListingsQuery.Data.ManageListing.Result]()
-    var completed_List_Array = [ManageListingsQuery.Data.ManageListing.Result]()
+    var manageListingArray = [ManageListingsQuery.Data.ManageListings.Result]()
+    var inprogress_List_Array = [ManageListingsQuery.Data.ManageListings.Result]()
+    var completed_List_Array = [ManageListingsQuery.Data.ManageListings.Result]()
     var getListingSpecialPrice_Array = [GetListingSpecialPriceQuery.Data.GetListingSpecialPrice.Result]()
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     open weak var delegate: WWCalendarTimeSelectorProtocol?
     
     open var optionCurrentDateRange: WWCalendarTimeSelectorDateRange = WWCalendarTimeSelectorDateRange()
@@ -291,7 +282,7 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.editView.isHidden = false
             self.editBtn.isHidden = false
             self.editLbl.isHidden = false
@@ -331,109 +322,113 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
     }
     func manageListingAPICall()
     {
-       
-         if Utility().isConnectedToNetwork(){
-        let manageListingquery = ManageListingsQuery()
-        apollo_headerClient.fetch(query: manageListingquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            guard (result?.data?.manageListings?.results) != nil else{
-                print("Missing Data")
-                self.noDataView.isHidden = false
-                self.lottieView.isHidden = true
-                return
-            }
-            self.lottieView.isHidden = true
-            self.manageListingArray = ((result?.data?.manageListings?.results)!) as! [ManageListingsQuery.Data.ManageListing.Result]
-            self.completed_List_Array.removeAll()
-            self.inprogress_List_Array.removeAll()
-            for i in self.manageListingArray
-            {
-                if(i.isReady == false)
-                {
-                    self.inprogress_List_Array.append(i)
-                }
-                else{
-                    self.completed_List_Array.append(i)
-                }
-            }
-            
-            
-           
-            if(self.completed_List_Array.count > 0)
-            {
-               self.noDataView.isHidden = true
-                self.topView.isHidden = false
-                self.calendarView.isHidden = false
-               
-                self.editView.isHidden = true
-                self.editBtn.isHidden = true
-                self.editLbl.isHidden = true
-                self.editIconImg.isHidden = true
-
-            
-                
-                
-                self.listId = self.completed_List_Array[0].id!
-               // if(self.new_titleArray.count > 0)
-//                {
-//                    self.listtitleLabel.text = self.new_titleArray["title"]
-//                    self.entireLabel.text = self.new_titleArray["entireTitle"]
-//                    if(self.new_titleArray["listImage"] != nil)
-//                    {
-//                        self.listImage.sd_setImage(with: URL(string: "\(IMAGE_LISTING_MEDIUM)\(self.new_titleArray["listImage"]!)"), placeholderImage: #imageLiteral(resourceName: "home-1"))
-//                    Utility.shared.isfrom_availability_calendar_date = true
-//                    }
-//                    else
-//                    {
-//                        self.listImage.image = #imageLiteral(resourceName: "camera-50")
-//                    }
-//
-//                }
-//                else
-//                {
-                self.listtitleLabel.text = self.completed_List_Array[0].title != nil ? self.completed_List_Array[0].title! : ""
-               
-                if(self.completed_List_Array[0].settingsData![0]?.listsettings != nil && self.completed_List_Array[0].settingsData![0]?.listsettings?.itemName != nil)
-                {
-                self.entireLabel.text = self.completed_List_Array[0].settingsData![0]?.listsettings?.itemName!
-                }
-                else
-                {
-                  self.entireLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"entireplace"))!)"
-                }
-                    if(self.completed_List_Array[0].listPhotoName != nil)
-                    {
-                        let listimage = self.completed_List_Array[0].listPhotoName!
-                        self.listImage.sd_setImage(with: URL(string: "\(IMAGE_LISTING_MEDIUM)\(listimage)"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
-                        self.listImage.contentMode = .scaleAspectFill
+        
+        if Utility.shared.isConnectedToNetwork(){
+            let manageListingquery = ManageListingsQuery()
+            Network.shared.apollo_headerClient.fetch(query: manageListingquery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.manageListings?.results) != nil else{
+                        print("Missing Data")
+                        self.noDataView.isHidden = false
+                        self.lottieView.isHidden = true
+                        return
                     }
-                    else
+                    self.lottieView.isHidden = true
+                    self.manageListingArray = ((result.data?.manageListings?.results)!) as! [ManageListingsQuery.Data.ManageListings.Result]
+                    self.completed_List_Array.removeAll()
+                    self.inprogress_List_Array.removeAll()
+                    for i in self.manageListingArray
                     {
-                        self.listImage.image = #imageLiteral(resourceName: "camera-50")
+                        if(i.isReady == false)
+                        {
+                            self.inprogress_List_Array.append(i)
+                        }
+                        else{
+                            self.completed_List_Array.append(i)
+                        }
                     }
-               // }
-                self.listId = self.completed_List_Array[0].id != nil ? self.completed_List_Array[0].id! : 0
-                self.BlockedlistAPICall(listId: self.completed_List_Array[0].id != nil ? self.completed_List_Array[0].id! : 0)
+                    
+                    
+                    
+                    if(self.completed_List_Array.count > 0)
+                    {
+                        self.noDataView.isHidden = true
+                        self.topView.isHidden = false
+                        self.calendarView.isHidden = false
+                        
+                        self.editView.isHidden = true
+                        self.editBtn.isHidden = true
+                        self.editLbl.isHidden = true
+                        self.editIconImg.isHidden = true
+                        
+                        
+                        
+                        
+                        self.listId = self.completed_List_Array[0].id!
+                        // if(self.new_titleArray.count > 0)
+                        //                {
+                        //                    self.listtitleLabel.text = self.new_titleArray["title"]
+                        //                    self.entireLabel.text = self.new_titleArray["entireTitle"]
+                        //                    if(self.new_titleArray["listImage"] != nil)
+                        //                    {
+                        //                        self.listImage.sd_setImage(with: URL(string: "\(IMAGE_LISTING_MEDIUM)\(self.new_titleArray["listImage"]!)"), placeholderImage: #imageLiteral(resourceName: "home-1"))
+                        //                    Utility.shared.isfrom_availability_calendar_date = true
+                        //                    }
+                        //                    else
+                        //                    {
+                        //                        self.listImage.image = #imageLiteral(resourceName: "camera-50")
+                        //                    }
+                        //
+                        //                }
+                        //                else
+                        //                {
+                        self.listtitleLabel.text = self.completed_List_Array[0].title != nil ? self.completed_List_Array[0].title! : ""
+                        
+                        if(self.completed_List_Array[0].settingsData![0]?.listsettings != nil && self.completed_List_Array[0].settingsData![0]?.listsettings?.itemName != nil)
+                        {
+                            self.entireLabel.text = self.completed_List_Array[0].settingsData![0]?.listsettings?.itemName!
+                        }
+                        else
+                        {
+                            self.entireLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"entireplace"))!)"
+                        }
+                        if(self.completed_List_Array[0].listPhotoName != nil)
+                        {
+                            let listimage = self.completed_List_Array[0].listPhotoName!
+                            self.listImage.sd_setImage(with: URL(string: "\(IMAGE_LISTING_MEDIUM)\(listimage)"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
+                            self.listImage.contentMode = .scaleAspectFill
+                        }
+                        else
+                        {
+                            self.listImage.image = #imageLiteral(resourceName: "camera-50")
+                        }
+                        // }
+                        self.listId = self.completed_List_Array[0].id != nil ? self.completed_List_Array[0].id! : 0
+                        self.BlockedlistAPICall(listId: self.completed_List_Array[0].id != nil ? self.completed_List_Array[0].id! : 0)
+                    }
+                    else{
+                        self.noDataView.isHidden = false
+                        self.lottieView.isHidden = true
+                        self.topView.isHidden = true
+                        self.editView.isHidden = true
+                        self.editBtn.isHidden = true
+                        self.editLbl.isHidden = true
+                        self.editIconImg.isHidden = true
+                        
+                        self.calendarView.isHidden = true
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
             }
-            else{
-                self.noDataView.isHidden = false
-                self.lottieView.isHidden = true
-                self.topView.isHidden = true
-                self.editView.isHidden = true
-                self.editBtn.isHidden = true
-                self.editLbl.isHidden = true
-                self.editIconImg.isHidden = true
-
-                self.calendarView.isHidden = true
-            }
-            
         }
-        }
-         else{
+        else{
             self.lottieView.isHidden = true
             self.editView.isHidden = true
-             self.editBtn.isHidden = true
-             self.editLbl.isHidden = true
-             self.editIconImg.isHidden = true
+            self.editBtn.isHidden = true
+            self.editLbl.isHidden = true
+            self.editIconImg.isHidden = true
             self.offlineView.isHidden = false
             let shadowSize2 : CGFloat = 3.0
             let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
@@ -450,8 +445,8 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
                 offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-150, width: self.offlineView.frame.size.width, height: 55)
             }else{
                 offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: self.offlineView.frame.size.width, height: 55)
+            }
         }
-    }
     }
     func APICall(listImage:String,title:String,entireTitle:String,listId:Int)
     {
@@ -500,97 +495,100 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
     
     func BlockedlistAPICall(listId:Int)
     {
-         self.lottieAnimation()
-        if Utility().isConnectedToNetwork(){
+        self.lottieAnimation()
+        if Utility.shared.isConnectedToNetwork(){
             let getListingSpecialPricequery = GetListingSpecialPriceQuery(listId: listId)
-            apollo_headerClient.fetch(query: getListingSpecialPricequery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-                guard (result?.data?.getListingSpecialPrice?.results) != nil else{
-                    print("Missing Data")
-                    self.noDataView.isHidden = false
-                    self.lottieView.isHidden = true
-                    return
-                }
-                self.getListingSpecialPrice_Array = (result?.data?.getListingSpecialPrice?.results)! as! [GetListingSpecialPriceQuery.Data.GetListingSpecialPrice.Result]
-                Utility.shared.host_blockedDates_Array.removeAllObjects()
-                Utility.shared.host_bookedPricing_Array.removeAllObjects()
-                Utility.shared.host_specialPricing_Array.removeAllObjects()
-                Utility.shared.host_specialPrice_value_Array.removeAllObjects()
-                Utility.shared.host_specialDay_Array.removeAllObjects()
-                Utility.shared.host_currency_Array.removeAllObjects()
-                Utility.shared.hosr_blockDay_Array.removeAllObjects()
-                Utility.shared.host_bookDay_Array.removeAllObjects()
-                for i in self.getListingSpecialPrice_Array
-                {
-                   if(Int(i.blockedDates!) != nil) {
-                    let timestamp = i.blockedDates
-                    let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
-                    let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
-                    //let newdate = Calendar.current.date(byAdding: .day, value: 1, to: newTime)
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "dd MMM YYYY"
-                       dateFormatter.timeZone = TimeZone(abbreviation: "UTC")//Specify your format that you want
-//                       if(Utility.shared.isRTLLanguage()) {
-//                  dateFormatter.locale = NSLocale(localeIdentifier:"en") as Locale
-//                       }
-//                       else {
-//                           dateFormatter.locale = NSLocale(localeIdentifier:Utility.shared.getAppLanguageCode()!) as Locale
-//                       }
-                    let dateFormatter1 = DateFormatter()
-                    dateFormatter1.dateFormat = "EEEE"
-                       dateFormatter1.timeZone = TimeZone(abbreviation: "UTC")
-//                       if(Utility.shared.isRTLLanguage()) {
-//                  dateFormatter1.locale = NSLocale(localeIdentifier:"en") as Locale
-//                       }
-//                       else {
-//                           dateFormatter1.locale = NSLocale(localeIdentifier:Utility.shared.getAppLanguageCode()!) as Locale
-//                       }
-                    let date1 = "\(dateFormatter1.string(from: newTime))"
-                    
-                    let date = "\(dateFormatter.string(from: newTime))"
-                  
-                    
-                    if(i.calendarStatus == "blocked" || (newTime < Date() && !Calendar.current.isDateInToday(newTime)))
+            Network.shared.apollo_headerClient.fetch(query: getListingSpecialPricequery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getListingSpecialPrice?.results) != nil else{
+                        print("Missing Data")
+                        self.noDataView.isHidden = false
+                        self.lottieView.isHidden = true
+                        return
+                    }
+                    self.getListingSpecialPrice_Array = (result.data?.getListingSpecialPrice?.results)! as! [GetListingSpecialPriceQuery.Data.GetListingSpecialPrice.Result]
+                    Utility.shared.host_blockedDates_Array.removeAllObjects()
+                    Utility.shared.host_bookedPricing_Array.removeAllObjects()
+                    Utility.shared.host_specialPricing_Array.removeAllObjects()
+                    Utility.shared.host_specialPrice_value_Array.removeAllObjects()
+                    Utility.shared.host_specialDay_Array.removeAllObjects()
+                    Utility.shared.host_currency_Array.removeAllObjects()
+                    Utility.shared.hosr_blockDay_Array.removeAllObjects()
+                    Utility.shared.host_bookDay_Array.removeAllObjects()
+                    for i in self.getListingSpecialPrice_Array
                     {
-                        print("Blocked dates -----------------", date, date1)
-                        if(i.reservationId != nil)
-                        {
-                        Utility.shared.host_bookedPricing_Array.add("\(date)")
-                       Utility.shared.host_bookDay_Array.add("\(date1)")
-                        }
-                        else{
-    
-                        Utility.shared.host_blockedDates_Array.add("\(date)")
-                        Utility.shared.hosr_blockDay_Array.add("\(date1)")
+                        if(Int(i.blockedDates!) != nil) {
+                            let timestamp = i.blockedDates
+                            let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
+                            let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
+                            //let newdate = Calendar.current.date(byAdding: .day, value: 1, to: newTime)
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "dd MMM YYYY"
+                            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")//Specify your format that you want
+                            //                       if(Utility.shared.isRTLLanguage()) {
+                            //                  dateFormatter.locale = NSLocale(localeIdentifier:"en") as Locale
+                            //                       }
+                            //                       else {
+                            //                           dateFormatter.locale = NSLocale(localeIdentifier:Utility.shared.getAppLanguageCode()!) as Locale
+                            //                       }
+                            let dateFormatter1 = DateFormatter()
+                            dateFormatter1.dateFormat = "EEEE"
+                            dateFormatter1.timeZone = TimeZone(abbreviation: "UTC")
+                            //                       if(Utility.shared.isRTLLanguage()) {
+                            //                  dateFormatter1.locale = NSLocale(localeIdentifier:"en") as Locale
+                            //                       }
+                            //                       else {
+                            //                           dateFormatter1.locale = NSLocale(localeIdentifier:Utility.shared.getAppLanguageCode()!) as Locale
+                            //                       }
+                            let date1 = "\(dateFormatter1.string(from: newTime))"
+                            
+                            let date = "\(dateFormatter.string(from: newTime))"
+                            
+                            
+                            if(i.calendarStatus == "blocked" || (newTime < Date() && !Calendar.current.isDateInToday(newTime)))
+                            {
+                                print("Blocked dates -----------------", date, date1)
+                                if(i.reservationId != nil)
+                                {
+                                    Utility.shared.host_bookedPricing_Array.add("\(date)")
+                                    Utility.shared.host_bookDay_Array.add("\(date1)")
+                                }
+                                else{
+                                    
+                                    Utility.shared.host_blockedDates_Array.add("\(date)")
+                                    Utility.shared.hosr_blockDay_Array.add("\(date1)")
+                                }
+                            }
+                            else if(i.calendarStatus == "available" && i.isSpecialPrice != nil)
+                            {
+                                var Dict = [String:Any]()
+                                Dict.updateValue("\(date)", forKey: "Date")
+                                Dict.updateValue(i.isSpecialPrice!, forKey: "SpecialPrice")
+                                Dict.updateValue(i.listCurrency, forKey: "Currency")
+                                Utility.shared.host_specialPrice_Array.append(Dict)
+                                if(i.listCurrency != nil)
+                                {
+                                    Utility.shared.host_currency_Array.add(i.listCurrency!)
+                                }
+                                else{
+                                    Utility.shared.host_currency_Array.add(Utility.shared.currencyvalue_from_API_base)
+                                }
+                                Utility.shared.host_specialPricing_Array.add("\(date)")
+                                Utility.shared.host_specialDay_Array.add("\(date1)")
+                                Utility.shared.host_specialPrice_value_Array.add(i.isSpecialPrice!)
+                            }
                         }
                     }
-                    else if(i.calendarStatus == "available" && i.isSpecialPrice != nil)
-                    {
-                        var Dict = [String:Any]()
-                        Dict.updateValue("\(date)", forKey: "Date")
-                        Dict.updateValue(i.isSpecialPrice!, forKey: "SpecialPrice")
-                        Dict.updateValue(i.listCurrency, forKey: "Currency")
-                        Utility.shared.host_specialPrice_Array.append(Dict)
-                        if(i.listCurrency != nil)
-                        {
-                        Utility.shared.host_currency_Array.add(i.listCurrency!)
-                        }
-                        else{
-                          Utility.shared.host_currency_Array.add(Utility.shared.currencyvalue_from_API_base)
-                        }
-                    Utility.shared.host_specialPricing_Array.add("\(date)")
-                    Utility.shared.host_specialDay_Array.add("\(date1)")
-                    Utility.shared.host_specialPrice_value_Array.add(i.isSpecialPrice!)
-                    }
+                    
+                    self.calendarViewCall()
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-                }
-               
-                self.calendarViewCall()
                 
-                    
-                }
+                
             }
-        
-        else
+        }        else
         {
             self.offlineView.isHidden = false
             let shadowSize2 : CGFloat = 3.0
@@ -613,7 +611,7 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
         
     }
     @IBAction func nextBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         if(Utility.shared.calendar_Date_Array.count > 0)
         {
         
@@ -651,7 +649,7 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
     }
     
     @IBAction func downArrowBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         
         let headerView = CalendarListingVC()
             headerView.deleagte = self

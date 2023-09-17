@@ -86,8 +86,9 @@
 		764276A72AB1CA51005FA2A5 /* AffiliateRegistrationWebsite.xib in Resources */ = {isa = PBXBuildFile; fileRef = 764276A52AB1CA51005FA2A5 /* AffiliateRegistrationWebsite.xib */; };
 		764276AA2AB1CA68005FA2A5 /* AffiliateRegistrationDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764276A82AB1CA68005FA2A5 /* AffiliateRegistrationDocument.swift */; };
 		764276AB2AB1CA68005FA2A5 /* AffiliateRegistrationDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 764276A92AB1CA68005FA2A5 /* AffiliateRegistrationDocument.xib */; };
+		7669E93E2AB6C32900938861 /* ThreadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669E93D2AB6C32900938861 /* ThreadItem.swift */; };
+		766F79492AB582C70004DBF6 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 766F79482AB582C70004DBF6 /* Apollo */; };
 		767ACB0E2AB301BB00B27B60 /* getAffiliateUserStep.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 767ACB0D2AB301BB00B27B60 /* getAffiliateUserStep.graphql */; };
-		76DE9F6B2AB4A5F7003191ED /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 76DE9F6A2AB4A5F7003191ED /* Apollo */; };
 		76DE9F6D2AB4A716003191ED /* schema.graphqls in Resources */ = {isa = PBXBuildFile; fileRef = 76DE9F6C2AB4A716003191ED /* schema.graphqls */; };
 		76DE9F702AB4AA42003191ED /* PTProAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 76DE9F6F2AB4AA42003191ED /* PTProAPI */; };
 		76DE9F782AB4BA98003191ED /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE9F772AB4BA98003191ED /* Network.swift */; };
@@ -723,8 +724,9 @@
 		764276A52AB1CA51005FA2A5 /* AffiliateRegistrationWebsite.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AffiliateRegistrationWebsite.xib; sourceTree = "<group>"; };
 		764276A82AB1CA68005FA2A5 /* AffiliateRegistrationDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateRegistrationDocument.swift; sourceTree = "<group>"; };
 		764276A92AB1CA68005FA2A5 /* AffiliateRegistrationDocument.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AffiliateRegistrationDocument.xib; sourceTree = "<group>"; };
+		7669E93D2AB6C32900938861 /* ThreadItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadItem.swift; sourceTree = "<group>"; };
 		767ACB0D2AB301BB00B27B60 /* getAffiliateUserStep.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = getAffiliateUserStep.graphql; sourceTree = "<group>"; };
-		76DE9F6C2AB4A716003191ED /* schema.graphqls */ = {isa = PBXFileReference; lastKnownFileType = file; path = schema.graphqls; sourceTree = SOURCE_ROOT; };
+		76DE9F6C2AB4A716003191ED /* schema.graphqls */ = {isa = PBXFileReference; lastKnownFileType = text; path = schema.graphqls; sourceTree = SOURCE_ROOT; };
 		76DE9F772AB4BA98003191ED /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		B50087AD22B76E4500DBC9A0 /* WebviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewVC.swift; sourceTree = "<group>"; };
 		B50087AE22B76E4500DBC9A0 /* WebviewVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WebviewVC.xib; sourceTree = "<group>"; };
@@ -1259,7 +1261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B54017D4282D4D9E006ECE28 /* PassKit.framework in Frameworks */,
-				76DE9F6B2AB4A5F7003191ED /* Apollo in Frameworks */,
+				766F79492AB582C70004DBF6 /* Apollo in Frameworks */,
 				C702F1BA2A38782F0A1B4075 /* Pods_App.framework in Frameworks */,
 				76DE9F702AB4AA42003191ED /* PTProAPI in Frameworks */,
 			);
@@ -1802,6 +1804,7 @@
 				2CB4CB7123C85425002EE107 /* KeychainService.swift */,
 				B5AE6BC7280E985600BD2F84 /* GooglePlacesResult.swift */,
 				B537ED4E281134C500E5434B /* Extensions.swift */,
+				7669E93D2AB6C32900938861 /* ThreadItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2922,8 +2925,8 @@
 			);
 			name = App;
 			packageProductDependencies = (
-				76DE9F6A2AB4A5F7003191ED /* Apollo */,
 				76DE9F6F2AB4AA42003191ED /* PTProAPI */,
+				766F79482AB582C70004DBF6 /* Apollo */,
 			);
 			productName = Rent_All;
 			productReference = B54D90FD223F9316003A4589 /* App.app */;
@@ -3009,8 +3012,8 @@
 			);
 			mainGroup = B54D90F4223F9316003A4589;
 			packageReferences = (
-				76DE9F692AB4A5F7003191ED /* XCRemoteSwiftPackageReference "apollo-ios" */,
 				76DE9F6E2AB4AA42003191ED /* XCLocalSwiftPackageReference "PTProAPI" */,
+				766F79472AB582C70004DBF6 /* XCRemoteSwiftPackageReference "apollo-ios" */,
 			);
 			productRefGroup = B54D90FE223F9316003A4589 /* Products */;
 			projectDirPath = "";
@@ -3537,6 +3540,7 @@
 				B5AD7DB722424A5F00E10420 /* ForgotPasswordVC.swift in Sources */,
 				2CFAA45922FBF1E9004A2B2E /* IncreaseEarningViewController.swift in Sources */,
 				B5B084002897B71A00668D0F /* TipCell.swift in Sources */,
+				7669E93E2AB6C32900938861 /* ThreadItem.swift in Sources */,
 				B574B9252828DDF200ED5339 /* FTPopOverMenuCell.swift in Sources */,
 				B54D913B223F9EDA003A4589 /* ImageScroller.swift in Sources */,
 				2C93338322FAF78A00884A3B /* BookingWindowViewController.swift in Sources */,
@@ -4111,20 +4115,20 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		76DE9F692AB4A5F7003191ED /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
+		766F79472AB582C70004DBF6 /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apollographql/apollo-ios";
 			requirement = {
-				kind = exactVersion;
-				version = 1.0.5;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		76DE9F6A2AB4A5F7003191ED /* Apollo */ = {
+		766F79482AB582C70004DBF6 /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 76DE9F692AB4A5F7003191ED /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			package = 766F79472AB582C70004DBF6 /* XCRemoteSwiftPackageReference "apollo-ios" */;
 			productName = Apollo;
 		};
 		76DE9F6F2AB4AA42003191ED /* PTProAPI */ = {

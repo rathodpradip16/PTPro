@@ -24,15 +24,6 @@ class VerificationSuccessVC: UIViewController {
     
     @IBOutlet var Offline_button: UIButton!
     
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -156,23 +147,26 @@ class VerificationSuccessVC: UIViewController {
         if Utility.shared.isConnectedToNetwork(){
             
             let verifyEmail = EmailVerificationMutation(token: Utility.shared.ConfirmEmailToken, email: Utility.shared.ConfirmEmailString)
-            apollo_headerClient.perform(mutation: verifyEmail){ (result,error) in
-                
-                if result?.data?.emailVerification?.status == 200 {
-                    print(result?.data?.emailVerification?.resultMap)
-                    self.SetIntitalSetup()
-                }else{
-                    //self.view.makeToast("Something Went wrong")
-                    
-                    let alert = UIAlertController(title: "\((Utility.shared.getLanguage()?.value(forKey: "oops"))!)", message: result?.data?.emailVerification?.errorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "\((Utility.shared.getLanguage()?.value(forKey: "okay"))!)", style: .default, handler: { (action) in
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        Utility.shared.setTab(index: 0)
-                        appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
-                    }))
-                    self.present(alert, animated: true) {
-                       
+            Network.shared.apollo_headerClient.perform(mutation: verifyEmail){  response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.emailVerification?.status,data == 200 {
+                        self.SetIntitalSetup()
+                    } else {
+                        //self.view.makeToast("Something Went wrong")
+                        
+                        let alert = UIAlertController(title: "\((Utility.shared.getLanguage()?.value(forKey: "oops"))!)", message: result.data?.emailVerification?.errorMessage, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "\((Utility.shared.getLanguage()?.value(forKey: "okay"))!)", style: .default, handler: { (action) in
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            Utility.shared.setTab(index: 0)
+                            appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
+                        }))
+                        self.present(alert, animated: true) {
+                            
+                        }
                     }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
             }
         } else {

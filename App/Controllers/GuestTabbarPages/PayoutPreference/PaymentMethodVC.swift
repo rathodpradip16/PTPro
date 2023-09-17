@@ -26,17 +26,8 @@ class PaymentMethodVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     @IBOutlet var lblHeader: UILabel!
     
     
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
-    var getpaymentmethodsArray = [GetPaymentMethodsQuery.Data.GetPaymentMethod.Result]()
-    var getpaymentmethodsArrayFilter = [GetPaymentMethodsQuery.Data.GetPaymentMethod.Result]()
+    var getpaymentmethodsArray = [GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
+    var getpaymentmethodsArrayFilter = [GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
     var lottieView: LottieAnimationView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,29 +81,29 @@ class PaymentMethodVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         self.lottieView.play()
     }
     
-    func payoutAPICall()
-    {
-        
-        
+    func payoutAPICall(){
         let getpayoutquery = GetPaymentMethodsQuery()
-        apollo_headerClient.fetch(query: getpayoutquery,cachePolicy:.fetchIgnoringCacheData){ [self](result,error) in
-            guard (result?.data?.getPaymentMethods?.results) != nil else{
-                print("Missing Data")
-                 self.lottieView.isHidden = true
-                self.view.makeToast(result?.data?.getPaymentMethods?.errorMessage)
-                return
+        Network.shared.apollo_headerClient.fetch(query: getpayoutquery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getPaymentMethods?.results) != nil else{
+                    print("Missing Data")
+                    self.lottieView.isHidden = true
+                    self.view.makeToast(result.data?.getPaymentMethods?.errorMessage)
+                    return
+                }
+                
+                self.lottieView.isHidden = true
+                self.getpaymentmethodsArray = ((result.data?.getPaymentMethods?.results)!) as! [GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]
+                getpaymentmethodsArrayFilter  =  getpaymentmethodsArray.filter { result in
+                    result.isEnable == true
+                }
+                
+                self.paymentMethodTable.reloadData()
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            
-             self.lottieView.isHidden = true
-            self.getpaymentmethodsArray = ((result?.data?.getPaymentMethods?.results)!) as! [GetPaymentMethodsQuery.Data.GetPaymentMethod.Result]
-            getpaymentmethodsArrayFilter  =  getpaymentmethodsArray.filter { result in
-                result.isEnable == true
-            }
-            
-            self.paymentMethodTable.reloadData()
-            
         }
-        
     }
 
     
@@ -144,7 +135,7 @@ class PaymentMethodVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
         }
     }
@@ -194,7 +185,7 @@ class PaymentMethodVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         if(indexPath.row == 0)
         {
             if("\((getpaymentmethodsArrayFilter[indexPath.row].name!))" == "Paypal") {

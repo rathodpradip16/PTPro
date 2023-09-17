@@ -10,10 +10,9 @@ import UIKit
 import MapKit
 import Lottie
 import IQKeyboardManagerSwift
+import PTProAPI
 
 class AddressListingViewController: BaseHostTableviewController, CountryDelegate {
-   
-    
 
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var backBtn: UIButton!
@@ -43,8 +42,8 @@ class AddressListingViewController: BaseHostTableviewController, CountryDelegate
     var city = ""
     var state = ""
     var pincode = ""
-    var createResults = CreateListingMutation.Data.CreateListing.Result()
-      var lottieView1: LottieAnimationView!
+    var createResults:CreateListingMutation.Data.CreateListing.Results?
+    var lottieView1: LottieAnimationView!
     
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
     @IBOutlet weak var stepTitleheightConstaraint: NSLayoutConstraint!
@@ -228,48 +227,45 @@ class AddressListingViewController: BaseHostTableviewController, CountryDelegate
         if Utility.shared.isConnectedToNetwork()
         {
             let createlist = CreateListingMutation(listId: nil,
-                                                   roomType: "\(Utility.shared.step1ValuesInfo["roomType"] ?? "")",
-                houseType: "\(Utility.shared.step1ValuesInfo["houseType"] ?? "")" ,
-                residenceType: "\(Utility.shared.step1ValuesInfo["residenceType"] ?? "")",
-                bedrooms: "\(Utility.shared.step1ValuesInfo["bedrooms"] ?? "")" ,
-                buildingSize: "\(Utility.shared.step1ValuesInfo["buildingSize"] ?? "")",
-                bedType: "\(Utility.shared.step1ValuesInfo["bedType"] ?? "")" ,
-                beds: Utility.shared.step1ValuesInfo["beds"] as? Int,
-                personCapacity: Utility.shared.step1ValuesInfo["personCapacity"] as? Int,
-                bathrooms:(Utility.shared.step1ValuesInfo["bathrooms"] as? Double),
-                bathroomType: "\(Utility.shared.step1ValuesInfo["bathroomType"] ?? "")",
-                country: "\(Utility.shared.step1ValuesInfo["country"] ?? "")",
-                street: "\(Utility.shared.step1ValuesInfo["street"] ?? "")",
-                buildingName: "\(Utility.shared.step1ValuesInfo["buildingName"] ?? "")",
-                city: "\(Utility.shared.step1ValuesInfo["city"] ?? "")",
-                state: "\(Utility.shared.step1ValuesInfo["state"] ?? "")",
-                zipcode: "\(Utility.shared.step1ValuesInfo["zipcode"] ?? "")",
-                lat: (Utility.shared.step1ValuesInfo["lat"] as! Double),
-                lng: (Utility.shared.step1ValuesInfo["lng"] as! Double),
-                bedTypes: "\(Utility.shared.step1ValuesInfo["bedTypes"] ?? "")" ,
-                isMapTouched: Utility.shared.step1ValuesInfo["isMapTouched"] as? Bool,
-                amenities: [] ,
-                safetyAmenities: [] ,
-                spaces: [])
-            apollo_headerClient.perform(mutation: createlist){ (result,error) in
-                
-                if(result?.data?.createListing?.status == 200)
-                {
-                    
-                    self.lottieView1.isHidden = true
-                    self.nextBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey: "next"))!)", for:.normal)
-                    self.createResults = (result?.data?.createListing?.results)!
-                    Utility.shared.createId = (result?.data?.createListing?.id)!
-                    self.manageListingSteps(listId: "\((result?.data?.createListing?.id)!)", currentStep: 1)
-                    
-
-                }
-                else{
-                    self.lottieView1.isHidden = true
-                    self.nextBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey: "next"))!)", for:.normal)
-
-                    
-                
+                                                   roomType: Utility.shared.step1ValuesInfo["roomType"] as? GraphQLNullable<String> ?? "",
+                                                   houseType: Utility.shared.step1ValuesInfo["houseType"] as? GraphQLNullable<String> ?? "",
+                                                   residenceType: Utility.shared.step1ValuesInfo["residenceType"] as? GraphQLNullable<String> ?? "",
+                                                   bedrooms: Utility.shared.step1ValuesInfo["bedrooms"] as? GraphQLNullable<String> ?? "" ,
+                                                   buildingSize: Utility.shared.step1ValuesInfo["buildingSize"] as? GraphQLNullable<String> ?? "",
+                                                   bedType: Utility.shared.step1ValuesInfo["bedType"] as? GraphQLNullable<String> ?? "" ,
+                                                   beds: Utility.shared.step1ValuesInfo["beds"] as! GraphQLNullable<Int>,
+                                                   personCapacity: Utility.shared.step1ValuesInfo["personCapacity"] as! GraphQLNullable<Int> ,
+                                                   bathrooms:Utility.shared.step1ValuesInfo["bathrooms"] as! GraphQLNullable<Double> ,
+                                                   bathroomType: Utility.shared.step1ValuesInfo["bathroomType"] as? GraphQLNullable<String> ?? "",
+                                                   country: Utility.shared.step1ValuesInfo["country"] as? GraphQLNullable<String> ?? "",
+                                                   street: Utility.shared.step1ValuesInfo["street"] as? GraphQLNullable<String> ?? "",
+                                                   buildingName: Utility.shared.step1ValuesInfo["buildingName"] as? GraphQLNullable<String> ?? "",
+                                                   city: Utility.shared.step1ValuesInfo["city"] as? GraphQLNullable<String> ?? "",
+                                                   state: Utility.shared.step1ValuesInfo["state"] as? GraphQLNullable<String> ?? "",
+                                                   zipcode: Utility.shared.step1ValuesInfo["zipcode"] as? GraphQLNullable<String> ?? "",
+                                                   lat: Utility.shared.step1ValuesInfo["lat"] as! GraphQLNullable<Double> ,
+                                                   lng: Utility.shared.step1ValuesInfo["lng"] as! GraphQLNullable<Double> ,
+                                                   bedTypes: Utility.shared.step1ValuesInfo["bedTypes"] as? GraphQLNullable<String> ?? "" ,
+                                                   isMapTouched: Utility.shared.step1ValuesInfo["isMapTouched"] as! GraphQLNullable<Bool> ,
+                                                   amenities: [] ,
+                                                   safetyAmenities: [] ,
+                                                   spaces: [])
+            Network.shared.apollo_headerClient.perform(mutation: createlist){  response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.createListing?.status,data == 200 {
+                        
+                        self.lottieView1.isHidden = true
+                        self.nextBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey: "next"))!)", for:.normal)
+                        self.createResults = (result.data?.createListing?.results)!
+                        Utility.shared.createId = (result.data?.createListing?.id)!
+                        self.manageListingSteps(listId: "\((result.data?.createListing?.id)!)", currentStep: 1)
+                    } else {
+                        self.lottieView1.isHidden = true
+                        self.nextBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey: "next"))!)", for:.normal)
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
             }
         }else {
@@ -301,27 +297,29 @@ class AddressListingViewController: BaseHostTableviewController, CountryDelegate
     func manageListingSteps(listId:String,currentStep:Int)
     {
         let manageListingStepsMutation = ManageListingStepsMutation(listId:listId, currentStep:currentStep)
-        apollo_headerClient.perform(mutation: manageListingStepsMutation){ (result,error) in
-            
-            if(result?.data?.manageListingSteps?.status == 200)
-            {
-                print("steps updated")
-                self.lottieView1.isHidden = true
-                let becomeHostObj = MapLocateVC()
-                if(Utility.shared.isfrombecomehoststep1Edit)
-                {
-                 Utility.shared.step1_inactivestatus = "completed"
+        Network.shared.apollo_headerClient.perform(mutation: manageListingStepsMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.manageListingSteps?.status,data == 200 {
+                    print("steps updated")
+                    self.lottieView1.isHidden = true
+                    let becomeHostObj = MapLocateVC()
+                    if(Utility.shared.isfrombecomehoststep1Edit)
+                    {
+                        Utility.shared.step1_inactivestatus = "completed"
+                    }
+                    else
+                    {
+                        Utility.shared.step1_inactivestatus = ((result.data?.manageListingSteps?.results?.step3!)!)
+                    }
+                    self.view.window?.backgroundColor = UIColor.white
+                    becomeHostObj.modalPresentationStyle = .fullScreen
+                    self.present(becomeHostObj, animated:false, completion: nil)
+                } else {
+                    self.view.makeToast(result.data?.manageListingSteps?.errorMessage)
                 }
-                else
-                {
-                Utility.shared.step1_inactivestatus = ((result?.data?.manageListingSteps?.results?.step3!)!)
-                }
-                self.view.window?.backgroundColor = UIColor.white
-                becomeHostObj.modalPresentationStyle = .fullScreen
-                self.present(becomeHostObj, animated:false, completion: nil)
-            }
-            else {
-                self.view.makeToast(result?.data?.manageListingSteps?.errorMessage)
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
@@ -357,7 +355,7 @@ class AddressListingViewController: BaseHostTableviewController, CountryDelegate
     //IBActions
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
     }
@@ -366,7 +364,7 @@ class AddressListingViewController: BaseHostTableviewController, CountryDelegate
         address = address + " " + pincode
     }
     @IBAction func RedirectNextPage(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         if self.countryValue.isEmpty || self.street.isEmpty || self.city.isEmpty || self.state.isEmpty || self.pincode.isEmpty {
             if self.countryValue.isEmpty{
                 self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "enter_country"))!)")
@@ -507,7 +505,7 @@ class AddressListingViewController: BaseHostTableviewController, CountryDelegate
     }
     
     @IBAction func saveAndExitAction(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             updateAddressVariable()
 //                if Utility.shared.step1ValuesInfo.keys.contains("lat") && Utility.shared.step1ValuesInfo.keys.contains("lng")
 //                {

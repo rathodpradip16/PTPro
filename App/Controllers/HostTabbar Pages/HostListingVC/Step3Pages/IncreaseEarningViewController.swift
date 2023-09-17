@@ -46,7 +46,7 @@ class IncreaseEarningViewController: BaseHostTableviewController {
     @IBOutlet var progressViewWidth: NSLayoutConstraint!
     @IBOutlet weak var requiredBtn: UIButton!
     @IBOutlet weak var noOneOptionBtn: UIButton!
-    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrency.Result]()
+    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrencies.Result]()
     
     var weeklydiscountvalue = ""
     var monthlydiscountvalue = ""
@@ -275,13 +275,13 @@ class IncreaseEarningViewController: BaseHostTableviewController {
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
     }
     
     @IBAction func RedirectNextPage(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
        // Utility.shared.step3ValuesInfo.updateValue("request", forKey: "bookingType")
         Utility.shared.step3ValuesInfo.updateValue(Utility.shared.createId, forKey: "id")
         let amenities = ReviewGuestViewController()
@@ -296,7 +296,7 @@ class IncreaseEarningViewController: BaseHostTableviewController {
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
             //self.view.layer.add(dismissrightAnimation()!, forKey: kCATransition)
              if(Utility.shared.step3_Edit)
              {
@@ -324,7 +324,7 @@ class IncreaseEarningViewController: BaseHostTableviewController {
         self.present(becomeHost, animated:false, completion: nil)
     }
     @IBAction func saveandexitAction(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
              self.lottieViewanimation()
           Utility.shared.step3ValuesInfo.updateValue(Utility.shared.selectedRules, forKey: "houseRules")
                      Utility.shared.step3ValuesInfo.updateValue(Utility.shared.createId, forKey: "id")

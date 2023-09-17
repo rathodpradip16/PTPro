@@ -156,7 +156,7 @@ class PlaceListingViewController: BaseHostTableviewController,GuestListingViewCo
     
     func setHouseType()
     {
-        let listSettings = (Utility.shared.getListSettingsArray.houseType?.listSettings!)!
+        let listSettings = (Utility.shared.getListSettingsArray?.houseType?.listSettings!)!
         for item in listSettings
         {
             houseTypeArray.append((item?.itemName)!)
@@ -192,7 +192,7 @@ class PlaceListingViewController: BaseHostTableviewController,GuestListingViewCo
     }
     
     override func setRoomType() {
-        let roomTypeListSettings = (Utility.shared.getListSettingsArray.roomType?.listSettings!)!
+        let roomTypeListSettings = (Utility.shared.getListSettingsArray?.roomType?.listSettings!)!
         for item in roomTypeListSettings
         {
             roomTypeArray.append((item?.itemName)!)
@@ -226,14 +226,14 @@ class PlaceListingViewController: BaseHostTableviewController,GuestListingViewCo
         }
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
     }
     
     func setbuildingSize()
     {
-        let buildingSizeListings = (Utility.shared.getListSettingsArray.buildingSize?.listSettings!)!
+        let buildingSizeListings = (Utility.shared.getListSettingsArray?.buildingSize?.listSettings!)!
         
         for item in buildingSizeListings
         {
@@ -322,7 +322,7 @@ class PlaceListingViewController: BaseHostTableviewController,GuestListingViewCo
     //IBActions
     
     @IBAction func RedirectNextPage(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         let guestListing = GuestListingViewController()
         guestListing.delegateGuestListing = self
         self.view.window?.backgroundColor = UIColor.white
@@ -389,7 +389,7 @@ class PlaceListingViewController: BaseHostTableviewController,GuestListingViewCo
     
    
     @IBAction func saveAndExitAction(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.lottieanimation()
             super.updateListingAPICall{ (success) -> Void in
             if success {
@@ -675,12 +675,12 @@ class PlaceListingViewController: BaseHostTableviewController,GuestListingViewCo
         {
             houseLabel = houseTypeArray[row]
             pickerView.selectRow(row, inComponent: component, animated: true)
-            Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray.houseType?.listSettings![row]?.id!)!, forKey: "houseType")
+            Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray?.houseType?.listSettings![row]?.id!)!, forKey: "houseType")
         }else if selectedTextfield == 1
         {
             roomTypeLbl = roomTypeArray[row]
             pickerView.selectRow(row, inComponent: component, animated: true)
-            Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray.roomType?.listSettings![row]?.id!)!, forKey: "roomType")
+            Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray?.roomType?.listSettings![row]?.id!)!, forKey: "roomType")
         }else if selectedTextfield == 2
         {
             buildingSizeLbl = buildingSizeArray[row]

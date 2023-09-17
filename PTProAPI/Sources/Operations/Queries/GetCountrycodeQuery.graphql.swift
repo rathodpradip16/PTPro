@@ -5,35 +5,19 @@
 
 public class GetCountrycodeQuery: GraphQLQuery {
   public static let operationName: String = "getCountrycode"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getCountrycode {
-        getCountries {
-          __typename
-          errorMessage
-          status
-          results {
-            __typename
-            id
-            isEnable
-            countryCode
-            countryName
-            dialCode
-          }
-        }
-      }
-      """
+      #"query getCountrycode { getCountries { __typename errorMessage status results { __typename id isEnable countryCode countryName dialCode } } }"#
     ))
 
   public init() {}
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getCountries", GetCountries?.self),
     ] }
 
@@ -44,10 +28,11 @@ public class GetCountrycodeQuery: GraphQLQuery {
     /// Parent Type: `AllCountry`
     public struct GetCountries: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.AllCountry }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.AllCountry }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("errorMessage", String?.self),
         .field("status", Int?.self),
         .field("results", [Result?]?.self),
@@ -62,10 +47,11 @@ public class GetCountrycodeQuery: GraphQLQuery {
       /// Parent Type: `Country`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.Country }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Country }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("isEnable", Bool?.self),
           .field("countryCode", String?.self),

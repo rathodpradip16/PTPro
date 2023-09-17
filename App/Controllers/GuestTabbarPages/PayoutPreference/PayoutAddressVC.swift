@@ -77,7 +77,7 @@ class PayoutAddressVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
 
     @IBAction func continuebtnTapped(_ sender: Any) {
-          if Utility().isConnectedToNetwork(){
+          if Utility.shared.isConnectedToNetwork(){
             self.view.endEditing(true)
            
         if((Utility.shared.payout_Address_Dict["address1"]) == nil || ((Utility.shared.payout_Address_Dict["address1"]as! String) == ""))
@@ -135,7 +135,7 @@ class PayoutAddressVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-           if Utility().isConnectedToNetwork(){
+           if Utility.shared.isConnectedToNetwork(){
             self.continueBtn.isHidden = false
             self.offlineView.isHidden = true
         }

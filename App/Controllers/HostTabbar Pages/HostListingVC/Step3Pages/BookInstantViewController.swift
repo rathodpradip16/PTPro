@@ -118,7 +118,7 @@ class BookInstantViewController: BaseHostTableviewController {
     
     override func setDropdownList() {
         
-        let reviewGuestBook = (Utility.shared.getListSettingsArray.reviewGuestBook?.listSettings!)!
+        let reviewGuestBook = (Utility.shared.getListSettingsArray?.reviewGuestBook?.listSettings!)!
         for i in 0..<reviewGuestBook.count
         {
             var amenityInfo = [String : Any]()
@@ -181,7 +181,7 @@ class BookInstantViewController: BaseHostTableviewController {
     //IBActions
     
     @IBAction func RedirectNextPage(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
            
         let becomeHost = NoticeArrivalViewController()
         self.view.window?.backgroundColor = UIColor.white
@@ -195,7 +195,7 @@ class BookInstantViewController: BaseHostTableviewController {
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
     }
@@ -221,7 +221,7 @@ class BookInstantViewController: BaseHostTableviewController {
         self.present(becomeHost, animated:false, completion: nil)
     }
     @IBAction func saveandExitaction(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
              self.lottieViewanimation()
             Utility.shared.step3ValuesInfo.updateValue(Utility.shared.selectedRules, forKey: "houseRules")
             Utility.shared.step3ValuesInfo.updateValue(Utility.shared.createId, forKey: "id")

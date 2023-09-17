@@ -5,34 +5,19 @@
 
 public class GetWhyHostDataQuery: GraphQLQuery {
   public static let operationName: String = "getWhyHostData"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getWhyHostData {
-        getWhyHostData {
-          __typename
-          status
-          errorMessage
-          results {
-            __typename
-            id
-            imageName
-            title
-            buttonLabel
-          }
-        }
-      }
-      """
+      #"query getWhyHostData { getWhyHostData { __typename status errorMessage results { __typename id imageName title buttonLabel } } }"#
     ))
 
   public init() {}
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getWhyHostData", GetWhyHostData?.self),
     ] }
 
@@ -43,10 +28,11 @@ public class GetWhyHostDataQuery: GraphQLQuery {
     /// Parent Type: `WhyHostCommonType`
     public struct GetWhyHostData: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.WhyHostCommonType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.WhyHostCommonType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
         .field("results", [Result?]?.self),
@@ -61,10 +47,11 @@ public class GetWhyHostDataQuery: GraphQLQuery {
       /// Parent Type: `WhyHostType`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.WhyHostType }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.WhyHostType }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("imageName", String?.self),
           .field("title", String?.self),

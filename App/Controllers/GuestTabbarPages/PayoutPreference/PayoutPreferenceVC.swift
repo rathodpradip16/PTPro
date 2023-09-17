@@ -43,16 +43,7 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     @IBOutlet weak var nodataview: UIView!
     var lottieWholeView = UIView()
     var lottieView1 =  LottieAnimationView()
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
-     var getpayoutArray = [GetPayoutsQuery.Data.GetPayout.Result]()
+     var getpayoutArray = [GetPayoutsQuery.Data.GetPayouts.Result]()
     var lottieView: LottieAnimationView!
     
     override func viewDidLoad() {
@@ -122,7 +113,7 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
      @IBAction func addBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         Utility.shared.payout_Address_Dict.removeAll()
 //        let payoutcountryObj = PayoutCountryVC()
 //        payoutcountryObj.modalPresentationStyle = .fullScreen
@@ -225,7 +216,7 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineview.isHidden = true
         }
     }
@@ -377,7 +368,7 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     @objc func verifyBtnTapped(_ sender: UIButton)
     {
-      if Utility().isConnectedToNetwork(){
+      if Utility.shared.isConnectedToNetwork(){
         self.VerifyAPICall(stripeaccountID: getpayoutArray[sender.tag].payEmail!)
         }
         else
@@ -421,58 +412,60 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     func setPayoutCall(accountid:String)
     {
         self.lottiewholeAnimation()
-        let setPayoutMutation = ConfirmPayoutMutation(currentAccountId:accountid)
-        apollo_headerClient.perform(mutation:setPayoutMutation){(result,error) in
-                if(result?.data?.confirmPayout?.status == 200)
-                {
+        let setPayoutMutation = ConfirmPayoutMutation(currentAccountId:.some(accountid))
+        Network.shared.apollo_headerClient.perform(mutation:setPayoutMutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.confirmPayout?.status,data == 200 {
                     self.payoutAPICall()
                     self.lottieView1.isHidden = true
                     self.lottieWholeView.isHidden = true
                     //self.payoutTable.reloadData()
-
-//                                    let payoutObj = PayoutPreferenceVC()
-//                                                    Utility.shared.isfrom_payoutcurrency = true
-//                                                     payoutObj.modalPresentationStyle = .fullScreen
-//                                                    self.present(payoutObj, animated: true, completion: nil)
-                }
-                else
-                {
+                    
+                    //                                    let payoutObj = PayoutPreferenceVC()
+                    //                                                    Utility.shared.isfrom_payoutcurrency = true
+                    //                                                     payoutObj.modalPresentationStyle = .fullScreen
+                    //                                                    self.present(payoutObj, animated: true, completion: nil)
+                } else {
                     self.lottieView1.isHidden = true
                     self.lottieWholeView.isHidden = true
-                    self.view.makeToast(result?.data?.confirmPayout?.errorMessage)
-//                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"somethingwrong"))!)")
+                    self.view.makeToast(result.data?.confirmPayout?.errorMessage)
+                    //                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"somethingwrong"))!)")
                 }
-    }
-            
-            
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
+        
     }
     func VerifyAPICall(stripeaccountID:String)
     {
-    let verifyPayoutmutation = VerifyPayoutMutation(stripeAccount: stripeaccountID)
-    apollo_headerClient.perform(mutation:verifyPayoutmutation) {(result,error) in
-        if(result?.data?.verifyPayout?.status == 200)
-        {
-            let webviewObj = WebviewVC()
-            webviewObj.delegate = self
-            webviewObj.webstring = (result?.data?.verifyPayout?.connectUrl)!
-            webviewObj.modalPresentationStyle = .fullScreen
-            webviewObj.succesURL = (result?.data?.verifyPayout?.successUrl)!
-            webviewObj.failureURL = (result?.data?.verifyPayout?.failureUrl)!
-            webviewObj.webviewRedirection(webviewString:(result?.data?.verifyPayout?.connectUrl!)!)
-            webviewObj.accountID = (result?.data?.verifyPayout?.stripeAccountId!)!
-            webviewObj.pageTitle = ""
-            self.present(webviewObj, animated: true, completion: nil)
-    }
-        else
-        {
-            self.view.makeToast(result?.data?.verifyPayout?.errorMessage)
+        let verifyPayoutmutation = VerifyPayoutMutation(stripeAccount: .some(stripeaccountID))
+        Network.shared.apollo_headerClient.perform(mutation:verifyPayoutmutation) { response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.verifyPayout?.status,data == 200 {
+                    let webviewObj = WebviewVC()
+                    webviewObj.delegate = self
+                    webviewObj.webstring = (result.data?.verifyPayout?.connectUrl)!
+                    webviewObj.modalPresentationStyle = .fullScreen
+                    webviewObj.succesURL = (result.data?.verifyPayout?.successUrl)!
+                    webviewObj.failureURL = (result.data?.verifyPayout?.failureUrl)!
+                    webviewObj.webviewRedirection(webviewString:(result.data?.verifyPayout?.connectUrl!)!)
+                    webviewObj.accountID = (result.data?.verifyPayout?.stripeAccountId!)!
+                    webviewObj.pageTitle = ""
+                    self.present(webviewObj, animated: true, completion: nil)
+                } else {
+                    self.view.makeToast(result.data?.verifyPayout?.errorMessage!)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
         }
-    }
-    
     }
     @objc func defaultBtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.setDefaultAPICall(id: getpayoutArray[sender.tag].id!, type: "set")
         }
         else
@@ -500,7 +493,7 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     @objc func deleteBtnTapped(_ sender: UIButton)
     {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
             if((getpayoutArray.count > sender.tag) && getpayoutArray[sender.tag].id != nil)
             {
         self.setDefaultAPICall(id: getpayoutArray[sender.tag].id!, type: "remove")
@@ -533,35 +526,37 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     func payoutAPICall()
     {
         let getpayoutquery = GetPayoutsQuery()
-        apollo_headerClient.fetch(query: getpayoutquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            guard (result?.data?.getPayouts?.results) != nil else{
-                print("Missing Data")
-                self.payoutTable.isHidden = true
-                self.nodataview.isHidden = true
-                self.lottieView.isHidden = true
-                return
+        Network.shared.apollo_headerClient.fetch(query: getpayoutquery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getPayouts?.results) != nil else{
+                    print("Missing Data")
+                    self.payoutTable.isHidden = true
+                    self.nodataview.isHidden = true
+                    self.lottieView.isHidden = true
+                    return
+                }
+                
+                
+                self.getpayoutArray = ((result.data?.getPayouts?.results)!) as! [GetPayoutsQuery.Data.GetPayouts.Result]
+                if(self.getpayoutArray.count>0)
+                {
+                    self.payoutTable.isHidden = false
+                    self.nodataview.isHidden = true
+                    self.lottieView.isHidden = true
+                    self.payoutTable.reloadData()
+                    self.scrollToBottom()
+                }
+                else
+                {
+                    self.payoutTable.isHidden = true
+                    self.lottieView.isHidden = true
+                    self.nodataview.isHidden = true
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-           
-            
-            self.getpayoutArray = ((result?.data?.getPayouts?.results)!) as! [GetPayoutsQuery.Data.GetPayout.Result]
-            if(self.getpayoutArray.count>0)
-            {
-                self.payoutTable.isHidden = false
-                self.nodataview.isHidden = true
-                self.lottieView.isHidden = true
-                self.payoutTable.reloadData()
-                self.scrollToBottom()
-            }
-            else
-            {
-                self.payoutTable.isHidden = true
-                self.lottieView.isHidden = true
-                self.nodataview.isHidden = true
-            }
-            
-           
         }
-        
     }
     
    func scrollToBottom() {
@@ -575,21 +570,21 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
     }
 
-func setDefaultAPICall(id:Int,type:String)
-{
+    func setDefaultAPICall(id:Int,type:String){
         let setdefaultMutation = SetDefaultPayoutMutation(id: id, type: type)
-        apollo_headerClient.perform(mutation: setdefaultMutation) {(result,error) in
-            
-            if (result?.data?.setDefaultPayout?.status == 200)
-            {
-                self.payoutAPICall()
-            }
-            else {
-                self.view.makeToast(result?.data?.setDefaultPayout?.errorMessage)
+        Network.shared.apollo_headerClient.perform(mutation: setdefaultMutation) { response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.setDefaultPayout?.status,data == 200 {
+                    self.payoutAPICall()
+                } else {
+                    self.view.makeToast(result.data?.setDefaultPayout?.errorMessage!)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
-    
-}
+    }
 
     /*
     // MARK: - Navigation

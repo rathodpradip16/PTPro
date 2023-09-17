@@ -41,15 +41,6 @@ class ViewReviewPage: UIViewController, WriteReviewProtocol,UITableViewDelegate 
     
     var cellIdArray  = [Int]()
     var lottieView: LottieAnimationView!
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     
     @IBOutlet weak var offlineView: UIView!
     @IBOutlet weak var retryBtn: UIButton!
@@ -57,9 +48,9 @@ class ViewReviewPage: UIViewController, WriteReviewProtocol,UITableViewDelegate 
     var pageIndex = 1
     var selectedOwnerType = "other"
     var totalCount = 0
-    var aboutYouReviewArray = [GetUserReviewsQuery.Data.GetUserReview.Result]()
-    var byYouReviewArray = [GetUserReviewsQuery.Data.GetUserReview.Result]()
-    var pendingReviewArray = [GetPendingUserReviewsQuery.Data.GetPendingUserReview.Result]()
+    var aboutYouReviewArray = [GetUserReviewsQuery.Data.GetUserReviews.Result]()
+    var byYouReviewArray = [GetUserReviewsQuery.Data.GetUserReviews.Result]()
+    var pendingReviewArray = [GetPendingUserReviewsQuery.Data.GetPendingUserReviews.Result]()
     var pendingPageIndex = 1
     var pendingTotalCount = 0
     
@@ -108,7 +99,7 @@ class ViewReviewPage: UIViewController, WriteReviewProtocol,UITableViewDelegate 
             self.offlineView.isHidden = true
             self.NoReviewsFoundView.isHidden = true
             self.ReviewsTableView.isHidden = false
-            let getUserReview = GetUserReviewsQuery(currentPage: self.pageIndex, ownerType: self.selectedOwnerType)
+            let getUserReview = GetUserReviewsQuery(currentPage: .some(self.pageIndex), ownerType: .some(self.selectedOwnerType))
             if pageIndex == 1{
                 self.aboutYouReviewArray.removeAll()
                 self.byYouReviewArray.removeAll()
@@ -116,44 +107,51 @@ class ViewReviewPage: UIViewController, WriteReviewProtocol,UITableViewDelegate 
                 self.ReviewsTableView.reloadData()
             }
             self.isAPICallGoingOn = true
-            apollo_headerClient.fetch(query:getUserReview,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-                
+            Network.shared.apollo_headerClient.fetch(query:getUserReview,cachePolicy:.fetchIgnoringCacheData){ response in
                 self.isAPICallGoingOn = false
-                guard (result?.data?.getUserReviews?.results) != nil else{
-                    self.ReviewsTableView.hideSkeleton()
-                    self.ReviewsTableView.isSkeletonable = false
-                    self.lottieView.isHidden = true
-                    self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
-                   
-                    
-                self.view.makeToast(result?.data?.getUserReviews?.errorMessage)
-                return
-            }
                 
-                if self.selectedOwnerType == result?.data?.getUserReviews?.ownerType{
-                if result?.data?.getUserReviews?.currentPage == 1{
-                    self.aboutYouReviewArray.removeAll()
-                    self.byYouReviewArray.removeAll()
-                    self.cellIdArray.removeAll()
-                }
-                self.totalCount = result?.data?.getUserReviews?.count ?? 0
-                if self.selectedOwnerType == "other"{
-                    self.aboutYouReviewArray.append(contentsOf: (result?.data?.getUserReviews?.results)! as! [GetUserReviewsQuery.Data.GetUserReview.Result])
-                }else{
-                    self.byYouReviewArray.append(contentsOf: (result?.data?.getUserReviews?.results)! as! [GetUserReviewsQuery.Data.GetUserReview.Result])
-                }
-                   self.ReviewsTableView.hideSkeleton()
-                    self.ReviewsTableView.isSkeletonable = false
-                self.lottieView.isHidden = true
-                self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
-                if self.totalCount != 0{
-                    self.ReviewsTableView.isHidden = false
-                    self.NoReviewsFoundView.isHidden = true
-                    self.ReviewsTableView.reloadData()
-                }else{
-                    self.ReviewsTableView.isHidden = true
-                    self.NoReviewsFoundView.isHidden = false
-                }
+                switch response {
+                case .success(let result):
+                    
+                    guard (result.data?.getUserReviews?.results) != nil else{
+                        self.ReviewsTableView.hideSkeleton()
+                        self.ReviewsTableView.isSkeletonable = false
+                        self.lottieView.isHidden = true
+                        self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
+                        
+                        
+                        self.view.makeToast(result.data?.getUserReviews?.errorMessage)
+                        return
+                    }
+                    
+                    if self.selectedOwnerType == result.data?.getUserReviews?.ownerType{
+                        if result.data?.getUserReviews?.currentPage == 1{
+                            self.aboutYouReviewArray.removeAll()
+                            self.byYouReviewArray.removeAll()
+                            self.cellIdArray.removeAll()
+                        }
+                        self.totalCount = result.data?.getUserReviews?.count ?? 0
+                        if self.selectedOwnerType == "other"{
+                            self.aboutYouReviewArray.append(contentsOf: (result.data?.getUserReviews?.results)! as! [GetUserReviewsQuery.Data.GetUserReviews.Result])
+                        }else{
+                            self.byYouReviewArray.append(contentsOf: (result.data?.getUserReviews?.results)! as! [GetUserReviewsQuery.Data.GetUserReviews.Result])
+                        }
+                        self.ReviewsTableView.hideSkeleton()
+                        self.ReviewsTableView.isSkeletonable = false
+                        self.lottieView.isHidden = true
+                        self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
+                        if self.totalCount != 0{
+                            self.ReviewsTableView.isHidden = false
+                            self.NoReviewsFoundView.isHidden = true
+                            self.ReviewsTableView.reloadData()
+                        }else{
+                            self.ReviewsTableView.isHidden = true
+                            self.NoReviewsFoundView.isHidden = false
+                        }
+                    }
+                    
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
             }
         }else{
@@ -184,7 +182,7 @@ class ViewReviewPage: UIViewController, WriteReviewProtocol,UITableViewDelegate 
             self.offlineView.isHidden = true
             self.NoReviewsFoundView.isHidden = true
             
-            let getPendingReviews = GetPendingUserReviewsQuery(currentPage: self.pendingPageIndex)
+            let getPendingReviews = GetPendingUserReviewsQuery(currentPage: .some(self.pendingPageIndex))
             
             if self.pendingPageIndex == 1{
                 self.pendingReviewArray.removeAll()
@@ -192,38 +190,43 @@ class ViewReviewPage: UIViewController, WriteReviewProtocol,UITableViewDelegate 
                 self.ReviewsTableView.reloadData()
             }
             self.isAPICallGoingOn = true
-            apollo_headerClient.fetch(query:getPendingReviews,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-                
+            Network.shared.apollo_headerClient.fetch(query:getPendingReviews,cachePolicy:.fetchIgnoringCacheData){ response in
                 self.isAPICallGoingOn = false
-                guard (result?.data?.getPendingUserReviews?.results) != nil else{
+                
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getPendingUserReviews?.results) != nil else{
+                        self.ReviewsTableView.hideSkeleton()
+                        self.ReviewsTableView.isSkeletonable = false
+                        self.lottieView.isHidden = true
+                        self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
+                        
+                        
+                        
+                        self.view.makeToast(result.data?.getPendingUserReviews?.errorMessage)
+                        return
+                    }
+                    if result.data?.getPendingUserReviews?.currentPage == 1{
+                        self.pendingReviewArray.removeAll()
+                        self.cellIdArray.removeAll()
+                    }
+                    
+                    self.pendingTotalCount = result.data?.getPendingUserReviews?.count ?? 0
+                    self.pendingReviewArray.append(contentsOf: (result.data?.getPendingUserReviews?.results)! as! [GetPendingUserReviewsQuery.Data.GetPendingUserReviews.Result])
                     self.ReviewsTableView.hideSkeleton()
                     self.ReviewsTableView.isSkeletonable = false
                     self.lottieView.isHidden = true
                     self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
-                    
-                   
-                    
-                self.view.makeToast(result?.data?.getPendingUserReviews?.errorMessage)
-                return
-            }
-                if result?.data?.getPendingUserReviews?.currentPage == 1{
-                    self.pendingReviewArray.removeAll()
-                    self.cellIdArray.removeAll()
-                }
-                
-                self.pendingTotalCount = result?.data?.getPendingUserReviews?.count ?? 0
-                self.pendingReviewArray.append(contentsOf: (result?.data?.getPendingUserReviews?.results)! as! [GetPendingUserReviewsQuery.Data.GetPendingUserReview.Result])
-                self.ReviewsTableView.hideSkeleton()
-                self.ReviewsTableView.isSkeletonable = false
-                self.lottieView.isHidden = true
-                self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
-                if self.pendingTotalCount != 0{
-                    self.ReviewsTableView.isHidden = false
-                    self.NoReviewsFoundView.isHidden = true
-                    self.ReviewsTableView.reloadData()
-                }else{
-                    self.ReviewsTableView.isHidden = true
-                    self.NoReviewsFoundView.isHidden = false
+                    if self.pendingTotalCount != 0{
+                        self.ReviewsTableView.isHidden = false
+                        self.NoReviewsFoundView.isHidden = true
+                        self.ReviewsTableView.reloadData()
+                    }else{
+                        self.ReviewsTableView.isHidden = true
+                        self.NoReviewsFoundView.isHidden = false
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
             }
         }else{

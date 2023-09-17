@@ -136,7 +136,7 @@ class BookingWindowViewController: BaseHostTableviewController {
     }
     func setBookingStatus()
     {
-        let listSettings = (Utility.shared.getListSettingsArray.maxDaysNotice?.listSettings!)!
+        let listSettings = (Utility.shared.getListSettingsArray?.maxDaysNotice?.listSettings!)!
 
         futureDatesArr = ["\((Utility.shared.getLanguage()?.value(forKey:"datesunavailable"))!)","3 \((Utility.shared.getLanguage()?.value(forKey:"monthsintofuture"))!)","6 \((Utility.shared.getLanguage()?.value(forKey:"monthsintofuture"))!)","9 \((Utility.shared.getLanguage()?.value(forKey:"monthsintofuture"))!)","12 \((Utility.shared.getLanguage()?.value(forKey:"monthsintofuture"))!)","\((Utility.shared.getLanguage()?.value(forKey:"Allfuturedates"))!)"]
         
@@ -290,7 +290,7 @@ class BookingWindowViewController: BaseHostTableviewController {
     //IBActions
     
     @IBAction func RedirectNextPage(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         let guestListing = TripLengthViewController()
         guestListing.modalPresentationStyle = .fullScreen
         self.present(guestListing, animated: false, completion: nil)
@@ -302,7 +302,7 @@ class BookingWindowViewController: BaseHostTableviewController {
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
             //self.view.layer.add(dismissrightAnimation()!, forKey: kCATransition)
              if(Utility.shared.step3_Edit)
              {
@@ -331,7 +331,7 @@ class BookingWindowViewController: BaseHostTableviewController {
     }
     @IBAction func saveandExit(_ sender: Any) {
         
-          if Utility().isConnectedToNetwork(){
+          if Utility.shared.isConnectedToNetwork(){
              self.lottieViewanimation()
            Utility.shared.step3ValuesInfo.updateValue(Utility.shared.selectedRules, forKey: "houseRules")
                       Utility.shared.step3ValuesInfo.updateValue(Utility.shared.createId, forKey: "id")
@@ -352,7 +352,7 @@ class BookingWindowViewController: BaseHostTableviewController {
     
     @IBAction func retryBtnTapped(_ sender: Any) {
         
-          if Utility().isConnectedToNetwork(){
+          if Utility.shared.isConnectedToNetwork(){
            self.offlineUIView.isHidden = true
         }
     }

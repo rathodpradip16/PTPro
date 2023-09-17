@@ -5,27 +5,9 @@
 
 public class GetListingSpecialPriceQuery: GraphQLQuery {
   public static let operationName: String = "getListingSpecialPrice"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getListingSpecialPrice($listId: Int!) {
-        getListingSpecialPrice(listId: $listId) {
-          __typename
-          results {
-            __typename
-            id
-            listId
-            reservationId
-            blockedDates
-            calendarStatus
-            isSpecialPrice
-            listCurrency
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query getListingSpecialPrice($listId: Int!) { getListingSpecialPrice(listId: $listId) { __typename results { __typename id listId reservationId blockedDates calendarStatus isSpecialPrice listCurrency } status errorMessage } }"#
     ))
 
   public var listId: Int
@@ -38,10 +20,10 @@ public class GetListingSpecialPriceQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getListingSpecialPrice", GetListingSpecialPrice?.self, arguments: ["listId": .variable("listId")]),
     ] }
 
@@ -52,10 +34,11 @@ public class GetListingSpecialPriceQuery: GraphQLQuery {
     /// Parent Type: `ListBlockedDatesResponseType`
     public struct GetListingSpecialPrice: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.ListBlockedDatesResponseType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ListBlockedDatesResponseType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", [Result?]?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -70,10 +53,11 @@ public class GetListingSpecialPriceQuery: GraphQLQuery {
       /// Parent Type: `ListBlockedDates`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.ListBlockedDates }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ListBlockedDates }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("listId", Int?.self),
           .field("reservationId", Int?.self),

@@ -127,7 +127,7 @@ class SafeAmenitiesViewController: BaseHostTableviewController,UICollectionViewD
     
     override func setDropdownList() {
        //  Utility.shared.selectedsafetyAmenityIdList.removeAllObjects()
-        let amenitiesList = (Utility.shared.getListSettingsArray.safetyAmenities?.listSettings!)!
+        let amenitiesList = (Utility.shared.getListSettingsArray?.safetyAmenities?.listSettings!)!
         for i in 0..<amenitiesList.count
         {
             var amenityInfo = [String : Any]()
@@ -147,7 +147,7 @@ class SafeAmenitiesViewController: BaseHostTableviewController,UICollectionViewD
         {
             for i in 0..<typeInfo.count
             {
-                if let userAmenityTypes = typeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetail.Result.UserSafetyAmenity
+                if let userAmenityTypes = typeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserSafetyAmenity
                 {
                     if amenityList.contains(where: { (item) -> Bool in
                         (item["itemName"] as? String == (userAmenityTypes.itemName!))
@@ -182,7 +182,7 @@ class SafeAmenitiesViewController: BaseHostTableviewController,UICollectionViewD
     
     //IBActions
     @IBAction func saveandExitTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         self.lottieViewanimation()
        Utility.shared.step1ValuesInfo.updateValue(Utility.shared.selectedsafetyAmenityIdList, forKey: "safetyAmenities")
         super.updateListingAPICall{ (success) -> Void in
@@ -237,13 +237,13 @@ class SafeAmenitiesViewController: BaseHostTableviewController,UICollectionViewD
         self.lottieView1.play()
     }
     @IBAction func retryBtntapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
         
     }
     @IBAction func RedirectNextPage(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         Utility.shared.step1ValuesInfo.updateValue(Utility.shared.selectedsafetyAmenityIdList, forKey: "safetyAmenities")
         let spaces = SpaceListViewController()
         self.view.window?.backgroundColor = UIColor.white

@@ -5,17 +5,9 @@
 
 public class SendUserFeedbackMutation: GraphQLMutation {
   public static let operationName: String = "sendUserFeedback"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation sendUserFeedback($type: String, $message: String) {
-        userFeedback(type: $type, message: $message) {
-          __typename
-          status
-          errorMessage
-        }
-      }
-      """
+      #"mutation sendUserFeedback($type: String, $message: String) { userFeedback(type: $type, message: $message) { __typename status errorMessage } }"#
     ))
 
   public var type: GraphQLNullable<String>
@@ -36,10 +28,10 @@ public class SendUserFeedbackMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("userFeedback", UserFeedback?.self, arguments: [
         "type": .variable("type"),
         "message": .variable("message")
@@ -53,10 +45,11 @@ public class SendUserFeedbackMutation: GraphQLMutation {
     /// Parent Type: `ReportUserResult`
     public struct UserFeedback: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.ReportUserResult }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ReportUserResult }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
       ] }

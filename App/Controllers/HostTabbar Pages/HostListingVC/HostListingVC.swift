@@ -50,19 +50,10 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     var lottieViewbtn: LottieAnimationView!
     var ispublish:Bool = false
     
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
-    var manageListingArray = [ManageListingsQuery.Data.ManageListing.Result]()
-    var siteSettingArray = [SiteSettingsQuery.Data.SiteSetting.Result]()
-    var inprogress_List_Array = [ManageListingsQuery.Data.ManageListing.Result]()
-    var completed_List_Array = [ManageListingsQuery.Data.ManageListing.Result]()
+    var manageListingArray = [ManageListingsQuery.Data.ManageListings.Result]()
+    var siteSettingArray = [SiteSettingsQuery.Data.SiteSettings.Result]()
+    var inprogress_List_Array = [ManageListingsQuery.Data.ManageListings.Result]()
+    var completed_List_Array = [ManageListingsQuery.Data.ManageListings.Result]()
     
     @IBOutlet var topContainerView: UIView!
     
@@ -111,8 +102,8 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
 //MARK: -  IBACTIONS & FUNCTIONS DECLARATIONS
     @IBAction func ListAddBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
-            if Utility.shared.getListSettingsArray.personCapacity != nil{
+        if Utility.shared.isConnectedToNetwork(){
+            if Utility.shared.getListSettingsArray?.personCapacity != nil{
         let baseHost = BaseHostTableviewController()
                 baseHost.showOverlay = true
         baseHost.getListSettingsArray = Utility.shared.getListSettingsArray
@@ -158,8 +149,8 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
     
     @IBAction func newListingBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
-            if Utility.shared.getListSettingsArray.personCapacity != nil{
+        if Utility.shared.isConnectedToNetwork(){
+            if Utility.shared.getListSettingsArray?.personCapacity != nil{
             let baseHost = BaseHostTableviewController()
             baseHost.getListSettingsArray = Utility.shared.getListSettingsArray
             Utility.shared.createId = Int()
@@ -293,12 +284,16 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     func CountryAPICAll()
     {
         let getcountrycodeQuery = GetCountrycodeQuery()
-        apollo.fetch(query: getcountrycodeQuery,cachePolicy: .fetchIgnoringCacheData){(result,error) in
-            guard (result?.data?.getCountries?.results) != nil else{
-//                self.view.makeToast("Missing Data")
-                return
+        apollo.fetch(query: getcountrycodeQuery,cachePolicy: .fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getCountries?.results) != nil else{
+                    //                self.view.makeToast("Missing Data")
+                    return
+                }
+                Utility.shared.countrylist =  ((result.data?.getCountries?.results)!) as! [GetCountrycodeQuery.Data.GetCountries.Result]
+            case .failure(_): break
             }
-            Utility.shared.countrylist =  ((result?.data?.getCountries?.results)!) as! [GetCountrycodeQuery.Data.GetCountry.Result]
         }
     }
     
@@ -307,16 +302,15 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     func GetListSettingAPICall()
     {
         let getlistsettingsquery = GetListingSettingQuery()
-        apollo_headerClient.fetch(query: getlistsettingsquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            
-            
-            guard (result?.data?.getListingSettings?.results) != nil else{
-                
-            
-                
-                return
+        Network.shared.apollo_headerClient.fetch(query: getlistsettingsquery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getListingSettings?.results) != nil else{
+                    return
+                }
+                Utility.shared.getListSettingsArray = (result.data?.getListingSettings?.results)!
+            case .failure(_): break
             }
-            Utility.shared.getListSettingsArray = (result?.data?.getListingSettings?.results)!
         }
     }
     
@@ -328,7 +322,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     @objc func deleteBtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
            // self.deleteListingAPICall(listId: self.inprogress_List_Array[(sender.tag)].id!)
         }
         else
@@ -370,7 +364,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     @IBAction func deleteListingTapped(_ sender: Any) {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             
             
             if(inprogressTapped) {
@@ -487,41 +481,45 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     func siteSettingsAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let siteSettingsquery = SiteSettingsQuery()
-            apollo_headerClient.fetch(query:siteSettingsquery,cachePolicy: .fetchIgnoringCacheData){ [self](result,error) in
-                if(result?.data?.siteSettings?.status == 200)
-                {
-                    self.siteSettingArray = result?.data?.siteSettings?.results as! [SiteSettingsQuery.Data.SiteSetting.Result]
-                    for i in self.siteSettingArray{
-                        if(i.name == "listingApproval")
-                        {
-                            if(i.value == "1")
+            let siteSettingsquery = SiteSettingsQuery(type: .some(""))
+            Network.shared.apollo_headerClient.fetch(query:siteSettingsquery,cachePolicy: .fetchIgnoringCacheData){ [self] response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.siteSettings?.status,data == 200 {
+                        self.siteSettingArray = result.data?.siteSettings?.results as! [SiteSettingsQuery.Data.SiteSettings.Result]
+                        for i in self.siteSettingArray{
+                            if(i.name == "listingApproval")
                             {
-                            Utility.shared.listingApproval = "required"
-                            } else {
-                                Utility.shared.listingApproval = "optional"
+                                if(i.value == "1")
+                                {
+                                    Utility.shared.listingApproval = "required"
+                                } else {
+                                    Utility.shared.listingApproval = "optional"
+                                }
                             }
                         }
+                        self.manageListingAPI()
                     }
-                   
-                    self.manageListingAPI()
+                case .failure(_): break
                 }
             }
             
-          //  let siteSettingsquery = siteSe
+            //  let siteSettingsquery = siteSe
             
         }
     }
 
     func manageListingAPI()
-    {
-        let manageListingquery = ManageListingsQuery()
-        apollo_headerClient.fetch(query: manageListingquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            if  result?.data?.manageListings?.status == 200 {
-                guard (result?.data?.manageListings?.results) != nil else{
+{
+    let manageListingquery = ManageListingsQuery()
+    Network.shared.apollo_headerClient.fetch(query: manageListingquery,cachePolicy:.fetchIgnoringCacheData){ response in
+        switch response {
+        case .success(let result):
+            if let data = result.data?.manageListings?.status,data == 200 {
+                guard (result.data?.manageListings?.results) != nil else{
                     
-                    if result?.data?.manageListings?.status == 500{
-                        let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message:result?.data?.manageListings?.errorMessage, preferredStyle: .alert)
+                    if result.data?.manageListings?.status == 500{
+                        let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message:result.data?.manageListings?.errorMessage, preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
                             UserDefaults.standard.removeObject(forKey: "user_token")
                             UserDefaults.standard.removeObject(forKey: "user_id")
@@ -549,7 +547,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 self.inprogress_List_Array.removeAll()
                 self.completed_List_Array.removeAll()
                 self.becomeListingTable.isHidden = false
-                self.manageListingArray = ((result?.data?.manageListings?.results)!) as! [ManageListingsQuery.Data.ManageListing.Result]
+                self.manageListingArray = ((result.data?.manageListings?.results)!) as! [ManageListingsQuery.Data.ManageListings.Result]
                 
                 for i in self.manageListingArray
                 {
@@ -562,7 +560,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                     }
                 }
                 
-            //    self.lottieView.isHidden = true
+                //    self.lottieView.isHidden = true
                 
                 if((self.inprogress_List_Array.count == 0) && (self.inprogressTapped)) {
                     self.becomeListingTable.isHidden = true
@@ -584,17 +582,17 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                     self.noDataView.isHidden = false
                 }
                 
-            }else{
+            } else {
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                 let welcomeObj = WelcomePageVC()
+                let welcomeObj = WelcomePageVC()
                 // self.present(welcomeObj, animated:false, completion: nil)
-                 appDelegate.setInitialViewController(initialView: welcomeObj)
+                appDelegate.setInitialViewController(initialView: welcomeObj)
                 //self.view.makeToast("Something went wrong")
             }
-            
-            
+        case .failure(_): break
         }
     }
+}
     
     
     func manageListingAPICall()
@@ -628,47 +626,48 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
     
     func deleteListingAPICall(listId:Int)
-    {
-        if Utility.shared.isConnectedToNetwork() {
-            
-            let deleteListingMutation = RemoveListingMutation(listId: listId)
-            apollo_headerClient.perform(mutation: deleteListingMutation){(result,error) in
-                if(result?.data?.removeListing?.status == 200)
-                {
-                   // self.lottieAnimation()
-                    
+{
+    if Utility.shared.isConnectedToNetwork() {
+        
+        let deleteListingMutation = RemoveListingMutation(listId: listId)
+        Network.shared.apollo_headerClient.perform(mutation: deleteListingMutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.removeListing?.status,data == 200 {
                     self.manageListingAPICall()
-                }else{
                     
-                    
-                    
-                    self.view.makeToast(result?.data?.removeListing?.errorMessage)
+                } else {
+                    self.view.makeToast(result.data?.removeListing?.errorMessage!)
                 }
-            }
-        }else{
-            offlineView.isHidden = false
-            let shadowSize2 : CGFloat = 3.0
-            let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
-                                                        y: -shadowSize2 / 2,
-                                                        width: self.offlineView.frame.size.width + shadowSize2,
-                                                        height: self.offlineView.frame.size.height + shadowSize2))
-            
-            self.offlineView.layer.masksToBounds = false
-            self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
-            self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-            self.offlineView.layer.shadowOpacity = 0.3
-            self.offlineView.layer.shadowPath = shadowPath2.cgPath
-            if IS_IPHONE_X || IS_IPHONE_XR{
-                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-150, width: FULLWIDTH, height: 55)
-            }else{
-                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: FULLWIDTH, height: 55)
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
         
+    }else{
+        offlineView.isHidden = false
+        let shadowSize2 : CGFloat = 3.0
+        let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
+                                                    y: -shadowSize2 / 2,
+                                                    width: self.offlineView.frame.size.width + shadowSize2,
+                                                    height: self.offlineView.frame.size.height + shadowSize2))
+        
+        self.offlineView.layer.masksToBounds = false
+        self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
+        self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        self.offlineView.layer.shadowOpacity = 0.3
+        self.offlineView.layer.shadowPath = shadowPath2.cgPath
+        if IS_IPHONE_X || IS_IPHONE_XR{
+            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-150, width: FULLWIDTH, height: 55)
+        }else{
+            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: FULLWIDTH, height: 55)
+        }
     }
     
+}
+    
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
         }
         
@@ -1045,7 +1044,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         if(inprogressTapped)
         {
         let becomeHostObj = BecomeHostVC()
@@ -1111,23 +1110,26 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         Timer.scheduledTimer(timeInterval:0.2, target: self, selector: #selector(autoscrolling), userInfo: nil, repeats: true)
     }
     func submitForVerification(listID:Int)
-    {
-        let submitforverificationmutation = SubmitForVerificationMutation(id:listID, listApprovalStatus:"pending")
-        apollo_headerClient.perform(mutation: submitforverificationmutation){(result,error) in
-           
-            if(result?.data?.submitForVerification?.status == 200)
-            {
+{
+    let submitforverificationmutation = SubmitForVerificationMutation(id:listID, listApprovalStatus:"pending")
+    Network.shared.apollo_headerClient.perform(mutation: submitforverificationmutation){ response in
+        switch response {
+        case .success(let result):
+            if let data = result.data?.submitForVerification?.status,data == 200{
                 self.lottieViewbtn.isHidden = true
                 self.manageListingAPI()
                 
             } else {
                 self.lottieViewbtn.isHidden = true
-               
-                self.view.makeToast(result?.data?.submitForVerification?.errorMessage!)
+                
+                self.view.makeToast(result.data?.submitForVerification?.errorMessage!)
                 
             }
+        case .failure(let error):
+            self.view.makeToast(error.localizedDescription)
         }
     }
+}
     
     @objc func editBtnTapped(_ sender: UIButton) {
         let becomeHostObj = BecomeHostVC()
@@ -1155,7 +1157,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
      @objc func PublishBtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         let btnsendtag: UIButton = sender
             
             
@@ -1208,33 +1210,34 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
    
     func PublishAPICall(listid:Int,action:String,sender:UIButton)
-    {
-        let managepublishstatusMutation = ManagePublishStatusMutation(listId: listid, action: action)
-        apollo_headerClient.perform(mutation: managepublishstatusMutation){(result,error) in
-             let btnsendtag: UIButton = sender
-    
-           if(result?.data?.managePublishStatus?.status == 200)
-           {
-            self.lottieViewbtn.isHidden = true
-            self.ispublish = true
-            self.manageListingAPICall()
-            if(!Utility.shared.unpublish_preview_check){
-             btnsendtag.setTitle("  \((Utility.shared.getLanguage()?.value(forKey:"unpublish"))!)  ", for: .normal)
-                
+{
+    let btnsendtag: UIButton = sender
+    let managepublishstatusMutation = ManagePublishStatusMutation(listId: listid, action: action)
+    Network.shared.apollo_headerClient.perform(mutation: managepublishstatusMutation){ response in
+        switch response {
+        case .success(let result):
+            if let data = result.data?.managePublishStatus?.status,data == 200 {
+                self.lottieViewbtn.isHidden = true
+                self.ispublish = true
+                self.manageListingAPICall()
+                if(!Utility.shared.unpublish_preview_check){
+                    btnsendtag.setTitle("  \((Utility.shared.getLanguage()?.value(forKey:"unpublish"))!)  ", for: .normal)
+                    
+                }
+                else
+                {
+                    btnsendtag.setTitle("  \((Utility.shared.getLanguage()?.value(forKey:"publish"))!)  ", for: .normal)
+                }
+            } else {
+                self.lottieViewbtn.isHidden = true
+                btnsendtag.setTitle("  \((Utility.shared.getLanguage()?.value(forKey:"unpublish"))!)  ", for: .normal)
+                self.view.makeToast(result.data?.managePublishStatus?.errorMessage!)
             }
-            else
-            {
-            btnsendtag.setTitle("  \((Utility.shared.getLanguage()?.value(forKey:"publish"))!)  ", for: .normal)
-            }
-            }else
-           {
-            self.lottieViewbtn.isHidden = true
-            btnsendtag.setTitle("  \((Utility.shared.getLanguage()?.value(forKey:"unpublish"))!)  ", for: .normal)
-            self.view.makeToast(result?.data?.managePublishStatus?.errorMessage!)
-            }
-            
+        case .failure(let error):
+            self.view.makeToast(error.localizedDescription)
         }
     }
+}
     
     
     
@@ -1263,7 +1266,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                   
                         if(selectedIndex == 0)
                         {
-                                     if Utility().isConnectedToNetwork(){
+                                     if Utility.shared.isConnectedToNetwork(){
                                          let viewListing = UpdatedViewListing()
                                          viewListing.listID = self.completed_List_Array[sender.tag].id ?? 0
                                          Utility.shared.unpublish_preview_check = true
@@ -1293,7 +1296,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                                     }
                         }
                         else  if(selectedIndex == 1){
-                            if Utility().isConnectedToNetwork(){
+                            if Utility.shared.isConnectedToNetwork(){
                              //   self.lottieAnimation()
                                 self.deleteListingAPICall(listId: self.completed_List_Array[(sender.tag)].id!)
                             }
@@ -1330,7 +1333,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         
         
         
-//         if Utility().isConnectedToNetwork(){
+//         if Utility.shared.isConnectedToNetwork(){
 //             let viewListing = UpdatedViewListing()
 //             viewListing.listID = completed_List_Array[sender.tag].id ?? 0
 //             viewListing.modalPresentationStyle = .fullScreen

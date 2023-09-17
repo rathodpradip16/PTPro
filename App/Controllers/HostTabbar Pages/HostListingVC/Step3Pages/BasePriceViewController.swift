@@ -28,7 +28,7 @@ class BasePriceViewController: BaseHostTableviewController {
       @IBOutlet weak var retryBtn: UIButton!
     
     @IBOutlet var progressViewWidth: NSLayoutConstraint!
-    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrency.Result]()
+    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrencies.Result]()
     
     var basePriceValue = ""
     var cleaningPriceValue = ""
@@ -230,7 +230,7 @@ class BasePriceViewController: BaseHostTableviewController {
 //            }
 //            return
 //        }
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.view.endEditing(true)
         if basePriceValue.isEmpty  || basePriceValue == "."  || basePriceValue == "0" || Utility.shared.host_basePrice < 1.0 || (basePriceValue.rangeOfCharacter(from: characterset.inverted) != nil) {
             if((basePriceValue == "."  || basePriceValue == "0" || Utility.shared.host_basePrice < 1.0) && (basePriceValue != "") && (basePriceValue.rangeOfCharacter(from: characterset.inverted) == nil) )
@@ -260,7 +260,7 @@ class BasePriceViewController: BaseHostTableviewController {
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             view.endEditing(true)
             //self.view.layer.add(dismissrightAnimation()!, forKey: kCATransition)
             if(Utility.shared.step3_Edit)
@@ -290,12 +290,12 @@ class BasePriceViewController: BaseHostTableviewController {
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
            self.offlineUIView.isHidden = true
         }
     }
     @IBAction func saveandexitAction(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
            self.view.endEditing(true)
              self.lottieViewanimation()
             

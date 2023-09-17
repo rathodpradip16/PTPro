@@ -5,42 +5,9 @@
 
 public class GetPendingUserReviewQuery: GraphQLQuery {
   public static let operationName: String = "getPendingUserReview"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getPendingUserReview($reservationId: Int!) {
-        getPendingUserReview(reservationId: $reservationId) {
-          __typename
-          status
-          errorMessage
-          result {
-            __typename
-            id
-            listId
-            guestId
-            hostId
-            listData {
-              __typename
-              id
-              title
-              city
-              state
-              country
-              roomType
-              reviewsCount
-              reviewsStarRating
-              coverPhoto
-              listPhotoName
-              listPhotos {
-                __typename
-                id
-                name
-              }
-            }
-          }
-        }
-      }
-      """
+      #"query getPendingUserReview($reservationId: Int!) { getPendingUserReview(reservationId: $reservationId) { __typename status errorMessage result { __typename id listId guestId hostId listData { __typename id title city state country roomType reviewsCount reviewsStarRating coverPhoto listPhotoName listPhotos { __typename id name } } } } }"#
     ))
 
   public var reservationId: Int
@@ -53,10 +20,10 @@ public class GetPendingUserReviewQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getPendingUserReview", GetPendingUserReview?.self, arguments: ["reservationId": .variable("reservationId")]),
     ] }
 
@@ -67,10 +34,11 @@ public class GetPendingUserReviewQuery: GraphQLQuery {
     /// Parent Type: `CommonReservationType`
     public struct GetPendingUserReview: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.CommonReservationType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.CommonReservationType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
         .field("result", Result?.self),
@@ -85,10 +53,11 @@ public class GetPendingUserReviewQuery: GraphQLQuery {
       /// Parent Type: `Reservation`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.Reservation }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Reservation }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("listId", Int?.self),
           .field("guestId", String?.self),
@@ -107,10 +76,11 @@ public class GetPendingUserReviewQuery: GraphQLQuery {
         /// Parent Type: `ShowListing`
         public struct ListData: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.ShowListing }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ShowListing }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("title", String?.self),
             .field("city", String?.self),
@@ -141,10 +111,11 @@ public class GetPendingUserReviewQuery: GraphQLQuery {
           /// Parent Type: `ListPhotosData`
           public struct ListPhoto: PTProAPI.SelectionSet {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ParentType { PTProAPI.Objects.ListPhotosData }
-            public static var __selections: [Selection] { [
+            public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ListPhotosData }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
               .field("id", Int?.self),
               .field("name", String?.self),
             ] }

@@ -5,17 +5,9 @@
 
 public class VerifyPhoneNumberMutation: GraphQLMutation {
   public static let operationName: String = "VerifyPhoneNumber"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation VerifyPhoneNumber($verificationCode: Int!) {
-        VerifyPhoneNumber(verificationCode: $verificationCode) {
-          __typename
-          status
-          errorMessage
-        }
-      }
-      """
+      #"mutation VerifyPhoneNumber($verificationCode: Int!) { VerifyPhoneNumber(verificationCode: $verificationCode) { __typename status errorMessage } }"#
     ))
 
   public var verificationCode: Int
@@ -28,10 +20,10 @@ public class VerifyPhoneNumberMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("VerifyPhoneNumber", VerifyPhoneNumber?.self, arguments: ["verificationCode": .variable("verificationCode")]),
     ] }
 
@@ -42,10 +34,11 @@ public class VerifyPhoneNumberMutation: GraphQLMutation {
     /// Parent Type: `UserAccount`
     public struct VerifyPhoneNumber: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.UserAccount }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserAccount }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
       ] }

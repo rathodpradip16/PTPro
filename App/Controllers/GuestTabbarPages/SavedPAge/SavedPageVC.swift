@@ -72,15 +72,6 @@ class SavedPageVC: UIViewController,UICollectionViewDelegate,UICollectionViewDat
     {
         if((Utility.shared.getCurrentUserToken()) != nil)
         {
-            apollo_headerClient = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                
-                let url = URL(string:graphQLEndpoint)!
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
         }
         else{
             apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
@@ -162,7 +153,7 @@ class SavedPageVC: UIViewController,UICollectionViewDelegate,UICollectionViewDat
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.lottieAnimation()
             self.savedTable.isHidden = false
             offlineView.isHidden = true
@@ -172,58 +163,63 @@ class SavedPageVC: UIViewController,UICollectionViewDelegate,UICollectionViewDat
     
     func WhishlistAPICall()
     {
-
-        if Utility().isConnectedToNetwork(){
-        let whishlistQuery = GetAllWishListGroupQuery()
-        apollo_headerClient.fetch(query: whishlistQuery,cachePolicy:.fetchIgnoringCacheData){ (result,error) in
-            guard (result?.data?.getAllWishListGroup?.results) != nil else{
-                print("Missing Data")
-                
-                if result?.data?.getAllWishListGroup?.status == 500{
-                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result?.data?.getAllWishListGroup?.errorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                        UserDefaults.standard.removeObject(forKey: "user_token")
-                        UserDefaults.standard.removeObject(forKey: "user_id")
-                        UserDefaults.standard.removeObject(forKey: "password")
-                        UserDefaults.standard.removeObject(forKey: "currency_rate")
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        let welcomeObj = WelcomePageVC()
-                        appDelegate.setInitialViewController(initialView: welcomeObj)
-                    }))
-                    self.present(alert, animated: true, completion: nil)
-                    return
+        
+        if Utility.shared.isConnectedToNetwork(){
+            let whishlistQuery = GetAllWishListGroupQuery(currentPage: .none)
+            Network.shared.apollo_headerClient.fetch(query: whishlistQuery,cachePolicy:.fetchIgnoringCacheData){  response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getAllWishListGroup?.results) != nil else{
+                        print("Missing Data")
+                        
+                        if result.data?.getAllWishListGroup?.status == 500{
+                            let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.getAllWishListGroup?.errorMessage, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                                UserDefaults.standard.removeObject(forKey: "user_token")
+                                UserDefaults.standard.removeObject(forKey: "user_id")
+                                UserDefaults.standard.removeObject(forKey: "password")
+                                UserDefaults.standard.removeObject(forKey: "currency_rate")
+                                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                let welcomeObj = WelcomePageVC()
+                                appDelegate.setInitialViewController(initialView: welcomeObj)
+                            }))
+                            self.present(alert, animated: true, completion: nil)
+                            return
+                        }
+                        
+                        
+                        self.topView.isHidden = false
+                        self.nowhishlistView.isHidden = false
+                        self.lottieView.isHidden = true
+                        self.savedTable.isHidden = true
+                        self.lottieView.isHidden = true
+                        self.savedTable?.hideSkeleton()
+                        self.savedTable.isSkeletonable = false
+                        return
+                    }
+                    self.nowhishlistView.isHidden = true
+                    self.savedTable.isHidden = false
+                    self.whishlistarray = ((result.data?.getAllWishListGroup?.results)!) as! [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
+                    self.lottieView.isHidden = true
+                    self.savedTable?.hideSkeleton()
+                    self.savedTable.isSkeletonable = false
+                    self.savedTable.reloadData()
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-         
-                      
-                self.topView.isHidden = false
-                self.nowhishlistView.isHidden = false
-                self.lottieView.isHidden = true
-                self.savedTable.isHidden = true
-                self.lottieView.isHidden = true
-                self.savedTable?.hideSkeleton()
-                self.savedTable.isSkeletonable = false
-                return
             }
-            self.nowhishlistView.isHidden = true
-            self.savedTable.isHidden = false
-            self.whishlistarray = ((result?.data?.getAllWishListGroup?.results)!) as! [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
-            self.lottieView.isHidden = true
-            self.savedTable?.hideSkeleton()
-            self.savedTable.isSkeletonable = false
-            self.savedTable.reloadData()
             
-        }
         }
         else
         {
             self.lottieView.isHidden = true
-           
+            
             self.offlineView.isHidden = false
             self.savedTable.isHidden = false
             self.nowhishlistView.isHidden = true
             savedTable?.prepareSkeleton(completion: { [self] done in
-            savedTable?.isSkeletonable = true
-            self.savedTable?.showAnimatedGradientSkeleton()
+                savedTable?.isSkeletonable = true
+                self.savedTable?.showAnimatedGradientSkeleton()
             })
             self.view?.bringSubviewToFront(offlineView)
             self.view.bringSubviewToFront(offlineView)
@@ -285,7 +281,7 @@ class SavedPageVC: UIViewController,UICollectionViewDelegate,UICollectionViewDat
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         let savedPageObj = SaveGroupPageVC()
             savedPageObj.groupID = whishlistarray[indexPath.row].id != nil ? whishlistarray[indexPath.row].id! : 0
             savedPageObj.savedGroupAPICall(groupID:whishlistarray[indexPath.row].id != nil ? whishlistarray[indexPath.row].id! : 0, PageIndex: 1)

@@ -5,85 +5,9 @@
 
 public class GetStep1ListingDetailsQuery: GraphQLQuery {
   public static let operationName: String = "getStep1ListingDetails"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getStep1ListingDetails($listId: String!, $preview: Boolean) {
-        getListingDetails(listId: $listId, preview: $preview) {
-          __typename
-          status
-          errorMessage
-          results {
-            __typename
-            id
-            userId
-            country
-            street
-            buildingName
-            city
-            state
-            zipcode
-            lat
-            lng
-            isMapTouched
-            bedrooms
-            residenceType
-            beds
-            personCapacity
-            bathrooms
-            user {
-              __typename
-              email
-              userBanStatus
-              profile {
-                __typename
-                firstName
-                lastName
-                dateOfBirth
-              }
-            }
-            userAmenities {
-              __typename
-              id
-              image
-              itemName
-            }
-            userSafetyAmenities {
-              __typename
-              id
-              image
-              itemName
-            }
-            userSpaces {
-              __typename
-              id
-              itemName
-            }
-            settingsData {
-              __typename
-              id
-              settingsId
-              listsettings {
-                __typename
-                id
-                itemName
-                settingsType {
-                  __typename
-                  typeName
-                }
-              }
-            }
-            userBedsTypes {
-              __typename
-              id
-              listId
-              bedCount
-              bedType
-            }
-          }
-        }
-      }
-      """
+      #"query getStep1ListingDetails($listId: String!, $preview: Boolean) { getListingDetails(listId: $listId, preview: $preview) { __typename status errorMessage results { __typename id userId country street buildingName city state zipcode lat lng isMapTouched bedrooms residenceType beds personCapacity bathrooms user { __typename email userBanStatus profile { __typename firstName lastName dateOfBirth } } userAmenities { __typename id image itemName } userSafetyAmenities { __typename id image itemName } userSpaces { __typename id itemName } settingsData { __typename id settingsId listsettings { __typename id itemName settingsType { __typename typeName } } } userBedsTypes { __typename id listId bedCount bedType } } } }"#
     ))
 
   public var listId: String
@@ -104,10 +28,10 @@ public class GetStep1ListingDetailsQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getListingDetails", GetListingDetails?.self, arguments: [
         "listId": .variable("listId"),
         "preview": .variable("preview")
@@ -121,10 +45,11 @@ public class GetStep1ListingDetailsQuery: GraphQLQuery {
     /// Parent Type: `AllListing`
     public struct GetListingDetails: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.AllListing }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.AllListing }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
         .field("results", Results?.self),
@@ -139,10 +64,11 @@ public class GetStep1ListingDetailsQuery: GraphQLQuery {
       /// Parent Type: `ShowListing`
       public struct Results: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.ShowListing }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ShowListing }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("userId", String?.self),
           .field("country", String?.self),
@@ -195,10 +121,11 @@ public class GetStep1ListingDetailsQuery: GraphQLQuery {
         /// Parent Type: `User`
         public struct User: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.User }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.User }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("email", String?.self),
             .field("userBanStatus", Int?.self),
             .field("profile", Profile?.self),
@@ -213,10 +140,11 @@ public class GetStep1ListingDetailsQuery: GraphQLQuery {
           /// Parent Type: `Profile`
           public struct Profile: PTProAPI.SelectionSet {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ParentType { PTProAPI.Objects.Profile }
-            public static var __selections: [Selection] { [
+            public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Profile }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
               .field("firstName", String?.self),
               .field("lastName", String?.self),
               .field("dateOfBirth", String?.self),
@@ -233,10 +161,11 @@ public class GetStep1ListingDetailsQuery: GraphQLQuery {
         /// Parent Type: `AllListSettingTypes`
         public struct UserAmenity: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.AllListSettingTypes }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.AllListSettingTypes }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("image", String?.self),
             .field("itemName", String?.self),
@@ -252,10 +181,11 @@ public class GetStep1ListingDetailsQuery: GraphQLQuery {
         /// Parent Type: `AllListSettingTypes`
         public struct UserSafetyAmenity: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.AllListSettingTypes }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.AllListSettingTypes }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("image", String?.self),
             .field("itemName", String?.self),
@@ -271,10 +201,11 @@ public class GetStep1ListingDetailsQuery: GraphQLQuery {
         /// Parent Type: `AllListSettingTypes`
         public struct UserSpace: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.AllListSettingTypes }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.AllListSettingTypes }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("itemName", String?.self),
           ] }
@@ -288,10 +219,11 @@ public class GetStep1ListingDetailsQuery: GraphQLQuery {
         /// Parent Type: `UserListingData`
         public struct SettingsDatum: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.UserListingData }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserListingData }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("settingsId", Int?.self),
             .field("listsettings", Listsettings?.self),
@@ -306,10 +238,11 @@ public class GetStep1ListingDetailsQuery: GraphQLQuery {
           /// Parent Type: `SingleListSettings`
           public struct Listsettings: PTProAPI.SelectionSet {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ParentType { PTProAPI.Objects.SingleListSettings }
-            public static var __selections: [Selection] { [
+            public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.SingleListSettings }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
               .field("id", Int?.self),
               .field("itemName", String?.self),
               .field("settingsType", SettingsType?.self),
@@ -324,10 +257,11 @@ public class GetStep1ListingDetailsQuery: GraphQLQuery {
             /// Parent Type: `ListSettingsTypes`
             public struct SettingsType: PTProAPI.SelectionSet {
               public let __data: DataDict
-              public init(data: DataDict) { __data = data }
+              public init(_dataDict: DataDict) { __data = _dataDict }
 
-              public static var __parentType: ParentType { PTProAPI.Objects.ListSettingsTypes }
-              public static var __selections: [Selection] { [
+              public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ListSettingsTypes }
+              public static var __selections: [ApolloAPI.Selection] { [
+                .field("__typename", String.self),
                 .field("typeName", String?.self),
               ] }
 
@@ -341,10 +275,11 @@ public class GetStep1ListingDetailsQuery: GraphQLQuery {
         /// Parent Type: `BedTypes`
         public struct UserBedsType: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.BedTypes }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.BedTypes }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("listId", Int?.self),
             .field("bedCount", Int?.self),

@@ -5,35 +5,19 @@
 
 public class GetImageBannerQuery: GraphQLQuery {
   public static let operationName: String = "getImageBanner"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getImageBanner {
-        getImageBanner {
-          __typename
-          result {
-            __typename
-            id
-            title
-            description
-            buttonLabel
-            image
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query getImageBanner { getImageBanner { __typename result { __typename id title description buttonLabel image } status errorMessage } }"#
     ))
 
   public init() {}
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getImageBanner", GetImageBanner?.self),
     ] }
 
@@ -44,10 +28,11 @@ public class GetImageBannerQuery: GraphQLQuery {
     /// Parent Type: `ImageBannerCommonType`
     public struct GetImageBanner: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.ImageBannerCommonType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ImageBannerCommonType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("result", Result?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -62,10 +47,11 @@ public class GetImageBannerQuery: GraphQLQuery {
       /// Parent Type: `ImageBanner`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.ImageBanner }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ImageBanner }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("title", String?.self),
           .field("description", String?.self),

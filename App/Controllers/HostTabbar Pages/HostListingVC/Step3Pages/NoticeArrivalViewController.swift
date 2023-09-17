@@ -178,7 +178,7 @@ class NoticeArrivalViewController: BaseHostTableviewController {
     }
     
     override func setDropdownList() {
-        let listSettings = (Utility.shared.getListSettingsArray.bookingNoticeTime?.listSettings!)!
+        let listSettings = (Utility.shared.getListSettingsArray?.bookingNoticeTime?.listSettings!)!
         for item in listSettings
         {
             bookingNoticeTimeArr.append((item?.itemName)!)
@@ -288,7 +288,7 @@ class NoticeArrivalViewController: BaseHostTableviewController {
     //IBActions
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offLineView.isHidden = true
         }
     }
@@ -331,7 +331,7 @@ class NoticeArrivalViewController: BaseHostTableviewController {
     
     
     @IBAction func RedirectNextPage(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
              self.view.endEditing(true)
              if(toTime != "Flexible" && fromTime != "Flexible") && !(fromTime == "12PM" && toTime == "12AM") && !(fromTime == "12PM" && toTime == "1AM") && !(fromTime == "1PM" && toTime == "1AM") && !(fromTime == "12PM" && toTime == "2AM") && !(fromTime == "2PM" && toTime == "2AM") && (fromTime == "" || toTime == ""){
                  self.view.makeToast( "Please select From and To Time");
@@ -402,7 +402,7 @@ class NoticeArrivalViewController: BaseHostTableviewController {
       }
     
     @IBAction func backBtnPressed(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             //self.view.layer.add(dismissrightAnimation()!, forKey: kCATransition)
             if(Utility.shared.step3_Edit)
             {
@@ -430,7 +430,7 @@ class NoticeArrivalViewController: BaseHostTableviewController {
         self.present(becomeHost, animated:false, completion: nil)
     }
     @IBAction func saveandExitAction(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.view.endEditing(true)
             self.lottieViewanimation()
 //                           super.updateStep3ListingAPICall{ (success) -> Void in

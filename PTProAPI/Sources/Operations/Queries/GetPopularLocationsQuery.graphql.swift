@@ -5,34 +5,19 @@
 
 public class GetPopularLocationsQuery: GraphQLQuery {
   public static let operationName: String = "getPopularLocations"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getPopularLocations {
-        getPopularLocations {
-          __typename
-          results {
-            __typename
-            id
-            location
-            locationAddress
-            image
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query getPopularLocations { getPopularLocations { __typename results { __typename id location locationAddress image } status errorMessage } }"#
     ))
 
   public init() {}
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getPopularLocations", GetPopularLocations?.self),
     ] }
 
@@ -43,10 +28,11 @@ public class GetPopularLocationsQuery: GraphQLQuery {
     /// Parent Type: `PopularLocationCommonType`
     public struct GetPopularLocations: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.PopularLocationCommonType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.PopularLocationCommonType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", [Result?]?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -61,10 +47,11 @@ public class GetPopularLocationsQuery: GraphQLQuery {
       /// Parent Type: `PopularLocationListing`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.PopularLocationListing }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.PopularLocationListing }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("location", String?.self),
           .field("locationAddress", String?.self),

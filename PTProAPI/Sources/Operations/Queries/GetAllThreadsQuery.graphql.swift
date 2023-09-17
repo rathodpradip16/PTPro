@@ -5,61 +5,9 @@
 
 public class GetAllThreadsQuery: GraphQLQuery {
   public static let operationName: String = "getAllThreads"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getAllThreads($threadType: String, $threadId: Int, $currentPage: Int) {
-        getAllThreads(
-          threadType: $threadType
-          threadId: $threadId
-          currentPage: $currentPage
-        ) {
-          __typename
-          results {
-            __typename
-            id
-            listId
-            guest
-            host
-            listData {
-              __typename
-              city
-              state
-              country
-            }
-            threadItem {
-              __typename
-              id
-              threadId
-              content
-              sentBy
-              isRead
-              type
-              startDate
-              endDate
-              createdAt
-            }
-            guestProfile {
-              __typename
-              profileId
-              displayName
-              firstName
-              picture
-            }
-            hostProfile {
-              __typename
-              profileId
-              displayName
-              firstName
-              picture
-            }
-          }
-          count
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query getAllThreads($threadType: String, $threadId: Int, $currentPage: Int) { getAllThreads( threadType: $threadType threadId: $threadId currentPage: $currentPage ) { __typename results { __typename id listId guest host listData { __typename city state country } threadItem { __typename id threadId content sentBy isRead type startDate endDate createdAt } guestProfile { __typename profileId displayName firstName picture } hostProfile { __typename profileId displayName firstName picture } } count status errorMessage } }"#
     ))
 
   public var threadType: GraphQLNullable<String>
@@ -84,10 +32,10 @@ public class GetAllThreadsQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getAllThreads", GetAllThreads?.self, arguments: [
         "threadType": .variable("threadType"),
         "threadId": .variable("threadId"),
@@ -102,10 +50,11 @@ public class GetAllThreadsQuery: GraphQLQuery {
     /// Parent Type: `AllThreads`
     public struct GetAllThreads: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.AllThreads }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.AllThreads }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", [Result?]?.self),
         .field("count", Int?.self),
         .field("status", Int?.self),
@@ -122,10 +71,11 @@ public class GetAllThreadsQuery: GraphQLQuery {
       /// Parent Type: `Threads`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.Threads }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Threads }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("listId", Int?.self),
           .field("guest", String?.self),
@@ -150,10 +100,11 @@ public class GetAllThreadsQuery: GraphQLQuery {
         /// Parent Type: `ShowListing`
         public struct ListData: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.ShowListing }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ShowListing }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("city", String?.self),
             .field("state", String?.self),
             .field("country", String?.self),
@@ -169,10 +120,11 @@ public class GetAllThreadsQuery: GraphQLQuery {
         /// Parent Type: `ThreadItems`
         public struct ThreadItem: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.ThreadItems }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ThreadItems }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("threadId", Int?.self),
             .field("content", String?.self),
@@ -200,10 +152,11 @@ public class GetAllThreadsQuery: GraphQLQuery {
         /// Parent Type: `UserProfile`
         public struct GuestProfile: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.UserProfile }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserProfile }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("profileId", Int?.self),
             .field("displayName", String?.self),
             .field("firstName", String?.self),
@@ -221,10 +174,11 @@ public class GetAllThreadsQuery: GraphQLQuery {
         /// Parent Type: `UserProfile`
         public struct HostProfile: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.UserProfile }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserProfile }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("profileId", Int?.self),
             .field("displayName", String?.self),
             .field("firstName", String?.self),

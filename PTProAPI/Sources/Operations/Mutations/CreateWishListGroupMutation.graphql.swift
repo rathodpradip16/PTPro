@@ -5,23 +5,9 @@
 
 public class CreateWishListGroupMutation: GraphQLMutation {
   public static let operationName: String = "CreateWishListGroup"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation CreateWishListGroup($name: String!, $isPublic: String, $id: Int) {
-        CreateWishListGroup(name: $name, isPublic: $isPublic, id: $id) {
-          __typename
-          status
-          errorMessage
-          results {
-            __typename
-            name
-            isPublic
-            id
-          }
-        }
-      }
-      """
+      #"mutation CreateWishListGroup($name: String!, $isPublic: String, $id: Int) { CreateWishListGroup(name: $name, isPublic: $isPublic, id: $id) { __typename status errorMessage results { __typename name isPublic id } } }"#
     ))
 
   public var name: String
@@ -46,10 +32,10 @@ public class CreateWishListGroupMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("CreateWishListGroup", CreateWishListGroup?.self, arguments: [
         "name": .variable("name"),
         "isPublic": .variable("isPublic"),
@@ -64,10 +50,11 @@ public class CreateWishListGroupMutation: GraphQLMutation {
     /// Parent Type: `GetWishListType`
     public struct CreateWishListGroup: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.GetWishListType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.GetWishListType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
         .field("results", Results?.self),
@@ -82,10 +69,11 @@ public class CreateWishListGroupMutation: GraphQLMutation {
       /// Parent Type: `WishListGroup`
       public struct Results: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.WishListGroup }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.WishListGroup }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("name", String?.self),
           .field("isPublic", String?.self),
           .field("id", Int?.self),

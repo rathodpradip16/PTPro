@@ -18,17 +18,7 @@ class ShowReviewPageVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     var profilename = String()
     var totalListcount:Int = 0
     var PageIndex : Int = 1
-    var showReivewArray = [UserReviewsQuery.Data.UserReview.Result]()
-    let apollo_headerClient: ApolloClient = {
-           let configuration = URLSessionConfiguration.default
-           // Add additional headers as needed
-           configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-           
-           let url = URL(string:graphQLEndpoint)!
-           
-           return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-           
-       }()
+    var showReivewArray = [UserReviewsQuery.Data.UserReviews.Result]()
        
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,17 +41,18 @@ class ShowReviewPageVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     func showreviewAPICall()
     {
-        let userreviewsquery = UserReviewsQuery(ownerType:"others",currentPage:PageIndex, profileId:profileid)
-        apollo_headerClient.fetch(query: userreviewsquery, cachePolicy: .fetchIgnoringCacheData){(result,error) in
-            if(result?.data?.userReviews?.status == 200)
-            {
-                self.showReivewArray.append(contentsOf: ((result?.data?.userReviews?.results)!) as! [UserReviewsQuery.Data.UserReview.Result])
-                self.totalListcount = (result?.data?.userReviews?.results!.count)!
-            }
-            else
-            {
-               
-                self.view.makeToast(result?.data?.userReviews?.errorMessage!)
+        let userreviewsquery = UserReviewsQuery(ownerType:"others",currentPage:.some(PageIndex), profileId:.some(profileid))
+        Network.shared.apollo_headerClient.fetch(query: userreviewsquery, cachePolicy: .fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.userReviews?.status,data == 200 {
+                    self.showReivewArray.append(contentsOf: ((result.data?.userReviews?.results)!) as! [UserReviewsQuery.Data.UserReviews.Result])
+                    self.totalListcount = (result.data?.userReviews?.results!.count)!
+                } else {
+                    self.view.makeToast(result.data?.userReviews?.errorMessage!)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
             self.showreviewTable.reloadData()
         }
@@ -182,7 +173,7 @@ class ShowReviewPageVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     @objc func profileTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if(((Utility.shared.getCurrentUserToken()) != nil) && (Utility.shared.getCurrentUserToken() != ""))
             {
                 if(showReivewArray[sender.tag].authorData?.fragments.profileFields.profileId != nil)

@@ -28,7 +28,7 @@ class DiscountViewController: BaseHostTableviewController {
     @IBOutlet weak var offlineUIView: UIView!
     @IBOutlet weak var retryBtn: UIButton!
     
-    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrency.Result]()
+    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrencies.Result]()
     
     @IBOutlet weak var errorLabel: UILabel!
     var weeklydiscountvalue = String()
@@ -151,7 +151,7 @@ class DiscountViewController: BaseHostTableviewController {
     //IBActions
     
     @IBAction func RedirectNextPage(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.view.endEditing(true)
         if !weeklydiscountvalue.isEmpty  || (weeklydiscountvalue.rangeOfCharacter(from: characterset.inverted) != nil){
             if(weeklydiscountvalue == ".")
@@ -193,7 +193,7 @@ class DiscountViewController: BaseHostTableviewController {
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             
         self.view.endEditing(true)
        // Utility.shared.step3ValuesInfo.updateValue(weeklydiscountvalue, forKey: "weeklyDiscount")
@@ -250,7 +250,7 @@ class DiscountViewController: BaseHostTableviewController {
         self.present(becomeHost, animated:false, completion: nil)
     }
     @IBAction func saveandexitAction(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.view.endEditing(true)
              self.lottieViewanimation()
             Utility.shared.step3ValuesInfo.updateValue(Utility.shared.selectedRules, forKey: "houseRules")
@@ -307,7 +307,7 @@ class DiscountViewController: BaseHostTableviewController {
     
     @IBAction func retryBtnTapped(_ sender: Any) {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
     }

@@ -184,7 +184,7 @@ class ForgotPasswordVC: UIViewController {
     //MARK: Keyboard show/Hide
     @IBAction func retry_Tapped(_ sender: Any) {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.Offline_View.isHidden = true
         }
     }
@@ -237,36 +237,35 @@ class ForgotPasswordVC: UIViewController {
             
             self.Offline_View.isHidden = true
             let forgotmutation = ForgotPasswordMutation(email:forgotTF.text!)
-            apollo.perform(mutation: forgotmutation){(result,error) in
-                print(result?.data?.userForgotPassword?.status as Any)
-                if result?.data?.userForgotPassword?.status == 200 {
-                    print(result?.data?.userForgotPassword?.resultMap)
-                    self.lottieView.isHidden = true
-
-                    let alert = UIAlertController(title: "\((Utility.shared.getLanguage()?.value(forKey: "success"))!)", message: "\((Utility.shared.getLanguage()?.value(forKey: "email_sent_success"))!)", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "\((Utility.shared.getLanguage()?.value(forKey: "okay"))!)", style: .default, handler: { (NavigatingtoLogin) in
-                        let logpage = WelcomePageVC()
-                        logpage.modalPresentationStyle = .fullScreen
-                        self.present(logpage, animated: false, completion: nil)
+            apollo.perform(mutation: forgotmutation){ response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.userForgotPassword?.status,data == 200 {
+                        self.lottieView.isHidden = true
                         
-                    }))
-                    self.present(alert, animated: true, completion: nil)
-                    
-                    
-                    
-                } else {
-                    self.lottieView.isHidden = true
-                    
-                     self.view.makeToast(result?.data?.userForgotPassword?.errorMessage)
+                        let alert = UIAlertController(title: "\((Utility.shared.getLanguage()?.value(forKey: "success"))!)", message: "\((Utility.shared.getLanguage()?.value(forKey: "email_sent_success"))!)", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "\((Utility.shared.getLanguage()?.value(forKey: "okay"))!)", style: .default, handler: { (NavigatingtoLogin) in
+                            let logpage = WelcomePageVC()
+                            logpage.modalPresentationStyle = .fullScreen
+                            self.present(logpage, animated: false, completion: nil)
+                            
+                        }))
+                        self.present(alert, animated: true, completion: nil)
+                    } else {
+                        self.lottieView.isHidden = true
+                        self.view.makeToast(result.data?.userForgotPassword?.errorMessage)
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-               
-                }
+            }    
+            
         } else {
             self.lottieView.isHidden = true
             self.Offline_View.isHidden = false
             //self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey: "network_check"))!)")
         }
-
+        
     }
     
     /*

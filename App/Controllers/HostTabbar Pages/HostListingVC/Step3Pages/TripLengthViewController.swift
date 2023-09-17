@@ -138,7 +138,7 @@ class TripLengthViewController: BaseHostTableviewController {
     
     func setBookingStatus()
     {
-        let listSettings = (Utility.shared.getListSettingsArray.maxDaysNotice?.listSettings!)!
+        let listSettings = (Utility.shared.getListSettingsArray?.maxDaysNotice?.listSettings!)!
 
         futureDatesArr = ["\((Utility.shared.getLanguage()?.value(forKey:"datesunavailable"))!)","3 \((Utility.shared.getLanguage()?.value(forKey:"monthsintofuture"))!)","6 \((Utility.shared.getLanguage()?.value(forKey:"monthsintofuture"))!)","9 \((Utility.shared.getLanguage()?.value(forKey:"monthsintofuture"))!)","12 \((Utility.shared.getLanguage()?.value(forKey:"monthsintofuture"))!)","\((Utility.shared.getLanguage()?.value(forKey:"Allfuturedates"))!)"]
         
@@ -202,8 +202,8 @@ class TripLengthViewController: BaseHostTableviewController {
     }
     
     override func setDropdownList() {
-        let minNights = (Utility.shared.getListSettingsArray.minNight?.listSettings!)!
-         let maxNights = (Utility.shared.getListSettingsArray.maxNight?.listSettings!)!
+        let minNights = (Utility.shared.getListSettingsArray?.minNight?.listSettings!)!
+         let maxNights = (Utility.shared.getListSettingsArray?.maxNight?.listSettings!)!
         if((minNights[0]?.endValue!) != nil)
         {
           minStayLimit = (minNights[0]?.endValue!)!
@@ -245,7 +245,7 @@ class TripLengthViewController: BaseHostTableviewController {
     //IBActions
     
     @IBAction func RedirectNextPage(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         if(Int(minStay) != nil && Int(maxStay) != nil)
         {
         let minNight : Int = Int(minStay)!
@@ -269,13 +269,13 @@ class TripLengthViewController: BaseHostTableviewController {
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
            self.offlineUIView.isHidden = true
         }
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
            // self.view.layer.add(dismissrightAnimation()!, forKey: kCATransition)
             if(Utility.shared.step3_Edit)
             {
@@ -340,7 +340,7 @@ class TripLengthViewController: BaseHostTableviewController {
         }
     }
     @IBAction func saveandexitAction(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
              self.lottieViewanimation()
             Utility.shared.step3ValuesInfo.updateValue(Utility.shared.selectedRules, forKey: "houseRules")
                        Utility.shared.step3ValuesInfo.updateValue(Utility.shared.createId, forKey: "id")

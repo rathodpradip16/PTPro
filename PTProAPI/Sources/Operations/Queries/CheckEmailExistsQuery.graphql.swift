@@ -5,17 +5,9 @@
 
 public class CheckEmailExistsQuery: GraphQLQuery {
   public static let operationName: String = "CheckEmailExists"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query CheckEmailExists($email: String!) {
-        validateEmailExist(email: $email) {
-          __typename
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query CheckEmailExists($email: String!) { validateEmailExist(email: $email) { __typename status errorMessage } }"#
     ))
 
   public var email: String
@@ -28,10 +20,10 @@ public class CheckEmailExistsQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("validateEmailExist", ValidateEmailExist?.self, arguments: ["email": .variable("email")]),
     ] }
 
@@ -42,10 +34,11 @@ public class CheckEmailExistsQuery: GraphQLQuery {
     /// Parent Type: `CommonType`
     public struct ValidateEmailExist: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.CommonType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.CommonType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
       ] }

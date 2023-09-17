@@ -45,7 +45,7 @@ class FloatMapVC: UIViewController,UICollectionViewDelegate,UICollectionViewData
     @IBOutlet weak var settingImg: UIImageView!
     @IBOutlet weak var floatingFilterBtn: UIButton!
     @IBOutlet weak var mapBackview:UIImageView!
-    var getsearchPriceArray = GetDefaultSettingQuery.Data.GetSearchSetting.Result()
+    var getsearchPriceArray : GetDefaultSettingQuery.Data.GetSearchSettings.Results?
     var RoomsFilterArray = [GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]()
     var indexforScroll = IndexPath()
     var markerArray = [GMSMarker]()
@@ -721,7 +721,7 @@ class FloatMapVC: UIViewController,UICollectionViewDelegate,UICollectionViewData
     }
     @objc func likeBtnTapped(_ sender: UIButton!)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
             {
                 let welcomeObj = WelcomePageVC()
@@ -779,7 +779,7 @@ class FloatMapVC: UIViewController,UICollectionViewDelegate,UICollectionViewData
     func didupdateWhishlistStatus(status: Bool) {
         let indexPath = IndexPath(row: wishlist_index, section: 0)
        
-            self.FloatSearchArray[wishlist_index].wishListStatus = status
+       //     self.FloatSearchArray[wishlist_index].wishListStatus = status
      
         mapCollection.reloadItems(at:[indexPath])
     }

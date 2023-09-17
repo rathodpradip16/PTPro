@@ -27,8 +27,8 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
     @IBOutlet var hostprofileTable: UITableView!
     
     var apollo_headerClient: ApolloClient!
-    var reiewListingArray = [UserReviewsQuery.Data.UserReview.Result]()
-    var showuserprofileArray = ShowUserProfileQuery.Data.ShowUserProfile.Result()
+    var reiewListingArray = [UserReviewsQuery.Data.UserReviews.Result]()
+    var showuserprofileArray : ShowUserProfileQuery.Data.ShowUserProfile.Results?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.checkApolloStatus()
@@ -63,23 +63,6 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     func checkApolloStatus(){
-        if((Utility.shared.getCurrentUserToken()) != nil)
-        {
-            apollo_headerClient = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                
-                let url = URL(string:graphQLEndpoint)!
-                print(Utility.shared.getCurrentUserToken()!)
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
-        }
-        else{
-            apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
-        }
-        
         self.showprofileAPICall(profileid: self.profileid)
     }
   func registerCell()
@@ -110,31 +93,32 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     func showprofileAPICall(profileid:Int)
     {
-        if Utility().isConnectedToNetwork(){
-        self.lottieanimation()
-        let showprofileQuery = ShowUserProfileQuery(profileId:profileid, isUser:false)
-            
-            print(showprofileQuery.variables)
-        apollo_headerClient.fetch(query:showprofileQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-
-            guard (result?.data?.showUserProfile?.results) != nil else
-            {
-                self.lottieView.isHidden = true
-
-                self.view.makeToast(result?.data?.showUserProfile?.errorMessage)
-                return
+        if Utility.shared.isConnectedToNetwork(){
+            self.lottieanimation()
+            let showprofileQuery = ShowUserProfileQuery(profileId:.some(profileid), isUser:false)
+            Network.shared.apollo_headerClient.fetch(query:showprofileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.showUserProfile?.results) != nil else
+                    {
+                        self.lottieView.isHidden = true
+                        
+                        self.view.makeToast(result.data?.showUserProfile?.errorMessage)
+                        return
+                    }
+                    
+                    self.lottieView.isHidden = true
+                    self.showuserprofileArray = ((result.data?.showUserProfile?.results)!)
+                    self.verifiedInfoCount = 0
+                    self.hostprofileTable.reloadData()
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
             }
-
-              self.lottieView.isHidden = true
-            self.showuserprofileArray = ((result?.data?.showUserProfile?.results)!)
-            self.verifiedInfoCount = 0
-            self.hostprofileTable.reloadData()
-
+            
         }
-          
-        }
-
-
+        
+        
     }
     
     
@@ -142,12 +126,12 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
         self.dismiss(animated: true, completion: nil)
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        if(showuserprofileArray.userId != nil)
+        if(showuserprofileArray?.userId != nil)
         {
            if(Utility.shared.unpublish_preview_check)
             {
         return 4
-            } else if((Utility.shared.getCurrentUserID() != nil) && ("\(self.showuserprofileArray.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))")) {
+           } else if((Utility.shared.getCurrentUserID() != nil) && ("\(self.showuserprofileArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))")) {
 
             return 5
            } else {
@@ -177,7 +161,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(showuserprofileArray.userId != nil)
+        if(showuserprofileArray?.userId != nil)
         {
         
         if(section == 0)
@@ -188,7 +172,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
         }
         if(section == 1)
         {
-            if(showuserprofileArray.info != nil && showuserprofileArray.info != "")
+            if(showuserprofileArray?.info != nil && showuserprofileArray?.info != "")
             {
                 return 1
             } else {
@@ -197,7 +181,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
         }
             if(section == 2)
             {
-                if(showuserprofileArray.reviewsCount != nil && showuserprofileArray.reviewsCount != 0)
+                if(showuserprofileArray?.reviewsCount != nil && showuserprofileArray?.reviewsCount != 0)
                 {
                     return 1
                 } else {
@@ -206,16 +190,16 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
             }
         if(section == 3)
         {
-            if ((showuserprofileArray.userVerifiedInfo?.isEmailConfirmed) != false) {
+            if ((showuserprofileArray?.userVerifiedInfo?.isEmailConfirmed) != false) {
                 verifiedInfoCount = verifiedInfoCount + 1
             }
-            if ((showuserprofileArray.userVerifiedInfo?.isFacebookConnected) != false) {
+            if ((showuserprofileArray?.userVerifiedInfo?.isFacebookConnected) != false) {
                 verifiedInfoCount = verifiedInfoCount + 1
             }
-            if ((showuserprofileArray.userVerifiedInfo?.isGoogleConnected) != false) {
+            if ((showuserprofileArray?.userVerifiedInfo?.isGoogleConnected) != false) {
                 verifiedInfoCount = verifiedInfoCount + 1
             }
-            if ((showuserprofileArray.userVerifiedInfo?.isPhoneVerified) != false) {
+            if ((showuserprofileArray?.userVerifiedInfo?.isPhoneVerified) != false) {
                 verifiedInfoCount = verifiedInfoCount + 1
             }
             return verifiedInfoCount
@@ -249,21 +233,21 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
             {
                 cell.nameLabel.text = "\(profilename)"
             }
-            if showuserprofileArray.picture != nil
+            if showuserprofileArray?.picture != nil
             {
-                let profImage = showuserprofileArray.picture!
+                let profImage = showuserprofileArray?.picture!
               cell.profileImage.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(profImage)"), completed: nil)
                 
             } else {
                cell.profileImage.image  = #imageLiteral(resourceName: "unknown")
             }
-            if (showuserprofileArray.createdAt != nil){
-                cell.memberLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"member"))!) \(getdayValue(timestamp: (showuserprofileArray.createdAt!)))"
+            if (showuserprofileArray?.createdAt != nil){
+                cell.memberLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"member"))!) \(getdayValue(timestamp: (showuserprofileArray?.createdAt!)!))"
             }
             
-            if(showuserprofileArray.location != nil)
+            if(showuserprofileArray?.location != nil)
             {
-            cell.cityLbl.text = showuserprofileArray.location!
+            cell.cityLbl.text = showuserprofileArray?.location!
             }else{
                 cell.cityLbl.text = ""
             }
@@ -273,17 +257,17 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
 
         } else if(indexPath.section == 1) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "AboutDynamicCell", for: indexPath)as! AboutDynamicCell
-            if(showuserprofileArray.info != nil)
+            if(showuserprofileArray?.info != nil)
             {
-            cell.aboutLabel.text = showuserprofileArray.info!
+            cell.aboutLabel.text = showuserprofileArray?.info!
             }
             cell.selectionStyle = .none
             return cell
         } else if(indexPath.section == 2) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewUserCell", for: indexPath)as! ReviewUserCell
-            if(showuserprofileArray.reviewsCount != nil)
+            if(showuserprofileArray?.reviewsCount != nil)
             {
-//            if(showuserprofileArray.reviewsCount! > 1)
+//            if(showuserprofileArray?.reviewsCount! > 1)
 //            {
                   cell.reviewBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"readall"))!) \((Utility.shared.getLanguage()?.value(forKey:"reviewssmall"))!)", for: .normal)
 //            } else {
@@ -304,7 +288,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
                 
                 if(indexPath.row == 0)
                 {
-                    if ((showuserprofileArray.userVerifiedInfo?.isEmailConfirmed) != false) {
+                    if ((showuserprofileArray?.userVerifiedInfo?.isEmailConfirmed) != false) {
                         cell.imgLeftIcon.image = UIImage(named: "Verify_email")
                         
                      
@@ -313,7 +297,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
                             cell.verifyConnectLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"verified"))!)"
                             cell.verifyConnectLabel.textColor = Theme.PRIMARY_COLOR
                     }
-                  else  if ((showuserprofileArray.userVerifiedInfo?.isFacebookConnected) != false) {
+                  else  if ((showuserprofileArray?.userVerifiedInfo?.isFacebookConnected) != false) {
                         cell.imgLeftIcon.image = UIImage(named: "Verify_Fb")
                         cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"facebook") ?? "facebook")"
                         cell.imgRightView.image = UIImage(named: "verify_green")
@@ -321,7 +305,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
                         cell.verifyConnectLabel.textColor = Theme.PRIMARY_COLOR
                         
                     }
-                  else  if ((showuserprofileArray.userVerifiedInfo?.isGoogleConnected) != false) {
+                  else  if ((showuserprofileArray?.userVerifiedInfo?.isGoogleConnected) != false) {
                         cell.imgLeftIcon.image = UIImage(named: "Verify_Google")
                         cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"google") ?? "Google")"
                         cell.imgRightView.image = UIImage(named: "verify_green")
@@ -329,7 +313,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
                         cell.verifyConnectLabel.textColor = Theme.PRIMARY_COLOR
                         
                     }
-                  else  if ((showuserprofileArray.userVerifiedInfo?.isPhoneVerified) != false) {
+                  else  if ((showuserprofileArray?.userVerifiedInfo?.isPhoneVerified) != false) {
                         cell.imgLeftIcon.image = UIImage(named: "Phone")
                         cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"phone") ?? "Phone")"
                         cell.imgRightView.image = UIImage(named: "verify_green")
@@ -344,7 +328,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
                 else if(indexPath.row == 1)
                 {
                    
-                    if ((showuserprofileArray.userVerifiedInfo?.isFacebookConnected) != false) {
+                    if ((showuserprofileArray?.userVerifiedInfo?.isFacebookConnected) != false) {
                         cell.imgLeftIcon.image = UIImage(named: "Verify_Fb")
                         cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"facebook") ?? "facebook")"
                         cell.imgRightView.image = UIImage(named: "verify_green")
@@ -353,7 +337,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
                         
                         
                     }
-                  else  if ((showuserprofileArray.userVerifiedInfo?.isGoogleConnected) != false) {
+                  else  if ((showuserprofileArray?.userVerifiedInfo?.isGoogleConnected) != false) {
                       cell.imgLeftIcon.image = UIImage(named: "Verify_Google")
                       cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"google") ?? "Google")"
                       cell.imgRightView.image = UIImage(named: "verify_green")
@@ -361,7 +345,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
                       cell.verifyConnectLabel.textColor = Theme.PRIMARY_COLOR
                         
                     }
-                   else if ((showuserprofileArray.userVerifiedInfo?.isPhoneVerified) != false) {
+                   else if ((showuserprofileArray?.userVerifiedInfo?.isPhoneVerified) != false) {
                        cell.imgLeftIcon.image = UIImage(named: "Phone")
                        cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"phone") ?? "Phone")"
                        cell.imgRightView.image = UIImage(named: "verify_green")
@@ -374,7 +358,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
                 else if(indexPath.row == 2)
                 {
                     
-                    if ((showuserprofileArray.userVerifiedInfo?.isGoogleConnected) != false) {
+                    if ((showuserprofileArray?.userVerifiedInfo?.isGoogleConnected) != false) {
                         cell.imgLeftIcon.image = UIImage(named: "Verify_Google")
                         cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"google") ?? "Google")"
                         cell.imgRightView.image = UIImage(named: "verify_green")
@@ -382,7 +366,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
                         cell.verifyConnectLabel.textColor = Theme.PRIMARY_COLOR
                         
                     }
-                    else if ((showuserprofileArray.userVerifiedInfo?.isPhoneVerified) != false) {
+                    else if ((showuserprofileArray?.userVerifiedInfo?.isPhoneVerified) != false) {
                         cell.imgLeftIcon.image = UIImage(named: "Phone")
                         cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"phone") ?? "Phone")"
                         cell.imgRightView.image = UIImage(named: "verify_green")
@@ -407,18 +391,18 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
             
             
 //            let cell = tableView.dequeueReusableCell(withIdentifier: "HostVerifiedInfoCellTableViewCell", for: indexPath)as! HostVerifiedInfoCellTableViewCell
-//            if(showuserprofileArray.userVerifiedInfo != nil)
+//            if(showuserprofileArray?.userVerifiedInfo != nil)
 //            {
 //                var verifiedInfo: String = ""
-//                if ((showuserprofileArray.userVerifiedInfo?.isEmailConfirmed) != nil) {
+//                if ((showuserprofileArray?.userVerifiedInfo?.isEmailConfirmed) != nil) {
 //                    verifiedInfo =   "\((Utility.shared.getLanguage()?.value(forKey:"Email Confirmed"))!)  ,"
 //                }
-//                if ((showuserprofileArray.userVerifiedInfo?.isGoogleConnected) != nil) {
+//                if ((showuserprofileArray?.userVerifiedInfo?.isGoogleConnected) != nil) {
 //                    verifiedInfo = verifiedInfo + "\((Utility.shared.getLanguage()?.value(forKey:"Google Confirmed"))!)  ,"
 //
 //
 //                }
-//                if ((showuserprofileArray.userVerifiedInfo?.isIdVerification) != nil){
+//                if ((showuserprofileArray?.userVerifiedInfo?.isIdVerification) != nil){
 //                    verifiedInfo = verifiedInfo + "\((Utility.shared.getLanguage()?.value(forKey:"Document Verification Done."))!)"
 //
 //
@@ -450,7 +434,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
         
     }
     @objc func reprtBtnTapped(){
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
             {
                 let welcomeObj = WelcomePageVC()
@@ -491,7 +475,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
         let reviewpageObj = ReviewShowVC()
         reviewpageObj.profileID = profileid
         reviewpageObj.isForProfileReviews = true
-        reviewpageObj.reviewcount = (showuserprofileArray.reviewsCount != nil ? (showuserprofileArray.reviewsCount!) : 0)
+        reviewpageObj.reviewcount = (showuserprofileArray?.reviewsCount != nil ? (showuserprofileArray?.reviewsCount!)! : 0)
         reviewpageObj.modalPresentationStyle = .fullScreen
         self.present(reviewpageObj, animated: false, completion: nil)
 //        }
@@ -499,7 +483,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(indexPath.section == 4)
         {
-            if Utility().isConnectedToNetwork(){
+            if Utility.shared.isConnectedToNetwork(){
                 if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
                 {
                     let welcomeObj = WelcomePageVC()

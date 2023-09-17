@@ -57,19 +57,10 @@ class WriteReview: UIViewController {
     
     @IBOutlet var btnRating: UIButton!
     var lottieView: LottieAnimationView!
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     
     var reservationID = 0
     var listID = 0
-    var pendingReviewListData = GetPendingUserReviewQuery.Data.GetPendingUserReview.Result()
+    var pendingReviewListData : GetPendingUserReviewQuery.Data.GetPendingUserReview.Result?
     
     var delegate: WriteReviewProtocol?
     var isFromEmailNavigation = false
@@ -113,37 +104,44 @@ class WriteReview: UIViewController {
             
             let getPendingReview = GetPendingUserReviewQuery(reservationId: self.reservationID)
             
-                    
-            apollo_headerClient.fetch(query:getPendingReview,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-                
+            
+            Network.shared.apollo_headerClient.fetch(query:getPendingReview,cachePolicy:.fetchIgnoringCacheData){ response in
                 self.lottieView.isHidden = true
                 self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
-                guard (result?.data?.getPendingUserReview?.result) != nil else{
-                   
+                
+                switch response {
+                case .success(let result):
                     
-                self.view.makeToast(result?.data?.getPendingUserReview?.errorMessage)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                        if self.isFromEmailNavigation {
-                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                            Utility.shared.setTab(index: 0)
-                            appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
-                        }else{
-                        self.dismiss(animated: true, completion: nil)
-                        }
-                    })
-                return
-            }
-                self.pendingReviewListData = result?.data?.getPendingUserReview?.result! as! GetPendingUserReviewQuery.Data.GetPendingUserReview.Result
-                self.listID = self.pendingReviewListData.listId ?? 0
-                if self.pendingReviewListData.listData == nil{
-                    self.scrollView.isHidden = true
-                    self.ErrorView.isHidden = false
-//                    self.view.makeToast("\(Utility.shared.getLanguage()?.value(forKey: "List_not_found") ?? "List is not found!")")
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-//                        self.dismiss(animated: true, completion: nil)
-//                    })
-                }else{
-                    self.configureLabels()
+                    guard (result.data?.getPendingUserReview?.result) != nil else{
+                        
+                        
+                        self.view.makeToast(result.data?.getPendingUserReview?.errorMessage)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                            if self.isFromEmailNavigation {
+                                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                Utility.shared.setTab(index: 0)
+                                appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
+                            }else{
+                                self.dismiss(animated: true, completion: nil)
+                            }
+                        })
+                        return
+                    }
+                    self.pendingReviewListData = result.data?.getPendingUserReview?.result! as! GetPendingUserReviewQuery.Data.GetPendingUserReview.Result
+                    self.listID = self.pendingReviewListData?.listId ?? 0
+                    if self.pendingReviewListData?.listData == nil{
+                        self.scrollView.isHidden = true
+                        self.ErrorView.isHidden = false
+                        //                    self.view.makeToast("\(Utility.shared.getLanguage()?.value(forKey: "List_not_found") ?? "List is not found!")")
+                        //                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                        //                        self.dismiss(animated: true, completion: nil)
+                        //                    })
+                    }else{
+                        self.configureLabels()
+                    }
+                    
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
             }
         }else{
@@ -180,7 +178,7 @@ class WriteReview: UIViewController {
         self.submitBtn.isHidden = false
         
         self.ListingImageView.clipsToBounds = true
-        self.ListingImageView.sd_setImage(with: URL(string: "\(IMAGE_LISTING_MEDIUM)\(self.pendingReviewListData.listData?.listPhotoName ?? "")"), completed: nil)
+        self.ListingImageView.sd_setImage(with: URL(string: "\(IMAGE_LISTING_MEDIUM)\(self.pendingReviewListData?.listData?.listPhotoName ?? "")"), completed: nil)
         self.ListingImageView.contentMode = .scaleAspectFill
      //   self.ListingImageView.halfroundedCorners(corners:[.topLeft,.bottomRight], radius:10 )
         
@@ -193,24 +191,24 @@ class WriteReview: UIViewController {
         lblReviewCount.textColor = UIColor(named: "searchPlaces_TextColor")
         self.ListingAddressLabel.font = UIFont(name: APP_FONT, size: 12)
         self.ListingAddressLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
-        self.ListingAddressLabel.text = self.pendingReviewListData.listData?.roomType ?? " "
+        self.ListingAddressLabel.text = self.pendingReviewListData?.listData?.roomType ?? " "
         
         self.ListingTitleName.textColor =  UIColor(named: "Title_Header")
         self.ListingTitleName.font = UIFont(name: APP_FONT_MEDIUM, size: 14)
         self.ListingTitleName.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
-        self.ListingTitleName.text = "\(self.pendingReviewListData.listData?.title ?? " "), \(self.pendingReviewListData.listData?.state ?? " "), \(self.pendingReviewListData.listData?.country ?? " ")"
+        self.ListingTitleName.text = "\(self.pendingReviewListData?.listData?.title ?? " "), \(self.pendingReviewListData?.listData?.state ?? " "), \(self.pendingReviewListData?.listData?.country ?? " ")"
         
 //        self.starRatingView.semanticContentAttribute = Utility.shared.isRTLLanguage() ? .forceRightToLeft : .forceLeftToRight
-        let value1 = Float(self.pendingReviewListData.listData?.reviewsCount ?? 0)
-        let value2 = Float(self.pendingReviewListData.listData?.reviewsStarRating ?? 0)
+        let value1 = Float(self.pendingReviewListData?.listData?.reviewsCount ?? 0)
+        let value2 = Float(self.pendingReviewListData?.listData?.reviewsStarRating ?? 0)
         if(value2 != 0.0){
             
             let reviewcount = (value2/value1)
             self.btnRating.setTitle(" \(Int(reviewcount.rounded()) ?? Int(0.0)) ", for: .normal)
             
-            if((self.pendingReviewListData.listData?.reviewsCount!)! > 0)
+            if((self.pendingReviewListData?.listData?.reviewsCount!)! > 0)
             {
-                lblReviewCount.text = "\u{2022} \(self.pendingReviewListData.listData?.reviewsCount! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"reviews"))!)"
+                lblReviewCount.text = "\u{2022} \(self.pendingReviewListData?.listData?.reviewsCount! ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"reviews"))!)"
             }
             else
             {
@@ -251,7 +249,7 @@ class WriteReview: UIViewController {
         self.DescriptionLabel.font = UIFont(name: APP_FONT, size: 14)
         self.DescriptionLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         
-        if Utility.shared.getCurrentUserID() as String? == self.pendingReviewListData.guestId{
+        if Utility.shared.getCurrentUserID() as String? == self.pendingReviewListData?.guestId{
             self.DescriptionLabel.text = "\(Utility.shared.getLanguage()?.value(forKey: "Your_Review_host_Description") ?? "Your review will be public on your host profile")"
         }else{
             self.DescriptionLabel.text = "\(Utility.shared.getLanguage()?.value(forKey: "yourreview_desc") ?? "Your review will be public on your profile")"
@@ -266,7 +264,7 @@ class WriteReview: UIViewController {
         self.view.backgroundColor = UIColor(named: "colorController")
         self.lblReviewCount.font = UIFont(name: APP_FONT, size: 12)
         
-        if Utility.shared.getCurrentUserID() as String? == self.pendingReviewListData.guestId{
+        if Utility.shared.getCurrentUserID() as String? == self.pendingReviewListData?.guestId{
             self.textViewPlaceholder.text = "\(Utility.shared.getLanguage()?.value(forKey: "reviewplaceholder_guest") ?? "What was it like to stay at this host's property.")"
         }else{
             self.textViewPlaceholder.text = "\(Utility.shared.getLanguage()?.value(forKey: "Review_Placeholder") ?? "What was it like to host this guest")"
@@ -322,25 +320,29 @@ class WriteReview: UIViewController {
             self.offlineView.isHidden = true
             var receiverID = ""
             
-            if Utility.shared.getCurrentUserID() as String? == self.pendingReviewListData.guestId{
-                receiverID = self.pendingReviewListData.hostId ?? ""
+            if Utility.shared.getCurrentUserID() as String? == self.pendingReviewListData?.guestId{
+                receiverID = self.pendingReviewListData?.hostId ?? ""
             }else{
-                receiverID = self.pendingReviewListData.guestId ?? ""
+                receiverID = self.pendingReviewListData?.guestId ?? ""
             }
             
             let submitWriteReview = WriteUserReviewMutation(reservationId: self.reservationID, listId: self.listID, reviewContent: self.textView.text.replacingOccurrences(of: "\\s+", with: " " , options: .regularExpression), rating: self.overALLRatingView.rating, receiverId: receiverID)
             
-                    
-            apollo_headerClient.perform(mutation: submitWriteReview){(result,error) in
-                
+            
+            Network.shared.apollo_headerClient.perform(mutation: submitWriteReview){ response in
                 self.lottieView.isHidden = true
                 self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
-                guard (result?.data?.writeUserReview?.status) == 200 else{
+                
+                switch response {
+                case .success(let result):
                     
-                self.view.makeToast(result?.data?.writeUserReview?.errorMessage)
-                return
-            }
-                self.view.makeToast("\(Utility.shared.getLanguage()?.value(forKey: "Reviewed_Successfully") ?? "Reviewed Successfully!")")
+                    
+                    guard (result.data?.writeUserReview?.status) == 200 else{
+                        
+                        self.view.makeToast(result.data?.writeUserReview?.errorMessage)
+                        return
+                    }
+                    self.view.makeToast("\(Utility.shared.getLanguage()?.value(forKey: "Reviewed_Successfully") ?? "Reviewed Successfully!")")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                         if self.isFromEmailNavigation {
                             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -352,6 +354,9 @@ class WriteReview: UIViewController {
                             self.delegate?.reloadPendingReviews()
                         }
                     })
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
             }
         }else{
             // self.previousTable.isHidden = true

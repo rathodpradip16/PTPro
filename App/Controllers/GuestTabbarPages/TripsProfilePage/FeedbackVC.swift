@@ -25,15 +25,6 @@ class FeedbackVC: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
     @IBOutlet weak var wholeView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var feedbckTable: UITableView!
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -136,26 +127,28 @@ class FeedbackVC: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
     func sendUserfeedback(type:String,message:String)
 
     {
-        let senduserFeedbackMutation = SendUserFeedbackMutation(type: type, message: message)
-        apollo_headerClient.perform(mutation:senduserFeedbackMutation){(result,error) in
-            if(result?.data?.userFeedback?.status == 200)
-            {
-                self.wholeView.isHidden = true
-                if(type == "Feed Back")
-                {
-                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"feedbacksuccessAlert"))!)")
+        let senduserFeedbackMutation = SendUserFeedbackMutation(type: .some(type), message: .some(message))
+        Network.shared.apollo_headerClient.perform(mutation:senduserFeedbackMutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.userFeedback?.status,data == 200 {
+                    self.wholeView.isHidden = true
+                    if(type == "Feed Back")
+                    {
+                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"feedbacksuccessAlert"))!)")
+                    }
+                    else{
+                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"bugsuccessAlert"))!)")
+                    }
+                } else {
+                    self.view.makeToast(result.data?.userFeedback?.errorMessage!)
                 }
-                else{
-                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"bugsuccessAlert"))!)")
-                }
-            }else{
-                
-               
-                
-                self.view.makeToast(result?.data?.userFeedback?.errorMessage!)
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
+    
     @objc func feedbackBtnTapped()
     { self.wholeView.isHidden = false
         self.FeedbcktextView.delegate = self

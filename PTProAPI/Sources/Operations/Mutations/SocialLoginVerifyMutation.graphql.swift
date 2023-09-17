@@ -5,17 +5,9 @@
 
 public class SocialLoginVerifyMutation: GraphQLMutation {
   public static let operationName: String = "SocialLoginVerify"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation SocialLoginVerify($verificationType: String!, $actionType: String!) {
-        SocialVerification(verificationType: $verificationType, actionType: $actionType) {
-          __typename
-          status
-          errorMessage
-        }
-      }
-      """
+      #"mutation SocialLoginVerify($verificationType: String!, $actionType: String!) { SocialVerification(verificationType: $verificationType, actionType: $actionType) { __typename status errorMessage } }"#
     ))
 
   public var verificationType: String
@@ -36,10 +28,10 @@ public class SocialLoginVerifyMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("SocialVerification", SocialVerification?.self, arguments: [
         "verificationType": .variable("verificationType"),
         "actionType": .variable("actionType")
@@ -53,10 +45,11 @@ public class SocialLoginVerifyMutation: GraphQLMutation {
     /// Parent Type: `SocialVerification`
     public struct SocialVerification: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.SocialVerification }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.SocialVerification }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
       ] }

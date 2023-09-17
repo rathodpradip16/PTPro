@@ -5,65 +5,9 @@
 
 public class CreateReservationMutation: GraphQLMutation {
   public static let operationName: String = "createReservation"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation createReservation($listId: Int!, $checkIn: String!, $checkOut: String!, $guests: Int!, $message: String!, $basePrice: Float!, $cleaningPrice: Float!, $currency: String!, $discount: Float, $discountType: String, $guestServiceFee: Float, $hostServiceFee: Float, $total: Float!, $bookingType: String, $cardToken: String!, $paymentType: Int, $convCurrency: String!, $averagePrice: Float, $nights: Int, $paymentCurrency: String) {
-        createReservation(
-          listId: $listId
-          checkIn: $checkIn
-          checkOut: $checkOut
-          guests: $guests
-          message: $message
-          basePrice: $basePrice
-          cleaningPrice: $cleaningPrice
-          currency: $currency
-          discount: $discount
-          discountType: $discountType
-          guestServiceFee: $guestServiceFee
-          hostServiceFee: $hostServiceFee
-          total: $total
-          bookingType: $bookingType
-          cardToken: $cardToken
-          paymentType: $paymentType
-          convCurrency: $convCurrency
-          averagePrice: $averagePrice
-          nights: $nights
-          paymentCurrency: $paymentCurrency
-        ) {
-          __typename
-          results {
-            __typename
-            id
-            listId
-            hostId
-            guestId
-            checkIn
-            checkOut
-            guests
-            message
-            basePrice
-            cleaningPrice
-            currency
-            discount
-            discountType
-            guestServiceFee
-            hostServiceFee
-            total
-            confirmationCode
-            createdAt
-            reservationState
-            paymentState
-          }
-          status
-          errorMessage
-          requireAdditionalAction
-          paymentIntentSecret
-          reservationId
-          redirectUrl
-        }
-      }
-      """
+      #"mutation createReservation($listId: Int!, $checkIn: String!, $checkOut: String!, $guests: Int!, $message: String!, $basePrice: Float!, $cleaningPrice: Float!, $currency: String!, $discount: Float, $discountType: String, $guestServiceFee: Float, $hostServiceFee: Float, $total: Float!, $bookingType: String, $cardToken: String!, $paymentType: Int, $convCurrency: String!, $averagePrice: Float, $nights: Int, $paymentCurrency: String) { createReservation( listId: $listId checkIn: $checkIn checkOut: $checkOut guests: $guests message: $message basePrice: $basePrice cleaningPrice: $cleaningPrice currency: $currency discount: $discount discountType: $discountType guestServiceFee: $guestServiceFee hostServiceFee: $hostServiceFee total: $total bookingType: $bookingType cardToken: $cardToken paymentType: $paymentType convCurrency: $convCurrency averagePrice: $averagePrice nights: $nights paymentCurrency: $paymentCurrency ) { __typename results { __typename id listId hostId guestId checkIn checkOut guests message basePrice cleaningPrice currency discount discountType guestServiceFee hostServiceFee total confirmationCode createdAt reservationState paymentState } status errorMessage requireAdditionalAction paymentIntentSecret reservationId redirectUrl } }"#
     ))
 
   public var listId: Int
@@ -156,10 +100,10 @@ public class CreateReservationMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("createReservation", CreateReservation?.self, arguments: [
         "listId": .variable("listId"),
         "checkIn": .variable("checkIn"),
@@ -191,10 +135,11 @@ public class CreateReservationMutation: GraphQLMutation {
     /// Parent Type: `ReservationPayment`
     public struct CreateReservation: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.ReservationPayment }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ReservationPayment }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", Results?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -217,10 +162,11 @@ public class CreateReservationMutation: GraphQLMutation {
       /// Parent Type: `Reservation`
       public struct Results: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.Reservation }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Reservation }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("listId", Int?.self),
           .field("hostId", String?.self),

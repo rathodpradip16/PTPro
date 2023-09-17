@@ -80,7 +80,7 @@ class DateofBirthVC: UIViewController {
 //Mark:************************************* METHODS & ACTIONS *****************************************>
     
     @IBAction func retryTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.bottomView.isHidden = false
         self.offlineView.isHidden = true
         }
@@ -93,7 +93,7 @@ class DateofBirthVC: UIViewController {
         self.lottieView.play()
 }
     @IBAction func goBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         self.offlineView.isHidden = true
         self.lottieWholeView.isHidden = false
         self.lottieWholeView.frame = CGRect(x: 0, y: 0, width: FULLWIDTH, height: FULLHEIGHT)
@@ -236,62 +236,66 @@ class DateofBirthVC: UIViewController {
     
     func signupAPICall(){
         // SignupApi
-        let signupMutation = SignupMutation(firstName:(Utility.shared.signupArray[0] as! String), lastName: (Utility.shared.signupArray[1] as! String), email: Utility.shared.signupArray[2] as! String, password: Utility.shared.signupArray[3] as! String, dateOfBirth:birthTF.text, deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "email")
-        apollo.perform(mutation: signupMutation){ (result,error) in
-            if(result?.data?.createUser?.status == 200) {
-                Utility.shared.signupArray.removeAllObjects()
-                Utility.shared.signupdataArray.removeAll()
-                if let token = result?.data?.createUser?.result?.userToken {
-                    Utility.shared.setUserToken(userID:token as NSString)
-                      Utility.shared.user_token = "\(token)"
+        let signupMutation = SignupMutation(firstName:.some(Utility.shared.signupArray[0] as! String), lastName: .some(Utility.shared.signupArray[1] as! String), email: Utility.shared.signupArray[2] as! String, password: Utility.shared.signupArray[3] as! String, dateOfBirth:.some(birthTF.text ?? ""), deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "email")
+        apollo.perform(mutation: signupMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createUser?.status,data == 200 {
+                    Utility.shared.signupArray.removeAllObjects()
+                    Utility.shared.signupdataArray.removeAll()
+                    if let token = result.data?.createUser?.result?.userToken {
+                        Utility.shared.setUserToken(userID:token as NSString)
+                        Utility.shared.user_token = "\(token)"
                     }
-            if let userId = result?.data?.createUser?.result?.userId {
-                    Utility.shared.setUserID(userid:userId as NSString)
-                }
-             if let firstName = result?.data?.createUser?.result?.user?.firstName {
-                               Utility.shared.signupdataArray.append(firstName as AnyObject)
-                           }
-            if let createdAt = result?.data?.createUser?.result?.user?.createdAt {
-                Utility.shared.signupdataArray.append(createdAt as AnyObject)
-                        }
-              if let picture = result?.data?.createUser?.result?.user?.picture {
-              Utility.shared.signupdataArray.append(picture as AnyObject)
-                      }
-                if let isEmailConfirmed = result?.data?.createUser?.result?.user?.verification?.isEmailConfirmed {
-                    Utility.shared.signupdataArray.append(isEmailConfirmed as AnyObject)
+                    if let userId = result.data?.createUser?.result?.userId {
+                        Utility.shared.setUserID(userid:userId as NSString)
                     }
-                 if let isIdVerification = result?.data?.createUser?.result?.user?.verification?.isIdVerification {
-                 Utility.shared.signupdataArray.append(isIdVerification as AnyObject)
-                 }
-                if let isFacebookConnected = result?.data?.createUser?.result?.user?.verification?.isFacebookConnected {
-                    Utility.shared.signupdataArray.append(isFacebookConnected as AnyObject)
-                }
-                if let isPhoneVerified = result?.data?.createUser?.result?.user?.verification?.isPhoneVerified {
-                    Utility.shared.signupdataArray.append(isPhoneVerified as AnyObject)
+                    if let firstName = result.data?.createUser?.result?.user?.firstName {
+                        Utility.shared.signupdataArray.append(firstName as AnyObject)
                     }
-                if let isGoogleConnected = result?.data?.createUser?.result?.user?.verification?.isGoogleConnected {
-                    Utility.shared.signupdataArray.append(isGoogleConnected as AnyObject)
+                    if let createdAt = result.data?.createUser?.result?.user?.createdAt {
+                        Utility.shared.signupdataArray.append(createdAt as AnyObject)
                     }
-                 
-              
-                
-                if(result?.data?.createUser?.result?.user?.preferredCurrency != nil)
-                {
-                Utility.shared.setPreferredCurrency(currency_rate: (result?.data?.createUser?.result?.user?.preferredCurrency as AnyObject) as! String)
-                }
-                else
-                {
-                    Utility.shared.setPreferredCurrency(currency_rate:"USD")
-                    Utility.shared.selectedCurrency = "USD"
-                }
+                    if let picture = result.data?.createUser?.result?.user?.picture {
+                        Utility.shared.signupdataArray.append(picture as AnyObject)
+                    }
+                    if let isEmailConfirmed = result.data?.createUser?.result?.user?.verification?.isEmailConfirmed {
+                        Utility.shared.signupdataArray.append(isEmailConfirmed as AnyObject)
+                    }
+                    if let isIdVerification = result.data?.createUser?.result?.user?.verification?.isIdVerification {
+                        Utility.shared.signupdataArray.append(isIdVerification as AnyObject)
+                    }
+                    if let isFacebookConnected = result.data?.createUser?.result?.user?.verification?.isFacebookConnected {
+                        Utility.shared.signupdataArray.append(isFacebookConnected as AnyObject)
+                    }
+                    if let isPhoneVerified = result.data?.createUser?.result?.user?.verification?.isPhoneVerified {
+                        Utility.shared.signupdataArray.append(isPhoneVerified as AnyObject)
+                    }
+                    if let isGoogleConnected = result.data?.createUser?.result?.user?.verification?.isGoogleConnected {
+                        Utility.shared.signupdataArray.append(isGoogleConnected as AnyObject)
+                    }
+                    
+                    
+                    
+                    if(result.data?.createUser?.result?.user?.preferredCurrency != nil)
+                    {
+                        Utility.shared.setPreferredCurrency(currency_rate: (result.data?.createUser?.result?.user?.preferredCurrency as AnyObject) as! String)
+                    }
+                    else
+                    {
+                        Utility.shared.setPreferredCurrency(currency_rate:"USD")
+                        Utility.shared.selectedCurrency = "USD"
+                    }
                     let appDelegate = UIApplication.shared.delegate as! AppDelegate
                     appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
-      }
-      else {
-            self.lottieWholeView.isHidden = true
-            self.lottieView.isHidden = true
-            Utility.shared.showAlert(msg:((result?.data?.createUser?.errorMessage)!))
-            //self.view.makeToast(result?.data?.createUser?.errorMessage!)
+                } else {
+                    self.lottieWholeView.isHidden = true
+                    self.lottieView.isHidden = true
+                    Utility.shared.showAlert(msg:((result.data?.createUser?.errorMessage)!))
+                    //self.view.makeToast(result.data?.createUser?.errorMessage!)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }

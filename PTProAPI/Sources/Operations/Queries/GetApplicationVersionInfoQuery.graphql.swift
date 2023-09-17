@@ -5,22 +5,9 @@
 
 public class GetApplicationVersionInfoQuery: GraphQLQuery {
   public static let operationName: String = "getApplicationVersionInfo"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getApplicationVersionInfo($appType: String!, $version: String!) {
-        getApplicationVersionInfo(appType: $appType, version: $version) {
-          __typename
-          status
-          errorMessage
-          result {
-            __typename
-            appStoreUrl
-            playStoreUrl
-          }
-        }
-      }
-      """
+      #"query getApplicationVersionInfo($appType: String!, $version: String!) { getApplicationVersionInfo(appType: $appType, version: $version) { __typename status errorMessage result { __typename appStoreUrl playStoreUrl } } }"#
     ))
 
   public var appType: String
@@ -41,10 +28,10 @@ public class GetApplicationVersionInfoQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getApplicationVersionInfo", GetApplicationVersionInfo?.self, arguments: [
         "appType": .variable("appType"),
         "version": .variable("version")
@@ -58,10 +45,11 @@ public class GetApplicationVersionInfoQuery: GraphQLQuery {
     /// Parent Type: `SiteSettingsCommon`
     public struct GetApplicationVersionInfo: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.SiteSettingsCommon }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.SiteSettingsCommon }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
         .field("result", Result?.self),
@@ -76,10 +64,11 @@ public class GetApplicationVersionInfoQuery: GraphQLQuery {
       /// Parent Type: `ApplicationVersion`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.ApplicationVersion }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ApplicationVersion }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("appStoreUrl", String?.self),
           .field("playStoreUrl", String?.self),
         ] }

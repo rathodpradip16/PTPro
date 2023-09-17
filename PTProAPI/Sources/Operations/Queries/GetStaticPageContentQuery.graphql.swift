@@ -5,26 +5,9 @@
 
 public class GetStaticPageContentQuery: GraphQLQuery {
   public static let operationName: String = "getStaticPageContent"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getStaticPageContent($id: Int) {
-        getStaticPageContent(id: $id) {
-          __typename
-          status
-          errorMessage
-          result {
-            __typename
-            id
-            pageName
-            metaTitle
-            metaDescription
-            content
-            createdAt
-          }
-        }
-      }
-      """
+      #"query getStaticPageContent($id: Int) { getStaticPageContent(id: $id) { __typename status errorMessage result { __typename id pageName metaTitle metaDescription content createdAt } } }"#
     ))
 
   public var id: GraphQLNullable<Int>
@@ -37,10 +20,10 @@ public class GetStaticPageContentQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getStaticPageContent", GetStaticPageContent?.self, arguments: ["id": .variable("id")]),
     ] }
 
@@ -51,10 +34,11 @@ public class GetStaticPageContentQuery: GraphQLQuery {
     /// Parent Type: `StaticPageCommonType`
     public struct GetStaticPageContent: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.StaticPageCommonType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.StaticPageCommonType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
         .field("result", Result?.self),
@@ -69,10 +53,11 @@ public class GetStaticPageContentQuery: GraphQLQuery {
       /// Parent Type: `StaticPageType`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.StaticPageType }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.StaticPageType }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("pageName", String?.self),
           .field("metaTitle", String?.self),

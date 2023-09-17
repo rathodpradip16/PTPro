@@ -16,9 +16,6 @@ import PTProAPI
 
 class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollectionViewDataSource,AssetsPickerViewControllerDelegate{
     
-    
-   
-    
     // MARK: - IBOUTLET & GLOABAL VARIABLE DECLARATIONS
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -54,9 +51,9 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
         return PHCachingImageManager()
     }()
      var imagesData = [Data]()
-     var showListingstepArray = ShowListingStepsQuery.Data.ShowListingStep.Result()
-    var showListPhotosArray = [ShowListPhotosQuery.Data.ShowListPhoto.Result]()
-    var getListingStep2Array = GetListingDetailsStep2Query.Data.GetListingDetail.Result()
+    var showListingstepArray : ShowListingStepsQuery.Data.ShowListingSteps.Results?
+    var showListPhotosArray = [ShowListPhotosQuery.Data.ShowListPhotos.Result]()
+    var getListingStep2Array : GetListingDetailsStep2Query.Data.GetListingDetails.Results?
     
     var multiimages_Selected:Bool = false
     var multiimages_count:Int = 0
@@ -226,67 +223,79 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     
     func showlistingPhotosAPICall()
     {
-         if Utility().isConnectedToNetwork(){
-        let showlistingphotosquery = ShowListPhotosQuery(listId: showListingstepArray.listId!)
-            super.apollo_headerClient.fetch(query: showlistingphotosquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            guard (result?.data?.showListPhotos?.results) != nil else{
-                print("Missing Data")
-                self.skipBtn.isHidden = false
-                self.nextBtn.isHidden = true
-                self.showListPhotosArray.removeAll()
-               
-//                self.photoAddTable.reloadData()
-                self.collectionView.reloadData()
-                return
+        if Utility.shared.isConnectedToNetwork(){
+            let showlistingphotosquery = ShowListPhotosQuery(listId:showListingstepArray?.listId! ?? 0)
+            Network.shared.apollo_headerClient.fetch(query: showlistingphotosquery, cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.showListPhotos?.results) != nil else{
+                        print("Missing Data")
+                        self.skipBtn.isHidden = false
+                        self.nextBtn.isHidden = true
+                        self.showListPhotosArray.removeAll()
+                        
+                        //                self.photoAddTable.reloadData()
+                        self.collectionView.reloadData()
+                        return
+                    }
+                    self.showListPhotosArray = (result.data?.showListPhotos?.results)! as! [ShowListPhotosQuery.Data.ShowListPhotos.Result]
+                    if(self.showListPhotosArray.count > 0)
+                    {
+                        self.skipBtn.isHidden = true
+                        self.nextBtn.isHidden = false
+                    }
+                    else {
+                        self.skipBtn.isHidden = false
+                        self.nextBtn.isHidden = true
+                    }
+                    
+                    if(!self.isdelete_API_call)
+                    {
+                        //                self.photoAddTable.reloadData()
+                        self.collectionView.reloadData()
+                        self.scrollToBottom()
+                    }
+                    else
+                    {
+                        self.collectionView.reloadData()
+                        //                self.photoAddTable.reloadSections([1], with: .automatic)
+                        
+                    }
+                    
+                case .failure(_): break
             }
-            self.showListPhotosArray = (result?.data?.showListPhotos?.results)! as! [ShowListPhotosQuery.Data.ShowListPhoto.Result]
-            if(self.showListPhotosArray.count > 0)
-            {
-                self.skipBtn.isHidden = true
-                self.nextBtn.isHidden = false
             }
-                else {
-                    self.skipBtn.isHidden = false
-                    self.nextBtn.isHidden = true
-                }
-
-            if(!self.isdelete_API_call)
-            {
-//                self.photoAddTable.reloadData()
-                self.collectionView.reloadData()
-                self.scrollToBottom()
-            }
-            else
-            {
-                self.collectionView.reloadData()
-//                self.photoAddTable.reloadSections([1], with: .automatic)
-                
-            }
-        }
+            
         }
         else
-         {
+        {
             //self.photoAddTable.reloadSections([1], with: .automatic)
-//            self.photoAddTable.reloadData()
-             self.collectionView.reloadData()
+            //            self.photoAddTable.reloadData()
+            self.collectionView.reloadData()
             self.offlineviewShow()
         }
     }
     
     func getListingDetailsStep2()
     {
-        if Utility().isConnectedToNetwork(){
-        let getlistingStep2query = GetListingDetailsStep2Query(listId:"\(showListingstepArray.listId!)", preview: true)
-            super.apollo_headerClient.fetch(query: getlistingStep2query,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            guard (result?.data?.getListingDetails?.results) != nil else{
-                print("Missing Data")
-                self.showlistingPhotosAPICall()
-                return
+        if Utility.shared.isConnectedToNetwork(){
+            let getlistingStep2query = GetListingDetailsStep2Query(listId:"\(String(describing: showListingstepArray?.listId!))", preview: true)
+            Network.shared.apollo_headerClient.fetch(query: getlistingStep2query,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getListingDetails?.results) != nil else{
+                        print("Missing Data")
+                        self.showlistingPhotosAPICall()
+                        return
+                    }
+                    self.getListingStep2Array = (result.data?.getListingDetails?.results)!
+                    Utility.shared.host_step2_isfromEdit = true
+                    self.showlistingPhotosAPICall()
+                case .failure(_): break
             }
-            self.getListingStep2Array = (result?.data?.getListingDetails?.results)!
-            Utility.shared.host_step2_isfromEdit = true
-            self.showlistingPhotosAPICall()
-    }
+                
+                
+            }
         }
         else{
             self.offlineviewShow()
@@ -296,33 +305,34 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     
     func deleteAPICall(name:String)
     {
-        if Utility().isConnectedToNetwork(){
-        let RemoveListPhotosmutation = RemoveListPhotosMutation(listId:(showListingstepArray.listId!), name:name)
-        apollo_headerClient.perform(mutation: RemoveListPhotosmutation){(result,error) in
-            if(result?.data?.removeListPhotos?.status == 200)
-            {
-                self.isdelete_API_call = true
-                self.showlistingPhotosAPICall()
-                
-            }
-            else
-            {
-                if(result?.data?.removeListPhotos?.errorMessage != "filename not exist")
-                {
-                    
-                   
-                    if(result?.data?.removeListPhotos?.errorMessage != nil) {
-                    self.view.makeToast(result?.data?.removeListPhotos?.errorMessage != nil ? result?.data?.removeListPhotos?.errorMessage! : "")
+        if Utility.shared.isConnectedToNetwork(){
+            let RemoveListPhotosmutation = RemoveListPhotosMutation(listId: (showListingstepArray?.listId!)!, name:.some(name))
+            Network.shared.apollo_headerClient.perform(mutation: RemoveListPhotosmutation){ response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.removeListPhotos?.status,data == 200 {
+                        self.isdelete_API_call = true
+                        self.showlistingPhotosAPICall()
+                        
+                    } else {
+                        if(result.data?.removeListPhotos?.errorMessage != "filename not exist")
+                        {
+                            if(result.data?.removeListPhotos?.errorMessage != nil) {
+                                self.view.makeToast(result.data?.removeListPhotos?.errorMessage != nil ? result.data?.removeListPhotos?.errorMessage! : "")
+                            }
+                        }
                     }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
             }
-        }
         }
         else
         {
             self.offlineviewShow()
         }
     }
+    
     func offlineviewShow()
     {
         self.offlinView.isHidden = false
@@ -346,7 +356,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
         }
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.nextBtn.isHidden = true
             self.offlinView.isHidden = true
              self.showlistingPhotosAPICall()
@@ -355,7 +365,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     }
     
     @IBAction func saveexitTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
 
             self.view.endEditing(true)
             super.updatelistingStep2APICall{(success) -> Void in
@@ -387,53 +397,61 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     func updateAPICall()
     {
         
-        if(getListingStep2Array.id != nil)
+        if(getListingStep2Array?.__data._data["id"] != nil)
         {
-        var coverphoto = Int()
-        var desc = String()
-        var title = String()
-        
-        if(Utility.shared.host_photo_coverid == 0)
-        {
-            if(getListingStep2Array.coverPhoto != nil)
+            var coverphoto = Int()
+            var desc = String()
+            var title = String()
+            
+            if(Utility.shared.host_photo_coverid == 0)
             {
-          coverphoto = getListingStep2Array.coverPhoto!
-                
+                if(getListingStep2Array?.coverPhoto != nil)
+                {
+                    coverphoto = getListingStep2Array?.coverPhoto! ?? 0
+                    
+                }
+                else
+                {
+                    coverphoto = 0
+                }
             }
             else
             {
-                coverphoto = 0
+                coverphoto = Utility.shared.host_photo_coverid
             }
-        }
-        else
-        {
-           coverphoto = Utility.shared.host_photo_coverid
-        }
-        
-        desc = getListingStep2Array.description != nil ? getListingStep2Array.description! : ""
-        
-       
-        title = getListingStep2Array.title != nil ? getListingStep2Array.title! : ""
-        
-        let UpdateListingStep2mutation = UpdateListingStep2Mutation(id:getListingStep2Array.id!, description:desc, title:title, coverPhoto:coverphoto)
-        apollo_headerClient.perform(mutation: UpdateListingStep2mutation){ (result,error) in
             
-            if(result?.data?.updateListingStep2?.status == 200)
-            {
-                let becomeHostObj = BecomeHostVC()
-                becomeHostObj.listID = "\(self.getListingStep2Array.id!)"
-                becomeHostObj.showListingStepsAPICall(listID:"\(self.getListingStep2Array.id!)")
-               // self.view.window!.layer.add(presentrightAnimation()!, forKey: kCATransition)
-                 becomeHostObj.modalPresentationStyle = .fullScreen
-                self.present(becomeHostObj, animated: false, completion: nil)
-                
+            if let d = getListingStep2Array?.description{
+                desc = d
+            }else{
+                desc = ""
             }
-            else {
-                self.view.makeToast(result?.data?.updateListingStep2?.errorMessage)
+            
+            if let t = getListingStep2Array?.title{
+                title = t
+            }else{
+                title = ""
+            }
+            
+            let UpdateListingStep2mutation = UpdateListingStep2Mutation(id: .some(getListingStep2Array?.__data._data["id"] as! Int), description: .some(desc), title:.some(title), coverPhoto:.some(coverphoto))
+            Network.shared.apollo_headerClient.perform(mutation: UpdateListingStep2mutation){  response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.updateListingStep2?.status,data == 200 {
+                        let becomeHostObj = BecomeHostVC()
+                        becomeHostObj.listID = "\(self.getListingStep2Array?.__data._data["id"] as! Int)"
+                        becomeHostObj.showListingStepsAPICall(listID:"\(self.getListingStep2Array?.__data._data["id"] as! Int)")
+                        // self.view.window!.layer.add(presentrightAnimation()!, forKey: kCATransition)
+                        becomeHostObj.modalPresentationStyle = .fullScreen
+                        self.present(becomeHostObj, animated: false, completion: nil)
+                        
+                    } else {
+                        self.view.makeToast(result.data?.updateListingStep2?.errorMessage)
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
             }
         }
-        }
-        
     }
     
     @IBAction func backBtnTapped(_ sender: Any) {
@@ -450,9 +468,13 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     @IBAction func skipBtnTappe(_ sender: Any) {
     }
     @IBAction func nextBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         let listTitleObj = ListingTitleVC()
-            Utility.shared.host_step2_listId = showListingstepArray.listId != nil ? showListingstepArray.listId! : 0
+            if let listid = showListingstepArray?.listId{
+                Utility.shared.host_step2_listId =  listid
+            }else{
+                Utility.shared.host_step2_listId =  0
+            }
         listTitleObj.saveexit_Activated = saveexit_Activated
         listTitleObj.getListingStep2Array = getListingStep2Array
             listTitleObj.showListingstepArray = showListingstepArray
@@ -609,7 +631,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     
     @objc func addbtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.isdelete_API_call = false
         let picker = AssetsPickerViewController()
         picker.pickerConfig.assetIsShowCameraButton = false
@@ -715,9 +737,9 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
                 {
                     if(Utility.shared.host_step2_isfromEdit)
                     {
-                        if(getListingStep2Array.coverPhoto != nil)
+                        if(getListingStep2Array?.coverPhoto != nil)
                             {
-                        if((getListingStep2Array.coverPhoto! == showListPhotosArray[indexPath.row-1].id) && (selected_Cover_Array.count == 0))
+                            if((getListingStep2Array?.coverPhoto! == showListPhotosArray[indexPath.row-1].id) && (selected_Cover_Array.count == 0))
                         {
                             
                             cell.coverbutton.backgroundColor = Theme.PRIMARY_COLOR
@@ -807,7 +829,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     
     }
     @objc func CoverbtnTapped(_ sender: UIButton){
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             
             if(showListPhotosArray.count > 1)
             {
@@ -828,7 +850,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     }
     @objc func deleteBtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         if((showListPhotosArray.count > sender.tag) && showListPhotosArray[sender.tag].name != nil)
         {
         self.deleteAPICall(name:showListPhotosArray[sender.tag].name!)
@@ -953,11 +975,11 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     }
     
     func uploadProfilePic(profileimage:[Data],onSuccess success: @escaping (NSDictionary) -> Void) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             let BaseUrl = URL(string: LISTINGIMAGE_UPLOAD)
             print("BASE URL : \(LISTINGIMAGE_UPLOAD)")
             let header = ["auth": "\(Utility.shared.getCurrentUserToken()!)"]
-            let parameters = ["listId": "\(showListingstepArray.listId!)"]
+            let parameters = ["listId": "\(showListingstepArray?.listId!)"]
             
             
             AF.upload(multipartFormData: { (multipartFormData) in
@@ -1066,7 +1088,11 @@ extension StepTwoVC: stepsUpdateProtocol{
                 break
             case 1:
                 let listTitleObj = ListingTitleVC()
-                    Utility.shared.host_step2_listId = showListingstepArray.listId != nil ? showListingstepArray.listId! : 0
+                if let listId = showListingstepArray?.listId{
+                    Utility.shared.host_step2_listId =  listId
+                }else{
+                    Utility.shared.host_step2_listId = 0
+                }
                 listTitleObj.saveexit_Activated = saveexit_Activated
                 listTitleObj.getListingStep2Array = getListingStep2Array
                 listTitleObj.showListingstepArray = showListingstepArray

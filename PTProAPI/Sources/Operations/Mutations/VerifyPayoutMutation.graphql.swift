@@ -5,21 +5,9 @@
 
 public class VerifyPayoutMutation: GraphQLMutation {
   public static let operationName: String = "verifyPayout"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation verifyPayout($stripeAccount: String) {
-        verifyPayout(stripeAccount: $stripeAccount) {
-          __typename
-          status
-          connectUrl
-          successUrl
-          failureUrl
-          stripeAccountId
-          errorMessage
-        }
-      }
-      """
+      #"mutation verifyPayout($stripeAccount: String) { verifyPayout(stripeAccount: $stripeAccount) { __typename status connectUrl successUrl failureUrl stripeAccountId errorMessage } }"#
     ))
 
   public var stripeAccount: GraphQLNullable<String>
@@ -32,10 +20,10 @@ public class VerifyPayoutMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("verifyPayout", VerifyPayout?.self, arguments: ["stripeAccount": .variable("stripeAccount")]),
     ] }
 
@@ -46,10 +34,11 @@ public class VerifyPayoutMutation: GraphQLMutation {
     /// Parent Type: `GetPayoutType`
     public struct VerifyPayout: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.GetPayoutType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.GetPayoutType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("connectUrl", String?.self),
         .field("successUrl", String?.self),

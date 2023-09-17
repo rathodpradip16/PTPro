@@ -35,17 +35,8 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     var lottieView: LottieAnimationView!
     var getallreservationquery = [GetAllReservationQuery.Data.GetAllReservation.Result]()
     var getpreviousReservationquery = [GetAllReservationQuery.Data.GetAllReservation.Result]()
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
-     var getReservationArray = GetReservationQuery.Data.GetReservation.Result()
-    var getReservation_currencyArray = GetReservationQuery.Data.GetReservation()
+    var getReservationArray : GetReservationQuery.Data.GetReservation.Results?
+    var getReservation_currencyArray : GetReservationQuery.Data.GetReservation?
     var checkinDate = String()
     var checkoutDate = String()
     
@@ -270,7 +261,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.lottieAnimation()
            // DispatchQueue.main.async {
                 
@@ -294,63 +285,68 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     func getTripsAPICall()
     {
-        if Utility().isConnectedToNetwork(){
-            let getallreservationQuery = GetAllReservationQuery(userType: "host", currentPage:PageIndex, dateFilter: "upcoming")
+        if Utility.shared.isConnectedToNetwork(){
+            let getallreservationQuery = GetAllReservationQuery(userType: "host", currentPage: .some(PageIndex), dateFilter: "upcoming")
             
-            apollo_headerClient.fetch(query:getallreservationQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-                guard (result?.data?.getAllReservation?.result) != nil else{
-                    print("Missing Data")
-                    
-                    if result?.data?.getAllReservation?.status == 500{
-                        let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message:result?.data?.getAllReservation?.errorMessage, preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                            UserDefaults.standard.removeObject(forKey: "user_token")
-                            UserDefaults.standard.removeObject(forKey: "user_id")
-                            UserDefaults.standard.removeObject(forKey: "password")
-                            UserDefaults.standard.removeObject(forKey: "currency_rate")
-                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                            let welcomeObj = WelcomePageVC()
-                            appDelegate.setInitialViewController(initialView: welcomeObj)
-                        }))
-                        self.present(alert, animated: true, completion: nil)
+            Network.shared.apollo_headerClient.fetch(query:getallreservationQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getAllReservation?.result) != nil else{
+                        print("Missing Data")
+                        
+                        if result.data?.getAllReservation?.status == 500{
+                            let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message:result.data?.getAllReservation?.errorMessage, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                                UserDefaults.standard.removeObject(forKey: "user_token")
+                                UserDefaults.standard.removeObject(forKey: "user_id")
+                                UserDefaults.standard.removeObject(forKey: "password")
+                                UserDefaults.standard.removeObject(forKey: "currency_rate")
+                                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                let welcomeObj = WelcomePageVC()
+                                appDelegate.setInitialViewController(initialView: welcomeObj)
+                            }))
+                            self.present(alert, animated: true, completion: nil)
+                            return
+                        }
+                        //  self.view.makeToast(result.data?.getAllReservation?.errorMessage)
+                        
+                        if(self.getallreservationquery.count == 0)
+                        {
+                            self.upcomingTable.isHidden = true
+                            self.WhereView.isHidden = false
+                        }
+                        else{
+                            self.upcomingTable.isHidden = false
+                            self.WhereView.isHidden = true
+                        }
                         return
                     }
-                  //  self.view.makeToast(result?.data?.getAllReservation?.errorMessage)
+                    self.totalListcount = (result.data?.getAllReservation?.count != nil ? ((result.data?.getAllReservation?.count)!) : 0)
+                    //self.getallreservationquery = (result.data?.getAllReservation?.result)! as! [GetAllReservationQuery.Data.GetAllReservation.Result]
+                    //            if(result.data?.searchListing?.currentPage == 1){
+                    //                self.FilterArray.removeAll()
+                    //            }
+                    self.getallreservationquery.append(contentsOf: ((result.data?.getAllReservation?.result)!) as! [GetAllReservationQuery.Data.GetAllReservation.Result])
                     
-                    if(self.getallreservationquery.count == 0)
-                    {
-                        self.upcomingTable.isHidden = true
-                        self.WhereView.isHidden = false
-                    }
-                    else{
-                        self.upcomingTable.isHidden = false
-                       self.WhereView.isHidden = true
-                    }
-                    return
+                    
+                    self.isSkeletable = false
+                    self.upcomingTable.hideSkeleton()
+                    
+                    self.upcomingTable.isHidden = false
+                    self.lottieView.isHidden = true
+                    self.upcomingTable?.reloadData()
+                    
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-                self.totalListcount = (result?.data?.getAllReservation?.count != nil ? ((result?.data?.getAllReservation?.count)!) : 0)
-                //self.getallreservationquery = (result?.data?.getAllReservation?.result)! as! [GetAllReservationQuery.Data.GetAllReservation.Result]
-                //            if(result?.data?.searchListing?.currentPage == 1){
-                //                self.FilterArray.removeAll()
-                //            }
-                self.getallreservationquery.append(contentsOf: ((result?.data?.getAllReservation?.result)!) as! [GetAllReservationQuery.Data.GetAllReservation.Result])
-                
-                
-                self.isSkeletable = false
-               self.upcomingTable.hideSkeleton()
-                
-                self.upcomingTable.isHidden = false
-                self.lottieView.isHidden = true
-                self.upcomingTable?.reloadData()
-                
             }
         }
         else{
             // self.previousTable.isHidden = true
             self.view.addSubview(offlineView)
-           
+            
             upcomingTable.updateAnimatedGradientSkeleton()
-           
+            
             upcomingTable.isSkeletonable = true
             upcomingTable.showAnimatedGradientSkeleton()
             self.isSkeletable = true
@@ -379,53 +375,52 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func previousTripsAPICall()
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
-            let getallreservationQuery = GetAllReservationQuery(userType: "host", currentPage:previousPageIndex, dateFilter: "previous")
+            let getallreservationQuery = GetAllReservationQuery(userType: "host", currentPage:.some(previousPageIndex), dateFilter: "previous")
             
-            apollo_headerClient.fetch(query:getallreservationQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-        
-                if(result?.data?.getAllReservation?.status == 200)
-                {
-                    self.previoustotalListcount = (result?.data?.getAllReservation?.count != nil ? (result?.data?.getAllReservation?.count!)! : 0)
-           
-                self.getpreviousReservationquery.append(contentsOf: ((result?.data?.getAllReservation?.result)!) as! [GetAllReservationQuery.Data.GetAllReservation.Result])
-                
-                    if(self.upcomingLabel.isHidden == false && self.getallreservationquery.count == 0)
-                    {
-                        self.WhereView.isHidden = false
-                        self.startLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"noprevious"))!)"
-                    }
-                    else
-                    {
-                        self.WhereView.isHidden = true
-                    }
-                    self.isSkeletable = false
-                    self.previousTable.hideSkeleton()
-                self.previousTable?.reloadData()
-                }
-                else
-                {
-                    if(self.getpreviousReservationquery.count == 0 && self.previousEnabled == true)
-                    {
+            Network.shared.apollo_headerClient.fetch(query:getallreservationQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.getAllReservation?.status,data == 200 {
+                        self.previoustotalListcount = (result.data?.getAllReservation?.count != nil ? (result.data?.getAllReservation?.count!)! : 0)
+                        
+                        self.getpreviousReservationquery.append(contentsOf: ((result.data?.getAllReservation?.result)!) as! [GetAllReservationQuery.Data.GetAllReservation.Result])
+                        
+                        if(self.upcomingLabel.isHidden == false && self.getallreservationquery.count == 0)
+                        {
+                            self.WhereView.isHidden = false
+                            self.startLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"noprevious"))!)"
+                        }
+                        else
+                        {
+                            self.WhereView.isHidden = true
+                        }
                         self.isSkeletable = false
                         self.previousTable.hideSkeleton()
-                        self.upcomingTable.isHidden = true
-                        self.previousTable.isHidden = true
-                        self.lottieView.isHidden = true
-                        self.WhereView.isHidden = false
-                        self.startLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"noprevious"))!)"
+                        self.previousTable?.reloadData()
+                    } else {
+                        if(self.getpreviousReservationquery.count == 0 && self.previousEnabled == true)
+                        {
+                            self.isSkeletable = false
+                            self.previousTable.hideSkeleton()
+                            self.upcomingTable.isHidden = true
+                            self.previousTable.isHidden = true
+                            self.lottieView.isHidden = true
+                            self.WhereView.isHidden = false
+                            self.startLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"noprevious"))!)"
+                        }
+                        
                     }
-                   
-                }
-                
+                case .failure(_): break
+            }
             }
         }
         else{
             //self.previousTable.isHidden = true
             self.view.addSubview(offlineView)
             self.previousTable.bringSubviewToFront(offlineView)
-           
+            
             previousTable.updateAnimatedGradientSkeleton()
             previousTable.isSkeletonable = true
             self.isSkeletable = true
@@ -1003,7 +998,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
  
     @objc func contactsupprtBtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if(getallreservationquery.count > 0) {
             let contactSupportObj = ContactusVC()
             contactSupportObj.Listid = getallreservationquery[sender.tag].listId != nil ? getallreservationquery[sender.tag].listId! : 0
@@ -1036,7 +1031,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     @objc func previouscontactsupprtBtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if(getpreviousReservationquery.count > 0) {
             let contactSupportObj = ContactusVC()
             contactSupportObj.Listid = getpreviousReservationquery[sender.tag].listId != nil ? getpreviousReservationquery[sender.tag].listId! : 0
@@ -1069,7 +1064,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     @objc func cancelBtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if(getallreservationquery.count > 0)
             {
                 
@@ -1119,7 +1114,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     @objc func previouscancelBtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if(getpreviousReservationquery.count > 0) {
             let cancelObj = TripsCancelVC()
             cancelObj.listID = getpreviousReservationquery[sender.tag].listId != nil ? getpreviousReservationquery[sender.tag].listId! : 0
@@ -1185,7 +1180,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func createReservationAPICall(reservationid:Int, senderBtn: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             var currency = String()
             if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
             {
@@ -1195,33 +1190,37 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             {
                 currency = Utility.shared.currencyvalue_from_API_base
             }
-            let createReservationquery = GetReservationQuery(reservationId: reservationid,convertCurrency:currency)
-            apollo_headerClient.fetch(query: createReservationquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-                guard (result?.data?.getReservation?.results) != nil else{
-                    print("Missing Data")
-                    self.view.makeToast(result?.data?.getReservation?.errorMessage)
-                    senderBtn.isUserInteractionEnabled = true
-                    return
-                }
-                self.getReservationArray = (result?.data?.getReservation?.results)!
-                self.getReservation_currencyArray = (result?.data?.getReservation!)!
-                if #available(iOS 11.0, *) {
-                    let receiptPageObj = ReceiptVC()
-                    Utility.shared.host_isfrom_hostRecipt = true
-                    receiptPageObj.getReservation_currencyArray = self.getReservation_currencyArray
-                    receiptPageObj.getReservationArray = self.getReservationArray
-                    //receiptPageObj.currencyvalue_from_API_base = currencyvalue_from_API_base
-                     receiptPageObj.modalPresentationStyle = .overFullScreen
-                    senderBtn.isUserInteractionEnabled = true
-                    self.view.window?.rootViewController?.present(receiptPageObj, animated:false, completion: nil)
-                    //self.present(receiptPageObj, animated: true, completion: nil)
-                } else {
-                    senderBtn.isUserInteractionEnabled = true
-                    // Fallback on earlier versions
-                }
+            let createReservationquery = GetReservationQuery(reservationId: reservationid,convertCurrency:.some(currency))
+            Network.shared.apollo_headerClient.fetch(query: createReservationquery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getReservation?.results) != nil else{
+                        print("Missing Data")
+                        self.view.makeToast(result.data?.getReservation?.errorMessage)
+                        senderBtn.isUserInteractionEnabled = true
+                        return
+                    }
+                    self.getReservationArray = (result.data?.getReservation?.results)!
+                    self.getReservation_currencyArray = (result.data?.getReservation!)!
+                    if #available(iOS 11.0, *) {
+                        let receiptPageObj = ReceiptVC()
+                        Utility.shared.host_isfrom_hostRecipt = true
+                        receiptPageObj.getReservation_currencyArray = self.getReservation_currencyArray
+                        receiptPageObj.getReservationArray = self.getReservationArray
+                        //receiptPageObj.currencyvalue_from_API_base = currencyvalue_from_API_base
+                        receiptPageObj.modalPresentationStyle = .overFullScreen
+                        senderBtn.isUserInteractionEnabled = true
+                        self.view.window?.rootViewController?.present(receiptPageObj, animated:false, completion: nil)
+                        //self.present(receiptPageObj, animated: true, completion: nil)
+                    } else {
+                        senderBtn.isUserInteractionEnabled = true
+                        // Fallback on earlier versions
+                    }
+                    
+                case .failure(_): break
             }
-        }
-        else{
+            }
+        }else{
             self.view.addSubview(offlineView)
             self.upcomingTable.bringSubviewToFront(offlineView)
             self.offlineView.isHidden = false
@@ -1327,7 +1326,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     @objc func messageBtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if(getallreservationquery.count > 0)
             {
             let InboxListingObj = InboxListingVC()
@@ -1364,7 +1363,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     @objc func messagePreviousBtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if(getpreviousReservationquery.count > 0)
             {
             let InboxListingObj = InboxListingVC()
@@ -1401,7 +1400,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if(isupcomingTable)
             {
                 let totalPages = (self.totalListcount/10)
@@ -1462,7 +1461,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     @objc func approvedBtnTapped(_ sender: UIButton)
     {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
          if(getallreservationquery.count > 0)
         {
            self.approveDeclineAPICall(threadid:(getallreservationquery[sender.tag].messageData?.id!)!, content: "", type:"approved", startDate:self.getapprovedateValue(timestamp:getallreservationquery[sender.tag].checkIn!) , endDate:self.getapprovedateValue(timestamp:getallreservationquery[sender.tag].checkOut!), personCapacity:getallreservationquery[sender.tag].guests!, reservationId: getallreservationquery[sender.tag].id!, actionType: "approved")
@@ -1494,7 +1493,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     @objc func declineBtnTapped(_ sender: UIButton)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if(getallreservationquery.count > 0)
             {
             self.approveDeclineAPICall(threadid:(getallreservationquery[sender.tag].messageData?.id!)!, content: "", type:"declined", startDate:self.getapprovedateValue(timestamp:getallreservationquery[sender.tag].checkIn!), endDate:self.getapprovedateValue(timestamp:getallreservationquery[sender.tag].checkOut!), personCapacity:getallreservationquery[sender.tag].guests!, reservationId: getallreservationquery[sender.tag].id!, actionType: "declined")
@@ -1527,48 +1526,44 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func approveDeclineAPICall(threadid:Int,content:String,type:String,startDate:String,endDate:String,personCapacity:Int,reservationId:Int,actionType:String)
     {
-        if Utility().isConnectedToNetwork(){
-            let reservationstatusMutation = ReservationStatusMutation(threadId: threadid, content: content, type: type, startDate: startDate, endDate: endDate, personCapacity: personCapacity, reservationId: reservationId, actionType: actionType)
-            apollo_headerClient.perform(mutation: reservationstatusMutation){(result,error) in
-                
-                if(result?.data?.reservationStatus?.status == 200)
-                {
-                    self.getallreservationquery.removeAll()
-                    self.PageIndex = 1
-                    self.previousPageIndex = 1
-                    self.getTripsAPICall()
-                    
-                }
-                else
-                {
-                    
-                    
-                    self.view.makeToast(result?.data?.reservationStatus?.errorMessage != nil ? result?.data?.reservationStatus?.errorMessage! : "")
+        if Utility.shared.isConnectedToNetwork(){
+            let reservationstatusMutation = ReservationStatusMutation(threadId: threadid, content: .some(content), type: .some(type), startDate: .some(startDate), endDate: .some(endDate), personCapacity: .some(personCapacity), reservationId: .some(reservationId), actionType: .some(actionType))
+            Network.shared.apollo_headerClient.perform(mutation: reservationstatusMutation){ response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.reservationStatus?.status,data == 200 {
+                        self.getallreservationquery.removeAll()
+                        self.PageIndex = 1
+                        self.previousPageIndex = 1
+                        self.getTripsAPICall()
+                    } else {
+                        self.view.makeToast(result.data?.reservationStatus?.errorMessage != nil ? result.data?.reservationStatus?.errorMessage! : "")
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
             }
-        }
-        else
-      {
-        self.view.addSubview(offlineView)
-        self.upcomingTable.bringSubviewToFront(offlineView)
-        self.offlineView.isHidden = false
-        let shadowSize2 : CGFloat = 3.0
-        let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
-                                                    y: -shadowSize2 / 2,
-                                                    width: self.offlineView.frame.size.width + shadowSize2,
-                                                    height: self.offlineView.frame.size.height + shadowSize2))
-        
-        self.offlineView.layer.masksToBounds = false
-        self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
-        self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        self.offlineView.layer.shadowOpacity = 0.3
-        self.offlineView.layer.shadowPath = shadowPath2.cgPath
-        if IS_IPHONE_X || IS_IPHONE_XR {
-            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-150, width: FULLWIDTH, height: 55)
         }else{
-            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: FULLWIDTH, height: 55)
-        }
-        
+            self.view.addSubview(offlineView)
+            self.upcomingTable.bringSubviewToFront(offlineView)
+            self.offlineView.isHidden = false
+            let shadowSize2 : CGFloat = 3.0
+            let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
+                                                        y: -shadowSize2 / 2,
+                                                        width: self.offlineView.frame.size.width + shadowSize2,
+                                                        height: self.offlineView.frame.size.height + shadowSize2))
+            
+            self.offlineView.layer.masksToBounds = false
+            self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
+            self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+            self.offlineView.layer.shadowOpacity = 0.3
+            self.offlineView.layer.shadowPath = shadowPath2.cgPath
+            if IS_IPHONE_X || IS_IPHONE_XR {
+                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-150, width: FULLWIDTH, height: 55)
+            }else{
+                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: FULLWIDTH, height: 55)
+            }
+            
         }
     }
     
@@ -1586,27 +1581,20 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     {
         if(Utility.shared.getCurrentUserToken() != nil)
         {
-        apollo_headerClient = {
-            let configuration = URLSessionConfiguration.default
-            // Add additional headers as needed
-            configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-            
-            let url = URL(string:graphQLEndpoint)!
-            
-            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-        }()
             let mostlistingquery = GetDefaultSettingQuery()
-            apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-                //RecommendedListing
-                guard (result?.data?.currency?.result) != nil else {
-                    print("Missing data")
-                    return
-                }
-                Utility.shared.currencyvalue_from_API_base = (result?.data?.currency?.result?.base != nil ? (result?.data?.currency?.result?.base)! : "")
-                let currency_value = result?.data?.currency?.result?.rates
-                Utility.shared.currency_Dict = self.convertToDictionary(text: currency_value!)! as NSDictionary
-                
-        }
+            Network.shared.apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.currency?.result) != nil else {
+                        print("Missing data")
+                        return
+                    }
+                    Utility.shared.currencyvalue_from_API_base = (result.data?.currency?.result?.base != nil ? (result.data?.currency?.result?.base)! : "")
+                    let currency_value = result.data?.currency?.result?.rates
+                    Utility.shared.currency_Dict = self.convertToDictionary(text: currency_value!)! as NSDictionary
+                case .failure(_): break
+            }
+            }
         }
     }
     

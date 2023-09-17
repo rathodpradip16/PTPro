@@ -33,8 +33,8 @@ class ContacthostVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     @IBOutlet weak var retryBtn: UIButton!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var contacthostTable: UITableView!
-     var viewListingArray = ViewListingDetailsQuery.Data.ViewListing.Result()
-    var getbillingArray = GetBillingCalculationQuery.Data.GetBillingCalculation.Result()
+    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
+    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     var currencyvalue_from_API_base = String()
     var currency_Dict = NSDictionary()
     var addDateinLabel = String()
@@ -53,15 +53,6 @@ class ContacthostVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     var guest_Count = Int()
     var lottieView: LottieAnimationView!
     
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,34 +126,37 @@ class ContacthostVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
 func ContacthostAPICall(message:String)
 {
-    let contacthostMutation = ContactHostMutation(listId: viewListingArray.id!, hostId: viewListingArray.userId!, content:message, userId: "\(Utility.shared.getCurrentUserID()!)", type: "inquiry", startDate: selected_datein_Label, endDate: selected_dateout_Label, personCapacity: guest_Count)
+
+    let contacthostMutation = ContactHostMutation(listId:  viewListingArray?.__data._data["id"] as! Int  , hostId: viewListingArray?.userId! ?? "", content:message, userId: "\(Utility.shared.getCurrentUserID()!)", type: "inquiry", startDate: selected_datein_Label, endDate: selected_dateout_Label, personCapacity:.some(guest_Count))
     
     Utility.shared.personCapcityForMessagePage = guest_Count
     
-    apollo_headerClient.perform(mutation: contacthostMutation){ (result,error) in
-        
-        if(result?.data?.createEnquiry?.status == 200)
-        {
-           self.lottieView.isHidden = true
-            self.sendBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"sendmessage"))!)", for: .normal)
-            
-            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"sendmessage_alert"))!)")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                // code to remove your view
-                self.sendBtn.isUserInteractionEnabled = true
-                self.dismiss(animated: true, completion: nil)
+    Network.shared.apollo_headerClient.perform(mutation: contacthostMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createEnquiry?.status,data == 200 {
+                    self.lottieView.isHidden = true
+                     self.sendBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"sendmessage"))!)", for: .normal)
+                     
+                     self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"sendmessage_alert"))!)")
+                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                         // code to remove your view
+                         self.sendBtn.isUserInteractionEnabled = true
+                         self.dismiss(animated: true, completion: nil)
+                     }
+                 } else {
+                     self.sendBtn.isUserInteractionEnabled = true;
+                   //  self.view.makeToast(result.data?.createEnquiry?.errorMessage)
+                 }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-        }
-        else{
-            self.sendBtn.isUserInteractionEnabled = true;
-          //  self.view.makeToast(result?.data?.createEnquiry?.errorMessage)
-        }
     }
     
     }
 
     @IBAction func sendMesgBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         let cell = view.viewWithTag((2) + 2000) as? checkTextviewCell
         let text = cell?.checkTxtview.text.trimmingCharacters(in: .whitespacesAndNewlines)
         if(Utility.shared.checkEmptyWithString(value: text!))
@@ -204,7 +198,7 @@ func ContacthostAPICall(message:String)
         }
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
              self.bottomView.isHidden = false
         }
@@ -213,9 +207,9 @@ func ContacthostAPICall(message:String)
     
     @objc func listBtnTapped(_ sender: UIButton)
      {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
              let viewListing = UpdatedViewListing()
-             viewListing.listID = viewListingArray.id ?? 0
+             viewListing.listID = viewListingArray?.__data._data["id"] as? Int ?? 0
              Utility.shared.unpublish_preview_check = false
              viewListing.modalPresentationStyle = .fullScreen
              self.present(viewListing, animated: true, completion: nil)
@@ -282,11 +276,11 @@ func ContacthostAPICall(message:String)
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "TripsLocationCell", for: indexPath)as! TripsLocationCell
             cell.selectionStyle = .none
-            cell.lblRoomType.text = viewListingArray.roomType
-            cell.lblDescription.text = viewListingArray.title
+            cell.lblRoomType.text = viewListingArray?.roomType
+            cell.lblDescription.text = viewListingArray?.title
             
-//            let reviewsCount = viewListingArray.reviewsCount ?? 0
-//            let ratings = viewListingArray.reviewsStarRating ?? 0
+//            let reviewsCount = viewListingArray?.reviewsCount ?? 0
+//            let ratings = viewListingArray?.reviewsStarRating ?? 0
 //
 //            let value1 = Float("\(reviewsCount)") ?? 0.0
 //            let value2 = Float("\(ratings)") ?? 0.0
@@ -300,8 +294,8 @@ func ContacthostAPICall(message:String)
 //            }
             
             
-            let value1 = Float(viewListingArray.reviewsCount ?? 0)
-            let value2 = Float(viewListingArray.reviewsStarRating ?? 0)
+            let value1 = Float(viewListingArray?.reviewsCount ?? 0)
+            let value2 = Float(viewListingArray?.reviewsStarRating ?? 0)
             if(value2 != 0.0){
                 let reviewcount = (value2/value1)
                 
@@ -327,13 +321,13 @@ func ContacthostAPICall(message:String)
             
             
             
-            if((viewListingArray.reviewsCount!) > 0)
+            if((viewListingArray?.reviewsCount! ?? 0) > 0)
             {
-                if((viewListingArray.reviewsCount!) == 1) {
-                    cell.lblReview.text = "\u{2022} \(viewListingArray.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)"
+                if((viewListingArray?.reviewsCount!) == 1) {
+                    cell.lblReview.text = "\u{2022} \(viewListingArray?.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)"
                 }
                 else {
-                cell.lblReview.text = "\u{2022} \(viewListingArray.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"reviews"))!)"
+                cell.lblReview.text = "\u{2022} \(viewListingArray?.reviewsCount ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"reviews"))!)"
                 }
             }
             else
@@ -343,7 +337,7 @@ func ContacthostAPICall(message:String)
             }
             
             
-            if let imgURL = viewListingArray.listPhotos?[0]?.name {
+            if let imgURL = viewListingArray?.listPhotos?[0]?.name {
             cell.imgView.sd_setImage(with: URL(string: "\(IMAGE_LISTING_MEDIUM)\(imgURL)"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
                 cell.imgView.halfroundedCorners(corners:[.topLeft, .bottomRight] , radius: 10)
            print(imgURL)
@@ -357,10 +351,10 @@ func ContacthostAPICall(message:String)
             cell.selectionStyle = .none
             let inputFormatter = DateFormatter()
             inputFormatter.dateFormat = "yyyy-MM-dd"
-            if(getbillingArray.checkIn != nil && getbillingArray.checkOut != nil)
+            if(getbillingArray?.checkIn != nil && getbillingArray?.checkOut != nil)
             {
-            let showDate = inputFormatter.date(from:getbillingArray.checkIn!)
-            let showDate2 = inputFormatter.date(from:getbillingArray.checkOut!)
+                let showDate = inputFormatter.date(from:getbillingArray?.checkIn! ?? "")
+                let showDate2 = inputFormatter.date(from:getbillingArray?.checkOut! ?? "")
                 inputFormatter.dateFormat = "MMM dd"
                 if(Utility.shared.isRTLLanguage()) {
                     inputFormatter.locale = NSLocale(localeIdentifier:"en") as Locale
@@ -373,8 +367,8 @@ func ContacthostAPICall(message:String)
                 cell.checkinoutLabel.text = "\(addDateinLabel) - \(addDateoutLabel)"
                 let dateformatter = DateFormatter()
                 dateformatter.dateFormat = "yyyy-MM-dd"
-                let showDate3 = dateformatter.date(from:getbillingArray.checkIn!)
-                let showDate4 = dateformatter.date(from:getbillingArray.checkOut!)
+                let showDate3 = dateformatter.date(from:getbillingArray?.checkIn! ?? "")
+                let showDate4 = dateformatter.date(from:getbillingArray?.checkOut! ?? "")
                 dateformatter.dateFormat = "MM-dd-yyyy"
                 selected_datein_Label = dateformatter.string(from: showDate3!)
                 selected_dateout_Label = dateformatter.string(from: showDate4!)
@@ -427,44 +421,47 @@ func ContacthostAPICall(message:String)
     
     @objc func addinBtnTapped(_ sender: UIButton!) {
         Utility.shared.blocked_date_month.removeAllObjects()
-        for i in viewListingArray.fullBlockedDates!
-        {
-            let timestamp = i?.blockedDates
-            let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
-            let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
-            let dateFormatter = DateFormatter()
-            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-            dateFormatter.dateFormat = "dd-LL-YYYY" //Specify your format that you want
-            let dateFormatter1 = DateFormatter()
-            dateFormatter1.dateFormat = "LL"
-            dateFormatter1.timeZone = TimeZone(abbreviation: "UTC")
-            let date = "\(dateFormatter.string(from: newTime))"
-            if(i?.calendarStatus != "available")
+        if let blockedDates = viewListingArray?.blockedDates{
+            for i in blockedDates
             {
-            Utility.shared.blocked_date_month.add("\(date)")
-            }
-            Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
-        }
+                let timestamp = i?.blockedDates
+                let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
+                let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
+                let dateFormatter = DateFormatter()
+                dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+                dateFormatter.dateFormat = "dd-LL-YYYY" //Specify your format that you want
+                let dateFormatter1 = DateFormatter()
+                dateFormatter1.dateFormat = "LL"
+                dateFormatter1.timeZone = TimeZone(abbreviation: "UTC")
+                let date = "\(dateFormatter.string(from: newTime))"
+                if(i?.calendarStatus != "available")
+                {
+                    Utility.shared.blocked_date_month.add("\(date)")
+                }
+                Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
+            }}
         
         Utility.shared.fullcheckBlockedDateMonth.removeAllObjects()
-        for i in viewListingArray.blockedDates!
-        {
-            let timestamp = i?.blockedDates
-            let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
-            let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
-            let dateFormatter = DateFormatter()
-            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-            dateFormatter.dateFormat = "dd-LL-YYYY" //Specify your format that you want
-            let dateFormatter1 = DateFormatter()
-            dateFormatter1.timeZone = TimeZone(abbreviation: "UTC")
-            dateFormatter1.dateFormat = "LL"
-            let date = "\(dateFormatter.string(from: newTime))"
-            if(i?.calendarStatus != "available")
+        if let blockedDates = viewListingArray?.blockedDates{
+            for i in blockedDates
             {
-            Utility.shared.fullcheckBlockedDateMonth.add("\(date)")
+                let timestamp = i?.blockedDates
+                let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
+                let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
+                let dateFormatter = DateFormatter()
+                dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+                dateFormatter.dateFormat = "dd-LL-YYYY" //Specify your format that you want
+                let dateFormatter1 = DateFormatter()
+                dateFormatter1.timeZone = TimeZone(abbreviation: "UTC")
+                dateFormatter1.dateFormat = "LL"
+                let date = "\(dateFormatter.string(from: newTime))"
+                if(i?.calendarStatus != "available")
+                {
+                    Utility.shared.fullcheckBlockedDateMonth.add("\(date)")
+                }
             }
         }
-        if let checkInDates = viewListingArray.checkInBlockedDates{
+        if let checkInDates = viewListingArray?.checkInBlockedDates{
             Utility.shared.checkedInDates.removeAllObjects()
             for i in checkInDates{
                 let timestamp = i?.blockedDates
@@ -478,9 +475,9 @@ func ContacthostAPICall(message:String)
             }
         }
         
-        Utility.shared.minimumstay = (viewListingArray.listingData?.minNight != nil ? ((viewListingArray.listingData?.minNight!)!) : 0)
+        Utility.shared.minimumstay = (viewListingArray?.listingData?.minNight != nil ? ((viewListingArray?.listingData?.minNight!)!) : 0)
         Utility.shared.isfromcheckingPage = true
-        Utility.shared.maximum_days_notice = Utility.shared.maximum_notice_period(maximumnoticeperiod: (viewListingArray.listingData?.maxDaysNotice!)!)!
+        Utility.shared.maximum_days_notice = Utility.shared.maximum_notice_period(maximumnoticeperiod: (viewListingArray?.listingData?.maxDaysNotice!)!)!
         let datePickerViewController = AirbnbDatePickerViewController(dateFrom: selectedStartDate, dateTo: selectedEndDate)
         datePickerViewController.delegate = self
         datePickerViewController.isFromEdit = true
@@ -501,7 +498,7 @@ func ContacthostAPICall(message:String)
     
     @objc func guestBtnTapped(_ sender: UIButton!) {
         Utility.shared.isfromcheckingPage = true
-        Utility.shared.maximum_Count_for_booking = viewListingArray.personCapacity!
+        Utility.shared.maximum_Count_for_booking = viewListingArray?.personCapacity! ?? 0
         let occupantController = AirbnbOccupantFilterController(adultCount: adultCount, childrenCount: childrenCount, infantCount: infantCount, hasPet: hasPet)
         occupantController.delegate = self
         let navigationController = UINavigationController(rootViewController: occupantController)
@@ -552,55 +549,61 @@ func ContacthostAPICall(message:String)
         
     }
     func billingListAPICall(startDate:String,endDate:String)
-    {
-        if Utility().isConnectedToNetwork(){
-            var currency = String()
-            if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
-            {
-                currency = Utility.shared.getPreferredCurrency()!
-            }
-            else
-            {
-                currency = Utility.shared.currencyvalue_from_API_base
-            }
-            if viewListingArray.id != nil {
-        let billingListquery = GetBillingCalculationQuery(listId: viewListingArray.id!, startDate: startDate, endDate: endDate, guests: Utility.shared.guestCountToBeSend, convertCurrency:currency)
-        apollo_headerClient.fetch(query: billingListquery){(result,error) in
-            guard (result?.data?.getBillingCalculation?.result) != nil else{
-                print("Missing Data")
-                
-                self.view.makeToast(result?.data?.getBillingCalculation?.errorMessage!)
-                return
-            }
-            self.getbillingArray = (result?.data?.getBillingCalculation?.result)!
-            Utility.shared.guestCountToBeSend = self.getbillingArray.guests ?? Utility.shared.guestCountToBeSend
-            self.contacthostTable.reloadData() }
-            
-        }
+{
+    if Utility.shared.isConnectedToNetwork(){
+        var currency = String()
+        if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
+        {
+            currency = Utility.shared.getPreferredCurrency()!
         }
         else
         {
-            self.offlineView.isHidden = false
-            self.bottomView.isHidden = true
-            let shadowSize2 : CGFloat = 3.0
-            let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
-                                                        y: -shadowSize2 / 2,
-                                                        width: self.offlineView.frame.size.width + shadowSize2,
-                                                        height: self.offlineView.frame.size.height + shadowSize2))
-            
-            self.offlineView.layer.masksToBounds = false
-            self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
-            self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-            self.offlineView.layer.shadowOpacity = 0.3
-            self.offlineView.layer.shadowPath = shadowPath2.cgPath
-            if IS_IPHONE_X || IS_IPHONE_XR{
-                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-85, width: FULLWIDTH, height: 55)
-            }else{
-                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-55, width: FULLWIDTH, height: 55)
+            currency = Utility.shared.currencyvalue_from_API_base
+        }
+        if viewListingArray?.id != nil {
+            let billingListquery = GetBillingCalculationQuery(listId: viewListingArray?.__data._data["id"] as! Int, startDate: startDate, endDate: endDate, guests: Utility.shared.guestCountToBeSend, convertCurrency:currency)
+            Network.shared.apollo_headerClient.fetch(query: billingListquery){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getBillingCalculation?.result) != nil else{
+                        print("Missing Data")
+                        
+                        self.view.makeToast(result.data?.getBillingCalculation?.errorMessage!)
+                        return
+                    }
+                    self.getbillingArray = (result.data?.getBillingCalculation?.result)!
+                    Utility.shared.guestCountToBeSend = self.getbillingArray?.guests ?? Utility.shared.guestCountToBeSend
+                    self.contacthostTable.reloadData()
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
             }
             
         }
     }
+    else
+    {
+        self.offlineView.isHidden = false
+        self.bottomView.isHidden = true
+        let shadowSize2 : CGFloat = 3.0
+        let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
+                                                    y: -shadowSize2 / 2,
+                                                    width: self.offlineView.frame.size.width + shadowSize2,
+                                                    height: self.offlineView.frame.size.height + shadowSize2))
+        
+        self.offlineView.layer.masksToBounds = false
+        self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
+        self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        self.offlineView.layer.shadowOpacity = 0.3
+        self.offlineView.layer.shadowPath = shadowPath2.cgPath
+        if IS_IPHONE_X || IS_IPHONE_XR{
+            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-85, width: FULLWIDTH, height: 55)
+        }else{
+            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-55, width: FULLWIDTH, height: 55)
+        }
+        
+    }
+}
     func configureNextBtn(enable:Bool){
         
         if(enable){

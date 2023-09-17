@@ -42,15 +42,6 @@ class WhishlistPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
         fatalError("init(coder:) has not been implemented")
     }
     
-    let apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     var whishlistarray = [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]()
     var whishlistarrayReverse = [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]()
     var listID = Int()
@@ -124,21 +115,23 @@ class WhishlistPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
     }
     func WhishlistAPICall()
     {
-        let whishlistQuery = GetAllWishListGroupQuery()
-            apollo_headerClient.fetch(query: whishlistQuery,cachePolicy:.fetchIgnoringCacheData){ (result,error) in
-            guard (result?.data?.getAllWishListGroup?.results) != nil else{
-              
-                self.Whishlist_status = false
-                self.lottieView.isHidden = true
-                self.noWhishlistView.isHidden = false
-                self.whishlistCollection.isHidden = true
-                return
-            }
-                self.whishlistarrayReverse = ((result?.data?.getAllWishListGroup?.results)!) as! [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
+        let whishlistQuery = GetAllWishListGroupQuery(currentPage: .none)
+        Network.shared.apollo_headerClient.fetch(query: whishlistQuery,cachePolicy:.fetchIgnoringCacheData){  response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getAllWishListGroup?.results) != nil else{
+                    
+                    self.Whishlist_status = false
+                    self.lottieView.isHidden = true
+                    self.noWhishlistView.isHidden = false
+                    self.whishlistCollection.isHidden = true
+                    return
+                }
+                self.whishlistarrayReverse = ((result.data?.getAllWishListGroup?.results)!) as! [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
                 
                 self.whishlistarray  = self.whishlistarrayReverse.reversed()
                 
-              
+                
                 if(self.whishlistarray.count>0)
                 {
                     self.lottieView.isHidden = true
@@ -147,7 +140,7 @@ class WhishlistPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
                     let cell = self.view.viewWithTag(2000) as? WhishlistCell
                     cell?.lottieView1 = LottieAnimationView.init(name:"animation_white")
                     cell?.lottieView1.isHidden = true
-                     self.whishlistCollection.reloadData()
+                    self.whishlistCollection.reloadData()
                     let indexPaths = IndexPath(item: 0, section: 0)
                     self.whishlistCollection.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
                     
@@ -159,24 +152,35 @@ class WhishlistPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
                     self.noWhishlistView.isHidden = false
                     self.whishlistCollection.isHidden = true
                 }
-        
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
     }
-    }
+    
     func createWhishlistAPICall(listId:Int,wishListGroupId:Int,eventKey:Bool)
     {
-        let createWhishlistMutation = CreateWishListMutation(listId: listId, wishListGroupId: wishListGroupId, eventKey: eventKey)
-        apollo_headerClient.perform(mutation: createWhishlistMutation){ (result,error) in
-            if(result?.data?.createWishList?.status == 200) {
-                self.WhishlistAPICall()
-            }
-            else{
-                self.view.makeToast(result?.data?.createWishList?.errorMessage)
+        let createWhishlistMutation = CreateWishListMutation(listId: listId, wishListGroupId:.some(wishListGroupId), eventKey: .some(eventKey))
+        Network.shared.apollo_headerClient.perform(mutation: createWhishlistMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createWishList?.status,data == 200 {
+                    self.WhishlistAPICall()
+                } else {
+                    self.view.makeToast(result.data?.createWishList?.errorMessage)
+                    let seconds = 2.0
+                    DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                        self.dismissView()
+                    }
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
                 let seconds = 2.0
                 DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
                     self.dismissView()
                 }
             }
-    }
+        }
     }
     
     @IBAction func addBtnTapped(_ sender: Any) {
@@ -247,7 +251,7 @@ class WhishlistPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         let cell = view.viewWithTag(indexPath.item + 2000) as? WhishlistCell
            cell?.lottieLottieAnimationView()
         // Timer.scheduledTimer(timeInterval:0.3, target: self, selector: #selector(cell?.autoscroll), userInfo: nil, repeats: true)

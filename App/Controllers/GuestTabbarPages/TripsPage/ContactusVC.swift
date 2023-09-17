@@ -35,15 +35,6 @@ class ContactusVC: UIViewController,UITextViewDelegate {
     var lottieView: LottieAnimationView!
     var placeholderLabel : UILabel!
     
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         offlineView.backgroundColor =  UIColor(named: "Button_Grey_Color")
@@ -143,7 +134,7 @@ class ContactusVC: UIViewController,UITextViewDelegate {
     }
     
     @IBAction func sendBtnTapped(_ sender: Any) {
-          if Utility().isConnectedToNetwork(){
+          if Utility.shared.isConnectedToNetwork(){
             if(contactTextView.text == "")
             {
                 self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"messagealert"))!)")
@@ -176,7 +167,7 @@ class ContactusVC: UIViewController,UITextViewDelegate {
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
             self.lottieView.isHidden = false
             self.lottieWholeView.isHidden = false
@@ -194,18 +185,23 @@ class ContactusVC: UIViewController,UITextViewDelegate {
     }
     func contactSupportAPICall(message:String,listId:Int,reservationId:Int,userType:String)
     {
-        let contactsupportQuery = ContactSupportQuery(message: message, listId: listId, reservationId: reservationId, userType: userType)
-        apollo_headerClient.fetch(query: contactsupportQuery){(result,error) in
-            if(result?.data?.contactSupport?.status) != 200 {
-                self.view.makeToast(result?.data?.contactSupport?.errorMessage)
-                return
-            }
-            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"contacthost_alert"))!)")
-            self.lottieView.isHidden = true
-            self.sendBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"send_uppercase"))!)", for:.normal)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                // code to remove your view
-                self.dismiss(animated: true, completion: nil)
+        let contactsupportQuery = ContactSupportQuery(message: .some(message), listId: .some(listId), reservationId: .some(reservationId), userType: .some(userType))
+        Network.shared.apollo_headerClient.fetch(query: contactsupportQuery){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.contactSupport?.status,data == 200 {
+                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"contacthost_alert"))!)")
+                    self.lottieView.isHidden = true
+                    self.sendBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"send_uppercase"))!)", for:.normal)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        // code to remove your view
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                } else {
+                    self.view.makeToast(result.data?.contactSupport?.errorMessage)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
             
         }

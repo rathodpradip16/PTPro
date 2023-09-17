@@ -5,42 +5,9 @@
 
 public class GetReviewsListQuery: GraphQLQuery {
   public static let operationName: String = "getReviewsList"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getReviewsList($listId: Int, $currentPage: Int, $hostId: String!) {
-        getReviews(listId: $listId, currentPage: $currentPage, hostId: $hostId) {
-          __typename
-          results {
-            __typename
-            id
-            userId
-            reviewContent
-            rating
-            createdAt
-            isAdmin
-            userData {
-              __typename
-              userId
-              profileId
-              firstName
-              lastName
-              picture
-            }
-            authorData {
-              __typename
-              userId
-              profileId
-              firstName
-              lastName
-              picture
-            }
-          }
-          status
-          count
-        }
-      }
-      """
+      #"query getReviewsList($listId: Int, $currentPage: Int, $hostId: String!) { getReviews(listId: $listId, currentPage: $currentPage, hostId: $hostId) { __typename results { __typename id userId reviewContent rating createdAt isAdmin userData { __typename userId profileId firstName lastName picture } authorData { __typename userId profileId firstName lastName picture } } status count } }"#
     ))
 
   public var listId: GraphQLNullable<Int>
@@ -65,10 +32,10 @@ public class GetReviewsListQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getReviews", GetReviews?.self, arguments: [
         "listId": .variable("listId"),
         "currentPage": .variable("currentPage"),
@@ -83,10 +50,11 @@ public class GetReviewsListQuery: GraphQLQuery {
     /// Parent Type: `AllReview`
     public struct GetReviews: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.AllReview }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.AllReview }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", [Result?]?.self),
         .field("status", Int?.self),
         .field("count", Int?.self),
@@ -101,10 +69,11 @@ public class GetReviewsListQuery: GraphQLQuery {
       /// Parent Type: `Reviews`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.Reviews }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Reviews }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("userId", String?.self),
           .field("reviewContent", String?.self),
@@ -129,10 +98,11 @@ public class GetReviewsListQuery: GraphQLQuery {
         /// Parent Type: `UserProfile`
         public struct UserData: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.UserProfile }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserProfile }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("userId", String?.self),
             .field("profileId", Int?.self),
             .field("firstName", String?.self),
@@ -152,10 +122,11 @@ public class GetReviewsListQuery: GraphQLQuery {
         /// Parent Type: `UserProfile`
         public struct AuthorData: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.UserProfile }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserProfile }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("userId", String?.self),
             .field("profileId", Int?.self),
             .field("firstName", String?.self),

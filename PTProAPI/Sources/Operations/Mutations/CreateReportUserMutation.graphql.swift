@@ -5,22 +5,9 @@
 
 public class CreateReportUserMutation: GraphQLMutation {
   public static let operationName: String = "createReportUser"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation createReportUser($reporterId: String, $userId: String, $reportType: String, $profileId: Int) {
-        createReportUser(
-          reporterId: $reporterId
-          userId: $userId
-          reportType: $reportType
-          profileId: $profileId
-        ) {
-          __typename
-          status
-          errorMessage
-        }
-      }
-      """
+      #"mutation createReportUser($reporterId: String, $userId: String, $reportType: String, $profileId: Int) { createReportUser( reporterId: $reporterId userId: $userId reportType: $reportType profileId: $profileId ) { __typename status errorMessage } }"#
     ))
 
   public var reporterId: GraphQLNullable<String>
@@ -49,10 +36,10 @@ public class CreateReportUserMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("createReportUser", CreateReportUser?.self, arguments: [
         "reporterId": .variable("reporterId"),
         "userId": .variable("userId"),
@@ -68,10 +55,11 @@ public class CreateReportUserMutation: GraphQLMutation {
     /// Parent Type: `ReportUserResult`
     public struct CreateReportUser: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.ReportUserResult }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.ReportUserResult }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
       ] }

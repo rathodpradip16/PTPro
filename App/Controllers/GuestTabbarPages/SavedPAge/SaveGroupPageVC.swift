@@ -46,7 +46,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
     @IBOutlet weak var nothingsavedesLabel: UILabel!
     @IBOutlet weak var nowhishlistView: UIView!
     @IBOutlet weak var wishlistTitle: UILabel!
-    var groupwhishlistArray = [GetWishListGroupQuery.Data.GetWishListGroup.Result.WishList]()
+    var groupwhishlistArray = [GetWishListGroupQuery.Data.GetWishListGroup.Results.WishList]()
     @IBOutlet weak var offlineView: UIView!
     @IBOutlet weak var groupCollection: UICollectionView!
     @IBOutlet weak var topView: UIView!
@@ -61,15 +61,6 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
     var PageIndex : Int = 1
 
 
-    let apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-
-        let url = URL(string:graphQLEndpoint)!
-
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
 
 
     override func viewDidLoad() {
@@ -222,57 +213,60 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
         self.lottieView.play()
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.offlineView.isHidden = true
         }
     }
 
     func savedGroupAPICall(groupID:Int,PageIndex:Int)
     {
-        if Utility().isConnectedToNetwork(){
-            let getwhishlistgroupquery = GetWishListGroupQuery(id: groupID, currentPage: PageIndex)
-            apollo_headerClient.fetch(query: getwhishlistgroupquery,cachePolicy:.fetchIgnoringCacheData){ (result,error) in
+        if Utility.shared.isConnectedToNetwork(){
+            let getwhishlistgroupquery = GetWishListGroupQuery(id: groupID, currentPage: .some(PageIndex))
+            Network.shared.apollo_headerClient.fetch(query: getwhishlistgroupquery,cachePolicy:.fetchIgnoringCacheData){  response in
                 self.lottieView.isHidden = true
-                guard (result?.data?.getWishListGroup?.results) != nil else{
-                    print("Missing Data")
-                    self.nowhishlistView.isHidden = false
-                    self.groupCollection.isHidden = true
-                    return
-                }
-                if result?.data?.getWishListGroup?.status == 200 {
-
-                    self.whishlistTitle = result?.data?.getWishListGroup?.results?.name ?? ""
-                    self.wishlistTitle.text = self.whishlistTitle
-                    self.totalListcount = ((result?.data?.getWishListGroup?.results?.wishListCount!)!)
-
-                    if((result?.data?.getWishListGroup?.results?.wishLists!.count)! > 0)
-                    {
-                        self.nowhishlistView.isHidden = true
-
-                        self.groupwhishlistArray.append(contentsOf:(((result?.data?.getWishListGroup?.results?.wishLists!)!) as! [GetWishListGroupQuery.Data.GetWishListGroup.Result.WishList]))
-                        self.groupCollection.hideSkeleton()
-                        self.groupCollection.isSkeletonable = false
-                        self.groupCollection.reloadData()
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getWishListGroup?.results) != nil else{
+                        print("Missing Data")
+                        self.nowhishlistView.isHidden = false
+                        self.groupCollection.isHidden = true
+                        return
                     }
-                    else
-                    {
-                        if(self.groupwhishlistArray.count == 0)
+                    if result.data?.getWishListGroup?.status == 200 {
+                        
+                        self.whishlistTitle = result.data?.getWishListGroup?.results?.name ?? ""
+                        self.wishlistTitle.text = self.whishlistTitle
+                        self.totalListcount = ((result.data?.getWishListGroup?.results?.wishListCount!)!)
+                        
+                        if((result.data?.getWishListGroup?.results?.wishLists!.count)! > 0)
                         {
-                            self.nowhishlistView.isHidden = false
-                            self.groupCollection.isHidden = true
+                            self.nowhishlistView.isHidden = true
+                            
+                            self.groupwhishlistArray.append(contentsOf:(((result.data?.getWishListGroup?.results?.wishLists!)!) as! [GetWishListGroupQuery.Data.GetWishListGroup.Results.WishList]))
                             self.groupCollection.hideSkeleton()
                             self.groupCollection.isSkeletonable = false
+                            self.groupCollection.reloadData()
                         }
+                        else
+                        {
+                            if(self.groupwhishlistArray.count == 0)
+                            {
+                                self.nowhishlistView.isHidden = false
+                                self.groupCollection.isHidden = true
+                                self.groupCollection.hideSkeleton()
+                                self.groupCollection.isSkeletonable = false
+                            }
+                        }
+                    }else{
+                        self.nowhishlistView.isHidden = false
+                        self.groupCollection.isHidden = true
+                        self.groupCollection.hideSkeleton()
+                        self.groupCollection.isSkeletonable = false
                     }
-                }else{
-                    self.nowhishlistView.isHidden = false
-                    self.groupCollection.isHidden = true
-                    self.groupCollection.hideSkeleton()
-                    self.groupCollection.isSkeletonable = false
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-
-
-        }
+            }
         }
         else
         {
@@ -287,7 +281,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
                                                         y: -shadowSize2 / 2,
                                                         width: self.offlineView.frame.size.width + shadowSize2,
                                                         height: self.offlineView.frame.size.height + shadowSize2))
-
+            
             self.offlineView.layer.masksToBounds = false
             self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
             self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
@@ -303,47 +297,50 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
 
     func createWhishlistAPICall(listId:Int,wishListGroupId:Int,eventKey:Bool)
     {
-        let createWhishlistMutation = CreateWishListMutation(listId: listId, wishListGroupId: wishListGroupId, eventKey: eventKey)
-        apollo_headerClient.perform(mutation: createWhishlistMutation){ (result,error) in
-            if(result?.data?.createWishList?.status == 200) {
-                self.groupwhishlistArray.removeAll()
-                self.savedGroupAPICall(groupID: self.groupID, PageIndex:1)
-            }
-            else{
-                self.view.makeToast(result?.data?.createWishList?.errorMessage!)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.dismiss(animated: true, completion: nil)
+        let createWhishlistMutation = CreateWishListMutation(listId: listId, wishListGroupId: .some(wishListGroupId), eventKey: .some(eventKey))
+        Network.shared.apollo_headerClient.perform(mutation: createWhishlistMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createWishList?.status,data == 200 {
+                    self.groupwhishlistArray.removeAll()
+                    self.savedGroupAPICall(groupID: self.groupID, PageIndex:1)
+                } else {
+                    self.view.makeToast(result.data?.createWishList?.errorMessage!)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
 
     func createWhishlistAPICall()
     {
-         if Utility().isConnectedToNetwork(){
-             let createWhishlistMutation = CreateWishListGroupMutation(name:editTextView.text!)
-             apollo_headerClient.perform(mutation: createWhishlistMutation){ [self](result,error) in
-
-                if(result?.data?.createWishListGroup?.status == 200)
-                {
-                    editPageView.removeFromSuperview()
-                    self.wishlistTitle.text = result?.data?.createWishListGroup?.results?.name
-                    
-//                    self.createWhishlistAPICalls(listId: self.listID, wishListGroupId: (result?.data?.createWishListGroup?.results?.id)!, eventKey: true)
-//
-//                    self.delegate?.updateWhishlistStatus(status:true)
+        if Utility.shared.isConnectedToNetwork(){
+            let createWhishlistMutation = CreateWishListGroupMutation(name:editTextView.text!,isPublic: .none, id: .none)
+            Network.shared.apollo_headerClient.perform(mutation: createWhishlistMutation){ [self] response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.createWishListGroup?.status,data == 200 {
+                        editPageView.removeFromSuperview()
+                        self.wishlistTitle.text = result.data?.createWishListGroup?.results?.name
+                        
+                        //                    self.createWhishlistAPICalls(listId: self.listID, wishListGroupId: (result.data?.createWishListGroup?.results?.id)!, eventKey: true)
+                        //
+                        //                    self.delegate?.updateWhishlistStatus(status:true)
+                    } else {
+                        self.view.makeToast(result.data?.createWishListGroup?.errorMessage)
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-                else
-                {
-
-
-                    self.view.makeToast(result?.data?.createWishListGroup?.errorMessage)
-                }
-
+                
+            }
         }
-         }
         else
-         {
+        {
             self.lottieView.isHidden = true
             self.offlineView.isHidden = false
             let shadowSize2 : CGFloat = 3.0
@@ -351,7 +348,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
                                                         y: -shadowSize2 / 2,
                                                         width: self.offlineView.frame.size.width + shadowSize2,
                                                         height: self.offlineView.frame.size.height + shadowSize2))
-
+            
             self.offlineView.layer.masksToBounds = false
             self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
             self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
@@ -367,22 +364,25 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
 
     func deleteAPICall()
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             let deletewhishlistMutation = DeleteWishListGroupMutation(id: groupID)
-            apollo_headerClient.perform(mutation: deletewhishlistMutation){ (result,error) in
-                if(result?.data?.deleteWishListGroup?.status == 200) {
-                    self.delegate?.whishDeleteAPIcall()
-                    self.dismiss(animated: true, completion: nil)
-                }
-                else
-                {
-                 self.view.makeToast(result?.data?.deleteWishListGroup?.errorMessage!)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                  self.dismiss(animated: true, completion: nil)
+            Network.shared.apollo_headerClient.perform(mutation: deletewhishlistMutation){  response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.deleteWishListGroup?.status,data == 200 {
+                        self.delegate?.whishDeleteAPIcall()
+                        self.dismiss(animated: true, completion: nil)
+                    } else {
+                        self.view.makeToast(result.data?.deleteWishListGroup?.errorMessage!)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self.dismiss(animated: true, completion: nil)
+                        }
                     }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-
-        }
+                
+            }
         }
         else
         {
@@ -392,7 +392,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
                                                         y: -shadowSize2 / 2,
                                                         width: self.offlineView.frame.size.width + shadowSize2,
                                                         height: self.offlineView.frame.size.height + shadowSize2))
-
+            
             self.offlineView.layer.masksToBounds = false
             self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
             self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
@@ -404,7 +404,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
                 self.offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: FULLWIDTH, height: 55)
             }
         }
-
+        
     }
 
 
@@ -579,7 +579,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
 
     @objc func likeBtnTapped(_ sender:UIButton!)
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             if((groupwhishlistArray.count > sender.tag) && groupwhishlistArray[sender.tag].listId != nil)
             {
                 self.createWhishlistAPICall(listId:(groupwhishlistArray[sender.tag].listId != nil ? groupwhishlistArray[sender.tag].listId! : 0), wishListGroupId:groupID, eventKey:false)
@@ -597,7 +597,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath)
    {
-       if Utility().isConnectedToNetwork(){
+       if Utility.shared.isConnectedToNetwork(){
            var totalPages = Int()
 
            let last_element = groupwhishlistArray.count - 1

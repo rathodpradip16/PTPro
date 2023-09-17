@@ -24,7 +24,7 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     //MARK:**************************************************** GLOBAL VARIABLE DECLARATIONS ***************************************************>
     var TitleArray = NSMutableArray()
     var imageArray = NSMutableArray()
-    var viewListingArray = ViewListingDetailsQuery.Data.ViewListing.Result()
+    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initialSetup()
@@ -54,7 +54,7 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     func registerCells(){
         shareTable.register(UINib(nibName: "ShareProductCell", bundle: nil), forCellReuseIdentifier: "ShareProductCell")
         shareTable.register(UINib(nibName: "ShareListCell", bundle: nil), forCellReuseIdentifier: "ShareListCell")
-          let profileimage = viewListingArray.listPhotoName!
+          let profileimage = viewListingArray?.listPhotoName!
         self.backgrndImage.sd_setImage(with: URL(string:"\(IMAGE_LISTING_MEDIUM)\(String(describing: profileimage))"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
     }
     //MARK:*************************************************** TABLEVIEW DELEGATE & DATASOURCE METHODS ************************************************>
@@ -85,9 +85,9 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             let cell = tableView.dequeueReusableCell(withIdentifier: "ShareProductCell", for: indexPath)as! ShareProductCell
             cell.imgBckgrdView.layer.cornerRadius = 5.0
             cell.imgBckgrdView.clipsToBounds = true
-            let profileimage = viewListingArray.listPhotoName!
+            let profileimage = viewListingArray?.listPhotoName!
             cell.productImg.sd_setImage(with: URL(string:"\(IMAGE_LISTING_MEDIUM)\(String(describing: profileimage))"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
-            cell.productTitleLabel.text = viewListingArray.title!
+            cell.productTitleLabel.text = viewListingArray?.title!
             cell.productTitleLabel.backgroundColor = UIColor(named: "colorController")
             cell.closeBtn.addTarget(self, action: #selector(closeBtnTapped), for: .touchUpInside)
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
@@ -113,17 +113,17 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
         
         if(indexPath.section==1){
             if(indexPath.row == 0){
-                let emailTitle = "\((Utility.shared.getLanguage()?.value(forKey:"checkoutplace"))!) \(viewListingArray.title!)"
-                let listid = viewListingArray.id != nil ? viewListingArray.id! : 0
-                let title = viewListingArray.title != nil ? viewListingArray.title! : ""
-                var convertedTitle =  title.replacingOccurrences(of:", ", with:"--")
+                let emailTitle = "\((Utility.shared.getLanguage()?.value(forKey:"checkoutplace"))!) \(viewListingArray?.title!)"
+                let listid = viewListingArray?.id != nil ? viewListingArray?.id! : 0
+                let title = viewListingArray?.title != nil ? viewListingArray?.title! : ""
+                var convertedTitle =  title!.replacingOccurrences(of:", ", with:"--")
                 convertedTitle = convertedTitle.replacingOccurrences(of:" ", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"#", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"/", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"%", with:"-")
                 let profileimage = "\(convertedTitle)" + "-\(listid)"
                 let urltoShare =  "\(SHARE_URL)\(String(describing: profileimage.lowercased()))"
-                let messageBody = "\((Utility.shared.getLanguage()?.value(forKey:"sharedesc"))!) \(viewListingArray.title!) \((Utility.shared.getLanguage()?.value(forKey:"sharedesc_next"))!) \(urltoShare)"
+                let messageBody = "\((Utility.shared.getLanguage()?.value(forKey:"sharedesc"))!) \(viewListingArray?.title!) \((Utility.shared.getLanguage()?.value(forKey:"sharedesc_next"))!) \(urltoShare)"
                 // let toRecipents = ["friend@stackoverflow.com"]
                 if MFMailComposeViewController.canSendMail() {
                 let mc: MFMailComposeViewController = MFMailComposeViewController()
@@ -148,9 +148,9 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 
                 let controller = MFMessageComposeViewController()
                 if MFMessageComposeViewController.canSendText() {
-                    let listid = viewListingArray.id != nil ? viewListingArray.id! : 0
-                    let title = viewListingArray.title != nil ? viewListingArray.title! : ""
-                    var convertedTitle =  title.replacingOccurrences(of:", ", with:"--")
+                    let listid = viewListingArray?.id != nil ? viewListingArray?.id! : 0
+                    let title = viewListingArray?.title != nil ? viewListingArray?.title! : ""
+                    var convertedTitle =  title!.replacingOccurrences(of:", ", with:"--")
                     convertedTitle = convertedTitle.replacingOccurrences(of:" ", with:"-")
                     convertedTitle = convertedTitle.replacingOccurrences(of:"#", with:"-")
                     convertedTitle = convertedTitle.replacingOccurrences(of:"/", with:"-")
@@ -158,7 +158,7 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let profileimage = "\(convertedTitle)" + "-\(listid)"
                     let urltoShare =  "\(SHARE_URL)\(String(describing: profileimage.lowercased()))"
                     
-                    controller.body = "\((Utility.shared.getLanguage()?.value(forKey:"sharedesc"))!) \(viewListingArray.title!) \((Utility.shared.getLanguage()?.value(forKey:"sharedesc_next"))!) \(urltoShare)"
+                    controller.body = "\((Utility.shared.getLanguage()?.value(forKey:"sharedesc"))!) \(viewListingArray?.title!) \((Utility.shared.getLanguage()?.value(forKey:"sharedesc_next"))!) \(urltoShare)"
                     
                     controller.messageComposeDelegate = self
                     
@@ -172,9 +172,9 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                
             }
             else if(indexPath.row == 2){
-                let listid = viewListingArray.id != nil ? viewListingArray.id! : 0
-                let title = viewListingArray.title != nil ? viewListingArray.title! : ""
-                var convertedTitle =  title.replacingOccurrences(of:", ", with:"--")
+                let listid = viewListingArray?.id != nil ? viewListingArray?.id! : 0
+                let title = viewListingArray?.title != nil ? viewListingArray?.title! : ""
+                var convertedTitle =  title!.replacingOccurrences(of:", ", with:"--")
                 convertedTitle = convertedTitle.replacingOccurrences(of:" ", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"#", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"/", with:"-")
@@ -188,10 +188,10 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             }
             else if(indexPath.row == 3){
                 
-                let someText:String = "\((Utility.shared.getLanguage()?.value(forKey:"checkoutplace"))!) \(viewListingArray.title!)"
-                let listid = viewListingArray.id != nil ? viewListingArray.id! : 0
-                let title = viewListingArray.title != nil ? viewListingArray.title! : ""
-                var convertedTitle =  title.replacingOccurrences(of:", ", with:"--")
+                let someText:String = "\((Utility.shared.getLanguage()?.value(forKey:"checkoutplace"))!) \(viewListingArray?.title!)"
+                let listid = viewListingArray?.id != nil ? viewListingArray?.id! : 0
+                let title = viewListingArray?.title != nil ? viewListingArray?.title! : ""
+                var convertedTitle =  title!.replacingOccurrences(of:", ", with:"--")
                 convertedTitle = convertedTitle.replacingOccurrences(of:" ", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"#", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"/", with:"-")

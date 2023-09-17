@@ -21,7 +21,7 @@ class WebviewVC: UIViewController,WKNavigationDelegate {
     @IBOutlet var lblContent: UILabel!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var backBtn:UIButton!
-     var webview = WKWebView()
+    var webview = WKWebView()
     @IBOutlet var scrollView: UIScrollView!
     var lottieView: LottieAnimationView!
     var webstring = String()
@@ -39,17 +39,8 @@ class WebviewVC: UIViewController,WKNavigationDelegate {
     
     @IBOutlet var textContent: UITextView!
     
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     
-   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor =   UIColor(named: "colorController")
@@ -65,7 +56,7 @@ class WebviewVC: UIViewController,WKNavigationDelegate {
         
         if(!isFromStaticContent) {
             scrollView.isHidden = true
-        self.view.addSubview(webview)
+            self.view.addSubview(webview)
         }
         else {
             scrollView.isHidden = false
@@ -101,7 +92,7 @@ class WebviewVC: UIViewController,WKNavigationDelegate {
         self.lottieView.layer.cornerRadius = 6.0
         self.lottieView.clipsToBounds = true
         self.lottieView.play()
-         Timer.scheduledTimer(timeInterval:0.3, target: self, selector: #selector(autoscroll), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval:0.3, target: self, selector: #selector(autoscroll), userInfo: nil, repeats: true)
     }
     @objc func autoscroll()
     {
@@ -109,7 +100,7 @@ class WebviewVC: UIViewController,WKNavigationDelegate {
     }
     @IBAction func backBtnTapped(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
-
+        
         if self.isForPayPal{
             delegate.onSuccessPayPalPayment(isSuccess: false, toastermsg: "\(Utility.shared.getLanguage()?.value(forKey: "User_Cancelled") ?? "User Cancelled")", successURL: nil)
         }
@@ -141,126 +132,129 @@ class WebviewVC: UIViewController,WKNavigationDelegate {
             debugPrint("Am here")
             
         }
-
+        
         let elementID = "intercom-container"
         let removeElementIdScript1 = "var element = document.getElementById('\(elementID)'); element.parentElement.removeChild(element);"
         webView.evaluateJavaScript(removeElementIdScript1) { (response, error) in
             debugPrint("Am here")
         }
-      
+        
         lottieView.isHidden = true
-       
-       
+        
+        
     }
-  func webView(
-             _ webView: WKWebView,
-             decidePolicyFor navigationAction: WKNavigationAction,
-             decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-                 
-    print("pradee \(navigationAction.request.url)")
-
-             guard let url = navigationAction.request.url else {
-                 decisionHandler(.allow)
-                 return
-             }
-    
-    if self.isForPayPal{
-        if url.absoluteString.contains("/success?"){
-            decisionHandler(.cancel)
-            self.dismiss(animated: true, completion: nil)
-            delegate.onSuccessPayPalPayment(isSuccess: true,toastermsg: "", successURL: url.absoluteURL)
-        }else if url.absoluteString.contains("/cancel"){
-            decisionHandler(.cancel)
-            self.dismiss(animated: true, completion: nil)
-            delegate.onSuccessPayPalPayment(isSuccess: false,toastermsg: "\(Utility.shared.getLanguage()?.value(forKey: "somethingwrong") ?? "Something went wrong")", successURL: nil)
-        }else{
-            decisionHandler(.allow)
-        }
-    }else{
-             let Cur_URL = URL(fileURLWithPath: succesURL)
-    
-    
-             //now u and ur server team can decide on what url will they redirect and what will be url string on login success
-             //lets say u and ur server team decides url to be https://some_base_url/login/success
-
-            if url.absoluteString.contains("/payout/success") {
-                 // this means login successful
-                 decisionHandler(.cancel)
-                let accountIDVal = self.getQueryStringParameter(url:succesURL, param: "account")
-
-                delegate?.setPayoutCall(accountid:accountIDVal!)
-                _ = self.dismiss(animated: true, completion: nil)
-             }
-            else if url.absoluteString.contains("/payout/failure"){
-                   
-                  decisionHandler(.cancel)
-                   
-                      let alert = UIAlertController(title: "Oops", message: "\((Utility.shared.getLanguage()?.value(forKey:"stripe_connection_failed"))!)", preferredStyle: .alert)
-                      alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action) in
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            
+            print("pradee \(navigationAction.request.url)")
+            
+            guard let url = navigationAction.request.url else {
+                decisionHandler(.allow)
+                return
+            }
+            
+            if self.isForPayPal{
+                if url.absoluteString.contains("/success?"){
+                    decisionHandler(.cancel)
+                    self.dismiss(animated: true, completion: nil)
+                    delegate.onSuccessPayPalPayment(isSuccess: true,toastermsg: "", successURL: url.absoluteURL)
+                }else if url.absoluteString.contains("/cancel"){
+                    decisionHandler(.cancel)
+                    self.dismiss(animated: true, completion: nil)
+                    delegate.onSuccessPayPalPayment(isSuccess: false,toastermsg: "\(Utility.shared.getLanguage()?.value(forKey: "somethingwrong") ?? "Something went wrong")", successURL: nil)
+                }else{
+                    decisionHandler(.allow)
+                }
+            }else{
+                let Cur_URL = URL(fileURLWithPath: succesURL)
+                
+                
+                //now u and ur server team can decide on what url will they redirect and what will be url string on login success
+                //lets say u and ur server team decides url to be https://some_base_url/login/success
+                
+                if url.absoluteString.contains("/payout/success") {
+                    // this means login successful
+                    decisionHandler(.cancel)
+                    let accountIDVal = self.getQueryStringParameter(url:succesURL, param: "account")
+                    
+                    delegate?.setPayoutCall(accountid:accountIDVal!)
+                    _ = self.dismiss(animated: true, completion: nil)
+                }
+                else if url.absoluteString.contains("/payout/failure"){
+                    
+                    decisionHandler(.cancel)
+                    
+                    let alert = UIAlertController(title: "Oops", message: "\((Utility.shared.getLanguage()?.value(forKey:"stripe_connection_failed"))!)", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action) in
                         let accountIDVal = self.getQueryStringParameter(url:self.failureURL, param: "account")
                         let payoutObj = PayoutPreferenceVC()
-                                                                                          Utility.shared.isfrom_payoutcurrency = true
-                                                                                           payoutObj.modalPresentationStyle = .fullScreen
-                                                                                          self.present(payoutObj, animated: true, completion: nil)
-//                        self.delegate?.setPayoutCall(accountid:accountIDVal!)
-//                         _ = self.dismiss(animated: true, completion: nil)
-                      }))
-                      self.present(alert, animated: true) {
-                       // self.LottieAnimationView.stop()
-                      }
-                   
-                  
+                        Utility.shared.isfrom_payoutcurrency = true
+                        payoutObj.modalPresentationStyle = .fullScreen
+                        self.present(payoutObj, animated: true, completion: nil)
+                        //                        self.delegate?.setPayoutCall(accountid:accountIDVal!)
+                        //                         _ = self.dismiss(animated: true, completion: nil)
+                    }))
+                    self.present(alert, animated: true) {
+                        // self.LottieAnimationView.stop()
+                    }
+                    
+                    
                 }
-             else {
-                 if navigationAction.navigationType == .linkActivated {
-                         guard let url = navigationAction.request.url else {return}
-                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                     }
-                 decisionHandler(.allow)
-//                self.view.makeToast("Connecting your bank account with the platform verification is failed")
-//
-//                let payoutObj = PayoutPreferenceVC()
-//                                                                   Utility.shared.isfrom_payoutcurrency = true
-//                                                                    payoutObj.modalPresentationStyle = .fullScreen
-//                                                                   self.present(payoutObj, animated: true, completion: nil)
-
-             }
-    }
-         }
+                else {
+                    if navigationAction.navigationType == .linkActivated {
+                        guard let url = navigationAction.request.url else {return}
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    }
+                    decisionHandler(.allow)
+                    //                self.view.makeToast("Connecting your bank account with the platform verification is failed")
+                    //
+                    //                let payoutObj = PayoutPreferenceVC()
+                    //                                                                   Utility.shared.isfrom_payoutcurrency = true
+                    //                                                                    payoutObj.modalPresentationStyle = .fullScreen
+                    //                                                                   self.present(payoutObj, animated: true, completion: nil)
+                    
+                }
+            }
+        }
     
     func getQueryStringParameter(url: String, param: String) -> String? {
-      guard let url = URLComponents(string: url) else { return nil }
-      return url.queryItems?.first(where: { $0.name == param })?.value
+        guard let url = URLComponents(string: url) else { return nil }
+        return url.queryItems?.first(where: { $0.name == param })?.value
     }
     
     
     func staticContentAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let staticContentQuery = GetStaticPageContentQuery(id: self.id)
-            apollo_headerClient.fetch(query:staticContentQuery,cachePolicy: .fetchIgnoringCacheData){ [self](result,error) in
-                if(result?.data?.getStaticPageContent?.status == 200)
-                {
-//                    self.staticContentArray = result?.data?.getStaticPageContent?.result as! [GetStaticPageContentQuery.Data.GetStaticPageContent.Result]
-                    let content = result?.data?.getStaticPageContent?.result?.content
-                    print(content?.htmlToAttributedString ?? "")
-                    textContent.attributedText = content?.htmlToAttributedString
-                    textContent.font = UIFont(name: APP_FONT, size: 15)
-                    textContent.textColor = UIColor(named: "searchPlaces_TextColor")
-                    textContent.showsVerticalScrollIndicator = false
-                    textContent.showsHorizontalScrollIndicator = false
-                   
-                }
-                else {
-                    self.view.makeToast(result?.data?.getStaticPageContent?.errorMessage!)
+            let staticContentQuery = GetStaticPageContentQuery(id: .some(self.id))
+            Network.shared.apollo_headerClient.fetch(query:staticContentQuery,cachePolicy: .fetchIgnoringCacheData){ [self] response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.getStaticPageContent?.status,data == 200 {
+                        //                    self.staticContentArray = result.data?.getStaticPageContent?.result as! [GetStaticPageContentQuery.Data.GetStaticPageContent.Result]
+                        let content = result.data?.getStaticPageContent?.result?.content
+                        print(content?.htmlToAttributedString ?? "")
+                        textContent.attributedText = content?.htmlToAttributedString
+                        textContent.font = UIFont(name: APP_FONT, size: 15)
+                        textContent.textColor = UIColor(named: "searchPlaces_TextColor")
+                        textContent.showsVerticalScrollIndicator = false
+                        textContent.showsHorizontalScrollIndicator = false
+                        
+                    } else {
+                        self.view.makeToast(result.data?.getStaticPageContent?.errorMessage!)
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
             }
             
-          //  let siteSettingsquery = siteSe
+            //  let siteSettingsquery = siteSe
             
         }
     }
-
+    
 }
 
 extension String {

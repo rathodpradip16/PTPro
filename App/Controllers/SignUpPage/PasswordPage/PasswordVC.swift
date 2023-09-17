@@ -68,7 +68,7 @@ class PasswordVC: UIViewController {
      //Mark:******************************** Button Actions ***********************************************************************>
     
     @IBAction func nextBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
         passwordTF.resignFirstResponder()
         self.lottieView.isHidden = true
         self.lottieView.frame = CGRect(x:FULLWIDTH/2-50, y: FULLHEIGHT/2-50, width: 100, height: 100)

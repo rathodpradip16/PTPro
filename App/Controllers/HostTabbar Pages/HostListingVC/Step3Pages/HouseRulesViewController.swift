@@ -116,12 +116,12 @@ class HouseRulesViewController: BaseHostTableviewController {
     }
     override func setDropdownList() {
         // Utility.shared.selectedRules.removeAllObjects()
-        let houseRule = (Utility.shared.getListSettingsArray.houseRules?.listSettings!)!
-        for i in 0..<houseRule.count
+        let houseRule = Utility.shared.getListSettingsArray?.houseRules?.listSettings
+        for i in 0..<(houseRule?.count ?? 0)
         {
             var amenityInfo = [String : Any]()
-            amenityInfo.updateValue(houseRule[i]!.itemName!, forKey: "itemName")
-            amenityInfo.updateValue(houseRule[i]!.id!, forKey: "id")
+            amenityInfo.updateValue(houseRule?[i]!.itemName!, forKey: "itemName")
+            amenityInfo.updateValue(houseRule?[i]!.id!, forKey: "id")
             houseRules.append(amenityInfo)
         }
         if Utility.shared.step3ValuesInfo.keys.contains("houseRules")
@@ -130,7 +130,7 @@ class HouseRulesViewController: BaseHostTableviewController {
             {
                 for i in 0..<typeInfo.count
                 {
-                    if let userhouseTypes = typeInfo[i] as? GetListingDetailsStep3Query.Data.GetListingDetail.Result.HouseRule
+                    if let userhouseTypes = typeInfo[i] as? GetListingDetailsStep3Query.Data.GetListingDetails.Results.HouseRule
                     {
                         if houseRules.contains(where: { (item) -> Bool in
                             (item["id"] as? Int == (userhouseTypes.id))
@@ -208,7 +208,7 @@ class HouseRulesViewController: BaseHostTableviewController {
     //IBActions
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
     }
@@ -253,7 +253,7 @@ class HouseRulesViewController: BaseHostTableviewController {
     }
     
     @IBAction func saveandExitAction(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
            
                  self.lottieViewanimation()
            Utility.shared.step3ValuesInfo.updateValue(Utility.shared.selectedRules, forKey: "houseRules")

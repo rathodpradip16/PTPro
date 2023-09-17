@@ -65,7 +65,7 @@ class EmailPageVC: UIViewController {
         }
     }
     @IBAction func retryTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         self.checkexistingemailAPI()
         }
     }
@@ -78,7 +78,7 @@ class EmailPageVC: UIViewController {
     
     @IBAction func nextBtnTapped(_ sender: Any) {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
              self.view.endEditing(true)
             if (emailTF.text?.isValidEmail())! {
 
@@ -197,32 +197,36 @@ class EmailPageVC: UIViewController {
         self.lottieView.clipsToBounds = true
         self.lottieView.play()
         let checkemail = CheckEmailExistsQuery(email: emailTF.text!)
-        apollo.fetch(query: checkemail,cachePolicy:.fetchIgnoringCacheData){ (result,error) in
-            
-            if(result?.data?.validateEmailExist?.status == 200){
-                self.nextBtn.isHidden = false
-                if Utility.shared.signupArray.count >= 3 {
-                Utility.shared.signupArray.replaceObject(at: 2, with: self.emailTF.text! as AnyObject)
-                }
-    
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-                let passwordObj = PasswordVC()
-                passwordObj.modalPresentationStyle = .fullScreen
-                 self.present(passwordObj, animated: false, completion: nil)
-              
-            })
-            } else {
-                self.lottieView.isHidden = true
-                self.lottieWholeView.isHidden = true
-                self.bottomView.isHidden = true
-                self.nextBtn.isHidden = true
-                self.emailexistView.isHidden = false
-                if IS_IPHONE_X || IS_IPHONE_XR {
-                self.emailexistView.frame = CGRect(x: 0, y: FULLHEIGHT-80, width: FULLWIDTH, height: 60)
-                   
+        apollo.fetch(query: checkemail,cachePolicy:.fetchIgnoringCacheData){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.validateEmailExist?.status,data == 200 {
+                    self.nextBtn.isHidden = false
+                    if Utility.shared.signupArray.count >= 3 {
+                        Utility.shared.signupArray.replaceObject(at: 2, with: self.emailTF.text! as AnyObject)
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                        let passwordObj = PasswordVC()
+                        passwordObj.modalPresentationStyle = .fullScreen
+                        self.present(passwordObj, animated: false, completion: nil)
+                        
+                    })
                 } else {
-                    self.emailexistView.frame = CGRect(x: 0, y: FULLHEIGHT-60, width: FULLWIDTH, height: 60)
+                    self.lottieView.isHidden = true
+                    self.lottieWholeView.isHidden = true
+                    self.bottomView.isHidden = true
+                    self.nextBtn.isHidden = true
+                    self.emailexistView.isHidden = false
+                    if IS_IPHONE_X || IS_IPHONE_XR {
+                        self.emailexistView.frame = CGRect(x: 0, y: FULLHEIGHT-80, width: FULLWIDTH, height: 60)
+                        
+                    } else {
+                        self.emailexistView.frame = CGRect(x: 0, y: FULLHEIGHT-60, width: FULLWIDTH, height: 60)
+                    }
                 }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }

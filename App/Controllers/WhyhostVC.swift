@@ -27,17 +27,8 @@ class WhyhostVC: UIViewController,UIScrollViewDelegate {
     
      let arrImg: [UIImage] = [#imageLiteral(resourceName: "bg_image1"),#imageLiteral(resourceName: "bg_image4"),#imageLiteral(resourceName: "bg_image3"),#imageLiteral(resourceName: "bg_image2")]
     var titleArray = [String]()
-    var getpayoutArray = [GetPayoutsQuery.Data.GetPayout.Result]()
-    var whyHostArray = [GetWhyHostDataQuery.Data.GetWhyHostDatum.Result]()
-    var apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
+    var getpayoutArray = [GetPayoutsQuery.Data.GetPayouts.Result]()
+    var whyHostArray = [GetWhyHostDataQuery.Data.GetWhyHostData.Result]()
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -166,42 +157,44 @@ class WhyhostVC: UIViewController,UIScrollViewDelegate {
     
     @objc func listingBtnTapped()
     {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             let getlistsettingsquery = GetListingSettingQuery()
-            apollo_headerClient.fetch(query: getlistsettingsquery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-                
-                
-                guard (result?.data?.getListingSettings?.results) != nil else{
+            Network.shared.apollo_headerClient.fetch(query: getlistsettingsquery,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getListingSettings?.results) != nil else{
+                        return
+                    }
+                    Utility.shared.getListSettingsArray = (result.data?.getListingSettings?.results)!
+                    if Utility.shared.getListSettingsArray?.personCapacity != nil{
+                        let baseHost = BaseHostTableviewController()
+                        baseHost.getListSettingsArray = Utility.shared.getListSettingsArray
+                        Utility.shared.createId = Int()
+                        baseHost.showOverlay = true
+                        Utility.shared.createId = 0
+                        Utility.shared.host_basePrice = 0
+                        Utility.shared.step1_inactivestatus  = ""
+                        Utility.shared.isfrombecomehoststep1Edit = false
+                        Utility.shared.selectedAmenityIdList.removeAllObjects()
+                        Utility.shared.selectedspaceAmenityIdList.removeAllObjects()
+                        Utility.shared.selectedsafetyAmenityIdList.removeAllObjects()
+                        Utility.shared.selectedRules.removeAllObjects()
+                        Utility.shared.step2_Description = ""
+                        Utility.shared.step2_Title = ""
+                        Utility.shared.currencyvalue = ""
+                        Utility.shared.step1ValuesInfo = [String : Any]()
+                        self.view.window?.backgroundColor = UIColor.white
+                        baseHost.modalPresentationStyle = .fullScreen
+                        self.present(baseHost, animated:false, completion: nil)
+                    }
                     
-
-                    
-                    return
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-                Utility.shared.getListSettingsArray = (result?.data?.getListingSettings?.results)!
-                if Utility.shared.getListSettingsArray.personCapacity != nil{
-            let baseHost = BaseHostTableviewController()
-            baseHost.getListSettingsArray = Utility.shared.getListSettingsArray
-            Utility.shared.createId = Int()
-            baseHost.showOverlay = true
-            Utility.shared.createId = 0
-            Utility.shared.host_basePrice = 0
-            Utility.shared.step1_inactivestatus  = ""
-            Utility.shared.isfrombecomehoststep1Edit = false
-            Utility.shared.selectedAmenityIdList.removeAllObjects()
-            Utility.shared.selectedspaceAmenityIdList.removeAllObjects()
-            Utility.shared.selectedsafetyAmenityIdList.removeAllObjects()
-            Utility.shared.selectedRules.removeAllObjects()
-            Utility.shared.step2_Description = ""
-            Utility.shared.step2_Title = ""
-            Utility.shared.currencyvalue = ""
-            Utility.shared.step1ValuesInfo = [String : Any]()
-            self.view.window?.backgroundColor = UIColor.white
-           baseHost.modalPresentationStyle = .fullScreen
-            self.present(baseHost, animated:false, completion: nil)
-                }
+                
             }
-             
-         }
+            
+        }
     }
     @objc func backdismissBtnTapped()
           {
@@ -214,23 +207,26 @@ class WhyhostVC: UIViewController,UIScrollViewDelegate {
 
     }
 
-    func dataAPICall()
-    {
+    func dataAPICall(){
         let getwhyhostquery = GetWhyHostDataQuery()
-       
-        apollo_headerClient.fetch(query: getwhyhostquery, cachePolicy: .fetchIgnoringCacheData){(result,error) in
-            guard (result?.data?.getWhyHostData?.results) != nil else{
-                self.view.makeToast(result?.data?.getWhyHostData?.errorMessage)
-             
-               
-                return
-            }
-            print(result?.data?.getWhyHostData?.results!)
-            self.whyHostArray = ((result?.data?.getWhyHostData?.results)!) as! [GetWhyHostDataQuery.Data.GetWhyHostDatum.Result]
-            self.scrollView.contentSize = CGSize(width:self.scrollView.frame.size.width * CGFloat(self.whyHostArray.count),height: self.scrollView.frame.size.height)
-            self.setScrollViewdata()
-        }
         
+        Network.shared.apollo_headerClient.fetch(query: getwhyhostquery, cachePolicy: .fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getWhyHostData?.results) != nil else{
+                    self.view.makeToast(result.data?.getWhyHostData?.errorMessage)
+                    
+                    
+                    return
+                }
+                print(result.data?.getWhyHostData?.results!)
+                self.whyHostArray = ((result.data?.getWhyHostData?.results)!) as! [GetWhyHostDataQuery.Data.GetWhyHostData.Result]
+                self.scrollView.contentSize = CGSize(width:self.scrollView.frame.size.width * CGFloat(self.whyHostArray.count),height: self.scrollView.frame.size.height)
+                self.setScrollViewdata()
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
     }
     
     

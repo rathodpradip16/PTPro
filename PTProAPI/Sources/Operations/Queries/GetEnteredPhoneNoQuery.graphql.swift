@@ -5,38 +5,19 @@
 
 public class GetEnteredPhoneNoQuery: GraphQLQuery {
   public static let operationName: String = "getEnteredPhoneNo"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getEnteredPhoneNo {
-        getPhoneData {
-          __typename
-          userId
-          profileId
-          phoneNumber
-          country
-          countryCode
-          verification {
-            __typename
-            id
-            isPhoneVerified
-          }
-          verificationCode
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query getEnteredPhoneNo { getPhoneData { __typename userId profileId phoneNumber country countryCode verification { __typename id isPhoneVerified } verificationCode status errorMessage } }"#
     ))
 
   public init() {}
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getPhoneData", GetPhoneData?.self),
     ] }
 
@@ -47,11 +28,12 @@ public class GetEnteredPhoneNoQuery: GraphQLQuery {
     /// Parent Type: `UserAccount`
     public struct GetPhoneData: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.UserAccount }
-      public static var __selections: [Selection] { [
-        .field("userId", ID?.self),
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserAccount }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
+        .field("userId", PTProAPI.ID?.self),
         .field("profileId", Int?.self),
         .field("phoneNumber", String?.self),
         .field("country", Int?.self),
@@ -62,7 +44,7 @@ public class GetEnteredPhoneNoQuery: GraphQLQuery {
         .field("errorMessage", String?.self),
       ] }
 
-      public var userId: ID? { __data["userId"] }
+      public var userId: PTProAPI.ID? { __data["userId"] }
       public var profileId: Int? { __data["profileId"] }
       public var phoneNumber: String? { __data["phoneNumber"] }
       public var country: Int? { __data["country"] }
@@ -77,10 +59,11 @@ public class GetEnteredPhoneNoQuery: GraphQLQuery {
       /// Parent Type: `UserVerifiedInfo`
       public struct Verification: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.UserVerifiedInfo }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserVerifiedInfo }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("isPhoneVerified", Bool?.self),
         ] }

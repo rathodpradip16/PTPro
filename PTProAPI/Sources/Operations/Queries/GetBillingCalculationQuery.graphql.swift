@@ -5,51 +5,9 @@
 
 public class GetBillingCalculationQuery: GraphQLQuery {
   public static let operationName: String = "getBillingCalculation"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getBillingCalculation($listId: Int!, $startDate: String!, $endDate: String!, $guests: Int!, $convertCurrency: String!) {
-        getBillingCalculation(
-          listId: $listId
-          startDate: $startDate
-          endDate: $endDate
-          guests: $guests
-          convertCurrency: $convertCurrency
-        ) {
-          __typename
-          result {
-            __typename
-            checkIn
-            checkOut
-            nights
-            basePrice
-            cleaningPrice
-            guests
-            currency
-            guestServiceFeePercentage
-            hostServiceFeePercentage
-            weeklyDiscountPercentage
-            monthlyDiscountPercentage
-            guestServiceFee
-            hostServiceFee
-            discountLabel
-            discount
-            subtotal
-            total
-            averagePrice
-            priceForDays
-            specialPricing {
-              __typename
-              blockedDates
-              isSpecialPrice
-            }
-            isSpecialPriceAssigned
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query getBillingCalculation($listId: Int!, $startDate: String!, $endDate: String!, $guests: Int!, $convertCurrency: String!) { getBillingCalculation( listId: $listId startDate: $startDate endDate: $endDate guests: $guests convertCurrency: $convertCurrency ) { __typename result { __typename checkIn checkOut nights basePrice cleaningPrice guests currency guestServiceFeePercentage hostServiceFeePercentage weeklyDiscountPercentage monthlyDiscountPercentage guestServiceFee hostServiceFee discountLabel discount subtotal total averagePrice priceForDays specialPricing { __typename blockedDates isSpecialPrice } isSpecialPriceAssigned } status errorMessage } }"#
     ))
 
   public var listId: Int
@@ -82,10 +40,10 @@ public class GetBillingCalculationQuery: GraphQLQuery {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getBillingCalculation", GetBillingCalculation?.self, arguments: [
         "listId": .variable("listId"),
         "startDate": .variable("startDate"),
@@ -102,10 +60,11 @@ public class GetBillingCalculationQuery: GraphQLQuery {
     /// Parent Type: `AllBillingType`
     public struct GetBillingCalculation: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.AllBillingType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.AllBillingType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("result", Result?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -120,10 +79,11 @@ public class GetBillingCalculationQuery: GraphQLQuery {
       /// Parent Type: `BillingType`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.BillingType }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.BillingType }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("checkIn", String?.self),
           .field("checkOut", String?.self),
           .field("nights", Int?.self),
@@ -174,10 +134,11 @@ public class GetBillingCalculationQuery: GraphQLQuery {
         /// Parent Type: `SpecialPricingType`
         public struct SpecialPricing: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.SpecialPricingType }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.SpecialPricingType }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("blockedDates", String?.self),
             .field("isSpecialPrice", Double?.self),
           ] }

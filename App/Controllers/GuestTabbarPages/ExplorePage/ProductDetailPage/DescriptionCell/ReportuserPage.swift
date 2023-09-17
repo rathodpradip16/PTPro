@@ -27,16 +27,6 @@ class ReportuserPage: UIViewController,UITableViewDelegate,UITableViewDataSource
      var lottieView: LottieAnimationView!
     var isfromreview:Bool = false
     
-    let apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-        
-    }()
     var reportAPIArray = [String]()
     var profileid = Int()
     
@@ -81,7 +71,7 @@ class ReportuserPage: UIViewController,UITableViewDelegate,UITableViewDataSource
         self.dismiss(animated: false, completion: nil)
     }
     @IBAction func saveBtnTapped(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
        
       self.reportUserAPICall(reportType: reportType, profileid: profileid)
         
@@ -199,7 +189,7 @@ class ReportuserPage: UIViewController,UITableViewDelegate,UITableViewDataSource
         }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
             if(indexPath.section > 0)
             {
         if(selectedArray.contains(reportcontentArray[indexPath.section-1]))
@@ -233,35 +223,32 @@ class ReportuserPage: UIViewController,UITableViewDelegate,UITableViewDataSource
     func reportUserAPICall(reportType:String,profileid:Int)
     {
         self.lottienextAnimation()
-        let reportuserMutation = CreateReportUserMutation(reporterId:Utility.shared.getCurrentUserID()! as String, reportType: reportType, profileId:profileid)
-        apollo_headerClient.perform(mutation: reportuserMutation){(result,error) in
-            
+        let reportuserMutation = CreateReportUserMutation(reporterId:.some(Utility.shared.getCurrentUserID()! as String), userId: .none, reportType: .some(reportType), profileId: .some(profileid))
+        Network.shared.apollo_headerClient.perform(mutation: reportuserMutation){ response in
             self.lottieView.isHidden = true
-            if (result?.data?.createReportUser?.status == 200)
-                
-            {
-                self.lottieView.isHidden = true
-                self.saveBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey: "Report") ?? "Report")", for: .normal)
-                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"reportalert"))!)")
-           
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    // code to remove your view
-                    self.dismiss(animated: true, completion: nil)
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createReportUser?.status,data == 200 {
+                    self.lottieView.isHidden = true
+                    self.saveBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey: "Report") ?? "Report")", for: .normal)
+                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"reportalert"))!)")
+                    
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        // code to remove your view
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                    
+                } else {
+                    self.lottieView.isHidden = true
+                    self.saveBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey: "Report") ?? "Report")", for: .normal)
+                    self.view.makeToast(result.data?.createReportUser?.errorMessage)
+                    //self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"reportalert"))!)")
                 }
-                
-            } else {
-                self.lottieView.isHidden = true
-                self.saveBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey: "Report") ?? "Report")", for: .normal)
-                self.view.makeToast(result?.data?.createReportUser?.errorMessage)
-                //self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"reportalert"))!)")
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            
-    
-            
         }
-        
-        
     }
     
     /*

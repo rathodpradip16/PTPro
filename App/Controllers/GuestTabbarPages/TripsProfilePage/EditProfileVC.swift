@@ -75,19 +75,8 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     var lottieView: LottieAnimationView!
     
     var DatePickerSender: Bool = false
-    
-    let apollo_headerClient: ApolloClient = {
-    let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-    configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
         
-    let url = URL(string:graphQLEndpoint)!
-        
-    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-        
-    }()
-    
-     var EditProfileArray = GetProfileQuery.Data.UserAccount.Result()
+    var EditProfileArray : GetProfileQuery.Data.UserAccount.Result?
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -97,15 +86,15 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 //             self.editProfileTable.reloadData()
 //        }
         self.view.backgroundColor = UIColor(named: "colorController")
-        if EditProfileArray.gender == "Male" {
-            EditProfileArray.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")"
-        }else if EditProfileArray.gender == "Female" {
-            EditProfileArray.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"
-        }else if EditProfileArray.gender == "Other" {
-            EditProfileArray.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_other") ?? "Other")"
+        if EditProfileArray?.gender == "Male" {
+  //          EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")"
+        }else if EditProfileArray?.gender == "Female" {
+//            EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"
+        }else if EditProfileArray?.gender == "Other" {
+//            EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_other") ?? "Other")"
         }
         else {
-            EditProfileArray.gender = ""
+//            EditProfileArray?.gender = ""
         }
 
         self.backBtn.setImage(UIImage(named: "left_arrow"), for: .normal)
@@ -121,7 +110,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
     override func viewWillAppear(_ animated: Bool) {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         imgChanged = false
         self.imagePicker.setNavigationBarHidden(false, animated:false)
         DispatchQueue.main.async {
@@ -220,14 +209,14 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = false
          self.datePickerInputView()
-//        if EditProfileArray.gender != nil && EditProfileArray.gender == ""
+//        if EditProfileArray?.gender != nil && EditProfileArray?.gender == ""
 //
-//        print("Gender Issue  \(EditProfileArray.gender)")
-        if EditProfileArray.gender != nil && EditProfileArray.gender != ""
+//        print("Gender Issue  \(EditProfileArray?.gender)")
+        if EditProfileArray?.gender != nil && EditProfileArray?.gender != ""
 
         {
             let index = genderArray.firstIndex(where: { (item) -> Bool in
-                item == EditProfileArray.gender!
+                item == EditProfileArray?.gender!
             })
             genderPicker.selectRow(index != nil ? index! : 0, inComponent: 0, animated: true)
             
@@ -252,70 +241,69 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     func EdiprofileAPICall()
     {
         let profileQuery = GetProfileQuery()
-        apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){(result,error) in
-            
-            guard (result?.data?.userAccount?.result) != nil else
-            {
-                if result?.data?.userAccount?.status == 500{
-                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result?.data?.userAccount?.errorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                        UserDefaults.standard.removeObject(forKey: "user_token")
-                        UserDefaults.standard.removeObject(forKey: "user_id")
-                        UserDefaults.standard.removeObject(forKey: "password")
-                        UserDefaults.standard.removeObject(forKey: "currency_rate")
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        let welcomeObj = WelcomePageVC()
-                        appDelegate.setInitialViewController(initialView: welcomeObj)
-                    }))
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }else{
-                    self.view.makeToast(result?.data?.userAccount?.errorMessage!)
-                return
+        Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.userAccount?.result) != nil else
+                {
+                    if result.data?.userAccount?.status == 500{
+                        let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.userAccount?.errorMessage, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                            UserDefaults.standard.removeObject(forKey: "user_token")
+                            UserDefaults.standard.removeObject(forKey: "user_id")
+                            UserDefaults.standard.removeObject(forKey: "password")
+                            UserDefaults.standard.removeObject(forKey: "currency_rate")
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            let welcomeObj = WelcomePageVC()
+                            appDelegate.setInitialViewController(initialView: welcomeObj)
+                        }))
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    }else{
+                        self.view.makeToast(result.data?.userAccount?.errorMessage!)
+                        return
+                    }
                 }
+                
+                print(result.data?.userAccount?.result as Any)
+                Utility.shared.EditProfileArray  = ((result.data?.userAccount?.result)!)
+                self.EditProfileArray = ((result.data?.userAccount?.result)!)
+                
+                if(self.EditProfileArray?.preferredCurrency != nil){
+                    Utility.shared.selectedCurrency = self.EditProfileArray?.preferredCurrency! ?? ""
+                }
+                
+                if self.EditProfileArray?.gender == "Male" {
+//                    self.EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")"
+                }else if self.EditProfileArray?.gender == "Female" {
+  //                  self.EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"
+                }else if self.EditProfileArray?.gender == "Other" {
+  //                  self.EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_other") ?? "Other")"
+                }
+                else {
+ //                   self.EditProfileArray?.gender = ""
+                }
+                //            {
+                self.lottieView.isHidden = true
+                self.lottieWholeView.isHidden = true
+                
+                if self.isFromFn {
+                    self.isFromFn = false
+                    let indexPaths = IndexPath(row: 1, section: 0)
+                    self.editProfileTable.reloadRows(at:[indexPaths] , with: .none)
+                }
+                else if self.isFromln {
+                    self.isFromln = false
+                    let indexPaths = IndexPath(row: 2, section: 0)
+                    self.editProfileTable.reloadRows(at:[indexPaths] , with: .none)
+                }
+                else {
+                    self.editProfileTable.reloadData()
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-            
-            print(result?.data?.userAccount?.result as Any)
-            Utility.shared.EditProfileArray  = ((result?.data?.userAccount?.result)!)
-            self.EditProfileArray = ((result?.data?.userAccount?.result)!)
-
-            if(self.EditProfileArray.preferredCurrency != nil){
-                         Utility.shared.selectedCurrency = self.EditProfileArray.preferredCurrency!
-                       }
-        
-            if self.EditProfileArray.gender == "Male" {
-                self.EditProfileArray.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")"
-            }else if self.EditProfileArray.gender == "Female" {
-                self.EditProfileArray.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"
-            }else if self.EditProfileArray.gender == "Other" {
-                self.EditProfileArray.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_other") ?? "Other")"
-            }
-            else {
-                self.EditProfileArray.gender = ""
-            }
-//            {
-            self.lottieView.isHidden = true
-            self.lottieWholeView.isHidden = true
-            
-            if self.isFromFn {
-                self.isFromFn = false
-                let indexPaths = IndexPath(row: 1, section: 0)
-                self.editProfileTable.reloadRows(at:[indexPaths] , with: .none)
-            }
-           else if self.isFromln {
-                self.isFromln = false
-               let indexPaths = IndexPath(row: 2, section: 0)
-               self.editProfileTable.reloadRows(at:[indexPaths] , with: .none)
-            }
-            else {
-            self.editProfileTable.reloadData()
-            }
-          //  }
-           
-
         }
-        
-        
     }
     @IBAction func retryBtnTapped(_ sender: Any) {
         
@@ -385,40 +373,40 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM-dd-yyyy"
         date_value = sender.date
-        EditProfileArray.iosDob = dateFormatter.string(from: sender.date)
+//        EditProfileArray?.iosDOB = dateFormatter.string(from: sender.date)
        DatePickerSender = true
     }
     
     func EditProfileAPICall(fieldName:String,fieldValue:String)
     {
-        let editprofileMutation = EditProfileMutation(userId:(Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: fieldValue, deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
-        apollo_headerClient.perform(mutation: editprofileMutation){ (result,error) in
-            
-            if(result?.data?.userUpdate?.status == 200)
-            {
-                print("success")
-                self.EdiprofileAPICall()
-            }
-            else {
-                
-                if result?.data?.userUpdate?.status == 500{
-                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message:result?.data?.userUpdate?.errorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                        UserDefaults.standard.removeObject(forKey: "user_token")
-                        UserDefaults.standard.removeObject(forKey: "user_id")
-                        UserDefaults.standard.removeObject(forKey: "password")
-                        UserDefaults.standard.removeObject(forKey: "currency_rate")
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        let welcomeObj = WelcomePageVC()
-                        appDelegate.setInitialViewController(initialView: welcomeObj)
-                    }))
-                    self.present(alert, animated: true, completion: nil)
-                    return
+        let editprofileMutation = EditProfileMutation(userId: Utility.shared.getCurrentUserID()! as String, fieldName: fieldName, fieldValue: .some(fieldValue), deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
+        Network.shared.apollo_headerClient.perform(mutation: editprofileMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.userUpdate?.status,data == 200 {
+                    self.EdiprofileAPICall()
+                } else {
+                    if result.data?.userUpdate?.status == 500{
+                        let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message:result.data?.userUpdate?.errorMessage, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                            UserDefaults.standard.removeObject(forKey: "user_token")
+                            UserDefaults.standard.removeObject(forKey: "user_id")
+                            UserDefaults.standard.removeObject(forKey: "password")
+                            UserDefaults.standard.removeObject(forKey: "currency_rate")
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            let welcomeObj = WelcomePageVC()
+                            appDelegate.setInitialViewController(initialView: welcomeObj)
+                        }))
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    }
+                    self.view.makeToast(result.data?.userUpdate?.errorMessage)
                 }
-              self.view.makeToast(result?.data?.userUpdate?.errorMessage)
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
-      }
+    }
     
     
     //MARK:*********************************************************** TABLEVIEW DELEGATE & DATASOURCE METHODS ****************************************************>
@@ -530,9 +518,9 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 
             else{
                 
-                if(Utility.shared.EditProfileArray.picture != nil)
+                if(Utility.shared.EditProfileArray?.picture != nil)
                 {
-                    let profImage = Utility.shared.EditProfileArray.picture!
+                    let profImage = Utility.shared.EditProfileArray?.picture!
                     cell.editProfileimage.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(profImage)"), completed: nil)
                 }
             }
@@ -553,7 +541,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             let toolBar = UIToolbar().ToolbarPikerSelect(mySelect: #selector(dismissName))
             toolBar.barTintColor = UIColor(named: "Button_Grey_Color")
             cell.txtField.inputAccessoryView = toolBar
-            cell.txtField.text = EditProfileArray.firstName ?? ""
+            cell.txtField.text = EditProfileArray?.firstName ?? ""
             cell.txtField.tag = 0
             cell.lineView.isHidden = true
             
@@ -572,7 +560,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             let toolBar = UIToolbar().ToolbarPikerSelect(mySelect: #selector(dismissName))
             toolBar.barTintColor = UIColor(named: "Button_Grey_Color")
             cell.txtField.inputAccessoryView = toolBar
-            cell.txtField.text = EditProfileArray.lastName ?? ""
+            cell.txtField.text = EditProfileArray?.lastName ?? ""
             cell.txtField.tag = 1
             cell.lineView.isHidden = false
             
@@ -585,7 +573,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 cell.selectionStyle = .none
                 
                 cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"aboutme") ?? "About")"
-                cell.descLabel.text = EditProfileArray.info ?? ""
+                cell.descLabel.text = EditProfileArray?.info ?? ""
                 cell.actionTitleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"Edit about me") ?? "Edit about me")"
                 cell.actionBtn.addTarget(self, action: #selector(onClickAboutMe), for: .touchUpInside)
                 
@@ -613,7 +601,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 cell.EditProfileTF.textColor = Theme.PRIMARY_COLOR
                 cell.EditProfileTF.placeholder = "\((Utility.shared.getLanguage()?.value(forKey:"selectgender"))!)"
                 cell.EditProfileTF.tintColor = .clear
-                    cell.EditProfileTF.text = EditProfileArray.gender != nil ? EditProfileArray.gender! : ""
+                    cell.EditProfileTF.text = EditProfileArray?.gender != nil ? EditProfileArray?.gender! : ""
                 let toolBar = UIToolbar().ToolbarPikerSelect(mySelect: #selector(dismissgenderPicker))
                 toolBar.barTintColor = UIColor(named: "Button_Grey_Color")
                 cell.EditProfileTF.tag = 2
@@ -637,9 +625,9 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 cell.EditProfileTF.placeholder = "\((Utility.shared.getLanguage()?.value(forKey:"selectbirthday"))!)"
                 cell.EditProfileTF.tintColor = .clear
                 cell.EditProfileTF.tag = 3
-                if(EditProfileArray.iosDob != nil)
+                if(EditProfileArray?.iosDOB != nil)
                 {
-                if(EditProfileArray.iosDob == "-undefined-undefined")
+                if(EditProfileArray?.iosDOB == "-undefined-undefined")
                 {
                     cell.EditProfileTF.text = ""
                     cell.arrowView.isHidden = false
@@ -649,19 +637,19 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 }
                     else
                 {
-                    cell.EditProfileTF.text = EditProfileArray.iosDob != nil ? EditProfileArray.iosDob! : ""
+                    cell.EditProfileTF.text = EditProfileArray?.iosDOB != nil ? EditProfileArray?.iosDOB! : ""
                         
                         cell.arrowView.isHidden = true
                         cell.tfTrailing.constant = 20
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat =  "MM/dd/yyyy"
-                        if(EditProfileArray.iosDob != nil) {
-                            if(dateFormatter.date(from: EditProfileArray.iosDob!) != nil) {
-                            datePickerView.date = dateFormatter.date(from: EditProfileArray.iosDob!)!
+                        if(EditProfileArray?.iosDOB != nil) {
+                            if(dateFormatter.date(from: EditProfileArray?.iosDOB! ?? "") != nil) {
+                                datePickerView.date = dateFormatter.date(from: EditProfileArray?.iosDOB! ?? "")!
                             }
                             else {
                                 dateFormatter.dateFormat =  "MM/yyyy/dd"
-                                datePickerView.date = dateFormatter.date(from: EditProfileArray.iosDob!)!
+                                datePickerView.date = dateFormatter.date(from: EditProfileArray?.iosDOB! ?? "")!
                             }
                         }
                     }
@@ -680,9 +668,9 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 cell.textfieldNameLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"emailreadonly"))!)"
                 cell.EditProfileTF.placeholder = "\((Utility.shared.getLanguage()?.value(forKey:"enteremail"))!)"
                 cell.EditProfileTF.tag = 4
-                textfieldValueArray.add(EditProfileArray.email ?? "")
+                textfieldValueArray.add(EditProfileArray?.email ?? "")
                 cell.EditProfileTF.isUserInteractionEnabled = false
-                cell.EditProfileTF.text = EditProfileArray.email ?? ""
+                cell.EditProfileTF.text = EditProfileArray?.email ?? ""
                 cell.arrowView.isHidden = true
                 cell.tfTrailing.constant = 20
                
@@ -694,7 +682,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 cell.EditProfileTF.isUserInteractionEnabled = false
                 cell.EditProfileTF.inputAccessoryView = nil
                 cell.EditProfileTF.inputView = nil
-                cell.EditProfileTF.text = "\(self.EditProfileArray.countryCode ?? "") " + "\(self.EditProfileArray.phoneNumber ?? "")"
+                cell.EditProfileTF.text = "\(self.EditProfileArray?.countryCode ?? "") " + "\(self.EditProfileArray?.phoneNumber ?? "")"
                 
                 if(cell.EditProfileTF.text != "" || cell.EditProfileTF.text != " "  ){
                     if cell.EditProfileTF.text!.trimmingCharacters(in: .whitespaces).isEmpty {
@@ -721,7 +709,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 toolBar.barTintColor = UIColor(named: "Button_Grey_Color")
                     cell.EditProfileTF.inputAccessoryView = toolBar
                     cell.EditProfileTF.tintColor = Theme.PRIMARY_COLOR
-                    cell.EditProfileTF.text = self.EditProfileArray.location != nil ? self.EditProfileArray.location! : ""
+                    cell.EditProfileTF.text = self.EditProfileArray?.location != nil ? self.EditProfileArray?.location! : ""
                     
                     
                    
@@ -739,7 +727,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             {
                 cell.imgLeftIcon.image = UIImage(named: "Verify_email")
                 
-                if((EditProfileArray.verification?.isEmailConfirmed != nil && EditProfileArray.verification?.isEmailConfirmed == true)){
+                if((EditProfileArray?.verification?.isEmailConfirmed != nil && EditProfileArray?.verification?.isEmailConfirmed == true)){
                     cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"confirmedemail") ?? "Email confirmed")"
                     cell.imgRightView.image = UIImage(named: "redtick")
                     email_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"verified"))!)"
@@ -763,7 +751,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             else if(indexPath.row == 1)
             {
                 cell.imgLeftIcon.image = UIImage(named: "Verify_Fb")
-                if((EditProfileArray.verification?.isFacebookConnected != nil && EditProfileArray.verification?.isFacebookConnected == true)){
+                if((EditProfileArray?.verification?.isFacebookConnected != nil && EditProfileArray?.verification?.isFacebookConnected == true)){
                     cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"connectedfb") ?? "Facebbok connected")"
                     cell.imgRightView.image = UIImage(named: "redtick")
                     facebook_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"disconnect"))!)"
@@ -788,7 +776,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             {
                
                 cell.imgLeftIcon.image = UIImage(named: "Verify_Google")
-                if((EditProfileArray.verification?.isGoogleConnected != nil && EditProfileArray.verification?.isGoogleConnected == true)){
+                if((EditProfileArray?.verification?.isGoogleConnected != nil && EditProfileArray?.verification?.isGoogleConnected == true)){
                     google_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"disconnect"))!)"
                     cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"connectedgoogle") ?? "Google Connected")"
                     cell.imgRightView.image = UIImage(named: "redtick")
@@ -808,7 +796,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 cell.info_button.addTarget(self, action: #selector(googleInfoTapped), for: .touchUpInside)
             }else{
                 cell.imgLeftIcon.image = UIImage(named: "Phone")
-                if((EditProfileArray.verification?.isPhoneVerified != nil && EditProfileArray.verification?.isPhoneVerified == true)){
+                if((EditProfileArray?.verification?.isPhoneVerified != nil && EditProfileArray?.verification?.isPhoneVerified == true)){
                     cell.titleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"Verified_Phone") ?? "Phone number verified")"
                     cell.imgRightView.image = UIImage(named: "redtick")
                     cell.verifyConnectLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"verified"))!)"
@@ -1130,9 +1118,9 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                self.present(phoneNumberObj, animated: true, completion: nil)
             }else{
                 let verifyObj = EmailGoogleFBViewController()
-                verifyObj.is_fb_verify = (EditProfileArray.verification?.isFacebookConnected != nil ? ((EditProfileArray.verification?.isFacebookConnected!)!) : false)
-                verifyObj.is_google_verify = (EditProfileArray.verification?.isGoogleConnected != nil ? ((EditProfileArray.verification?.isGoogleConnected!)!) : false)
-                verifyObj.is_email_verify = (EditProfileArray.verification?.isEmailConfirmed != nil ? ((EditProfileArray.verification?.isEmailConfirmed!)!) : false)
+                verifyObj.is_fb_verify = (EditProfileArray?.verification?.isFacebookConnected != nil ? ((EditProfileArray?.verification?.isFacebookConnected!)!) : false)
+                verifyObj.is_google_verify = (EditProfileArray?.verification?.isGoogleConnected != nil ? ((EditProfileArray?.verification?.isGoogleConnected!)!) : false)
+                verifyObj.is_email_verify = (EditProfileArray?.verification?.isEmailConfirmed != nil ? ((EditProfileArray?.verification?.isEmailConfirmed!)!) : false)
                 verifyObj.modalPresentationStyle = .fullScreen
                 self.present(verifyObj, animated: true, completion: nil)
             }
@@ -1156,7 +1144,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         return myTitle
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent  component: Int) {
-        EditProfileArray.gender = (genderNewArray[row] as! String)
+    //    EditProfileArray?.gender = (genderNewArray[row] as! String)
         
        //
     }
@@ -1176,35 +1164,36 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         
     }
     @objc func dismissgenderPicker() {
-        if(EditProfileArray.gender != nil)
+        if(EditProfileArray?.gender != nil)
         {
-            if EditProfileArray.gender == "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")" ||  EditProfileArray.gender == "Male" {
-                EditProfileArray.gender = "Male"
-            }else if EditProfileArray.gender == "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"  ||  EditProfileArray.gender == "Female"{
-                EditProfileArray.gender = "Female"
-            }
-            else if EditProfileArray.gender == ""{
-                EditProfileArray.gender = "Male"
-            }
-            else{
-                EditProfileArray.gender = "Other"
-            }
-            self.EditProfileAPICall(fieldName: "gender", fieldValue: "\(EditProfileArray.gender != nil ? EditProfileArray.gender! : "")")
+            //            if EditProfileArray?.gender == "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")" ||  EditProfileArray?.gender == "Male" {
+            //                EditProfileArray?.gender = "Male"
+            //            }else if EditProfileArray?.gender == "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"  ||  EditProfileArray?.gender == "Female"{
+            //                EditProfileArray?.gender = "Female"
+            //            }
+            //            else if EditProfileArray?.gender == ""{
+            //                EditProfileArray?.gender = "Male"
+            //            }
+            //            else{
+            //                EditProfileArray?.gender = "Other"
+            //            }
+            self.EditProfileAPICall(fieldName: "gender", fieldValue: "\(EditProfileArray?.gender != nil ? EditProfileArray?.gender! : "")")
         }
         else{
-            EditProfileArray.gender = "\((Utility.shared.getLanguage()?.value(forKey:"gender_male"))!)"
-            self.EditProfileAPICall(fieldName: "gender", fieldValue: "Male")
+            //            EditProfileArray?.gender = "\((Utility.shared.getLanguage()?.value(forKey:"gender_male"))!)"
+            //            self.EditProfileAPICall(fieldName: "gender", fieldValue: "Male")
+            //        }
+            //        if self.EditProfileArray?.gender == "Male" {
+            //            self.EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")"
+            //        }else if self.EditProfileArray?.gender == "Female" {
+            //            self.EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"
+            //        }else{
+            //            self.EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_other") ?? "Other")"
+            //        }
+            editProfileTable.reloadData()
+            view.endEditing(true)
+            
         }
-        if self.EditProfileArray.gender == "Male" {
-            self.EditProfileArray.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")"
-        }else if self.EditProfileArray.gender == "Female" {
-            self.EditProfileArray.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"
-        }else{
-            self.EditProfileArray.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_other") ?? "Other")"
-        }
-        editProfileTable.reloadData()
-        view.endEditing(true)
-        
     }
     @objc func dismissLocation() {
         
@@ -1329,62 +1318,58 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         }
     }
         
-    func emailAPICall()
-    {
-        let resendAPIquery = ResendConfirmEmailQuery()
-        apollo_headerClient.fetch(query: resendAPIquery,cachePolicy: .fetchIgnoringCacheData){(result,error) in
-            if(result?.data?.resendConfirmEmail?.status == 200)
-            {
-               
-//                sender.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"verifyemail"))!)", for: .normal)
+func emailAPICall(){
+    let resendAPIquery = ResendConfirmEmailQuery()
+    Network.shared.apollo_headerClient.fetch(query: resendAPIquery,cachePolicy: .fetchIgnoringCacheData){ response in
+        switch response {
+        case .success(let result):
+            if let data = result.data?.resendConfirmEmail?.status,data == 200 {
                 self.view.makeToast("Confirmation link is sent to your email")
                 self.EdiprofileAPICall()
                 self.editProfileTable.reloadData()
-                
+            } else {
+                self.view.makeToast(result.data?.resendConfirmEmail?.errorMessage != nil ? result.data?.resendConfirmEmail?.errorMessage! : "")
             }
-            else
-            {
-                self.view.makeToast(result?.data?.resendConfirmEmail?.errorMessage != nil ? result?.data?.resendConfirmEmail?.errorMessage! : "")
-              
-            }
+        case .failure(let error):
+            self.view.makeToast(error.localizedDescription)
         }
     }
-    func googleAPICall()
+}
+func googleAPICall(){
+    var actiontype = String()
+    if(google_btn_title == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
     {
-        var actiontype = String()
-        if(google_btn_title == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
-        {
-            actiontype = "true"
-        } else {
-            actiontype = "false"
-        }
-        let socialloginverifyMutation = SocialLoginVerifyMutation(verificationType:"google", actionType:actiontype)
-        apollo_headerClient.perform(mutation:socialloginverifyMutation){(result,error) in
-            if(result?.data?.socialVerification?.status == 200)
-            {
+        actiontype = "true"
+    } else {
+        actiontype = "false"
+    }
+    let socialloginverifyMutation = SocialLoginVerifyMutation(verificationType:"google", actionType:actiontype)
+    Network.shared.apollo_headerClient.perform(mutation:socialloginverifyMutation){ response in
+        switch response {
+        case .success(let result):
+            if let data = result.data?.socialVerification?.status,data == 200 {
                 print("success")
                 if(self.google_btn_title == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
                 {
                     self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"googleconnected"))!)")
-                   
+                    
                     self.google_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"disconnect"))!)"
                 } else {
-                   
+                    
                     self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"googledisconnected"))!)")
                     self.google_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)"
                 }
                 self.EdiprofileAPICall()
                 self.editProfileTable.reloadData()
+            } else {
+                self.view.makeToast(result.data?.socialVerification?.errorMessage != nil ? result.data?.socialVerification?.errorMessage! : "")
             }
-            else
-            {
-                self.view.makeToast(result?.data?.socialVerification?.errorMessage != nil ? result?.data?.socialVerification?.errorMessage! : "")
-            }
-            
-            
+        case .failure(let error):
+            self.view.makeToast(error.localizedDescription)
         }
-        
     }
+}
+
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if(error == nil)
         {
@@ -1419,51 +1404,46 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         }
     }
     
-    func facebookVerifyAPICall()
-    {
+func facebookVerifyAPICall(){
     
-                var actiontype = String()
-                if(facebook_btn_title == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
+    var actiontype = String()
+    if(facebook_btn_title == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
+    {
+        actiontype = "true"
+    } else {
+        
+        actiontype = "false"
+    }
+    let socialloginverifyMutation = SocialLoginVerifyMutation(verificationType:"facebook", actionType: actiontype)
+    Network.shared.apollo_headerClient.perform(mutation:socialloginverifyMutation){ response in
+        switch response {
+        case .success(let result):
+            if let data = result.data?.socialVerification?.status,data == 200 {
+                if(self.facebook_btn_title == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
                 {
-                    actiontype = "true"
+                    
+                    self.facebook_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"disconnect"))!)"
+                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"facebookconnected"))!)")
+                    
                 } else {
-                
-                   actiontype = "false"
-                }
-                let socialloginverifyMutation = SocialLoginVerifyMutation(verificationType:"facebook", actionType: actiontype)
-                self.apollo_headerClient.perform(mutation:socialloginverifyMutation){(result,error) in
-                    if(result?.data?.socialVerification?.status == 200)
-                    {
-                        if(self.facebook_btn_title == "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)")
-                        {
-                          
-                            self.facebook_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"disconnect"))!)"
-                            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"facebookconnected"))!)")
-                           
-                        } else {
-                        
-                        
-                         
-                            self.facebook_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)"
-                            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"facebookdisconnected"))!)")
-                            
-                        }
-                        self.EdiprofileAPICall()
-                        self.editProfileTable.reloadData()
-                        
-                    }
-                    else
-                    {
-                        
-                        
-                        self.view.makeToast(result?.data?.socialVerification?.errorMessage != nil ? result?.data?.socialVerification?.errorMessage! : "")
-                    }
                     
                     
+                    
+                    self.facebook_btn_title = "\((Utility.shared.getLanguage()?.value(forKey:"connect"))!)"
+                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"facebookdisconnected"))!)")
+                    
                 }
+                self.EdiprofileAPICall()
+                self.editProfileTable.reloadData()
                 
-                
+            } else {
+                self.view.makeToast(result.data?.socialVerification?.errorMessage != nil ? result.data?.socialVerification?.errorMessage! : "")
             }
+        case .failure(let error):
+            self.view.makeToast(error.localizedDescription)
+        }
+    }
+}
 
     
     func fixOrientation(img: UIImage) -> UIImage {
@@ -1489,7 +1469,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     func uploadProfileimageService(imageBase64:Data)
     {
         
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             
        self.uploadProfilePic(profileimage:imageBase64,onSuccess:{response in
         })
@@ -1529,7 +1509,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     
     func uploadProfilePic(profileimage:Data,onSuccess success: @escaping (NSDictionary) -> Void) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             let BaseUrl = URL(string: IMAGE_UPLOAD_PHOTO)
             print("BASE URL : \(IMAGE_UPLOAD_PHOTO)")
 
@@ -1608,59 +1588,61 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     func checkexistingemailAPI(currentTF:UITextField)
     {
-
-       self.lottieAnimation()
+        
+        self.lottieAnimation()
         let checkemail = CheckEmailExistsQuery(email:currentTF.text!)
-        apollo.fetch(query: checkemail){ (result,error) in
-            
-            if(result?.data?.validateEmailExist?.status == 200){
-                self.emailexistView.isHidden = true
-                self.EditemailAPICall(fieldName: "email", fieldValue:currentTF.text!)
-                self.lottieView.isHidden = true
-                self.lottieWholeView.isHidden = true
-            }
-            else{
-                
-                self.lottieView.isHidden = true
-                self.lottieWholeView.isHidden = true
-                self.emailWrongView.isHidden = true
-                self.emailexistView.isHidden = false
-                if IS_IPHONE_X || IS_IPHONE_XR{
-                    self.emailexistView.frame = CGRect.init(x: 0, y: FULLHEIGHT-85, width: FULLWIDTH, height: 55)
-                }else{
-                    self.emailexistView.frame = CGRect.init(x: 0, y: FULLHEIGHT-55, width: FULLWIDTH, height: 55)
+        apollo.fetch(query: checkemail){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.validateEmailExist?.status,data == 200 {
+                    self.emailexistView.isHidden = true
+                    self.EditemailAPICall(fieldName: "email", fieldValue:currentTF.text!)
+                    self.lottieView.isHidden = true
+                    self.lottieWholeView.isHidden = true
+                } else {
+                    self.lottieView.isHidden = true
+                    self.lottieWholeView.isHidden = true
+                    self.emailWrongView.isHidden = true
+                    self.emailexistView.isHidden = false
+                    if IS_IPHONE_X || IS_IPHONE_XR{
+                        self.emailexistView.frame = CGRect.init(x: 0, y: FULLHEIGHT-85, width: FULLWIDTH, height: 55)
+                    }else{
+                        self.emailexistView.frame = CGRect.init(x: 0, y: FULLHEIGHT-55, width: FULLWIDTH, height: 55)
+                    }
                 }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
-        
-        
     }
     
     func EditemailAPICall(fieldName:String,fieldValue:String)
     {
-        let editprofileMutation = EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: fieldValue, deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
-        apollo_headerClient.perform(mutation: editprofileMutation){ (result,error) in
-            
-            if(result?.data?.userUpdate?.status == 200)
-            {
-                self.EdiprofileAPICall()
-                if(result?.data?.userUpdate?.userToken != nil)
-                {
-                Utility.shared.setUserToken(userID: (result?.data?.userUpdate?.userToken as AnyObject) as! NSString)
+        let editprofileMutation = EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: .some(fieldValue), deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
+        Network.shared.apollo_headerClient.perform(mutation: editprofileMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.userUpdate?.status,data == 200 {
+                    self.EdiprofileAPICall()
+                    if(result.data?.userUpdate?.userToken != nil)
+                    {
+                    Utility.shared.setUserToken(userID: (result.data?.userUpdate?.userToken as AnyObject) as! NSString)
+                    }
+                    self.emailWrongView.isHidden = true
+                    self.lottieView.isHidden = true
+                    self.lottieWholeView.isHidden = true
+                } else {
+                    self.lottieView.isHidden = true
+                    self.lottieWholeView.isHidden = true
+                    self.emailWrongView.isHidden = false
+                    if IS_IPHONE_X || IS_IPHONE_XR{
+                        self.emailWrongView.frame = CGRect.init(x: 0, y: FULLHEIGHT-85, width: FULLWIDTH, height: 55)
+                    }else{
+                        self.emailWrongView.frame = CGRect.init(x: 0, y: FULLHEIGHT-55, width: FULLWIDTH, height: 55)
+                    }
                 }
-                self.emailWrongView.isHidden = true
-                self.lottieView.isHidden = true
-                self.lottieWholeView.isHidden = true
-            }
-            else {
-                self.lottieView.isHidden = true
-                self.lottieWholeView.isHidden = true
-                self.emailWrongView.isHidden = false
-                if IS_IPHONE_X || IS_IPHONE_XR{
-                    self.emailWrongView.frame = CGRect.init(x: 0, y: FULLHEIGHT-85, width: FULLWIDTH, height: 55)
-                }else{
-                    self.emailWrongView.frame = CGRect.init(x: 0, y: FULLHEIGHT-55, width: FULLWIDTH, height: 55)
-                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
@@ -1789,7 +1771,7 @@ extension EditProfileVC:UITextFieldDelegate {
             if(textField.text!.count>0)
             {
                 self.profileAlertView.isHidden = true
-                let arrayOfString = ["\(textField.text ?? "")","\(EditProfileArray.lastName ?? "")"]
+                let arrayOfString = ["\(textField.text ?? "")","\(EditProfileArray?.lastName ?? "")"]
                 print("\(json(from: arrayOfString))")
 
                 if let valueTobeSend = json(from: arrayOfString){
@@ -1815,7 +1797,7 @@ extension EditProfileVC:UITextFieldDelegate {
             if(textField.text!.count>0)
             {
                 self.profileAlertView.isHidden = true
-                let arrayOfString = ["\(EditProfileArray.firstName ?? "")","\(textField.text ?? "")"]
+                let arrayOfString = ["\(EditProfileArray?.firstName ?? "")","\(textField.text ?? "")"]
                 if let valueTobeSend = json(from: arrayOfString){
                     isFromln = true
                     self.EditProfileAPICall(fieldName: "firstName", fieldValue: valueTobeSend)
@@ -1855,7 +1837,7 @@ extension EditProfileVC:UITextFieldDelegate {
         }
          else if(textField.tag == 5)
          {
-                self.EditProfileArray.location = textField.text!
+           //     self.EditProfileArray?.location = textField.text!
                 self.EditProfileAPICall(fieldName: "location", fieldValue:textField.text!)
                 Utility.shared.isfromPhonePage = false
 

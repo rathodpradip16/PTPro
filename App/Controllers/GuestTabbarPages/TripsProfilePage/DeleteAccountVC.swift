@@ -54,15 +54,6 @@ class DeleteAccountVC: UIViewController {
     {
         if((Utility.shared.getCurrentUserToken()) != nil)
         {
-            apollo_headerClient = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                
-                let url = URL(string:graphQLEndpoint)!
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
         }
         else{
             apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
@@ -76,32 +67,34 @@ class DeleteAccountVC: UIViewController {
     
     @IBAction func deleteAaction(_ sender: Any) {
         if Utility.shared.isConnectedToNetwork(){
-        let deleteMutation = DeleteUserMutation()
-            apollo_headerClient.perform(mutation: deleteMutation){(result,error) in
-            print(result?.data?.deleteUser?.status as Any)
-            if(result?.data?.deleteUser?.status == 200) {
-                self.view.makeToast("\(Utility.shared.getLanguage()?.value(forKey:"delacccontent") ?? "No")")
-                UserDefaults.standard.removeObject(forKey: "user_token")
-                UserDefaults.standard.removeObject(forKey: "user_id")
-                UserDefaults.standard.removeObject(forKey: "password")
-                UserDefaults.standard.removeObject(forKey: "currency_rate")
-                let seconds = 2.0
-                DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                    let welcomeObj = WelcomePageVC()
-                    appDelegate.setInitialViewController(initialView: welcomeObj)
+            let deleteMutation = DeleteUserMutation()
+            Network.shared.apollo_headerClient.perform(mutation: deleteMutation){ response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.deleteUser?.status,data == 200 {
+                        self.view.makeToast("\(Utility.shared.getLanguage()?.value(forKey:"delacccontent") ?? "No")")
+                        UserDefaults.standard.removeObject(forKey: "user_token")
+                        UserDefaults.standard.removeObject(forKey: "user_id")
+                        UserDefaults.standard.removeObject(forKey: "password")
+                        UserDefaults.standard.removeObject(forKey: "currency_rate")
+                        let seconds = 2.0
+                        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            let welcomeObj = WelcomePageVC()
+                            appDelegate.setInitialViewController(initialView: welcomeObj)
+                        }
+                        
+                    } else {
+                        let alert = UIAlertController(title: "\(result.data?.deleteUser?.errorMessage! ?? "Unable to delete")", message: "", preferredStyle: UIAlertController.Style.alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default,  handler: { (action) in
+                            self.dismiss(animated:false, completion: nil)
+                        }))
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-               
             }
-            else{
-                let alert = UIAlertController(title: "\(result?.data?.deleteUser?.errorMessage! ?? "Unable to delete")", message: "", preferredStyle: UIAlertController.Style.alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default,  handler: { (action) in
-                    self.dismiss(animated:false, completion: nil)
-                }))
-                self.present(alert, animated: true, completion: nil)
-
-            }
-        }
         }
     }
     

@@ -123,12 +123,12 @@ class ReviewGuestViewController: BaseHostTableviewController {
     
     override func setDropdownList() {
         
-        let guestRequirement = (Utility.shared.getListSettingsArray.guestRequirements?.listSettings!)!
-        for i in 0..<guestRequirement.count
+        let guestRequirement = (Utility.shared.getListSettingsArray?.guestRequirements?.listSettings!)
+        for i in 0..<(guestRequirement?.count ?? 0)
         {
             var amenityInfo = [String : Any]()
-            amenityInfo.updateValue(guestRequirement[i]!.itemName!, forKey: "itemName")
-            amenityInfo.updateValue(guestRequirement[i]!.id!, forKey: "id")
+            amenityInfo.updateValue(guestRequirement?[i]!.itemName! ?? "", forKey: "itemName")
+            amenityInfo.updateValue(guestRequirement?[i]!.id! ?? 0, forKey: "id")
             guestRequirements.append(amenityInfo)
         }
         tableView.reloadData()
@@ -169,7 +169,7 @@ class ReviewGuestViewController: BaseHostTableviewController {
     //IBActions
     
     @IBAction func RedirectNextPage(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
         let becomeHost = LawAndTaxViewController()
         self.view.window?.backgroundColor = UIColor.white
         becomeHost.modalPresentationStyle = .fullScreen
@@ -182,7 +182,7 @@ class ReviewGuestViewController: BaseHostTableviewController {
     }
     
     @IBAction func retryBtnTapped(_ sender: Any) {
-          if Utility().isConnectedToNetwork(){
+          if Utility.shared.isConnectedToNetwork(){
             self.offlineUIView.isHidden = true
         }
     }
@@ -198,7 +198,7 @@ class ReviewGuestViewController: BaseHostTableviewController {
     }
     
     @IBAction func SaveAndExitAction(_ sender: Any) {
-        if Utility().isConnectedToNetwork(){
+        if Utility.shared.isConnectedToNetwork(){
             self.lottieViewanimation()
             Utility.shared.step3ValuesInfo.updateValue(Utility.shared.selectedRules, forKey: "houseRules")
             Utility.shared.step3ValuesInfo.updateValue(Utility.shared.createId, forKey: "id")

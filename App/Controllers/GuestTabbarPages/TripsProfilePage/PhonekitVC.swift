@@ -30,17 +30,8 @@ class PhonekitVC: UIViewController,UITextFieldDelegate,CountryDelegate{
     
     @IBOutlet weak var nextBtn: UIButton!
     @IBOutlet weak var phoneTF: CustomUITextField!
-    var userphonekitArray = GetProfileQuery.Data.UserAccount.Result()
+    var userphonekitArray : GetProfileQuery.Data.UserAccount.Result?
      
-    let apollo_headerClient: ApolloClient = {
-        let configuration = URLSessionConfiguration.default
-        // Add additional headers as needed
-        configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-        
-        let url = URL(string:graphQLEndpoint)!
-        
-        return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-    }()
     var lottieView1: LottieAnimationView!
     
     override func viewDidLoad() {
@@ -63,11 +54,11 @@ class PhonekitVC: UIViewController,UITextFieldDelegate,CountryDelegate{
         }
         else {
         
-            phoneTF.text = userphonekitArray.phoneNumber != nil ? userphonekitArray.phoneNumber! : ""
+            phoneTF.text = userphonekitArray?.phoneNumber != nil ? userphonekitArray?.phoneNumber! : ""
         Utility.shared.isfromPhonePage = true
         
         }
-        countryBtn.setTitle(userphonekitArray.countryCode != nil ? userphonekitArray.countryCode! : "+1", for: .normal)
+        countryBtn.setTitle(userphonekitArray?.countryCode != nil ? userphonekitArray?.countryCode! : "+1", for: .normal)
         
         let toolBar = UIToolbar().ToolbarPikerSelect(mySelect: #selector(dismissPicker))
         toolBar.barTintColor = UIColor(named: "Button_Grey_Color")
@@ -147,7 +138,7 @@ class PhonekitVC: UIViewController,UITextFieldDelegate,CountryDelegate{
     }
 
     @IBAction func nextBtnTapped(_ sender: Any) {
-         if Utility().isConnectedToNetwork(){
+         if Utility.shared.isConnectedToNetwork(){
           self.lottienextanimation()
           self.addPhonenumberCall()
         }
@@ -162,48 +153,50 @@ class PhonekitVC: UIViewController,UITextFieldDelegate,CountryDelegate{
     func addPhonenumberCall()
     {
         let addphonenumberMutation = AddPhoneNumberMutation(countryCode:(countryBtn.titleLabel?.text!)!, phoneNumber: phoneTF.text!)
-        apollo_headerClient.perform(mutation: addphonenumberMutation){(result,error) in
-            if(result?.data?.addPhoneNumber?.status == 200)
-            {
-                if result?.data?.addPhoneNumber?.phoneNumberStatus == "1"{
-                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"sentOTP"))!)")
-                    DispatchQueue.main.asyncAfter(deadline:.now() + 1) {
-                        let otpPageObj = VerifyOTPPage()
-                        otpPageObj.EditProfileArray = self.userphonekitArray
-                        otpPageObj.countrycode = self.countryBtn.titleLabel!.text!
-                        otpPageObj.phoneno = self.phoneTF.text!
+        Network.shared.apollo_headerClient.perform(mutation: addphonenumberMutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.addPhoneNumber?.status,data == 200 {
+                    if result.data?.addPhoneNumber?.phoneNumberStatus == "1"{
+                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"sentOTP"))!)")
+                        DispatchQueue.main.asyncAfter(deadline:.now() + 1) {
+                            let otpPageObj = VerifyOTPPage()
+                            otpPageObj.EditProfileArray = self.userphonekitArray
+                            otpPageObj.countrycode = self.countryBtn.titleLabel!.text!
+                            otpPageObj.phoneno = self.phoneTF.text!
                             otpPageObj.modalPresentationStyle = .fullScreen
-                                      self.present(otpPageObj, animated: false, completion: nil)
+                            self.present(otpPageObj, animated: false, completion: nil)
+                        }
+                    }else{
+                        self.dismiss(animated: true, completion: nil)
                     }
-                }else{
-                    self.dismiss(animated: true, completion: nil)
-                }              
-            }
-            else
-            {
-                self.lottieView1.isHidden = true
-                if (Utility.shared.phoneNumberStatus == "1"){
-                    self.nextBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey:"next") ?? "Next")", for: .normal)
-                }else{
-                    self.nextBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey:"Update") ?? "Update")", for: .normal)
+                } else {
+                    self.lottieView1.isHidden = true
+                    if (Utility.shared.phoneNumberStatus == "1"){
+                        self.nextBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey:"next") ?? "Next")", for: .normal)
+                    }else{
+                        self.nextBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey:"Update") ?? "Update")", for: .normal)
+                    }
+                    self.view.makeToast("\((result.data?.addPhoneNumber?.errorMessage!)!)")
                 }
-                self.view.makeToast("\((result?.data?.addPhoneNumber?.errorMessage!)!)")
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }
     func EditProfileAPICall(fieldName:String,fieldValue:String)
     {
         Utility.shared.isfromPhonePage = true
-        let editprofileMutation = EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: fieldValue, deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
-        apollo_headerClient.perform(mutation: editprofileMutation){ (result,error) in
-            
-            if(result?.data?.userUpdate?.status == 200)
-            {
-                print("success")
-               
-            }
-            else {
-                self.view.makeToast("\((result?.data?.userUpdate?.errorMessage!)!)")
+        let editprofileMutation = EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: .some(fieldValue), deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
+        Network.shared.apollo_headerClient.perform(mutation: editprofileMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.userUpdate?.status,data == 200 {
+                } else {
+            self.view.makeToast(result.data?.userUpdate?.errorMessage!)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
         }
     }

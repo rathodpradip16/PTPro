@@ -5,69 +5,19 @@
 
 public class GetProfileQuery: GraphQLQuery {
   public static let operationName: String = "GetProfile"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query GetProfile {
-        userAccount {
-          __typename
-          result {
-            __typename
-            userId
-            profileId
-            firstName
-            lastName
-            displayName
-            gender
-            dateOfBirth
-            iosDOB
-            email
-            userBanStatus
-            phoneNumber
-            preferredLanguage
-            preferredLanguageName
-            preferredCurrency
-            appTheme
-            location
-            info
-            createdAt
-            picture
-            country
-            loginUserType
-            isAddedList
-            verification {
-              __typename
-              id
-              isEmailConfirmed
-              isFacebookConnected
-              isGoogleConnected
-              isIdVerification
-              isPhoneVerified
-            }
-            userData {
-              __typename
-              type
-            }
-            verificationCode
-            countryCode
-            loginUserType
-            isAddedList
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query GetProfile { userAccount { __typename result { __typename userId profileId firstName lastName displayName gender dateOfBirth iosDOB email userBanStatus phoneNumber preferredLanguage preferredLanguageName preferredCurrency appTheme location info createdAt picture country loginUserType isAddedList verification { __typename id isEmailConfirmed isFacebookConnected isGoogleConnected isIdVerification isPhoneVerified } userData { __typename type } verificationCode countryCode loginUserType isAddedList } status errorMessage } }"#
     ))
 
   public init() {}
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("userAccount", UserAccount?.self),
     ] }
 
@@ -78,10 +28,11 @@ public class GetProfileQuery: GraphQLQuery {
     /// Parent Type: `WholeAccount`
     public struct UserAccount: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.WholeAccount }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.WholeAccount }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("result", Result?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -96,11 +47,12 @@ public class GetProfileQuery: GraphQLQuery {
       /// Parent Type: `UserAccount`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.UserAccount }
-        public static var __selections: [Selection] { [
-          .field("userId", ID?.self),
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserAccount }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
+          .field("userId", PTProAPI.ID?.self),
           .field("profileId", Int?.self),
           .field("firstName", String?.self),
           .field("lastName", String?.self),
@@ -128,7 +80,7 @@ public class GetProfileQuery: GraphQLQuery {
           .field("countryCode", String?.self),
         ] }
 
-        public var userId: ID? { __data["userId"] }
+        public var userId: PTProAPI.ID? { __data["userId"] }
         public var profileId: Int? { __data["profileId"] }
         public var firstName: String? { __data["firstName"] }
         public var lastName: String? { __data["lastName"] }
@@ -160,10 +112,11 @@ public class GetProfileQuery: GraphQLQuery {
         /// Parent Type: `UserVerifiedInfo`
         public struct Verification: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.UserVerifiedInfo }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserVerifiedInfo }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("id", Int?.self),
             .field("isEmailConfirmed", Bool?.self),
             .field("isFacebookConnected", Bool?.self),
@@ -185,10 +138,11 @@ public class GetProfileQuery: GraphQLQuery {
         /// Parent Type: `UserType`
         public struct UserData: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.UserType }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserType }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("type", String?.self),
           ] }
 

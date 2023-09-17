@@ -97,7 +97,7 @@ class MoreFilterVC: UIViewController,UITableViewDelegate,UITableViewDataSource,R
     var maxCount = Int()
     var minsliderValue = String()
     var maxsliderValue = String()
-    var getsearchPriceArray = GetDefaultSettingQuery.Data.GetSearchSetting.Result()
+    var getsearchPriceArray : GetDefaultSettingQuery.Data.GetSearchSettings.Results?
     var RoomsFilterArray = [GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]()
     
     var lottieView: LottieAnimationView!
@@ -145,15 +145,6 @@ class MoreFilterVC: UIViewController,UITableViewDelegate,UITableViewDataSource,R
     {
         if((Utility.shared.getCurrentUserToken()) != nil)
         {
-            apollo_headerClient = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["auth": "\(Utility.shared.getCurrentUserToken()!)"] // Replace `<token>`
-                
-                let url = URL(string:graphQLEndpoint)!
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
         }
         else{
             apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
@@ -227,40 +218,36 @@ class MoreFilterVC: UIViewController,UITableViewDelegate,UITableViewDataSource,R
         
     }
     
-    func FilterAPICall()
-    {
-         if Utility().isConnectedToNetwork(){
-        let priceRangequery = GetDefaultSettingQuery()
-        apollo_headerClient.fetch(query: priceRangequery){(result,error) in
-            //RecommendedListing
-            guard (result?.data?.getSearchSettings?.results) != nil else{
-                if (result?.data?.getSearchSettings?.status == 400) {
-                self.view.makeToast(result?.data?.getSearchSettings?.errorMessage)
+    func FilterAPICall(){
+        if Utility.shared.isConnectedToNetwork(){
+            let priceRangequery = GetDefaultSettingQuery()
+            Network.shared.apollo_headerClient.fetch(query: priceRangequery){ response in
+                switch response {
+                case .success(let result):
+                    //RecommendedListing
+                    guard (result.data?.getSearchSettings?.results) != nil else{
+                        if (result.data?.getSearchSettings?.status == 400) {
+                            self.view.makeToast(result.data?.getSearchSettings?.errorMessage)
+                        }
+                        return
+                    }
+                    self.getsearchPriceArray = ((result.data?.getSearchSettings?.results)!)
+                    
+                    
+                    
+                    
+                    guard (result.data?.getListingSettingsCommon?.results) != nil else{
+                        return
+                    }
+                    self.RoomsFilterArray = ((result.data?.getListingSettingsCommon?.results)!) as! [GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]
+                    
+                    self.filterTV.reloadData()
+                    self.lottieView.isHidden = true
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-                return
             }
-            self.getsearchPriceArray = ((result?.data?.getSearchSettings?.results)!)
-            
-            
-            
-            
-            guard (result?.data?.getListingSettingsCommon?.results) != nil else{
-                return
-            }
-            self.RoomsFilterArray = ((result?.data?.getListingSettingsCommon?.results)!) as! [GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]
-            
-            self.filterTV.reloadData()
-            self.lottieView.isHidden = true
-            
         }
-            
-            
-            
-            
-            
-            
-        }
-            
     }
     
     @IBAction func clearBtnTapped(_ sender: Any) {
@@ -447,7 +434,7 @@ class MoreFilterVC: UIViewController,UITableViewDelegate,UITableViewDataSource,R
             return 0
         }
         else if(section == 3){
-            if(((getsearchPriceArray.minPrice) != nil)&&((getsearchPriceArray.maxPrice) != nil))
+            if(((getsearchPriceArray?.minPrice) != nil)&&((getsearchPriceArray?.maxPrice) != nil))
             {
                 if(Utility.shared.priceRangeArray.count != 0){
                     return 1
@@ -838,10 +825,10 @@ class MoreFilterVC: UIViewController,UITableViewDelegate,UITableViewDataSource,R
                    if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
                    {
                        let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)
-                       let from_currency = (getsearchPriceArray.priceRangeCurrency!)
-                       let currency_amount = CGFloat(getsearchPriceArray.minPrice != nil ? getsearchPriceArray.minPrice! : 0)
-                       let max_currency_amount = CGFloat(getsearchPriceArray.maxPrice!)
-                       let price_value = Utility.shared.getCurrencyRate(basecurrency:Utility.shared.currencyvalue_from_API_base, fromCurrency:from_currency, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:Double(currency_amount))
+                       let from_currency = getsearchPriceArray?.priceRangeCurrency! ?? ""
+                       let currency_amount = CGFloat(getsearchPriceArray?.minPrice != nil ? (getsearchPriceArray?.minPrice)! : Double(0))
+                       let max_currency_amount = CGFloat(getsearchPriceArray?.maxPrice! ?? 0.0)
+                       let price_value = Utility.shared.getCurrencyRate(basecurrency:Utility.shared.currencyvalue_from_API_base, fromCurrency:from_currency ?? "", toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:Double(currency_amount))
                        
                        let price_value1 = Utility.shared.getCurrencyRate(basecurrency:Utility.shared.currencyvalue_from_API_base, fromCurrency:from_currency, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:Double(max_currency_amount))
                            let restricted_price =  Double(String(format: "%.2f",price_value))
@@ -872,10 +859,10 @@ class MoreFilterVC: UIViewController,UITableViewDelegate,UITableViewDataSource,R
                    else
                    {
                        let currencysymbol = Utility.shared.getSymbol(forCurrencyCode:Utility.shared.currencyvalue_from_API_base)
-                       let from_currency = (getsearchPriceArray.priceRangeCurrency!)
-                       let currency_amount = CGFloat(getsearchPriceArray.minPrice != nil ? getsearchPriceArray.minPrice! : 0)
-                       let max_currency_amount = CGFloat(getsearchPriceArray.maxPrice!)
-                       let price_value = Utility.shared.getCurrencyRate(basecurrency:Utility.shared.currencyvalue_from_API_base, fromCurrency:from_currency, toCurrency:Utility.shared.currencyvalue_from_API_base, CurrencyRate:Utility.shared.currency_Dict, amount:Double(currency_amount))
+                       let from_currency = (getsearchPriceArray?.priceRangeCurrency!)
+                       let currency_amount = CGFloat(getsearchPriceArray?.minPrice != nil ? (getsearchPriceArray?.minPrice!)! : Double(0))
+                       let max_currency_amount = CGFloat(getsearchPriceArray?.maxPrice! ?? Double(0))
+                       let price_value = Utility.shared.getCurrencyRate(basecurrency:Utility.shared.currencyvalue_from_API_base, fromCurrency:from_currency ?? "", toCurrency:Utility.shared.currencyvalue_from_API_base, CurrencyRate:Utility.shared.currency_Dict, amount:Double(currency_amount))
                        let restricted_price =  Double(String(format: "%.2f",price_value))
                        var currency = String()
                         if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
@@ -887,7 +874,7 @@ class MoreFilterVC: UIViewController,UITableViewDelegate,UITableViewDataSource,R
                        {
                            currency = Utility.shared.currencyvalue_from_API_base
                        }
-                       let price_value1 = Utility.shared.getCurrencyRate(basecurrency:Utility.shared.currencyvalue_from_API_base, fromCurrency:from_currency, toCurrency:currency, CurrencyRate:Utility.shared.currency_Dict, amount:Double(max_currency_amount))
+                       let price_value1 = Utility.shared.getCurrencyRate(basecurrency:Utility.shared.currencyvalue_from_API_base, fromCurrency:from_currency ?? "", toCurrency:currency, CurrencyRate:Utility.shared.currency_Dict, amount:Double(max_currency_amount))
                        if(Utility.shared.priceRangeArray.count != 0){
                            cell.sliderView.minValue = CGFloat(price_value)
                            cell.sliderView.maxValue = CGFloat(price_value1)

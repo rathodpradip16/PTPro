@@ -5,32 +5,9 @@
 
 public class CancelReservationMutation: GraphQLMutation {
   public static let operationName: String = "CancelReservation"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation CancelReservation($reservationId: Int!, $cancellationPolicy: String!, $refundToGuest: Float!, $payoutToHost: Float!, $guestServiceFee: Float!, $hostServiceFee: Float!, $total: Float!, $currency: String!, $threadId: Int!, $cancelledBy: String!, $message: String!, $checkIn: String!, $checkOut: String!, $guests: Int!) {
-        cancelReservation(
-          reservationId: $reservationId
-          cancellationPolicy: $cancellationPolicy
-          refundToGuest: $refundToGuest
-          payoutToHost: $payoutToHost
-          guestServiceFee: $guestServiceFee
-          hostServiceFee: $hostServiceFee
-          total: $total
-          currency: $currency
-          threadId: $threadId
-          cancelledBy: $cancelledBy
-          message: $message
-          checkIn: $checkIn
-          checkOut: $checkOut
-          guests: $guests
-        ) {
-          __typename
-          status
-          errorMessage
-        }
-      }
-      """
+      #"mutation CancelReservation($reservationId: Int!, $cancellationPolicy: String!, $refundToGuest: Float!, $payoutToHost: Float!, $guestServiceFee: Float!, $hostServiceFee: Float!, $total: Float!, $currency: String!, $threadId: Int!, $cancelledBy: String!, $message: String!, $checkIn: String!, $checkOut: String!, $guests: Int!) { cancelReservation( reservationId: $reservationId cancellationPolicy: $cancellationPolicy refundToGuest: $refundToGuest payoutToHost: $payoutToHost guestServiceFee: $guestServiceFee hostServiceFee: $hostServiceFee total: $total currency: $currency threadId: $threadId cancelledBy: $cancelledBy message: $message checkIn: $checkIn checkOut: $checkOut guests: $guests ) { __typename status errorMessage } }"#
     ))
 
   public var reservationId: Int
@@ -99,10 +76,10 @@ public class CancelReservationMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("cancelReservation", CancelReservation?.self, arguments: [
         "reservationId": .variable("reservationId"),
         "cancellationPolicy": .variable("cancellationPolicy"),
@@ -128,10 +105,11 @@ public class CancelReservationMutation: GraphQLMutation {
     /// Parent Type: `Reservationlist`
     public struct CancelReservation: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.Reservationlist }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Reservationlist }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
       ] }

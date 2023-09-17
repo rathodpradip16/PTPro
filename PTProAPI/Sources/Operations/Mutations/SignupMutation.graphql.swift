@@ -5,57 +5,9 @@
 
 public class SignupMutation: GraphQLMutation {
   public static let operationName: String = "Signup"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      mutation Signup($firstName: String, $lastName: String, $email: String!, $password: String!, $dateOfBirth: String, $deviceType: String!, $deviceDetail: String, $deviceId: String!, $registerType: String) {
-        createUser(
-          firstName: $firstName
-          lastName: $lastName
-          email: $email
-          password: $password
-          dateOfBirth: $dateOfBirth
-          deviceType: $deviceType
-          deviceDetail: $deviceDetail
-          deviceId: $deviceId
-          registerType: $registerType
-        ) {
-          __typename
-          result {
-            __typename
-            userId
-            userToken
-            user {
-              __typename
-              firstName
-              lastName
-              gender
-              dateOfBirth
-              phoneNumber
-              preferredLanguage
-              preferredCurrency
-              createdAt
-              picture
-              verification {
-                __typename
-                id
-                isPhoneVerified
-                isEmailConfirmed
-                isIdVerification
-                isGoogleConnected
-                isFacebookConnected
-              }
-              userData {
-                __typename
-                type
-              }
-            }
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"mutation Signup($firstName: String, $lastName: String, $email: String!, $password: String!, $dateOfBirth: String, $deviceType: String!, $deviceDetail: String, $deviceId: String!, $registerType: String) { createUser( firstName: $firstName lastName: $lastName email: $email password: $password dateOfBirth: $dateOfBirth deviceType: $deviceType deviceDetail: $deviceDetail deviceId: $deviceId registerType: $registerType ) { __typename result { __typename userId userToken user { __typename firstName lastName gender dateOfBirth phoneNumber preferredLanguage preferredCurrency createdAt picture verification { __typename id isPhoneVerified isEmailConfirmed isIdVerification isGoogleConnected isFacebookConnected } userData { __typename type } } } status errorMessage } }"#
     ))
 
   public var firstName: GraphQLNullable<String>
@@ -104,10 +56,10 @@ public class SignupMutation: GraphQLMutation {
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Mutation }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("createUser", CreateUser?.self, arguments: [
         "firstName": .variable("firstName"),
         "lastName": .variable("lastName"),
@@ -128,10 +80,11 @@ public class SignupMutation: GraphQLMutation {
     /// Parent Type: `UserCommon`
     public struct CreateUser: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.UserCommon }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserCommon }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("result", Result?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -146,10 +99,11 @@ public class SignupMutation: GraphQLMutation {
       /// Parent Type: `UserType`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.UserType }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserType }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("userId", String?.self),
           .field("userToken", String?.self),
           .field("user", User?.self),
@@ -164,10 +118,11 @@ public class SignupMutation: GraphQLMutation {
         /// Parent Type: `UserEditProfile`
         public struct User: PTProAPI.SelectionSet {
           public let __data: DataDict
-          public init(data: DataDict) { __data = data }
+          public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: ParentType { PTProAPI.Objects.UserEditProfile }
-          public static var __selections: [Selection] { [
+          public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserEditProfile }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
             .field("firstName", String?.self),
             .field("lastName", String?.self),
             .field("gender", String?.self),
@@ -198,10 +153,11 @@ public class SignupMutation: GraphQLMutation {
           /// Parent Type: `UserVerifiedInfo`
           public struct Verification: PTProAPI.SelectionSet {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ParentType { PTProAPI.Objects.UserVerifiedInfo }
-            public static var __selections: [Selection] { [
+            public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserVerifiedInfo }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
               .field("id", Int?.self),
               .field("isPhoneVerified", Bool?.self),
               .field("isEmailConfirmed", Bool?.self),
@@ -223,10 +179,11 @@ public class SignupMutation: GraphQLMutation {
           /// Parent Type: `UserProfile`
           public struct UserData: PTProAPI.SelectionSet {
             public let __data: DataDict
-            public init(data: DataDict) { __data = data }
+            public init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: ParentType { PTProAPI.Objects.UserProfile }
-            public static var __selections: [Selection] { [
+            public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.UserProfile }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
               .field("type", String?.self),
             ] }
 

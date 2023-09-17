@@ -5,35 +5,19 @@
 
 public class GetCurrenciesListQuery: GraphQLQuery {
   public static let operationName: String = "getCurrenciesList"
-  public static let document: ApolloAPI.DocumentType = .notPersisted(
+  public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      """
-      query getCurrenciesList {
-        getCurrencies {
-          __typename
-          results {
-            __typename
-            id
-            symbol
-            isEnable
-            isPayment
-            isBaseCurrency
-          }
-          status
-          errorMessage
-        }
-      }
-      """
+      #"query getCurrenciesList { getCurrencies { __typename results { __typename id symbol isEnable isPayment isBaseCurrency } status errorMessage } }"#
     ))
 
   public init() {}
 
   public struct Data: PTProAPI.SelectionSet {
     public let __data: DataDict
-    public init(data: DataDict) { __data = data }
+    public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Selection] { [
+    public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Query }
+    public static var __selections: [ApolloAPI.Selection] { [
       .field("getCurrencies", GetCurrencies?.self),
     ] }
 
@@ -44,10 +28,11 @@ public class GetCurrenciesListQuery: GraphQLQuery {
     /// Parent Type: `AllCurrenciesType`
     public struct GetCurrencies: PTProAPI.SelectionSet {
       public let __data: DataDict
-      public init(data: DataDict) { __data = data }
+      public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: ParentType { PTProAPI.Objects.AllCurrenciesType }
-      public static var __selections: [Selection] { [
+      public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.AllCurrenciesType }
+      public static var __selections: [ApolloAPI.Selection] { [
+        .field("__typename", String.self),
         .field("results", [Result?]?.self),
         .field("status", Int?.self),
         .field("errorMessage", String?.self),
@@ -62,10 +47,11 @@ public class GetCurrenciesListQuery: GraphQLQuery {
       /// Parent Type: `Currencies`
       public struct Result: PTProAPI.SelectionSet {
         public let __data: DataDict
-        public init(data: DataDict) { __data = data }
+        public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: ParentType { PTProAPI.Objects.Currencies }
-        public static var __selections: [Selection] { [
+        public static var __parentType: ApolloAPI.ParentType { PTProAPI.Objects.Currencies }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
           .field("id", Int?.self),
           .field("symbol", String?.self),
           .field("isEnable", Bool?.self),
