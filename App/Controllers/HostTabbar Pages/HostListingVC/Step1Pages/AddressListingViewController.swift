@@ -10,7 +10,6 @@ import UIKit
 import MapKit
 import Lottie
 import IQKeyboardManagerSwift
-import PTProAPI
 
 class AddressListingViewController: BaseHostTableviewController, CountryDelegate {
 

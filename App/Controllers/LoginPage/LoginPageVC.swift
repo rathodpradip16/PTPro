@@ -10,7 +10,6 @@ import UIKit
 import IQKeyboardManagerSwift
 import Lottie
 import Apollo
-import PTProAPI
 
 class LoginPageVC: UIViewController {
     

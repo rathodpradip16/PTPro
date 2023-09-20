@@ -8,7 +8,6 @@
 
 import UIKit
 import Apollo
-import PTProAPI
 
 class BookingstepOneVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
    

@@ -10,7 +10,6 @@ import UIKit
 import IQKeyboardManagerSwift
 import Lottie
 import SwiftMessages
-import PTProAPI
 
 protocol CountryDelegate {
     func setSelectedCountry(selectedCountry : String, selectedcountryCode : String,selectdialcode : String)

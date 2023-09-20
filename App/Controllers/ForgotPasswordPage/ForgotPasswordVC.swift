@@ -10,7 +10,6 @@ import UIKit
 import IQKeyboardManagerSwift
 import Lottie
 import SwiftMessages
-import PTProAPI
 
 class ForgotPasswordVC: UIViewController {
     

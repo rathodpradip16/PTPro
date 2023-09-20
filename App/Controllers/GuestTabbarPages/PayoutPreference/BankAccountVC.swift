@@ -10,7 +10,6 @@ import UIKit
 import Apollo
 import Lottie
 import Stripe
-import PTProAPI
 
 class BankAccountVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,WebviewVCDelegate,UIPickerViewDelegate, UIPickerViewDataSource{
     func onSuccessPayPalPayment(isSuccess: Bool,toastermsg: String,successURL: URL?) {

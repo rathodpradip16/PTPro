@@ -16,7 +16,6 @@ import Apollo
 import Lottie
 import SDWebImage
 import ISPageControl
-import PTProAPI
 
 protocol GuestDetailVCDelegate: class {
     func removeWhishlistAPICall()

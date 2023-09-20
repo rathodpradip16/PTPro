@@ -8,7 +8,6 @@
 import UIKit
 import Lottie
 import SwiftMessages
-import PTProAPI
 
 
 protocol PlaceListingViewControllerDelegate {

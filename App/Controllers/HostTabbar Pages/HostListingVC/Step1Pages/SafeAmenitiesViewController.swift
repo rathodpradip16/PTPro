@@ -8,7 +8,6 @@
 
 import UIKit
 import Lottie
-import PTProAPI
 
 class SafeAmenitiesViewController: BaseHostTableviewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     

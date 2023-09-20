@@ -13,7 +13,6 @@ import GooglePlaces
 import GooglePlacePicker
 import MaterialComponents
 import Lottie
-import PTProAPI
 
 class FloatMapVC: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,CLLocationManagerDelegate,GMSMapViewDelegate,UIScrollViewDelegate, WhishlistPageVCProtocol{
    

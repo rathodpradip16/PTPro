@@ -10,7 +10,6 @@ import UIKit
 import WebKit
 import Lottie
 import Apollo
-import PTProAPI
 
 protocol WebviewVCDelegate {
     func setPayoutCall(accountid:String)

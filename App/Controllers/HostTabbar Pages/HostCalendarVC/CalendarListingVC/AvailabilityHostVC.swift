@@ -10,7 +10,6 @@ import UIKit
 import Apollo
 import IQKeyboardManagerSwift
 import Toast_Swift
-import PTProAPI
 
 protocol AvailabilityHostVCDelegate {
      // func manageListingAPICall()

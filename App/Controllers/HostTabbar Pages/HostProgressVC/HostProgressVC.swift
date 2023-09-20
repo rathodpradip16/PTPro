@@ -12,7 +12,6 @@ import Lottie
 import SkeletonView
 import SwiftMessages
 import MessageUI
-import PTProAPI
 
 class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource, SkeletonTableViewDataSource,MFMailComposeViewControllerDelegate {
     

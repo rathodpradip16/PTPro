@@ -10,7 +10,6 @@ import UIKit
 import IQKeyboardManagerSwift
 import Apollo
 import Lottie
-import PTProAPI
 
 
 protocol ContacthostVCDelegate {
@@ -134,7 +133,7 @@ func ContacthostAPICall(message:String)
     Network.shared.apollo_headerClient.perform(mutation: contacthostMutation){  response in
             switch response {
             case .success(let result):
-                if let data = result.data?.createEnquiry?.status,data == 200 {
+                if let dicData = result.data?.createEnquiry?.status,dicData == 200 {
                     self.lottieView.isHidden = true
                      self.sendBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"sendmessage"))!)", for: .normal)
                      

@@ -9,7 +9,6 @@
 import UIKit
 import Apollo
 import Lottie
-import PTProAPI
 
 class PhonekitVC: UIViewController,UITextFieldDelegate,CountryDelegate{
     func setSelectedCountry(selectedCountry: String, selectedcountryCode: String, selectdialcode: String) {

@@ -47,6 +47,8 @@ pod 'Shimmer', '~> 1.0.2'
 pod 'SkeletonView'
 pod 'JXPageControl'
 pod "FlexiblePageControl"
+pod "Apollo"
+pod 'StepIndicator'
 end
 
 post_install do |installer|

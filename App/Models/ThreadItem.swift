@@ -8,7 +8,6 @@
 
 import Foundation
 import Apollo
-import PTProAPI
 
 struct ThreadItems {
     var id: Int = 0

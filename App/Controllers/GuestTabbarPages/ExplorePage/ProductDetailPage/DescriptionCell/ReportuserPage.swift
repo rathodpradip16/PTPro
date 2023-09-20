@@ -9,7 +9,6 @@
 import UIKit
 import Apollo
 import Lottie
-import PTProAPI
 
 class ReportuserPage: UIViewController,UITableViewDelegate,UITableViewDataSource {
    

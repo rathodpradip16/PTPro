@@ -11,7 +11,6 @@ import Apollo
 import Lottie
 import SkeletonView
 import SwiftMessages
-import PTProAPI
 
 class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate,SkeletonTableViewDataSource{
    

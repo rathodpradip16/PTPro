@@ -28,7 +28,7 @@ type Query {
   getListingDetails(listId: String!, preview: Boolean): AllListing
   getSimilarListing(lat: Float, lng: Float, listId: Int, limit: Int): AllList
   getReviews(listId: Int, currentPage: Int, hostId: String!): AllReview
-  SearchListing(personCapacity: Int, dates: String, currentPage: Int, lat: Float, lng: Float, roomType: [Int], bedrooms: Int, bathrooms: Int, beds: Int, amenities: [Int], spaces: [Int], houseRules: [Int], priceRange: [Int], geography: String, bookingType: String, geoType: String, address: String, currency: String): SearchListing
+  SearchListing(userId: String, personCapacity: Int, dates: String, currentPage: Int, lat: Float, lng: Float, roomType: [Int], bedrooms: Int, bathrooms: Int, beds: Int, amenities: [Int], spaces: [Int], houseRules: [Int], priceRange: [Int], geography: String, bookingType: String, geoType: String, address: String, currency: String, checkIn: String, checkOut: String, city: String): SearchListing
   dateAvailability(listId: Int!, startDate: String!, endDate: String!): DateAvailabilityType
   getListingSettingsCommon(step: String): listingSettingCommonTypes
   getAllReservation(userType: String, currentPage: Int, dateFilter: String): AllReservation
@@ -74,7 +74,7 @@ type Query {
   getPopularLocations: PopularLocationCommonType
   getApplicationVersionInfo(appType: String!, version: String!): SiteSettingsCommon
   getcouponuse(userId: String, couponCode: String, listId: Int): Couponmanager
-  getHostSuggested(userId: String, currentPage: Int, lat: Float, lng: Float): HostSuggested
+  getHostSuggested(userId: String, currentPage: Int, lat: Float, lng: Float, priceRange: [Int]): HostSuggested
   getcouponcode(userId: String, couponType: String, listId: Int, subscriptionType: String): Couponmanager
 }
 
@@ -1610,7 +1610,7 @@ type HostSuggested {
   lng: Float
   dates: String
   results: [ShowListing]
-  status: String
+  status: Int
   errorMessage: String
 }
 

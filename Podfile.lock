@@ -1,6 +1,9 @@
 PODS:
   - AARatingBar (1.2)
   - Alamofire (5.8.0)
+  - Apollo (1.5.0):
+    - Apollo/Core (= 1.5.0)
+  - Apollo/Core (1.5.0)
   - AppAuth (1.6.2):
     - AppAuth/Core (= 1.6.2)
     - AppAuth/ExternalUserAgent (= 1.6.2)
@@ -275,6 +278,7 @@ PODS:
   - SkeletonView (1.30.4)
   - SKPhotoBrowser (7.1.0)
   - SnapKit (5.6.0)
+  - StepIndicator (1.0.8)
   - Stripe (22.8.4):
     - Stripe/Stripe3DS2 (= 22.8.4)
     - StripeApplePay (= 22.8.4)
@@ -300,6 +304,7 @@ PODS:
 DEPENDENCIES:
   - AARatingBar
   - Alamofire
+  - Apollo
   - AssetsPickerViewController
   - Braintree
   - BraintreeDropIn
@@ -335,6 +340,7 @@ DEPENDENCIES:
   - Siren (~> 5.5.1)
   - SkeletonView
   - SKPhotoBrowser
+  - StepIndicator
   - Stripe
   - STTabbar
   - SwiftMessages
@@ -346,6 +352,7 @@ SPEC REPOS:
   trunk:
     - AARatingBar
     - Alamofire
+    - Apollo
     - AppAuth
     - AssetsPickerViewController
     - Braintree
@@ -399,6 +406,7 @@ SPEC REPOS:
     - SkeletonView
     - SKPhotoBrowser
     - SnapKit
+    - StepIndicator
     - Stripe
     - StripeApplePay
     - StripeCore
@@ -412,6 +420,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   AARatingBar: dc54d24687ae97688ffdb29738332d0bc5c0c09f
   Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
+  Apollo: 1e0ce95366a1c408fd7d053456c9dc048a6d7334
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   AssetsPickerViewController: 4343e10ace86e425097043c17efa145c1ec868ce
   Braintree: fcbdb324318cdf0562719c4d5629cdf71f29c220
@@ -465,6 +474,7 @@ SPEC CHECKSUMS:
   SkeletonView: 5a050f6411e697abd4cda0a8d767013399dccd69
   SKPhotoBrowser: cd95b95a6f352fc2a50992721299f75ead77f9ab
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  StepIndicator: 748b293f671355b021253f82031ac002f153dc81
   Stripe: 59f6659e8ea413def19c97c57e23f5ec6ea48cf8
   StripeApplePay: 6e9aebd3d248464836e9fbdaef6e5fb1817d56a6
   StripeCore: 193f27552fb98108ebfe0df11651fe5f38948305
@@ -475,6 +485,6 @@ SPEC CHECKSUMS:
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   WHTabbar: add14cb164535a8e5db2068c85a6c523345b681f
 
-PODFILE CHECKSUM: bb110ca80485b1718e043774306510e584be2730
+PODFILE CHECKSUM: 48a3b23d57be116b45fa3ff2028b7f8874ca433b
 
 COCOAPODS: 1.12.1

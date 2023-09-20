@@ -13,7 +13,6 @@ import ISPageControl
 import FlexiblePageControl
 import SKPhotoBrowser
 import Lottie
-import PTProAPI
 
 protocol ListVCProtocol
 {

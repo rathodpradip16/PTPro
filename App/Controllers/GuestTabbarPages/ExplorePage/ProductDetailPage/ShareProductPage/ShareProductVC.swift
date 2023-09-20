@@ -9,7 +9,6 @@
 import UIKit
 import Toast_Swift
 import MessageUI
-import PTProAPI
 
 class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource,MFMailComposeViewControllerDelegate,MFMessageComposeViewControllerDelegate {
     

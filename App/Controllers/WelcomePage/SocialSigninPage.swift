@@ -11,7 +11,6 @@ import FBSDKLoginKit
 import GoogleSignIn
 import Lottie
 import AuthenticationServices
-import PTProAPI
 
 class SocialSigninPage: UIViewController {
     

@@ -8,7 +8,6 @@
 
 import UIKit
 import Lottie
-import PTProAPI
 
 class BedsListingViewController: BaseHostTableviewController {
 

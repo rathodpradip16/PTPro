@@ -178,6 +178,7 @@ code_sign_if_enabled() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/AARatingBar/AARatingBar.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Apollo/Apollo.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AssetsPickerViewController/AssetsPickerViewController.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Braintree/Braintree.framework"
@@ -223,6 +224,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Siren/Siren.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SkeletonView/SkeletonView.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/StepIndicator/StepIndicator.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Stripe/Stripe.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripeApplePay/StripeApplePay.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripeCore/StripeCore.framework"
@@ -240,6 +242,7 @@ fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/AARatingBar/AARatingBar.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Apollo/Apollo.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AssetsPickerViewController/AssetsPickerViewController.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Braintree/Braintree.framework"
@@ -285,6 +288,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Siren/Siren.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SkeletonView/SkeletonView.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/StepIndicator/StepIndicator.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Stripe/Stripe.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripeApplePay/StripeApplePay.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripeCore/StripeCore.framework"

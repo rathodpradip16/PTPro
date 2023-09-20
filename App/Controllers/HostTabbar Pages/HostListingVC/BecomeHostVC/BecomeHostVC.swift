@@ -9,7 +9,6 @@
 import UIKit
 import Apollo
 import Lottie
-import PTProAPI
 
 class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
    

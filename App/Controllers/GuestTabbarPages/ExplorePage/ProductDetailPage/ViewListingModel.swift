@@ -9,7 +9,6 @@
 import Foundation
 import Apollo
 import SKPhotoBrowser
-import PTProAPI
 
 class viewListingModel{
     

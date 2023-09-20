@@ -14,7 +14,6 @@ import BraintreeDropIn
 import Lottie
 import Apollo
 import SwiftMessages
-import PTProAPI
 
 class PaymentSelectionPage: UIViewController {
 

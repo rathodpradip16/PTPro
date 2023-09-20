@@ -10,7 +10,6 @@ import UIKit
 import Lottie
 import IQKeyboardManagerSwift
 import SwiftMessages
-import PTProAPI
 
 class DiscountViewController: BaseHostTableviewController {
     

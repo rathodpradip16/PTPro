@@ -1,6 +1,7 @@
 ${PODS_ROOT}/Target Support Files/Pods-App/Pods-App-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/AARatingBar/AARatingBar.framework
 ${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
+${BUILT_PRODUCTS_DIR}/Apollo/Apollo.framework
 ${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework
 ${BUILT_PRODUCTS_DIR}/AssetsPickerViewController/AssetsPickerViewController.framework
 ${BUILT_PRODUCTS_DIR}/Braintree/Braintree.framework
@@ -46,6 +47,7 @@ ${BUILT_PRODUCTS_DIR}/ShimmerSwift/ShimmerSwift.framework
 ${BUILT_PRODUCTS_DIR}/Siren/Siren.framework
 ${BUILT_PRODUCTS_DIR}/SkeletonView/SkeletonView.framework
 ${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework
+${BUILT_PRODUCTS_DIR}/StepIndicator/StepIndicator.framework
 ${BUILT_PRODUCTS_DIR}/Stripe/Stripe.framework
 ${BUILT_PRODUCTS_DIR}/StripeApplePay/StripeApplePay.framework
 ${BUILT_PRODUCTS_DIR}/StripeCore/StripeCore.framework

@@ -21,7 +21,6 @@ import FirebaseMessaging
 import Siren
 import Braintree
 import PayPalCheckout
-import PTProAPI
 
 //#import "PayPalMobile.h"
 

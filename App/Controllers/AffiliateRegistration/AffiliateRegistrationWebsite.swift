@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AffiliateRegistrationWebsite: UIViewController {
+class AffiliateRegistrationWebsite: AffiliateRegistration {
 
     override func viewDidLoad() {
         super.viewDidLoad()

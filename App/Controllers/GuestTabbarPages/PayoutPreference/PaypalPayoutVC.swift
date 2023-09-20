@@ -11,7 +11,6 @@ import Apollo
 import Lottie
 import IQKeyboardManagerSwift
 import SwiftMessages
-import PTProAPI
 
 class PaypalPayoutVC: UIViewController,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,LanguageVCDelegate {
     func didupdateAppearanceStatus() {

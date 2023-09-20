@@ -10,7 +10,6 @@ import UIKit
 import Apollo
 import Lottie
 import SkeletonView
-import PTProAPI
 
 protocol CalendarListingVCProtocol
 {

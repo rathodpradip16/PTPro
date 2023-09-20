@@ -9,7 +9,6 @@
 import UIKit
 import Lottie
 import IQKeyboardManagerSwift
-import PTProAPI
 
 class SignUpViewController: UIViewController {
 

@@ -9,7 +9,6 @@
 import UIKit
 import SCPageControl
 import Apollo
-import PTProAPI
 
 class WhyhostVC: UIViewController,UIScrollViewDelegate {
     @IBOutlet weak var backBtn: UIButton!

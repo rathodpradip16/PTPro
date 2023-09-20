@@ -10,7 +10,6 @@ import UIKit
 import IQKeyboardManagerSwift
 import Apollo
 import SwiftMessages
-import PTProAPI
 
 
 class ListingDescriptionVC: BaseHostTableviewController,UITextViewDelegate {

@@ -10,7 +10,6 @@ import UIKit
 import Apollo
 import  Lottie
 import SwiftMessages
-import PTProAPI
 
 
 
@@ -377,8 +376,24 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
                 
             }
         }else if indexPath.row == 1 {
-            cell.profileSettingLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"BecomeAffiliateMarketer") ?? "Become a Affiliate Marketer")"
-            cell.iconImage.image =  #imageLiteral(resourceName: "switch-to-travelling-25")
+            if let stepInfo = Utility.shared.GetAffiliateUserStep?.stepInfo{
+                switch stepInfo{
+                case StepInfo.None.rawValue:
+                    cell.profileSettingLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"BecomeAffiliateMarketer") ?? "Become a Affiliate Marketer")"
+                    cell.iconImage.image =  #imageLiteral(resourceName: "switch-to-travelling-25")
+                    break
+                case StepInfo.Account.rawValue:
+                    break
+                case StepInfo.Website.rawValue:
+                    break
+                case StepInfo.Documents.rawValue:
+                    break
+                case StepInfo.Success.rawValue:
+                    break
+                default:
+                    break
+                }
+            }
         }
         
         
@@ -488,73 +503,77 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         }
     }else if indexPath.section == 1{
         if Utility.shared.isConnectedToNetwork(){
-            if(!Utility.shared.getTabbar()!)
-            {
+            if (indexPath.row == 0){
                 
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                Utility.shared.isfromGuestProfile = true
-                
-                
-                Utility.shared.host_message_isfrommessage = true
-                Utility.shared.host_message_isfromHost = true
-                
-                let SplashObj = SwitchTravelAndHostVC()
-                
-                if Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification || Utility.shared.isfromBackroundBooking || Utility.shared.isfromOfflineBooking{
-                    Utility.shared.isfromHost = true
-                    Utility.shared.isfromNotificationHost = false
-                    Utility.shared.isfromOfflineNotification = false
-                    Utility.shared.isfromBackroundBooking = false
-                    Utility.shared.isfromOfflineBooking = false
+                if(!Utility.shared.getTabbar()!)
+                {
+                    
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    Utility.shared.isfromGuestProfile = true
+                    
+                    
+                    Utility.shared.host_message_isfrommessage = true
+                    Utility.shared.host_message_isfromHost = true
+                    
+                    let SplashObj = SwitchTravelAndHostVC()
+                    
+                    if Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification || Utility.shared.isfromBackroundBooking || Utility.shared.isfromOfflineBooking{
+                        Utility.shared.isfromHost = true
+                        Utility.shared.isfromNotificationHost = false
+                        Utility.shared.isfromOfflineNotification = false
+                        Utility.shared.isfromBackroundBooking = false
+                        Utility.shared.isfromOfflineBooking = false
+                        Utility.shared.isfromGuestProfile = false
+                    }else{
+                        Utility.shared.isfromHost = false
+                    }
+                    SplashObj.modalPresentationStyle = .fullScreen
+                    self.present(SplashObj, animated: false) {
+                        // appDelegate.settingRootViewControllerFunction()
+                    }
+                    
+                    
+                    
+                }
+                else
+                {
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    Utility.shared.setTab(index: 0)
                     Utility.shared.isfromGuestProfile = false
-                }else{
-                    Utility.shared.isfromHost = false
+                    Utility.shared.host_message_isfromHost = false
+                    Utility.shared.host_message_isfrommessage = false
+                    Utility.shared.isfromfloatmap_Page = false
+                    Utility.shared.locationfromSearch  = ""
+                    Utility.shared.TotalFilterCount = 0
+                    if(Utility.shared.searchLocationDict.count > 0)
+                    {
+                        Utility.shared.searchLocationDict.setValue(nil, forKey: "lat")
+                        Utility.shared.searchLocationDict.setValue(nil, forKey: "lon")
+                    }
+                    Utility.shared.instantBook = ""
+                    Utility.shared.roomtypeArray.removeAllObjects()
+                    Utility.shared.amenitiesArray.removeAllObjects()
+                    Utility.shared.priceRangeArray.removeAllObjects()
+                    Utility.shared.facilitiesArray.removeAllObjects()
+                    Utility.shared.houseRulesArray.removeAllObjects()
+                    Utility.shared.beds_count = 0
+                    Utility.shared.bedrooms_count = 0
+                    Utility.shared.bathroom_count = 0
+                    if(Utility.shared.isSwitchEnable)
+                    {
+                        Utility.shared.isSwitchEnable = false
+                    }
+                    Utility.shared.isfromHost = true
+                    let switchObj = SwitchTravelAndHostVC()
+                    switchObj.modalPresentationStyle = .fullScreen
+                    self.view.window?.rootViewController!.present(switchObj, animated: false) {
+                    }
+                    
                 }
-                SplashObj.modalPresentationStyle = .fullScreen
-                self.present(SplashObj, animated: false) {
-                    // appDelegate.settingRootViewControllerFunction()
-                }
-                
-                
-                
-            }
-            else
-            {
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                Utility.shared.setTab(index: 0)
-                Utility.shared.isfromGuestProfile = false
-                Utility.shared.host_message_isfromHost = false
-                Utility.shared.host_message_isfrommessage = false
-                Utility.shared.isfromfloatmap_Page = false
-                Utility.shared.locationfromSearch  = ""
-                Utility.shared.TotalFilterCount = 0
-                if(Utility.shared.searchLocationDict.count > 0)
-                {
-                    Utility.shared.searchLocationDict.setValue(nil, forKey: "lat")
-                    Utility.shared.searchLocationDict.setValue(nil, forKey: "lon")
-                }
-                Utility.shared.instantBook = ""
-                Utility.shared.roomtypeArray.removeAllObjects()
-                Utility.shared.amenitiesArray.removeAllObjects()
-                Utility.shared.priceRangeArray.removeAllObjects()
-                Utility.shared.facilitiesArray.removeAllObjects()
-                Utility.shared.houseRulesArray.removeAllObjects()
-                Utility.shared.beds_count = 0
-                Utility.shared.bedrooms_count = 0
-                Utility.shared.bathroom_count = 0
-                if(Utility.shared.isSwitchEnable)
-                {
-                    Utility.shared.isSwitchEnable = false
-                }
-                Utility.shared.isfromHost = true
-                let switchObj = SwitchTravelAndHostVC()
-                switchObj.modalPresentationStyle = .fullScreen
-                self.view.window?.rootViewController!.present(switchObj, animated: false) {
-                }
+            }else{
                 
             }
-        }
-        else{
+        } else{
             self.offlineView.isHidden = false
             let shadowSize2 : CGFloat = 3.0
             let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,

@@ -10,7 +10,6 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 import GooglePlacePicker
-import PTProAPI
 
 class MapPageVC: UIViewController,GMSMapViewDelegate {
 
