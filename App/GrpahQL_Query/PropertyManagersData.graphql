@@ -1,0 +1,25 @@
+query getPropertyManagersData($userId: String,$filter:String,$graphType: String,$startDate:String,$endDate:String){
+getPropertyManagersData(userId:$userId,filter:$filter,,graphType:$graphType,startDate:$startDate,endDate:$endDate){
+Inquiry_to_Booking_Conversion_Rate
+Occupancy_Rate
+Average_Daily_Rate
+RevPAR
+total1
+total2
+rate
+filter
+graphType
+status
+errorMessage
+graphData{
+data1{
+graphDate
+value
+}
+data2{
+graphDate
+value
+}
+}
+}
+}

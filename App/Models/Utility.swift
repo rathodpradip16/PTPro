@@ -91,7 +91,8 @@ public class Utility: NSObject {
     // Explore Page Call back
    var recommendListingArray = [GetDefaultSettingQuery.Data.GetRecommend.Result]()
 //    var mostListingArray = [GetDefaultSettingQuery.Data.GetMostViewedListing.Result]()
-    
+    var GetAffiliateUserStep: GetAffiliateUserStepQuery.Data.GetAffiliateUserStep?
+
     //MARK: - Receipt Page
     var isreceiptAccepted : Bool = false
     var showbedRoomCount: Bool = false

@@ -1,0 +1,6 @@
+mutation createAffiliateUserAccountInfo($userId: String, $payeeName: String, $address: String, $city: String, $state: String, $zipcode: Int, $country: String, $phoneNumber: String) {
+createAffiliateUserAccountInfo (userId: $userId, payeeName: $payeeName, address: $address,city: $city, state: $state, zipcode: $zipcode, country: $country,phoneNumber: $phoneNumber) {
+status
+errorMessage
+}
+}

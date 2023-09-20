@@ -1,0 +1,8 @@
+mutation createAffiliateUserWebList($userId: String, $websiteName: String, $websiteUrl: String, $websiteAbout: String,$typeList: String, $websiteDrive: String,$primryJoining: String, $websiteVisitors: String,$buildLinks: String, $websiteMonitize: String) {
+createAffiliateUserWebList (userId: $userId, websiteName: $websiteName, websiteUrl: $websiteUrl, websiteAbout: $websiteAbout, typeList: $typeList, websiteDrive: $websiteDrive, primryJoining: $primryJoining,websiteVisitors: $websiteVisitors,buildLinks: $buildLinks,websiteMonitize: $websiteMonitize){
+status
+errorMessage
+}
+}
+
+

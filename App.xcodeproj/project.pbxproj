@@ -80,6 +80,7 @@
 		2CFE2EA222FAD2260064D9C4 /* HouseRulesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CFE2EA022FAD2260064D9C4 /* HouseRulesViewController.xib */; };
 		2CFE2EA522FAD6440064D9C4 /* BookInstantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFE2EA322FAD6440064D9C4 /* BookInstantViewController.swift */; };
 		2CFE2EA622FAD6440064D9C4 /* BookInstantViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CFE2EA422FAD6440064D9C4 /* BookInstantViewController.xib */; };
+		76015B4A2AB8BFD3002FA9EF /* createAffiliateUserWebList.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76015B3B2AB8BFD1002FA9EF /* createAffiliateUserWebList.graphql */; };
 		764276A22AB1CA34005FA2A5 /* AffiliateRegistrationAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764276A02AB1CA34005FA2A5 /* AffiliateRegistrationAccount.swift */; };
 		764276A32AB1CA34005FA2A5 /* AffiliateRegistrationAccount.xib in Resources */ = {isa = PBXBuildFile; fileRef = 764276A12AB1CA34005FA2A5 /* AffiliateRegistrationAccount.xib */; };
 		764276A62AB1CA51005FA2A5 /* AffiliateRegistrationWebsite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764276A42AB1CA51005FA2A5 /* AffiliateRegistrationWebsite.swift */; };
@@ -88,7 +89,19 @@
 		764276AB2AB1CA68005FA2A5 /* AffiliateRegistrationDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 764276A92AB1CA68005FA2A5 /* AffiliateRegistrationDocument.xib */; };
 		7669E93E2AB6C32900938861 /* ThreadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669E93D2AB6C32900938861 /* ThreadItem.swift */; };
 		766F79492AB582C70004DBF6 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 766F79482AB582C70004DBF6 /* Apollo */; };
-		767ACB0E2AB301BB00B27B60 /* getAffiliateUserStep.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 767ACB0D2AB301BB00B27B60 /* getAffiliateUserStep.graphql */; };
+		76B57C572AB95C4E00AEA63E /* AffiliateLink.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76B57C562AB95C4E00AEA63E /* AffiliateLink.graphql */; };
+		76B57C632AB95CB000AEA63E /* DashboardData.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76B57C582AB95CA600AEA63E /* DashboardData.graphql */; };
+		76B57C642AB95CB000AEA63E /* AffiliateUserStepSuccess.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76B57C592AB95CA800AEA63E /* AffiliateUserStepSuccess.graphql */; };
+		76B57C652AB95CB000AEA63E /* PropertyManagersData.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76B57C5A2AB95CA900AEA63E /* PropertyManagersData.graphql */; };
+		76B57C662AB95CB000AEA63E /* calculateOccupancyRate.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76B57C5B2AB95CAA00AEA63E /* calculateOccupancyRate.graphql */; };
+		76B57C672AB95CB000AEA63E /* AffiliateSearchListing.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76B57C5C2AB95CAB00AEA63E /* AffiliateSearchListing.graphql */; };
+		76B57C682AB95CB000AEA63E /* affiliateShowDocumentList.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76B57C5D2AB95CAC00AEA63E /* affiliateShowDocumentList.graphql */; };
+		76B57C692AB95CB000AEA63E /* createAffiliateUser.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76B57C5E2AB95CAD00AEA63E /* createAffiliateUser.graphql */; };
+		76B57C6A2AB95CB000AEA63E /* createAffiliateUserAccountInfo.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76B57C5F2AB95CAD00AEA63E /* createAffiliateUserAccountInfo.graphql */; };
+		76B57C6C2AB95CB000AEA63E /* coupon.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76B57C612AB95CAF00AEA63E /* coupon.graphql */; };
+		76B57C6F2AB95E1F00AEA63E /* ListingDetails.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76B57C6E2AB95E1F00AEA63E /* ListingDetails.graphql */; };
+		76B57C752AB963CE00AEA63E /* getAffiliateUserStep.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76B57C742AB963CE00AEA63E /* getAffiliateUserStep.graphql */; };
+		76B57C782AB9648600AEA63E /* PTProAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 76B57C772AB9648600AEA63E /* PTProAPI */; };
 		76DE9F6D2AB4A716003191ED /* schema.graphqls in Resources */ = {isa = PBXBuildFile; fileRef = 76DE9F6C2AB4A716003191ED /* schema.graphqls */; };
 		76DE9F702AB4AA42003191ED /* PTProAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 76DE9F6F2AB4AA42003191ED /* PTProAPI */; };
 		76DE9F782AB4BA98003191ED /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE9F772AB4BA98003191ED /* Network.swift */; };
@@ -718,6 +731,7 @@
 		2CFE2EA322FAD6440064D9C4 /* BookInstantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookInstantViewController.swift; sourceTree = "<group>"; };
 		2CFE2EA422FAD6440064D9C4 /* BookInstantViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BookInstantViewController.xib; sourceTree = "<group>"; };
 		6B3A00182DFE6443E9BE868E /* Pods_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		76015B3B2AB8BFD1002FA9EF /* createAffiliateUserWebList.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = createAffiliateUserWebList.graphql; sourceTree = "<group>"; };
 		764276A02AB1CA34005FA2A5 /* AffiliateRegistrationAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateRegistrationAccount.swift; sourceTree = "<group>"; };
 		764276A12AB1CA34005FA2A5 /* AffiliateRegistrationAccount.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AffiliateRegistrationAccount.xib; sourceTree = "<group>"; };
 		764276A42AB1CA51005FA2A5 /* AffiliateRegistrationWebsite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateRegistrationWebsite.swift; sourceTree = "<group>"; };
@@ -725,7 +739,18 @@
 		764276A82AB1CA68005FA2A5 /* AffiliateRegistrationDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateRegistrationDocument.swift; sourceTree = "<group>"; };
 		764276A92AB1CA68005FA2A5 /* AffiliateRegistrationDocument.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AffiliateRegistrationDocument.xib; sourceTree = "<group>"; };
 		7669E93D2AB6C32900938861 /* ThreadItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadItem.swift; sourceTree = "<group>"; };
-		767ACB0D2AB301BB00B27B60 /* getAffiliateUserStep.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = getAffiliateUserStep.graphql; sourceTree = "<group>"; };
+		76B57C562AB95C4E00AEA63E /* AffiliateLink.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AffiliateLink.graphql; sourceTree = "<group>"; };
+		76B57C582AB95CA600AEA63E /* DashboardData.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DashboardData.graphql; sourceTree = "<group>"; };
+		76B57C592AB95CA800AEA63E /* AffiliateUserStepSuccess.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AffiliateUserStepSuccess.graphql; sourceTree = "<group>"; };
+		76B57C5A2AB95CA900AEA63E /* PropertyManagersData.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PropertyManagersData.graphql; sourceTree = "<group>"; };
+		76B57C5B2AB95CAA00AEA63E /* calculateOccupancyRate.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calculateOccupancyRate.graphql; sourceTree = "<group>"; };
+		76B57C5C2AB95CAB00AEA63E /* AffiliateSearchListing.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AffiliateSearchListing.graphql; sourceTree = "<group>"; };
+		76B57C5D2AB95CAC00AEA63E /* affiliateShowDocumentList.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = affiliateShowDocumentList.graphql; sourceTree = "<group>"; };
+		76B57C5E2AB95CAD00AEA63E /* createAffiliateUser.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = createAffiliateUser.graphql; sourceTree = "<group>"; };
+		76B57C5F2AB95CAD00AEA63E /* createAffiliateUserAccountInfo.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = createAffiliateUserAccountInfo.graphql; sourceTree = "<group>"; };
+		76B57C612AB95CAF00AEA63E /* coupon.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = coupon.graphql; sourceTree = "<group>"; };
+		76B57C6E2AB95E1F00AEA63E /* ListingDetails.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ListingDetails.graphql; sourceTree = "<group>"; };
+		76B57C742AB963CE00AEA63E /* getAffiliateUserStep.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = getAffiliateUserStep.graphql; sourceTree = "<group>"; };
 		76DE9F6C2AB4A716003191ED /* schema.graphqls */ = {isa = PBXFileReference; lastKnownFileType = text; path = schema.graphqls; sourceTree = SOURCE_ROOT; };
 		76DE9F772AB4BA98003191ED /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		B50087AD22B76E4500DBC9A0 /* WebviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewVC.swift; sourceTree = "<group>"; };
@@ -1261,6 +1286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B54017D4282D4D9E006ECE28 /* PassKit.framework in Frameworks */,
+				76B57C782AB9648600AEA63E /* PTProAPI in Frameworks */,
 				766F79492AB582C70004DBF6 /* Apollo in Frameworks */,
 				C702F1BA2A38782F0A1B4075 /* Pods_App.framework in Frameworks */,
 				76DE9F702AB4AA42003191ED /* PTProAPI in Frameworks */,
@@ -1397,7 +1423,19 @@
 				B54E4FF1283E09A800643206 /* Terms.graphql */,
 				B5A2790F2851F2B0008E8F74 /* deleteuser.graphql */,
 				B51207BA28E48226001BA260 /* versionUpdate.graphql */,
-				767ACB0D2AB301BB00B27B60 /* getAffiliateUserStep.graphql */,
+				76015B3B2AB8BFD1002FA9EF /* createAffiliateUserWebList.graphql */,
+				76B57C562AB95C4E00AEA63E /* AffiliateLink.graphql */,
+				76B57C5C2AB95CAB00AEA63E /* AffiliateSearchListing.graphql */,
+				76B57C5D2AB95CAC00AEA63E /* affiliateShowDocumentList.graphql */,
+				76B57C592AB95CA800AEA63E /* AffiliateUserStepSuccess.graphql */,
+				76B57C5B2AB95CAA00AEA63E /* calculateOccupancyRate.graphql */,
+				76B57C612AB95CAF00AEA63E /* coupon.graphql */,
+				76B57C5E2AB95CAD00AEA63E /* createAffiliateUser.graphql */,
+				76B57C5F2AB95CAD00AEA63E /* createAffiliateUserAccountInfo.graphql */,
+				76B57C582AB95CA600AEA63E /* DashboardData.graphql */,
+				76B57C5A2AB95CA900AEA63E /* PropertyManagersData.graphql */,
+				76B57C6E2AB95E1F00AEA63E /* ListingDetails.graphql */,
+				76B57C742AB963CE00AEA63E /* getAffiliateUserStep.graphql */,
 			);
 			path = GrpahQL_Query;
 			sourceTree = "<group>";
@@ -2927,6 +2965,7 @@
 			packageProductDependencies = (
 				76DE9F6F2AB4AA42003191ED /* PTProAPI */,
 				766F79482AB582C70004DBF6 /* Apollo */,
+				76B57C772AB9648600AEA63E /* PTProAPI */,
 			);
 			productName = Rent_All;
 			productReference = B54D90FD223F9316003A4589 /* App.app */;
@@ -3012,8 +3051,8 @@
 			);
 			mainGroup = B54D90F4223F9316003A4589;
 			packageReferences = (
-				76DE9F6E2AB4AA42003191ED /* XCLocalSwiftPackageReference "PTProAPI" */,
 				766F79472AB582C70004DBF6 /* XCRemoteSwiftPackageReference "apollo-ios" */,
+				76B57C762AB9648600AEA63E /* XCLocalSwiftPackageReference "PTProAPI" */,
 			);
 			productRefGroup = B54D90FE223F9316003A4589 /* Products */;
 			projectDirPath = "";
@@ -3036,6 +3075,7 @@
 				B539F1E3293472E10010F36E /* price_tag_color.svg in Resources */,
 				2CFAA45E22FBF209004A2B2E /* LawAndTaxViewController.xib in Resources */,
 				B5605D0326006F260051F5D8 /* writeUserReview.graphql in Resources */,
+				76B57C632AB95CB000AEA63E /* DashboardData.graphql in Resources */,
 				B5FC84D72256005F003C8EAC /* AmenityDetailCell.xib in Resources */,
 				B528EF0C228E947300C99BFC /* checkTextviewCell.xib in Resources */,
 				B5771AB22244E0FF0070DD96 /* ProfilePageVC.xib in Resources */,
@@ -3091,6 +3131,8 @@
 				B5D4AF44230685550066BD3F /* payout.graphql in Resources */,
 				B574A0E2281A96E300D20E5B /* VerifiedInfoCell.xib in Resources */,
 				B5BD575F22AA33D0005B132D /* ReservationCancelCell.xib in Resources */,
+				76B57C682AB95CB000AEA63E /* affiliateShowDocumentList.graphql in Resources */,
+				76B57C652AB95CB000AEA63E /* PropertyManagersData.graphql in Resources */,
 				B553A3F6224CD30700138107 /* AmenitiesCell.xib in Resources */,
 				B5EE962A22578308004E4A2D /* ShareProductVC.xib in Resources */,
 				B56181502261E09400046766 /* animation.json in Resources */,
@@ -3155,6 +3197,7 @@
 				B552B53622F0128E0072E170 /* ListingDescriptionVC.xib in Resources */,
 				B56E0BF9282934E70038348E /* CancellationPolicyCell1.xib in Resources */,
 				B5408EE322FAD2310031E783 /* BlockCalendarCell.xib in Resources */,
+				76B57C6C2AB95CB000AEA63E /* coupon.graphql in Resources */,
 				B54BA46B22730E1900F6035B /* FacilitiesCell.xib in Resources */,
 				B532C3E12601DD46007AADF1 /* getPropertyReviews.graphql in Resources */,
 				2C98561722E87645004D960A /* TextFieldCell.xib in Resources */,
@@ -3174,6 +3217,7 @@
 				B54D9108223F9320003A4589 /* Assets.xcassets in Resources */,
 				2C3A19C4237D335C00021D3B /* Style.json in Resources */,
 				764276A72AB1CA51005FA2A5 /* AffiliateRegistrationWebsite.xib in Resources */,
+				76B57C6F2AB95E1F00AEA63E /* ListingDetails.graphql in Resources */,
 				2C5CBD9322E9726400723569 /* ListingSettings.graphql in Resources */,
 				B5EB004729310ED000E9FC11 /* currency.json in Resources */,
 				B501402B230AB7ED00C88EED /* BankAccountVC.xib in Resources */,
@@ -3211,6 +3255,7 @@
 				B5D26E342600F29F00383B6A /* reviewCollectionCell.xib in Resources */,
 				2C77EB1223BB4AA70014199D /* ReviewUserCell.xib in Resources */,
 				B5F5398226CB9787000AC0EE /* listApproval.graphql in Resources */,
+				76B57C752AB963CE00AEA63E /* getAffiliateUserStep.graphql in Resources */,
 				B587F790281BB083009D9842 /* BeVietnamPro-SemiBold.ttf in Resources */,
 				B50841B1289908D300D458E4 /* GuestListingNew.xib in Resources */,
 				B570951322AE2A52000E6A07 /* message.graphql in Resources */,
@@ -3234,6 +3279,7 @@
 				B572DC49258A440100FA66DF /* homelistingCell.xib in Resources */,
 				B56303CF22B20B4600ABAE78 /* ReceiverMessageonlyCell.xib in Resources */,
 				B52D5A79283CBADE00C83CE1 /* whyhost.graphql in Resources */,
+				76B57C572AB95C4E00AEA63E /* AffiliateLink.graphql in Resources */,
 				B501C7312282DF4200D4E0E5 /* Language.graphql in Resources */,
 				B50087B022B76E4500DBC9A0 /* WebviewVC.xib in Resources */,
 				B5C91A22227D98F500178B4E /* action_bar_host.png in Resources */,
@@ -3253,6 +3299,7 @@
 				B54E4FF2283E09A800643206 /* Terms.graphql in Resources */,
 				2CFAA45A22FBF1E9004A2B2E /* IncreaseEarningViewController.xib in Resources */,
 				B5CD192A227FF56A00A8D83E /* HeaderProfileCell.xib in Resources */,
+				76015B4A2AB8BFD3002FA9EF /* createAffiliateUserWebList.graphql in Resources */,
 				B5D61CF32260962E00152DB4 /* ResetPasswordVC.xib in Resources */,
 				B564CC0B23C5DFE600F8759C /* SocialSigninPage.xib in Resources */,
 				B5EAE9B6229FAC5600EFAAC3 /* BookingStepFourVC.xib in Resources */,
@@ -3264,7 +3311,6 @@
 				B54ED83A241B4D5100487C20 /* VerifyOTPPage.xib in Resources */,
 				B567AF7E2851E92000DC88B8 /* DeleteAccountVC.xib in Resources */,
 				B5E4CEE822A1015100FC9A3D /* ItenaryListCell.xib in Resources */,
-				767ACB0E2AB301BB00B27B60 /* getAffiliateUserStep.graphql in Resources */,
 				B553A3FA224CDF5100138107 /* RoomsCell.xib in Resources */,
 				B5CD193122800A6300A8D83E /* profile.graphql in Resources */,
 				B553A3DE224CA03600138107 /* InstantBookCell.xib in Resources */,
@@ -3318,8 +3364,10 @@
 				B545164622AFCD60006D7009 /* sendCell.xib in Resources */,
 				B5B084012897B71A00668D0F /* TipCell.xib in Resources */,
 				B5F992CE22B267B3005863FA /* NomessageCell.xib in Resources */,
+				76B57C6A2AB95CB000AEA63E /* createAffiliateUserAccountInfo.graphql in Resources */,
 				B5793DEA25653F480032C20F /* العربية.json in Resources */,
 				B5919A8A22CDBCDF00F328D2 /* Whishlist.graphql in Resources */,
+				76B57C692AB95CB000AEA63E /* createAffiliateUser.graphql in Resources */,
 				B56602D522E9681E00A144CE /* InProgressCell.xib in Resources */,
 				B5516F2F22FE9BF0004E672E /* CalendardetailCell.xib in Resources */,
 				B5771AA32244E0800070DD96 /* ExplorePageVC.xib in Resources */,
@@ -3333,9 +3381,12 @@
 				B5E4CEF022A1059B00FC9A3D /* ItenarycheckCell.xib in Resources */,
 				B56602DC22E98C4B00A144CE /* ManageListing.graphql in Resources */,
 				B5EE962522575BC8004E4A2D /* ReadmoreVC.xib in Resources */,
+				76B57C672AB95CB000AEA63E /* AffiliateSearchListing.graphql in Resources */,
 				B5F992D222B277F3005863FA /* CustomTabbar.xib in Resources */,
 				B5825320281F998500287853 /* SignUpViewController.xib in Resources */,
 				B54BA46F22730E9600F6035B /* HouseRulesCell.xib in Resources */,
+				76B57C642AB95CB000AEA63E /* AffiliateUserStepSuccess.graphql in Resources */,
+				76B57C662AB95CB000AEA63E /* calculateOccupancyRate.graphql in Resources */,
 				B5605D08260070F60051F5D8 /* WriteReview.xib in Resources */,
 				B5B95FE522F7F50C00C4970C /* CalendarListCell.xib in Resources */,
 				2CFE2E9E22FAA56D0064D9C4 /* ReviewGuestViewController.xib in Resources */,
@@ -4108,7 +4159,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		76DE9F6E2AB4AA42003191ED /* XCLocalSwiftPackageReference "PTProAPI" */ = {
+		76B57C762AB9648600AEA63E /* XCLocalSwiftPackageReference "PTProAPI" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = PTProAPI;
 		};
@@ -4130,6 +4181,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 766F79472AB582C70004DBF6 /* XCRemoteSwiftPackageReference "apollo-ios" */;
 			productName = Apollo;
+		};
+		76B57C772AB9648600AEA63E /* PTProAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PTProAPI;
 		};
 		76DE9F6F2AB4AA42003191ED /* PTProAPI */ = {
 			isa = XCSwiftPackageProductDependency;

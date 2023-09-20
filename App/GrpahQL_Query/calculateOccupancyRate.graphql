@@ -1,0 +1,8 @@
+query calculateOccupancyRate($lat:Float,$lng:Float,$filter:String,$startDate:String,$endDate:String){
+calculateOccupancyRate(lat:$lat,lng:$lng,filter:$filter,startDate:$startDate,endDate:$endDate){
+Occupancy_Rate
+filter
+status
+errorMessage
+}
+}

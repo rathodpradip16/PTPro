@@ -77,8 +77,6 @@ errorMessage
 }
 
 #showlistingphotos
-
-
 query ShowListPhotos($listId: Int!) {
 showListPhotos(listId: $listId) {
 results{

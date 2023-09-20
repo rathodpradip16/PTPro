@@ -1,0 +1,25 @@
+query affiliateShowDocumentList( $userId: String,){
+affiliateShowDocumentList(userId:$userId){
+id
+userId
+fileName
+fileType
+}
+}
+
+#RemoveAffiliateDocumentList
+mutation removeAffiliateDocumentList($id:Int,$userId:String) {
+  removeAffiliateDocumentList (id: $id,userId:$userId) {
+status
+photosCount
+removePhoto
+}
+}
+
+#createDocumentAffiliateUser
+mutation  createDocumentAffiliateUser($userId:String!, $fileName: String, $fileType: String) {
+createDocumentAffiliateUser (userId:$userId, fileName: $fileName, fileType: $fileType) {
+status
+photosCount
+}
+}

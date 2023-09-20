@@ -35,34 +35,19 @@ class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,
     var lottieView: LottieAnimationView!
     
     var ProfileAPIArray : GetProfileQuery.Data.UserAccount.Result?
-    
-    
-    var apollo_headerClient:ApolloClient!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         offlineView.backgroundColor =  UIColor(named: "Button_Grey_Color")
-        self.checkApolloStatus()
         CustomTabbar().delegate = self
         
         self.initialSetup()
         // self.lottieAnimation()
         self.LanguageAPICall()
         self.currencyAPICall()
-        
-        
-        
         // Do any additional setup after loading the view.
     }
-    func checkApolloStatus()
-    {
-        if((Utility.shared.getCurrentUserToken()) != nil)
-        {
-        }
-        else{
-            apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
-        }
-        
-    }
+    
     override func viewWillAppear(_ animated: Bool) {
         
         self.profileTable.reloadData()
@@ -70,15 +55,11 @@ class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,
         
         if((Utility.shared.getCurrentUserToken()) != nil || (Utility.shared.getCurrentUserToken()) != "")
         {
-            
             self.profileAPICall()
+            self.getAffiliateUserStepAPICall()
         }
-        
-        
-        
-        
-        
     }
+    
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController)
     {
         print("Test")
@@ -310,7 +291,10 @@ func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> 
     case 0:
         return 1
     case 1:
-        return 2
+        if( Utility.shared.host_message_isfromHost) {
+            return 2
+        }
+        return 1
     case 2:
         if(Utility.shared.host_message_isfromHost)
         {
@@ -877,10 +861,112 @@ func currencyAPICall()
         }
     }
 }
+    
+    // MARK: Get API Call
 
+    func getAffiliateUserStepAPICall()
+    {
+        if Utility.shared.isConnectedToNetwork(){
+//            let affiliateUserQuery = GetAffiliateUserStepQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""))
+//            Network.shared.apollo_headerClient.fetch(query: affiliateUserQuery){ response in
+//                switch response {
+//                case .success(let result):
+//                    if let status = result.data?.getAffiliateUserStep?.status,status == 200{
+//                        
+//                    }else{
+//                        self.view.makeToast(result.data?.getAffiliateUserStep?.errorMessage)
+//                    }
+//                    Utility.shared.currencyDataArray = ((result.data?.getCurrencies?.results)!) as! [GetCurrenciesListQuery.Data.GetCurrencies.Result]
+//                    Utility.shared.currencyvalue = Utility.shared.currencyDataArray.first!.symbol != nil ?
+//                    Utility.shared.currencyDataArray.first!.symbol! : ""
+//                case .failure(let error):
+//                    self.view.makeToast(error.localizedDescription)
+//                }
+//            }
+            
+            
+            let parameters = "{\"query\":\"query getAffiliateUserStep($userId:String) {\\r\\n  getAffiliateUserStep(userId: $userId) {\\r\\n    status\\r\\n    errorMessage\\r\\n    stepInfo\\r\\n    stepDetails {\\r\\n      userId\\r\\n      payeeName\\r\\n      address\\r\\n      city\\r\\n      state\\r\\n      zipcode\\r\\n      country\\r\\n      phoneNumber\\r\\n      websiteName\\r\\n      websiteUrl\\r\\n      typesOfWebsite\\r\\n      primryJoining\\r\\n      websiteVisitors\\r\\n      buildLinks\\r\\n      websiteMonitize\\r\\n    }\\r\\n  }\\r\\n}\\r\\n\",\"variables\":{\"userId\":\"\(Utility.shared.ProfileAPIArray?.userId ?? "")\"}}"
+            let postData = parameters.data(using: .utf8)
 
+            var request = URLRequest(url: URL(string: "http://ptpro.paperbirdtech.com:4000/graphql")!,timeoutInterval: Double.infinity)
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("lang=en-US", forHTTPHeaderField: "Cookie")
 
+            request.httpMethod = "POST"
+            request.httpBody = postData
+
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+              guard let data = data else {
+                print(String(describing: error))
+                return
+              }
+                do {
+                    if let dic = try JSONSerialization.jsonObject(with: data, options: []) as? [String: AnyHashable]{
+                        Utility.shared.GetAffiliateUserStep = .init(_dataDict: DataDict(data:  dic, fulfilledFragments: []))
+                        self.intializeAffiliateRegistration()
+                    }else{
+                        self.intializeAffiliateRegistration()
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                    self.intializeAffiliateRegistration()
+                }
+            }
+
+            task.resume()
+
+        }else{
+            self.offlineView.isHidden = false
+            let shadowSize2 : CGFloat = 3.0
+            let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
+                                                        y: -shadowSize2 / 2,
+                                                        width: self.offlineView.frame.size.width + shadowSize2,
+                                                        height: self.offlineView.frame.size.height + shadowSize2))
+            
+            self.offlineView.layer.masksToBounds = false
+            self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
+            self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+            self.offlineView.layer.shadowOpacity = 0.3
+            self.offlineView.layer.shadowPath = shadowPath2.cgPath
+            if IS_IPHONE_X || IS_IPHONE_XR{
+                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-85, width: FULLWIDTH, height: 55)
+            }else{
+                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-55, width: FULLWIDTH, height: 55)
+            }
+        }
+    }
+    
+    func intializeAffiliateRegistration(){
+        if let stepInfo = Utility.shared.GetAffiliateUserStep?.stepInfo as? String{
+            switch stepInfo{
+            case StepInfo.None.rawValue:
+                
+                break
+            case StepInfo.Account.rawValue:
+                break
+            case StepInfo.Website.rawValue:
+                break
+            case StepInfo.Documents.rawValue:
+                break
+            case StepInfo.Success.rawValue:
+                break
+            default:
+                break
+            }
+        }else{
+            
+        }
+    }
 }
+
+enum StepInfo: String{
+    case None = "None"
+    case Account = "Account"
+    case Website = "Website"
+    case Documents = "Documents"
+    case Success = "Success"
+}
+
 extension StringProtocol {
     var firstUppercased: String {
         return prefix(1).uppercased() + dropFirst()

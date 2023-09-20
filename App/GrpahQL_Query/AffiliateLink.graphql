@@ -1,0 +1,33 @@
+mutation createAffiliateLink($propertyId: Int, $affiliateId: String) {
+createAffiliateLink (propertyId: $propertyId, affiliateId: $affiliateId) {
+status
+errorMessage
+}
+}
+
+#affiliateLinkManager
+query affiliateLinkManager( $userId: String,$address: String) {
+affiliateLinkManager( userId: $userId,address: $address) {
+results {
+id
+title
+affiliateId
+referralId
+createdAt
+clickResult
+earning
+listPhotos {
+id
+name
+type
+}
+listingData {
+basePrice
+currency
+affiliate_commission
+}
+}
+status
+errorMessage
+}
+}

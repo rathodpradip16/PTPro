@@ -1,0 +1,18 @@
+query getDashboardData($userId: String,$fromDate: String,$toDate: String,$filter: String,$graphType : String){
+getDashboardData(userId:$userId,fromDate:$fromDate,toDate:$toDate,filter:$filter,graphType:$graphType){
+clickOverviewCount
+clickFilterCount
+conversionOverviewCount
+conversionFilterCount
+earningOverviewCount
+earningFilterCount
+status
+errorMessage
+filter
+graphType
+graphData{
+graphDate
+value
+}
+}
+}

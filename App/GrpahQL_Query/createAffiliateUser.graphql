@@ -1,0 +1,6 @@
+mutation createAffiliateUser($id: String, $email: String!, $password: String,$findUS: String $phonenumber: String,$countryCode: String ) {
+createAffiliateUser (id: $id, email: $email, password: $password,findUS: $findUS, phonenumber: $phonenumber,countryCode:$countryCode) {
+status
+errorMessage
+}
+}

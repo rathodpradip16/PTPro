@@ -424,17 +424,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
                 // Fallback on earlier versions
             }
         }
-        
-        
-        
-        
        
         window?.backgroundColor =  UIColor(named: "colorController")
         // window?.rootViewController?.dismiss(animated: true, completion: nil)
-       
-       
-            
-          
         self.window?.rootViewController?.view.backgroundColor =  UIColor(named: "colorController")
     }
     
@@ -902,10 +894,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         window?.rootViewController?.dismiss(animated: true, completion: nil)
         window?.backgroundColor =  UIColor(named: "colorController")
         let homeViewController = initialView
-       
-     
-      
-        
         
         let nav = UINavigationController(rootViewController: homeViewController)
        // window?.rootViewController?.definesPresentationContext = true
@@ -917,10 +905,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
             
        
         self.themeInitialSetUp()
-       
-        
-    
     }
+    
     func GuestTabbarInitialize(initialView:UITabBarController)
     {
        

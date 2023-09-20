@@ -1,0 +1,24 @@
+query affiliateSearchListing( $userId: String,$address: String,$orderBy: String) {
+affiliateSearchListing( userId: $userId,address: $address,orderBy: $orderBy) {
+results {
+id
+title
+city
+affiliateId
+referralId
+isGenerated
+description
+listPhotos {
+id
+name
+type
+}
+listingData {
+basePrice
+currency
+}
+}
+status
+errorMessage
+}
+}

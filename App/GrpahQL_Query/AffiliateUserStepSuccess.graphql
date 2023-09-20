@@ -1,0 +1,6 @@
+query getAffiliateUserStepSuccess($userId:String) {
+getAffiliateUserStepSuccess(userId: $userId){
+status
+errorMessage
+}
+}

@@ -1,0 +1,55 @@
+mutation Createcouponcode($userId:String,$listId:Int,$couponCode:String,$couponType:String,$discount:Float,$startDate:String,$endDate:String,$description:String,$userType:String){
+Createcouponcode(userId:$userId,listId:$listId,couponCode:$couponCode,couponType:$couponType,discount:$discount,startDate:$startDate,endDate:$endDate,description:$description,userType:$userType,){
+status
+}
+}
+
+#couponcode
+query getcouponcode($userId: String,$couponType:String,$listId:Int,$subscriptionType:String){
+getcouponcode(userId:$userId,couponType:$couponType,listId:$listId,subscriptionType:$subscriptionType){
+errorMessage
+status
+data{
+id
+couponCode
+activeStatus
+couponType
+discount
+startDate
+endDate
+description
+userType
+}
+}
+}
+
+#coupon use
+query getcouponuse($userId: String,$couponCode:String,$listId:Int){
+getcouponuse(userId:$userId,couponCode:$couponCode,listId:$listId){
+errorMessage
+status
+}
+}
+
+#Create Coupen Entry
+mutation CreateCoupenEntry($userId:String,$couponCode:String){
+CreateCoupenEntry(userId:$userId,couponCode:$couponCode){
+status
+}
+}
+
+#deleteCoupon
+mutation deleteCoupon($id: Int!,$couponCode:String) {
+deleteCoupon (id: $id,couponCode:$couponCode) {
+status
+errorMessage
+}
+}
+
+#Couponcount
+mutation Couponcount($id: Int!,$couponCode:String) {
+Couponcount (id: $id,couponCode:$couponCode) {
+status
+errorMessage
+}
+}

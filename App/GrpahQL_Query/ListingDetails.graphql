@@ -1,0 +1,45 @@
+query getListingDetails($listId:String!, $preview: Boolean) {
+getListingDetails (listId:$listId, preview: $preview) {
+results{
+id
+userId
+bookingType
+isPublished
+houseRules {
+id
+}
+listingData {
+bookingNoticeTime
+checkInStart
+checkInEnd
+maxDaysNotice
+minNight
+maxNight
+basePrice
+cleaningPrice
+currency
+is_affiliate
+affiliate_commission
+weeklyDiscount
+monthlyDiscount
+cancellationPolicy
+}
+blockedDates {
+blockedDates
+reservationId
+}
+calendars {
+id
+name
+url
+listId
+status
+}
+}
+status
+errorMessage
+}
+}
+
+
+
