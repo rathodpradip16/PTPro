@@ -306,7 +306,7 @@ class WelcomePageVC: UIViewController  {
     
     func checkLoginAPI()
     {
-        let loginquery = PTProAPI.LoginQuery(email: emailTextView.text ?? "", password: passwordTextField.text ?? "", deviceType:"iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken)
+        let loginquery = PTProAPI.LoginQuery(email: emailTextView.text! , password: passwordTextField.text!, deviceType:"iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken)
         let apollo = ApolloClient(url: URL(string:graphQLEndpoint)!)
         apollo.fetch(query: loginquery,cachePolicy:.fetchIgnoringCacheData) {  response in
             switch response {
