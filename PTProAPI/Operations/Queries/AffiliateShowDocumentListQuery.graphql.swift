@@ -3,52 +3,55 @@
 
 @_exported import Apollo
 
-public class AffiliateShowDocumentListQuery: GraphQLQuery {
-  public static let operationName: String = "affiliateShowDocumentList"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"query affiliateShowDocumentList($userId: String) { affiliateShowDocumentList(userId: $userId) { __typename id userId fileName fileType } }"#
-    ))
+extension PTProAPI {
+  class AffiliateShowDocumentListQuery: GraphQLQuery {
+    static let operationName: String = "affiliateShowDocumentList"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"query affiliateShowDocumentList($userId: String) { affiliateShowDocumentList(userId: $userId) { __typename id userId fileName fileType } }"#
+      ))
 
-  public var userId: GraphQLNullable<String>
+    public var userId: GraphQLNullable<String>
 
-  public init(userId: GraphQLNullable<String>) {
-    self.userId = userId
-  }
+    public init(userId: GraphQLNullable<String>) {
+      self.userId = userId
+    }
 
-  public var __variables: Variables? { ["userId": userId] }
+    public var __variables: Variables? { ["userId": userId] }
 
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Apollo.Selection] { [
-      .field("affiliateShowDocumentList", [AffiliateShowDocumentList?]?.self, arguments: ["userId": .variable("userId")]),
-    ] }
-
-    public var affiliateShowDocumentList: [AffiliateShowDocumentList?]? { __data["affiliateShowDocumentList"] }
-
-    /// AffiliateShowDocumentList
-    ///
-    /// Parent Type: `AffiliateUserDocumentManagementType`
-    public struct AffiliateShowDocumentList: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.AffiliateUserDocumentManagementType }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("id", Int?.self),
-        .field("userId", PTProAPI.ID.self),
-        .field("fileName", String?.self),
-        .field("fileType", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
+      static var __selections: [Apollo.Selection] { [
+        .field("affiliateShowDocumentList", [AffiliateShowDocumentList?]?.self, arguments: ["userId": .variable("userId")]),
       ] }
 
-      public var id: Int? { __data["id"] }
-      public var userId: PTProAPI.ID { __data["userId"] }
-      public var fileName: String? { __data["fileName"] }
-      public var fileType: String? { __data["fileType"] }
+      var affiliateShowDocumentList: [AffiliateShowDocumentList?]? { __data["affiliateShowDocumentList"] }
+
+      /// AffiliateShowDocumentList
+      ///
+      /// Parent Type: `AffiliateUserDocumentManagementType`
+      struct AffiliateShowDocumentList: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
+
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.AffiliateUserDocumentManagementType }
+        static var __selections: [Apollo.Selection] { [
+          .field("__typename", String.self),
+          .field("id", Int?.self),
+          .field("userId", PTProAPI.ID.self),
+          .field("fileName", String?.self),
+          .field("fileType", String?.self),
+        ] }
+
+        var id: Int? { __data["id"] }
+        var userId: PTProAPI.ID { __data["userId"] }
+        var fileName: String? { __data["fileName"] }
+        var fileType: String? { __data["fileType"] }
+      }
     }
   }
+
 }

@@ -18,6 +18,8 @@
 
 "City" = "Πόλη";
 
+"Code field" = "Πεδίο κωδικού";
+
 "Company" = "Εταιρεία";
 
 "Continue" = "Συνέχεια";
@@ -28,6 +30,8 @@
 
 "County" = "Κομητεία";
 
+"Date is empty." = "Η ημερομηνία είναι κενή.";
+
 "Department" = "Τμήμα";
 
 "District" = "Περιφέρεια";
@@ -35,6 +39,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Τέλος";
+
+"Double tap to edit" = "Πατήστε δύο φορές για επεξεργασία";
+
+"Edit" = "Επεξεργασία";
 
 "Eircode" = "Ταχυδρομικός κώδικας";
 
@@ -49,6 +57,8 @@
 "Full name" = "Πλήρες όνομα";
 
 "Incomplete phone number" = "Ελλιπής αριθμός τηλεφώνου";
+
+"Invalid UPI ID" = "Μη έγκυρο αναγνωριστικό UPI";
 
 "Island" = "Νησί";
 
@@ -80,6 +90,8 @@
 
 "Remove bank account ending in %@" = "Αφαίρεση του τραπεζικού λογαριασμού που λήγει σε %@";
 
+"Search" = "Αναζήτηση";
+
 "State" = "Πολιτεία";
 
 "Suburb" = "Προάστιο";
@@ -93,6 +105,8 @@
 "The account number you entered is incomplete." = "Ο αριθμός λογαριασμού που εισαγάγατε είναι ελλιπής.";
 
 "Town or city" = "Κωμόπολη ή πόλη";
+
+"UPI ID" = "Αναγνωριστικό UPI";
 
 "Unable to parse phone number" = "Δεν ήταν δυνατή η ανάλυση του αριθμού τηλεφώνου";
 

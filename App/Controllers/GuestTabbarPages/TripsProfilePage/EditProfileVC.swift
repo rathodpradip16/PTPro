@@ -75,7 +75,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     var DatePickerSender: Bool = false
         
-    var EditProfileArray : GetProfileQuery.Data.UserAccount.Result?
+    var EditProfileArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -239,7 +239,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     func EdiprofileAPICall()
     {
-        let profileQuery = GetProfileQuery()
+        let profileQuery = PTProAPI.GetProfileQuery()
         Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -378,7 +378,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     func EditProfileAPICall(fieldName:String,fieldValue:String)
     {
-        let editprofileMutation = EditProfileMutation(userId: Utility.shared.getCurrentUserID()! as String, fieldName: fieldName, fieldValue: .some(fieldValue), deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
+        let editprofileMutation = PTProAPI.EditProfileMutation(userId: Utility.shared.getCurrentUserID()! as String, fieldName: fieldName, fieldValue: .some(fieldValue), deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
         Network.shared.apollo_headerClient.perform(mutation: editprofileMutation){  response in
             switch response {
             case .success(let result):
@@ -1318,7 +1318,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
         
 func emailAPICall(){
-    let resendAPIquery = ResendConfirmEmailQuery()
+    let resendAPIquery = PTProAPI.ResendConfirmEmailQuery()
     Network.shared.apollo_headerClient.fetch(query: resendAPIquery,cachePolicy: .fetchIgnoringCacheData){ response in
         switch response {
         case .success(let result):
@@ -1342,7 +1342,7 @@ func googleAPICall(){
     } else {
         actiontype = "false"
     }
-    let socialloginverifyMutation = SocialLoginVerifyMutation(verificationType:"google", actionType:actiontype)
+    let socialloginverifyMutation = PTProAPI.SocialLoginVerifyMutation(verificationType:"google", actionType:actiontype)
     Network.shared.apollo_headerClient.perform(mutation:socialloginverifyMutation){ response in
         switch response {
         case .success(let result):
@@ -1413,7 +1413,7 @@ func facebookVerifyAPICall(){
         
         actiontype = "false"
     }
-    let socialloginverifyMutation = SocialLoginVerifyMutation(verificationType:"facebook", actionType: actiontype)
+    let socialloginverifyMutation = PTProAPI.SocialLoginVerifyMutation(verificationType:"facebook", actionType: actiontype)
     Network.shared.apollo_headerClient.perform(mutation:socialloginverifyMutation){ response in
         switch response {
         case .success(let result):
@@ -1589,7 +1589,7 @@ func facebookVerifyAPICall(){
     {
         
         self.lottieAnimation()
-        let checkemail = CheckEmailExistsQuery(email:currentTF.text!)
+        let checkemail = PTProAPI.CheckEmailExistsQuery(email:currentTF.text!)
         apollo.fetch(query: checkemail){  response in
             switch response {
             case .success(let result):
@@ -1617,7 +1617,7 @@ func facebookVerifyAPICall(){
     
     func EditemailAPICall(fieldName:String,fieldValue:String)
     {
-        let editprofileMutation = EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: .some(fieldValue), deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
+        let editprofileMutation = PTProAPI.EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: .some(fieldValue), deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
         Network.shared.apollo_headerClient.perform(mutation: editprofileMutation){  response in
             switch response {
             case .success(let result):

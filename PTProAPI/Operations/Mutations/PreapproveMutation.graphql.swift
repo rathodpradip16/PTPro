@@ -3,118 +3,121 @@
 
 @_exported import Apollo
 
-public class PreapproveMutation: GraphQLMutation {
-  public static let operationName: String = "preapprove"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"mutation preapprove($threadId: Int!, $content: String, $type: String, $startDate: String, $endDate: String, $personCapacity: Int, $reservationId: Int) { sendMessage( threadId: $threadId content: $content type: $type startDate: $startDate endDate: $endDate personCapacity: $personCapacity reservationId: $reservationId ) { __typename results { __typename id sentBy content type reservationId startDate endDate createdAt personCapacity } status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class PreapproveMutation: GraphQLMutation {
+    static let operationName: String = "preapprove"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"mutation preapprove($threadId: Int!, $content: String, $type: String, $startDate: String, $endDate: String, $personCapacity: Int, $reservationId: Int) { sendMessage( threadId: $threadId content: $content type: $type startDate: $startDate endDate: $endDate personCapacity: $personCapacity reservationId: $reservationId ) { __typename results { __typename id sentBy content type reservationId startDate endDate createdAt personCapacity } status errorMessage } }"#
+      ))
 
-  public var threadId: Int
-  public var content: GraphQLNullable<String>
-  public var type: GraphQLNullable<String>
-  public var startDate: GraphQLNullable<String>
-  public var endDate: GraphQLNullable<String>
-  public var personCapacity: GraphQLNullable<Int>
-  public var reservationId: GraphQLNullable<Int>
+    public var threadId: Int
+    public var content: GraphQLNullable<String>
+    public var type: GraphQLNullable<String>
+    public var startDate: GraphQLNullable<String>
+    public var endDate: GraphQLNullable<String>
+    public var personCapacity: GraphQLNullable<Int>
+    public var reservationId: GraphQLNullable<Int>
 
-  public init(
-    threadId: Int,
-    content: GraphQLNullable<String>,
-    type: GraphQLNullable<String>,
-    startDate: GraphQLNullable<String>,
-    endDate: GraphQLNullable<String>,
-    personCapacity: GraphQLNullable<Int>,
-    reservationId: GraphQLNullable<Int>
-  ) {
-    self.threadId = threadId
-    self.content = content
-    self.type = type
-    self.startDate = startDate
-    self.endDate = endDate
-    self.personCapacity = personCapacity
-    self.reservationId = reservationId
-  }
+    public init(
+      threadId: Int,
+      content: GraphQLNullable<String>,
+      type: GraphQLNullable<String>,
+      startDate: GraphQLNullable<String>,
+      endDate: GraphQLNullable<String>,
+      personCapacity: GraphQLNullable<Int>,
+      reservationId: GraphQLNullable<Int>
+    ) {
+      self.threadId = threadId
+      self.content = content
+      self.type = type
+      self.startDate = startDate
+      self.endDate = endDate
+      self.personCapacity = personCapacity
+      self.reservationId = reservationId
+    }
 
-  public var __variables: Variables? { [
-    "threadId": threadId,
-    "content": content,
-    "type": type,
-    "startDate": startDate,
-    "endDate": endDate,
-    "personCapacity": personCapacity,
-    "reservationId": reservationId
-  ] }
-
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
-
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Apollo.Selection] { [
-      .field("sendMessage", SendMessage?.self, arguments: [
-        "threadId": .variable("threadId"),
-        "content": .variable("content"),
-        "type": .variable("type"),
-        "startDate": .variable("startDate"),
-        "endDate": .variable("endDate"),
-        "personCapacity": .variable("personCapacity"),
-        "reservationId": .variable("reservationId")
-      ]),
+    public var __variables: Variables? { [
+      "threadId": threadId,
+      "content": content,
+      "type": type,
+      "startDate": startDate,
+      "endDate": endDate,
+      "personCapacity": personCapacity,
+      "reservationId": reservationId
     ] }
 
-    public var sendMessage: SendMessage? { __data["sendMessage"] }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// SendMessage
-    ///
-    /// Parent Type: `SendMessage`
-    public struct SendMessage: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.SendMessage }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("results", Results?.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
+      static var __selections: [Apollo.Selection] { [
+        .field("sendMessage", SendMessage?.self, arguments: [
+          "threadId": .variable("threadId"),
+          "content": .variable("content"),
+          "type": .variable("type"),
+          "startDate": .variable("startDate"),
+          "endDate": .variable("endDate"),
+          "personCapacity": .variable("personCapacity"),
+          "reservationId": .variable("reservationId")
+        ]),
       ] }
 
-      public var results: Results? { __data["results"] }
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var sendMessage: SendMessage? { __data["sendMessage"] }
 
-      /// SendMessage.Results
+      /// SendMessage
       ///
-      /// Parent Type: `ThreadItems`
-      public struct Results: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `SendMessage`
+      struct SendMessage: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ThreadItems }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.SendMessage }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("id", Int?.self),
-          .field("sentBy", String?.self),
-          .field("content", String?.self),
-          .field("type", String?.self),
-          .field("reservationId", Int?.self),
-          .field("startDate", String?.self),
-          .field("endDate", String?.self),
-          .field("createdAt", String?.self),
-          .field("personCapacity", Int?.self),
+          .field("results", Results?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
         ] }
 
-        public var id: Int? { __data["id"] }
-        public var sentBy: String? { __data["sentBy"] }
-        public var content: String? { __data["content"] }
-        public var type: String? { __data["type"] }
-        public var reservationId: Int? { __data["reservationId"] }
-        public var startDate: String? { __data["startDate"] }
-        public var endDate: String? { __data["endDate"] }
-        public var createdAt: String? { __data["createdAt"] }
-        public var personCapacity: Int? { __data["personCapacity"] }
+        var results: Results? { __data["results"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
+
+        /// SendMessage.Results
+        ///
+        /// Parent Type: `ThreadItems`
+        struct Results: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
+
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.ThreadItems }
+          static var __selections: [Apollo.Selection] { [
+            .field("__typename", String.self),
+            .field("id", Int?.self),
+            .field("sentBy", String?.self),
+            .field("content", String?.self),
+            .field("type", String?.self),
+            .field("reservationId", Int?.self),
+            .field("startDate", String?.self),
+            .field("endDate", String?.self),
+            .field("createdAt", String?.self),
+            .field("personCapacity", Int?.self),
+          ] }
+
+          var id: Int? { __data["id"] }
+          var sentBy: String? { __data["sentBy"] }
+          var content: String? { __data["content"] }
+          var type: String? { __data["type"] }
+          var reservationId: Int? { __data["reservationId"] }
+          var startDate: String? { __data["startDate"] }
+          var endDate: String? { __data["endDate"] }
+          var createdAt: String? { __data["createdAt"] }
+          var personCapacity: Int? { __data["personCapacity"] }
+        }
       }
     }
   }
+
 }

@@ -18,6 +18,8 @@
 
 "City" = "Ciutat";
 
+"Code field" = "Camp pel codi";
+
 "Company" = "Empresa";
 
 "Continue" = "Continua";
@@ -28,6 +30,8 @@
 
 "County" = "Comtat";
 
+"Date is empty." = "La data és buida.";
+
 "Department" = "Departament";
 
 "District" = "Districte";
@@ -35,6 +39,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Fet";
+
+"Double tap to edit" = "Toca dos cops per editar";
+
+"Edit" = "Editar";
 
 "Eircode" = "Eircode";
 
@@ -49,6 +57,8 @@
 "Full name" = "Nom complet";
 
 "Incomplete phone number" = "Número de telèfon incomplet";
+
+"Invalid UPI ID" = "ID d'UPI no vàlid";
 
 "Island" = "Illa";
 
@@ -80,6 +90,8 @@
 
 "Remove bank account ending in %@" = "Elimina el compte bancari que acaba en %@";
 
+"Search" = "Cerca";
+
 "State" = "País";
 
 "Suburb" = "Suburbi";
@@ -93,6 +105,8 @@
 "The account number you entered is incomplete." = "El número de compte que heu introduït és incomplet.";
 
 "Town or city" = "Municipi o ciutat";
+
+"UPI ID" = "ID d'UPI";
 
 "Unable to parse phone number" = "No s'ha pogut analitzar el número de telèfon";
 

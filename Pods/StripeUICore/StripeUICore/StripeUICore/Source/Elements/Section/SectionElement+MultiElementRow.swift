@@ -3,6 +3,7 @@
 //  StripeUICore
 //
 //  Created by Yuki Tokuhiro on 3/18/22.
+//  Copyright © 2022 Stripe, Inc. All rights reserved.
 //
 
 import Foundation
@@ -17,14 +18,12 @@ public extension SectionElement {
         }()
         public let elements: [Element]
         public let theme: ElementsUITheme
-        
+
         public init(_ elements: [Element], theme: ElementsUITheme = .default) {
             self.elements = elements
             self.theme = theme
-            defer {
-                elements.forEach {
-                    $0.delegate = self
-                }
+            elements.forEach {
+                $0.delegate = self
             }
         }
     }

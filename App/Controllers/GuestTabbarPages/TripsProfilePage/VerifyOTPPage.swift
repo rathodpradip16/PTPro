@@ -21,7 +21,7 @@ class VerifyOTPPage: UIViewController,UITextFieldDelegate{
     @IBOutlet weak var enterDigitLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var topView: UIView!
-    var EditProfileArray : GetProfileQuery.Data.UserAccount.Result?
+    var EditProfileArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
     var lottieView1: LottieAnimationView!
     var countrycode = String()
     var phoneno = String()
@@ -102,7 +102,7 @@ class VerifyOTPPage: UIViewController,UITextFieldDelegate{
     }
     func verifyPhonenumberCall()
     {
-        let verifyphonenoMutation = VerifyPhoneNumberMutation(verificationCode:Int(otpTF.text!)!)
+        let verifyphonenoMutation = PTProAPI.VerifyPhoneNumberMutation(verificationCode:Int(otpTF.text!)!)
         Network.shared.apollo_headerClient.perform(mutation: verifyphonenoMutation){ response in
             switch response {
             case .success(let result):
@@ -130,7 +130,7 @@ class VerifyOTPPage: UIViewController,UITextFieldDelegate{
     }
     func addPhonenumberCall()
     {
-        let addphonenumberMutation = AddPhoneNumberMutation(countryCode:countrycode, phoneNumber:phoneno)
+        let addphonenumberMutation = PTProAPI.AddPhoneNumberMutation(countryCode:countrycode, phoneNumber:phoneno)
         Network.shared.apollo_headerClient.perform(mutation: addphonenumberMutation){ response in
             switch response {
             case .success(let result):
@@ -146,7 +146,7 @@ class VerifyOTPPage: UIViewController,UITextFieldDelegate{
     }
     func getEnteredPhonenoAPICall()
     {
-        let getEnteredphonenoquery = GetEnteredPhoneNoQuery()
+        let getEnteredphonenoquery = PTProAPI.GetEnteredPhoneNoQuery()
         Network.shared.apollo_headerClient.fetch(query:getEnteredphonenoquery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):

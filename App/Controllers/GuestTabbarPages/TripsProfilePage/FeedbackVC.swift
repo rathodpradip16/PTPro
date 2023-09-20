@@ -126,7 +126,7 @@ class FeedbackVC: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
     func sendUserfeedback(type:String,message:String)
 
     {
-        let senduserFeedbackMutation = SendUserFeedbackMutation(type: .some(type), message: .some(message))
+        let senduserFeedbackMutation = PTProAPI.SendUserFeedbackMutation(type: .some(type), message: .some(message))
         Network.shared.apollo_headerClient.perform(mutation:senduserFeedbackMutation){ response in
             switch response {
             case .success(let result):

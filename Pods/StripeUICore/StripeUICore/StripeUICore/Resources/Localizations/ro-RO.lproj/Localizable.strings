@@ -18,6 +18,8 @@
 
 "City" = "Oraș";
 
+"Code field" = "Câmp pentru introducerea codului";
+
 "Company" = "Companie";
 
 "Continue" = "Continuare";
@@ -28,6 +30,8 @@
 
 "County" = "Județ";
 
+"Date is empty." = "Data nu este completată.";
+
 "Department" = "Departament";
 
 "District" = "District";
@@ -35,6 +39,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Efectuat";
+
+"Double tap to edit" = "Atingeți de două ori pentru a edita";
+
+"Edit" = "Editare";
 
 "Eircode" = "Eircode";
 
@@ -49,6 +57,8 @@
 "Full name" = "Nume complet";
 
 "Incomplete phone number" = "Număr de telefon incomplet";
+
+"Invalid UPI ID" = "ID UPI nevalid";
 
 "Island" = "Insulă";
 
@@ -80,6 +90,8 @@
 
 "Remove bank account ending in %@" = "Eliminați contul bancar care se termină în %@";
 
+"Search" = "Căutare";
+
 "State" = "Stat";
 
 "Suburb" = "Suburbie";
@@ -93,6 +105,8 @@
 "The account number you entered is incomplete." = "Numărul de cont pe care l-ați introdus nu este complet.";
 
 "Town or city" = "Municipalitate sau oraș";
+
+"UPI ID" = "ID UPI";
 
 "Unable to parse phone number" = "Nu se poate analiza numărul de telefon";
 

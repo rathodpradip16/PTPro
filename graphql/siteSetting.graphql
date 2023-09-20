@@ -1,0 +1,14 @@
+query siteSettings($type: String) {
+siteSettings(type: $type) {
+status
+errorMessage
+results{
+id
+title
+name
+value
+type
+status
+}
+}
+}

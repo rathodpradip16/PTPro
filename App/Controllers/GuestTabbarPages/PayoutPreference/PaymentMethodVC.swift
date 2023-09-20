@@ -25,8 +25,8 @@ class PaymentMethodVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     @IBOutlet var lblHeader: UILabel!
     
     
-    var getpaymentmethodsArray = [GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
-    var getpaymentmethodsArrayFilter = [GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
+    var getpaymentmethodsArray = [PTProAPI.GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
+    var getpaymentmethodsArrayFilter = [PTProAPI.GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
     var lottieView: LottieAnimationView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +81,7 @@ class PaymentMethodVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func payoutAPICall(){
-        let getpayoutquery = GetPaymentMethodsQuery()
+        let getpayoutquery = PTProAPI.GetPaymentMethodsQuery()
         Network.shared.apollo_headerClient.fetch(query: getpayoutquery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
             switch response {
             case .success(let result):
@@ -93,7 +93,7 @@ class PaymentMethodVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
                 }
                 
                 self.lottieView.isHidden = true
-                self.getpaymentmethodsArray = ((result.data?.getPaymentMethods?.results)!) as! [GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]
+                self.getpaymentmethodsArray = ((result.data?.getPaymentMethods?.results)!) as! [PTProAPI.GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]
                 getpaymentmethodsArrayFilter  =  getpaymentmethodsArray.filter { result in
                     result.isEnable == true
                 }

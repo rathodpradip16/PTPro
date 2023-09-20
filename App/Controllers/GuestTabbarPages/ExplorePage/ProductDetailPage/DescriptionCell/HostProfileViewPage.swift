@@ -26,8 +26,8 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
     @IBOutlet var hostprofileTable: UITableView!
     
     var apollo_headerClient: ApolloClient!
-    var reiewListingArray = [UserReviewsQuery.Data.UserReviews.Result]()
-    var showuserprofileArray : ShowUserProfileQuery.Data.ShowUserProfile.Results?
+    var reiewListingArray = [PTProAPI.UserReviewsQuery.Data.UserReviews.Result]()
+    var showuserprofileArray : PTProAPI.ShowUserProfileQuery.Data.ShowUserProfile.Results?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.checkApolloStatus()
@@ -94,7 +94,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
     {
         if Utility.shared.isConnectedToNetwork(){
             self.lottieanimation()
-            let showprofileQuery = ShowUserProfileQuery(profileId:.some(profileid), isUser:false)
+            let showprofileQuery = PTProAPI.ShowUserProfileQuery(profileId:.some(profileid), isUser:false)
             Network.shared.apollo_headerClient.fetch(query:showprofileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):

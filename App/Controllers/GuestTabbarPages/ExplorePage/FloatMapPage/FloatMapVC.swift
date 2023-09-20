@@ -36,7 +36,7 @@ class FloatMapVC: UIViewController,UICollectionViewDelegate,UICollectionViewData
     var markergms = GMSMarker()
     var layout = UICollectionViewFlowLayout()
     var lottieView: LottieAnimationView!
-    var FloatSearchArray = [SearchListingQuery.Data.SearchListing.Result]()
+    var FloatSearchArray = [PTProAPI.SearchListingQuery.Data.SearchListing.Result]()
     var didscroll:Bool = false
     var currencyvalue_from_API_base = String()
     var currency_Dict = NSDictionary()
@@ -44,8 +44,8 @@ class FloatMapVC: UIViewController,UICollectionViewDelegate,UICollectionViewData
     @IBOutlet weak var settingImg: UIImageView!
     @IBOutlet weak var floatingFilterBtn: UIButton!
     @IBOutlet weak var mapBackview:UIImageView!
-    var getsearchPriceArray : GetDefaultSettingQuery.Data.GetSearchSettings.Results?
-    var RoomsFilterArray = [GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]()
+    var getsearchPriceArray : PTProAPI.GetDefaultSettingQuery.Data.GetSearchSettings.Results?
+    var RoomsFilterArray = [PTProAPI.GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]()
     var indexforScroll = IndexPath()
     var markerArray = [GMSMarker]()
     var Latitude: Double = 0.0

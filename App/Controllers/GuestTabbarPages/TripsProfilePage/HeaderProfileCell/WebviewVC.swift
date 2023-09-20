@@ -34,7 +34,7 @@ class WebviewVC: UIViewController,WKNavigationDelegate {
     var pageTitle = ""
     var isForPayPal: Bool = false
     var id:Int = 0
-    var staticContentArray = [GetStaticPageContentQuery.Data.GetStaticPageContent.Result]()
+    var staticContentArray = [PTProAPI.GetStaticPageContentQuery.Data.GetStaticPageContent.Result]()
     
     @IBOutlet var textContent: UITextView!
     
@@ -227,7 +227,7 @@ class WebviewVC: UIViewController,WKNavigationDelegate {
     func staticContentAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let staticContentQuery = GetStaticPageContentQuery(id: .some(self.id))
+            let staticContentQuery = PTProAPI.GetStaticPageContentQuery(id: .some(self.id))
             Network.shared.apollo_headerClient.fetch(query:staticContentQuery,cachePolicy: .fetchIgnoringCacheData){ [self] response in
                 switch response {
                 case .success(let result):

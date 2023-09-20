@@ -12,9 +12,13 @@
 
 "BSB number" = "Číslo BSB";
 
+"Billing address is same as shipping" = "Fakturační adresa je stejná jako dodací";
+
 "Cancel" = "Zrušit";
 
 "City" = "Město";
+
+"Code field" = "Pole pro kód";
 
 "Company" = "Společnost";
 
@@ -26,6 +30,8 @@
 
 "County" = "Okres";
 
+"Date is empty." = "Datum je prázdné.";
+
 "Department" = "Oddělení";
 
 "District" = "Okrsek";
@@ -33,6 +39,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Hotovo";
+
+"Double tap to edit" = "Dvakrát klepněte pro úpravu";
+
+"Edit" = "Upravit";
 
 "Eircode" = "Eircode";
 
@@ -47,6 +57,8 @@
 "Full name" = "Celé jméno";
 
 "Incomplete phone number" = "Neúplné telefonní číslo";
+
+"Invalid UPI ID" = "Neplatné UPI ID";
 
 "Island" = "Ostrov";
 
@@ -78,6 +90,8 @@
 
 "Remove bank account ending in %@" = "Odebrat bankovní účet končící na %@";
 
+"Search" = "Hledat";
+
 "State" = "Stát";
 
 "Suburb" = "Předměstí";
@@ -91,6 +105,8 @@
 "The account number you entered is incomplete." = "Zadané číslo účtu je neúplné.";
 
 "Town or city" = "Město nebo velkoměsto";
+
+"UPI ID" = "UPI ID";
 
 "Unable to parse phone number" = "Nelze analyzovat telefonní číslo";
 

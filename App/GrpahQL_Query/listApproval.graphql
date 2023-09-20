@@ -1,7 +1,0 @@
-mutation submitForVerification($id: Int!,$listApprovalStatus: String){
-          submitForVerification(id:$id, listApprovalStatus: $listApprovalStatus){
-              id
-              status
-              errorMessage
-            }
-          }

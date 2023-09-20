@@ -3,59 +3,62 @@
 
 @_exported import Apollo
 
-public class ManagePublishStatusMutation: GraphQLMutation {
-  public static let operationName: String = "managePublishStatus"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"mutation managePublishStatus($listId: Int!, $action: String!) { managePublishStatus(listId: $listId, action: $action) { __typename status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class ManagePublishStatusMutation: GraphQLMutation {
+    static let operationName: String = "managePublishStatus"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"mutation managePublishStatus($listId: Int!, $action: String!) { managePublishStatus(listId: $listId, action: $action) { __typename status errorMessage } }"#
+      ))
 
-  public var listId: Int
-  public var action: String
+    public var listId: Int
+    public var action: String
 
-  public init(
-    listId: Int,
-    action: String
-  ) {
-    self.listId = listId
-    self.action = action
-  }
+    public init(
+      listId: Int,
+      action: String
+    ) {
+      self.listId = listId
+      self.action = action
+    }
 
-  public var __variables: Variables? { [
-    "listId": listId,
-    "action": action
-  ] }
-
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
-
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Apollo.Selection] { [
-      .field("managePublishStatus", ManagePublishStatus?.self, arguments: [
-        "listId": .variable("listId"),
-        "action": .variable("action")
-      ]),
+    public var __variables: Variables? { [
+      "listId": listId,
+      "action": action
     ] }
 
-    public var managePublishStatus: ManagePublishStatus? { __data["managePublishStatus"] }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// ManagePublishStatus
-    ///
-    /// Parent Type: `AllList`
-    public struct ManagePublishStatus: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.AllList }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
+      static var __selections: [Apollo.Selection] { [
+        .field("managePublishStatus", ManagePublishStatus?.self, arguments: [
+          "listId": .variable("listId"),
+          "action": .variable("action")
+        ]),
       ] }
 
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var managePublishStatus: ManagePublishStatus? { __data["managePublishStatus"] }
+
+      /// ManagePublishStatus
+      ///
+      /// Parent Type: `AllList`
+      struct ManagePublishStatus: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
+
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.AllList }
+        static var __selections: [Apollo.Selection] { [
+          .field("__typename", String.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
+        ] }
+
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
+      }
     }
   }
+
 }

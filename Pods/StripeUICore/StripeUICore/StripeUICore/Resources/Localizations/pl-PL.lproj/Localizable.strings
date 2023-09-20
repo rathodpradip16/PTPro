@@ -18,6 +18,8 @@
 
 "City" = "Miejscowość";
 
+"Code field" = "Pole kodu";
+
 "Company" = "Firma";
 
 "Continue" = "Kontynuuj";
@@ -28,6 +30,8 @@
 
 "County" = "Hrabstwo";
 
+"Date is empty." = "Data jest pusta.";
+
 "Department" = "Departament";
 
 "District" = "Dystrykt";
@@ -35,6 +39,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Gotowe";
+
+"Double tap to edit" = "Dotknij dwa razy, aby edytować";
+
+"Edit" = "Edytuj";
 
 "Eircode" = "Eircode";
 
@@ -49,6 +57,8 @@
 "Full name" = "Imię i nazwisko";
 
 "Incomplete phone number" = "Niekompletny numer telefonu";
+
+"Invalid UPI ID" = "Nieprawidłowy UPI ID";
 
 "Island" = "Wyspa";
 
@@ -80,6 +90,8 @@
 
 "Remove bank account ending in %@" = "Usuń konto bankowe kończące się na %@";
 
+"Search" = "Wyszukaj";
+
 "State" = "Stan";
 
 "Suburb" = "Przedmieścia";
@@ -93,6 +105,8 @@
 "The account number you entered is incomplete." = "Podany numer konta jest niekompletny.";
 
 "Town or city" = "Miejscowość";
+
+"UPI ID" = "UPI ID";
 
 "Unable to parse phone number" = "Nie można dokonać parsowania numeru telefonu";
 

@@ -39,7 +39,7 @@ class LanguageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     var LanguagesymbolArray = [String]()
     var appearanceArray = ["Auto","Light","Dark"]
     
-    var userEditProfileArray : GetProfileQuery.Data.UserAccount.Result?
+    var userEditProfileArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
     var selectedLanguageArray = NSMutableArray()
     var selectedAppearanceArray = NSMutableArray()
     var delegate:LanguageVCDelegate!
@@ -623,7 +623,7 @@ class LanguageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func EditProfileAPICall(fieldName:String,fieldValue:String)
     {
-        let editprofileMutation = EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: .some(fieldValue), deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
+        let editprofileMutation = PTProAPI.EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: .some(fieldValue), deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
         Network.shared.apollo_headerClient.perform(mutation: editprofileMutation){  response in
             switch response {
             case .success(let result):

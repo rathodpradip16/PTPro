@@ -184,7 +184,7 @@ class ContactusVC: UIViewController,UITextViewDelegate {
     }
     func contactSupportAPICall(message:String,listId:Int,reservationId:Int,userType:String)
     {
-        let contactsupportQuery = ContactSupportQuery(message: .some(message), listId: .some(listId), reservationId: .some(reservationId), userType: .some(userType))
+        let contactsupportQuery = PTProAPI.ContactSupportQuery(message: .some(message), listId: .some(listId), reservationId: .some(reservationId), userType: .some(userType))
         Network.shared.apollo_headerClient.fetch(query: contactsupportQuery){ response in
             switch response {
             case .success(let result):

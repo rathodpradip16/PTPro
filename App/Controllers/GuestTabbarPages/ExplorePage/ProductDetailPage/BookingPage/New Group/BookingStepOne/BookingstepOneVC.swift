@@ -28,8 +28,8 @@ class BookingstepOneVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     var totalPriceLabel = String()
     
     
-    var houserulesArray = [ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]()
-    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
+    var houserulesArray = [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]()
+    var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
     
     
     override func viewDidLoad() {
@@ -197,7 +197,7 @@ class BookingstepOneVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             
             if (Utility.shared.getCurrentUserID() != nil){
                 
-                let profileQuery = GetProfileQuery()
+                let profileQuery = PTProAPI.GetProfileQuery()
                 
                 Network.shared.apollo_headerClient.fetch(query: profileQuery, cachePolicy: .fetchIgnoringCacheData){ response in
                     switch response {

@@ -145,7 +145,7 @@ class VerificationSuccessVC: UIViewController {
     func EmailVerification(){
         if Utility.shared.isConnectedToNetwork(){
             
-            let verifyEmail = EmailVerificationMutation(token: Utility.shared.ConfirmEmailToken, email: Utility.shared.ConfirmEmailString)
+            let verifyEmail = PTProAPI.EmailVerificationMutation(token: Utility.shared.ConfirmEmailToken, email: Utility.shared.ConfirmEmailString)
             Network.shared.apollo_headerClient.perform(mutation: verifyEmail){  response in
                 switch response {
                 case .success(let result):

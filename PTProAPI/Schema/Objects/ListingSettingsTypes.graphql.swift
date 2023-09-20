@@ -3,7 +3,7 @@
 
 import Apollo
 
-public extension Objects {
+extension PTProAPI.Objects {
   /// Represents listing field types for the frontend
   static let ListingSettingsTypes = Object(
     typename: "listingSettingsTypes",

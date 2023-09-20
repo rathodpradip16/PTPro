@@ -3,62 +3,65 @@
 
 @_exported import Apollo
 
-public class GetActiveSocialLoginsQuery: GraphQLQuery {
-  public static let operationName: String = "getActiveSocialLogins"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"query getActiveSocialLogins { getActiveSocialLogins { __typename status errorMessage results { __typename facebook google } } }"#
-    ))
+extension PTProAPI {
+  class GetActiveSocialLoginsQuery: GraphQLQuery {
+    static let operationName: String = "getActiveSocialLogins"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"query getActiveSocialLogins { getActiveSocialLogins { __typename status errorMessage results { __typename facebook google } } }"#
+      ))
 
-  public init() {}
+    public init() {}
 
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Apollo.Selection] { [
-      .field("getActiveSocialLogins", GetActiveSocialLogins?.self),
-    ] }
-
-    public var getActiveSocialLogins: GetActiveSocialLogins? { __data["getActiveSocialLogins"] }
-
-    /// GetActiveSocialLogins
-    ///
-    /// Parent Type: `SocialLoginsType`
-    public struct GetActiveSocialLogins: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.SocialLoginsType }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
-        .field("results", Results?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
+      static var __selections: [Apollo.Selection] { [
+        .field("getActiveSocialLogins", GetActiveSocialLogins?.self),
       ] }
 
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
-      public var results: Results? { __data["results"] }
+      var getActiveSocialLogins: GetActiveSocialLogins? { __data["getActiveSocialLogins"] }
 
-      /// GetActiveSocialLogins.Results
+      /// GetActiveSocialLogins
       ///
-      /// Parent Type: `ResultType`
-      public struct Results: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `SocialLoginsType`
+      struct GetActiveSocialLogins: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ResultType }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.SocialLoginsType }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("facebook", Bool?.self),
-          .field("google", Bool?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
+          .field("results", Results?.self),
         ] }
 
-        public var facebook: Bool? { __data["facebook"] }
-        public var google: Bool? { __data["google"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
+        var results: Results? { __data["results"] }
+
+        /// GetActiveSocialLogins.Results
+        ///
+        /// Parent Type: `ResultType`
+        struct Results: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
+
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.ResultType }
+          static var __selections: [Apollo.Selection] { [
+            .field("__typename", String.self),
+            .field("facebook", Bool?.self),
+            .field("google", Bool?.self),
+          ] }
+
+          var facebook: Bool? { __data["facebook"] }
+          var google: Bool? { __data["google"] }
+        }
       }
     }
   }
+
 }

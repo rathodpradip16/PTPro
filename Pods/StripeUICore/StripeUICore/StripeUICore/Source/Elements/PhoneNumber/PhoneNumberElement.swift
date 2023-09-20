@@ -3,16 +3,17 @@
 //  StripeUICore
 //
 //  Created by Yuki Tokuhiro on 6/21/22.
+//  Copyright © 2022 Stripe, Inc. All rights reserved.
 //
 
-import UIKit
 @_spi(STP) import StripeCore
+import UIKit
 
 /**
     A simple hstack of  [🇺🇸 + 1] `DropdownElement` and [ Phone number ] `TextFieldElement`
  */
 @_spi(STP) public class PhoneNumberElement: ContainerElement {
-    
+
     // MARK: - ContainerElement protocol
     public lazy var elements: [Element] = { [countryDropdownElement, textFieldElement] }()
     public var delegate: ElementDelegate?
@@ -21,24 +22,28 @@ import UIKit
         let hStackView = UIStackView(arrangedSubviews: [countryDropdownElement.view, textFieldElement.view])
         return hStackView
     }()
-    
+
     // MARK: - sub-Elements
     let countryDropdownElement: DropdownFieldElement
     let textFieldElement: TextFieldElement
-    
+
     // MARK: - Public properties
     public var phoneNumber: PhoneNumber? {
         return PhoneNumber(number: textFieldElement.text, countryCode: countryDropdownElement.selectedItem.rawData)
     }
-    
+
     public var hasBeenModified: Bool {
         return defaultPhoneNumber?.number != phoneNumber?.number ||
         defaultPhoneNumber?.countryCode != phoneNumber?.countryCode
     }
-    
+
+    public var selectedCountryCode: String {
+        countryDropdownElement.selectedItem.rawData
+    }
+
     // MARK: - Private properties
     private var defaultPhoneNumber: PhoneNumber?
-    
+
     // MARK: - Initializer
     /**
      Creates an address section with a country dropdown populated from the given list of countryCodes.
@@ -80,12 +85,23 @@ import UIKit
         self.countryDropdownElement.delegate = self
         self.textFieldElement.delegate = self
     }
-    
+
+    public func setSelectedCountryCode(_ countryCode: String, shouldUpdateDefaultNumber: Bool = false) {
+        guard let index = countryDropdownElement.items.firstIndex(where: { $0.rawData == countryCode }) else {
+            return
+        }
+        selectCountry(index: index, shouldUpdateDefaultNumber: shouldUpdateDefaultNumber)
+    }
+
+    public func clearPhoneNumber() {
+        textFieldElement.setText("")
+    }
+
     // MARK: - Element protocol
     public func beginEditing() -> Bool {
         return textFieldElement.beginEditing()
     }
-    
+
     // MARK: - ElementDelegate
     public func didUpdate(element: Element) {
         if element === textFieldElement && textFieldElement.didReceiveAutofill {
@@ -106,7 +122,7 @@ import UIKit
         }
         delegate?.didUpdate(element: self)
     }
-    
+
     // MARK: - Helpers
     static func deriveDefaults(countryCode: String?, phoneNumber: String?) -> (countryCode: String?, phoneNumber: String?) {
         // If the phone number is E164, derive defaults from that
@@ -116,10 +132,10 @@ import UIKit
             return (countryCode, phoneNumber)
         }
     }
-    
+
     func selectCountry(index: Int, shouldUpdateDefaultNumber: Bool = false) {
         countryDropdownElement.select(index: index)
-        
+
         if shouldUpdateDefaultNumber {
             self.defaultPhoneNumber = phoneNumber
         }
@@ -142,7 +158,7 @@ extension DropdownFieldElement {
             return .init(
                 pickerDisplayName: "\(flagEmoji) \(name) \(prefix)",            // 🇺🇸 United States +1
                 labelDisplayName: "\(flagEmoji) \(prefix)",
-                accessibilityLabel: "\(name) \(prefix)",
+                accessibilityValue: "\(name) \(prefix)",
                 rawData: $0
             )
         }

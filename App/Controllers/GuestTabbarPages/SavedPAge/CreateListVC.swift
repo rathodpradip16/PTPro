@@ -131,7 +131,7 @@ class CreateListVC: UIViewController {
     
     func createWhishlistAPICalls(listId:Int,wishListGroupId:Int,eventKey:Bool)
     {
-        let createWhishlistMutation = CreateWishListMutation(listId: listId, wishListGroupId: .some(wishListGroupId), eventKey:.some(eventKey))
+        let createWhishlistMutation = PTProAPI.CreateWishListMutation(listId: listId, wishListGroupId: .some(wishListGroupId), eventKey:.some(eventKey))
         Network.shared.apollo_headerClient.perform(mutation: createWhishlistMutation){  response in
             switch response {
             case .success(let result):
@@ -159,7 +159,7 @@ class CreateListVC: UIViewController {
     func createWhishlistAPICall()
 {
     if Utility.shared.isConnectedToNetwork(){
-        let createWhishlistMutation = CreateWishListGroupMutation(name: titleTF.text!, isPublic: .none, id: .none)
+        let createWhishlistMutation = PTProAPI.CreateWishListGroupMutation(name: titleTF.text!, isPublic: .none, id: .none)
         Network.shared.apollo_headerClient.perform(mutation: createWhishlistMutation){ response in
             switch response {
             case .success(let result):
@@ -232,7 +232,7 @@ class CreateListVC: UIViewController {
     func createWhishlistAPICalls()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let createWhishlistMutation = CreateWishListGroupMutation(name:titleTF.text!, isPublic: .none , id: .some(self.groupID))
+            let createWhishlistMutation = PTProAPI.CreateWishListGroupMutation(name:titleTF.text!, isPublic: .none , id: .some(self.groupID))
             Network.shared.apollo_headerClient.perform(mutation: createWhishlistMutation){ [self] response in
                 self.lottieView.isHidden = true
                 

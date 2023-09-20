@@ -22,8 +22,8 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var offlineView: UIView!
-    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
-    var cancelResrvarionArray  : CancellationDataQuery.Data.CancelReservationData.Results?
+    var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
+    var cancelResrvarionArray  : PTProAPI.CancellationDataQuery.Data.CancelReservationData.Results?
     var checkinDate = String()
     var checkoutDate = String()
     var textviewValue = String()
@@ -683,7 +683,7 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
 func getcancellationAPICall(reservationId:Int,userType:String,currency:String)
     {
-        let getcancellationquery = CancellationDataQuery(reservationId: reservationId, userType: userType, currency: .some(currency))
+        let getcancellationquery = PTProAPI.CancellationDataQuery(reservationId: reservationId, userType: userType, currency: .some(currency))
         Network.shared.apollo_headerClient.fetch(query: getcancellationquery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -733,7 +733,7 @@ func getcancellationAPICall(reservationId:Int,userType:String,currency:String)
         {
     //        cancelResrvarionArray?.payoutToHost = 0
         }
-        let cancelBookingMutation = CancelReservationMutation(reservationId: cancelResrvarionArray?.reservationId! ?? 0, cancellationPolicy: cancelResrvarionArray?.cancellationPolicy! ?? "", refundToGuest: cancelResrvarionArray?.refundToGuest! ?? 0, payoutToHost: cancelResrvarionArray?.payoutToHost! ?? 0, guestServiceFee: cancelResrvarionArray?.guestServiceFee! ?? 0, hostServiceFee: cancelResrvarionArray?.hostServiceFee! ?? 0, total: cancelResrvarionArray?.total! ?? 0, currency: cancelResrvarionArray?.currency! ?? "", threadId: cancelResrvarionArray?.threadId! ?? 0, cancelledBy: cancelResrvarionArray?.cancelledBy! ?? "", message: textviewValue, checkIn: cancelResrvarionArray?.checkIn! ?? "", checkOut: cancelResrvarionArray?.checkOut! ?? "", guests: cancelResrvarionArray?.guests! ?? 0)
+        let cancelBookingMutation = PTProAPI.CancelReservationMutation(reservationId: cancelResrvarionArray?.reservationId! ?? 0, cancellationPolicy: cancelResrvarionArray?.cancellationPolicy! ?? "", refundToGuest: cancelResrvarionArray?.refundToGuest! ?? 0, payoutToHost: cancelResrvarionArray?.payoutToHost! ?? 0, guestServiceFee: cancelResrvarionArray?.guestServiceFee! ?? 0, hostServiceFee: cancelResrvarionArray?.hostServiceFee! ?? 0, total: cancelResrvarionArray?.total! ?? 0, currency: cancelResrvarionArray?.currency! ?? "", threadId: cancelResrvarionArray?.threadId! ?? 0, cancelledBy: cancelResrvarionArray?.cancelledBy! ?? "", message: textviewValue, checkIn: cancelResrvarionArray?.checkIn! ?? "", checkOut: cancelResrvarionArray?.checkOut! ?? "", guests: cancelResrvarionArray?.guests! ?? 0)
         Network.shared.apollo_headerClient.perform(mutation: cancelBookingMutation){ response in
             self.lottieView.isHidden  = true
             switch response {
@@ -775,7 +775,7 @@ func getcancellationAPICall(reservationId:Int,userType:String,currency:String)
     func viewDetailAPICall(listid:Int)
     {
         if Utility.shared.isConnectedToNetwork(){
-            var viewListQuery = ViewListingDetailsQuery(listId:self.listID, preview: .some(false))
+            var viewListQuery = PTProAPI.ViewListingDetailsQuery(listId:self.listID, preview: .some(false))
             
             Network.shared.apollo_headerClient.fetch(query: viewListQuery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {

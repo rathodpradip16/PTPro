@@ -222,7 +222,7 @@ class ReportuserPage: UIViewController,UITableViewDelegate,UITableViewDataSource
     func reportUserAPICall(reportType:String,profileid:Int)
     {
         self.lottienextAnimation()
-        let reportuserMutation = CreateReportUserMutation(reporterId:.some(Utility.shared.getCurrentUserID()! as String), userId: .none, reportType: .some(reportType), profileId: .some(profileid))
+        let reportuserMutation = PTProAPI.CreateReportUserMutation(reporterId:.some(Utility.shared.getCurrentUserID()! as String), userId: .none, reportType: .some(reportType), profileId: .some(profileid))
         Network.shared.apollo_headerClient.perform(mutation: reportuserMutation){ response in
             self.lottieView.isHidden = true
             switch response {

@@ -69,7 +69,7 @@ class ForgotPasswordVC: UIViewController {
         forgotView.resignFirstResponder()
         forgotTF.resignFirstResponder()
         
-        if (!(forgotTF.text?.isValidEmail())! || forgotTF.text?.length == 0)  {
+        if (!(forgotTF.text?.isValidEmail())! || forgotTF.text?.count == 0)  {
 
             self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"validemailenter"))!)")
         }
@@ -235,7 +235,7 @@ class ForgotPasswordVC: UIViewController {
         if Utility.shared.isConnectedToNetwork(){
             
             self.Offline_View.isHidden = true
-            let forgotmutation = ForgotPasswordMutation(email:forgotTF.text!)
+            let forgotmutation = PTProAPI.ForgotPasswordMutation(email:forgotTF.text!)
             apollo.perform(mutation: forgotmutation){ response in
                 switch response {
                 case .success(let result):

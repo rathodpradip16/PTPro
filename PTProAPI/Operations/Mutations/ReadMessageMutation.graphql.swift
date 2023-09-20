@@ -3,50 +3,53 @@
 
 @_exported import Apollo
 
-public class ReadMessageMutation: GraphQLMutation {
-  public static let operationName: String = "readMessage"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"mutation readMessage($threadId: Int!) { readMessage(threadId: $threadId) { __typename status message errorMessage } }"#
-    ))
+extension PTProAPI {
+  class ReadMessageMutation: GraphQLMutation {
+    static let operationName: String = "readMessage"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"mutation readMessage($threadId: Int!) { readMessage(threadId: $threadId) { __typename status message errorMessage } }"#
+      ))
 
-  public var threadId: Int
+    public var threadId: Int
 
-  public init(threadId: Int) {
-    self.threadId = threadId
-  }
+    public init(threadId: Int) {
+      self.threadId = threadId
+    }
 
-  public var __variables: Variables? { ["threadId": threadId] }
+    public var __variables: Variables? { ["threadId": threadId] }
 
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Apollo.Selection] { [
-      .field("readMessage", ReadMessage?.self, arguments: ["threadId": .variable("threadId")]),
-    ] }
-
-    public var readMessage: ReadMessage? { __data["readMessage"] }
-
-    /// ReadMessage
-    ///
-    /// Parent Type: `SendMessage`
-    public struct ReadMessage: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.SendMessage }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("status", Int?.self),
-        .field("message", String?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
+      static var __selections: [Apollo.Selection] { [
+        .field("readMessage", ReadMessage?.self, arguments: ["threadId": .variable("threadId")]),
       ] }
 
-      public var status: Int? { __data["status"] }
-      public var message: String? { __data["message"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var readMessage: ReadMessage? { __data["readMessage"] }
+
+      /// ReadMessage
+      ///
+      /// Parent Type: `SendMessage`
+      struct ReadMessage: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
+
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.SendMessage }
+        static var __selections: [Apollo.Selection] { [
+          .field("__typename", String.self),
+          .field("status", Int?.self),
+          .field("message", String?.self),
+          .field("errorMessage", String?.self),
+        ] }
+
+        var status: Int? { __data["status"] }
+        var message: String? { __data["message"] }
+        var errorMessage: String? { __data["errorMessage"] }
+      }
     }
   }
+
 }

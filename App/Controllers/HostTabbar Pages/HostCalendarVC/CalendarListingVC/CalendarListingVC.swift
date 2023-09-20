@@ -31,9 +31,9 @@ class CalendarListingVC: UIViewController,UITableViewDelegate,UITableViewDataSou
     @IBOutlet weak var CalendarListingTable: UITableView!
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var topView: UIView!
-    var manageListingArray = [ManageListingsQuery.Data.ManageListings.Result]()
-    var inprogress_List_Array = [ManageListingsQuery.Data.ManageListings.Result]()
-    var completed_List_Array = [ManageListingsQuery.Data.ManageListings.Result]()
+    var manageListingArray = [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]()
+    var inprogress_List_Array = [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]()
+    var completed_List_Array = [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]()
   //  var selected_Array  = NSMutableArray()
      var lottieView: LottieAnimationView!
     var deleagte:CalendarListingVCProtocol!
@@ -83,7 +83,7 @@ class CalendarListingVC: UIViewController,UITableViewDelegate,UITableViewDataSou
     func manageListingAPICall()
     {
         
-        let manageListingquery = ManageListingsQuery()
+        let manageListingquery = PTProAPI.ManageListingsQuery()
         Network.shared.apollo_headerClient.fetch(query: manageListingquery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
             switch response {
             case .success(let result):
@@ -92,7 +92,7 @@ class CalendarListingVC: UIViewController,UITableViewDelegate,UITableViewDataSou
                     self.view.makeToast(result.data?.manageListings?.errorMessage)
                     return
                 }
-                self.manageListingArray = ((result.data?.manageListings?.results)!) as! [ManageListingsQuery.Data.ManageListings.Result]
+                self.manageListingArray = ((result.data?.manageListings?.results)!) as! [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]
                 for i in self.manageListingArray
                 {
                     if(i.isReady == false)

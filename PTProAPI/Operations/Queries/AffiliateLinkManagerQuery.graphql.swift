@@ -3,133 +3,136 @@
 
 @_exported import Apollo
 
-public class AffiliateLinkManagerQuery: GraphQLQuery {
-  public static let operationName: String = "affiliateLinkManager"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"query affiliateLinkManager($userId: String, $address: String) { affiliateLinkManager(userId: $userId, address: $address) { __typename results { __typename id title affiliateId referralId createdAt clickResult earning listPhotos { __typename id name type } listingData { __typename basePrice currency affiliate_commission } } status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class AffiliateLinkManagerQuery: GraphQLQuery {
+    static let operationName: String = "affiliateLinkManager"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"query affiliateLinkManager($userId: String, $address: String) { affiliateLinkManager(userId: $userId, address: $address) { __typename results { __typename id title affiliateId referralId createdAt clickResult earning listPhotos { __typename id name type } listingData { __typename basePrice currency affiliate_commission } } status errorMessage } }"#
+      ))
 
-  public var userId: GraphQLNullable<String>
-  public var address: GraphQLNullable<String>
+    public var userId: GraphQLNullable<String>
+    public var address: GraphQLNullable<String>
 
-  public init(
-    userId: GraphQLNullable<String>,
-    address: GraphQLNullable<String>
-  ) {
-    self.userId = userId
-    self.address = address
-  }
+    public init(
+      userId: GraphQLNullable<String>,
+      address: GraphQLNullable<String>
+    ) {
+      self.userId = userId
+      self.address = address
+    }
 
-  public var __variables: Variables? { [
-    "userId": userId,
-    "address": address
-  ] }
-
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
-
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Apollo.Selection] { [
-      .field("affiliateLinkManager", AffiliateLinkManager?.self, arguments: [
-        "userId": .variable("userId"),
-        "address": .variable("address")
-      ]),
+    public var __variables: Variables? { [
+      "userId": userId,
+      "address": address
     ] }
 
-    public var affiliateLinkManager: AffiliateLinkManager? { __data["affiliateLinkManager"] }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// AffiliateLinkManager
-    ///
-    /// Parent Type: `Resultdata`
-    public struct AffiliateLinkManager: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Resultdata }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("results", [Result?]?.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
+      static var __selections: [Apollo.Selection] { [
+        .field("affiliateLinkManager", AffiliateLinkManager?.self, arguments: [
+          "userId": .variable("userId"),
+          "address": .variable("address")
+        ]),
       ] }
 
-      public var results: [Result?]? { __data["results"] }
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var affiliateLinkManager: AffiliateLinkManager? { __data["affiliateLinkManager"] }
 
-      /// AffiliateLinkManager.Result
+      /// AffiliateLinkManager
       ///
-      /// Parent Type: `Searchlistaffiliate`
-      public struct Result: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `Resultdata`
+      struct AffiliateLinkManager: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Searchlistaffiliate }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.Resultdata }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("id", Int?.self),
-          .field("title", String?.self),
-          .field("affiliateId", String?.self),
-          .field("referralId", String?.self),
-          .field("createdAt", String?.self),
-          .field("clickResult", Int?.self),
-          .field("earning", Double?.self),
-          .field("listPhotos", [ListPhoto?]?.self),
-          .field("listingData", ListingData?.self),
+          .field("results", [Result?]?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
         ] }
 
-        public var id: Int? { __data["id"] }
-        public var title: String? { __data["title"] }
-        public var affiliateId: String? { __data["affiliateId"] }
-        public var referralId: String? { __data["referralId"] }
-        public var createdAt: String? { __data["createdAt"] }
-        public var clickResult: Int? { __data["clickResult"] }
-        public var earning: Double? { __data["earning"] }
-        public var listPhotos: [ListPhoto?]? { __data["listPhotos"] }
-        public var listingData: ListingData? { __data["listingData"] }
+        var results: [Result?]? { __data["results"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
 
-        /// AffiliateLinkManager.Result.ListPhoto
+        /// AffiliateLinkManager.Result
         ///
-        /// Parent Type: `ListPhotoss`
-        public struct ListPhoto: PTProAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+        /// Parent Type: `Searchlistaffiliate`
+        struct Result: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListPhotoss }
-          public static var __selections: [Apollo.Selection] { [
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.Searchlistaffiliate }
+          static var __selections: [Apollo.Selection] { [
             .field("__typename", String.self),
             .field("id", Int?.self),
-            .field("name", String?.self),
-            .field("type", String?.self),
+            .field("title", String?.self),
+            .field("affiliateId", String?.self),
+            .field("referralId", String?.self),
+            .field("createdAt", String?.self),
+            .field("clickResult", Int?.self),
+            .field("earning", Double?.self),
+            .field("listPhotos", [ListPhoto?]?.self),
+            .field("listingData", ListingData?.self),
           ] }
 
-          public var id: Int? { __data["id"] }
-          public var name: String? { __data["name"] }
-          public var type: String? { __data["type"] }
-        }
+          var id: Int? { __data["id"] }
+          var title: String? { __data["title"] }
+          var affiliateId: String? { __data["affiliateId"] }
+          var referralId: String? { __data["referralId"] }
+          var createdAt: String? { __data["createdAt"] }
+          var clickResult: Int? { __data["clickResult"] }
+          var earning: Double? { __data["earning"] }
+          var listPhotos: [ListPhoto?]? { __data["listPhotos"] }
+          var listingData: ListingData? { __data["listingData"] }
 
-        /// AffiliateLinkManager.Result.ListingData
-        ///
-        /// Parent Type: `ListingDataa`
-        public struct ListingData: PTProAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+          /// AffiliateLinkManager.Result.ListPhoto
+          ///
+          /// Parent Type: `ListPhotoss`
+          struct ListPhoto: PTProAPI.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListingDataa }
-          public static var __selections: [Apollo.Selection] { [
-            .field("__typename", String.self),
-            .field("basePrice", Double?.self),
-            .field("currency", String?.self),
-            .field("affiliate_commission", Double?.self),
-          ] }
+            static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListPhotoss }
+            static var __selections: [Apollo.Selection] { [
+              .field("__typename", String.self),
+              .field("id", Int?.self),
+              .field("name", String?.self),
+              .field("type", String?.self),
+            ] }
 
-          public var basePrice: Double? { __data["basePrice"] }
-          public var currency: String? { __data["currency"] }
-          public var affiliate_commission: Double? { __data["affiliate_commission"] }
+            var id: Int? { __data["id"] }
+            var name: String? { __data["name"] }
+            var type: String? { __data["type"] }
+          }
+
+          /// AffiliateLinkManager.Result.ListingData
+          ///
+          /// Parent Type: `ListingDataa`
+          struct ListingData: PTProAPI.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
+
+            static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListingDataa }
+            static var __selections: [Apollo.Selection] { [
+              .field("__typename", String.self),
+              .field("basePrice", Double?.self),
+              .field("currency", String?.self),
+              .field("affiliate_commission", Double?.self),
+            ] }
+
+            var basePrice: Double? { __data["basePrice"] }
+            var currency: String? { __data["currency"] }
+            var affiliate_commission: Double? { __data["affiliate_commission"] }
+          }
         }
       }
     }
   }
+
 }

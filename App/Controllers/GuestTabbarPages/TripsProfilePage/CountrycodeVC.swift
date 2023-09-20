@@ -26,7 +26,7 @@ class CountrycodeVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     @IBOutlet weak var label: UILabel!
      @IBOutlet var bottomConstraint: NSLayoutConstraint!
     //This property
-    var countrycodeArray = [GetCountrycodeQuery.Data.GetCountries.Result]()
+    var countrycodeArray = [PTProAPI.GetCountrycodeQuery.Data.GetCountries.Result]()
     var titleForHeader = "\((Utility.shared.getLanguage()?.value(forKey:"selectcountry"))!)"
     var tabFilterData = [[String : Any]]()
     var countryStringArr = [String]()
@@ -114,7 +114,7 @@ class CountrycodeVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     func CountryAPICAll()
     {
-        let getcountrycodeQuery = GetCountrycodeQuery()
+        let getcountrycodeQuery = PTProAPI.GetCountrycodeQuery()
         apollo.fetch(query: getcountrycodeQuery){ response in
             switch response {
             case .success(let result):
@@ -123,7 +123,7 @@ class CountrycodeVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                     print("Missing Data")
                     return
                 }
-                self.countrycodeArray =  ((result.data?.getCountries?.results)!) as! [GetCountrycodeQuery.Data.GetCountries.Result]
+                self.countrycodeArray =  ((result.data?.getCountries?.results)!) as! [PTProAPI.GetCountrycodeQuery.Data.GetCountries.Result]
                 self.lottieView.isHidden = true
                 self.countryTable.reloadData()
                 

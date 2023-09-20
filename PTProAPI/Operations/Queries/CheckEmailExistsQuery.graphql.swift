@@ -3,48 +3,51 @@
 
 @_exported import Apollo
 
-public class CheckEmailExistsQuery: GraphQLQuery {
-  public static let operationName: String = "CheckEmailExists"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"query CheckEmailExists($email: String!) { validateEmailExist(email: $email) { __typename status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class CheckEmailExistsQuery: GraphQLQuery {
+    static let operationName: String = "CheckEmailExists"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"query CheckEmailExists($email: String!) { validateEmailExist(email: $email) { __typename status errorMessage } }"#
+      ))
 
-  public var email: String
+    public var email: String
 
-  public init(email: String) {
-    self.email = email
-  }
+    public init(email: String) {
+      self.email = email
+    }
 
-  public var __variables: Variables? { ["email": email] }
+    public var __variables: Variables? { ["email": email] }
 
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Apollo.Selection] { [
-      .field("validateEmailExist", ValidateEmailExist?.self, arguments: ["email": .variable("email")]),
-    ] }
-
-    public var validateEmailExist: ValidateEmailExist? { __data["validateEmailExist"] }
-
-    /// ValidateEmailExist
-    ///
-    /// Parent Type: `CommonType`
-    public struct ValidateEmailExist: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.CommonType }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
+      static var __selections: [Apollo.Selection] { [
+        .field("validateEmailExist", ValidateEmailExist?.self, arguments: ["email": .variable("email")]),
       ] }
 
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var validateEmailExist: ValidateEmailExist? { __data["validateEmailExist"] }
+
+      /// ValidateEmailExist
+      ///
+      /// Parent Type: `CommonType`
+      struct ValidateEmailExist: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
+
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.CommonType }
+        static var __selections: [Apollo.Selection] { [
+          .field("__typename", String.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
+        ] }
+
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
+      }
     }
   }
+
 }

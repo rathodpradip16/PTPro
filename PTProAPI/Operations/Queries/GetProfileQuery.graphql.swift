@@ -3,152 +3,155 @@
 
 @_exported import Apollo
 
-public class GetProfileQuery: GraphQLQuery {
-  public static let operationName: String = "GetProfile"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"query GetProfile { userAccount { __typename result { __typename userId profileId firstName lastName displayName gender dateOfBirth iosDOB email userBanStatus phoneNumber preferredLanguage preferredLanguageName preferredCurrency appTheme location info createdAt picture country loginUserType isAddedList verification { __typename id isEmailConfirmed isFacebookConnected isGoogleConnected isIdVerification isPhoneVerified } userData { __typename type } verificationCode countryCode loginUserType isAddedList } status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class GetProfileQuery: GraphQLQuery {
+    static let operationName: String = "GetProfile"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"query GetProfile { userAccount { __typename result { __typename userId profileId firstName lastName displayName gender dateOfBirth iosDOB email userBanStatus phoneNumber preferredLanguage preferredLanguageName preferredCurrency appTheme location info createdAt picture country loginUserType isAddedList verification { __typename id isEmailConfirmed isFacebookConnected isGoogleConnected isIdVerification isPhoneVerified } userData { __typename type } verificationCode countryCode loginUserType isAddedList } status errorMessage } }"#
+      ))
 
-  public init() {}
+    public init() {}
 
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Apollo.Selection] { [
-      .field("userAccount", UserAccount?.self),
-    ] }
-
-    public var userAccount: UserAccount? { __data["userAccount"] }
-
-    /// UserAccount
-    ///
-    /// Parent Type: `WholeAccount`
-    public struct UserAccount: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.WholeAccount }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("result", Result?.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
+      static var __selections: [Apollo.Selection] { [
+        .field("userAccount", UserAccount?.self),
       ] }
 
-      public var result: Result? { __data["result"] }
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var userAccount: UserAccount? { __data["userAccount"] }
 
-      /// UserAccount.Result
+      /// UserAccount
       ///
-      /// Parent Type: `UserAccount`
-      public struct Result: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `WholeAccount`
+      struct UserAccount: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.UserAccount }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.WholeAccount }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("userId", PTProAPI.ID?.self),
-          .field("profileId", Int?.self),
-          .field("firstName", String?.self),
-          .field("lastName", String?.self),
-          .field("displayName", String?.self),
-          .field("gender", String?.self),
-          .field("dateOfBirth", String?.self),
-          .field("iosDOB", String?.self),
-          .field("email", String?.self),
-          .field("userBanStatus", Int?.self),
-          .field("phoneNumber", String?.self),
-          .field("preferredLanguage", String?.self),
-          .field("preferredLanguageName", String?.self),
-          .field("preferredCurrency", String?.self),
-          .field("appTheme", String?.self),
-          .field("location", String?.self),
-          .field("info", String?.self),
-          .field("createdAt", String?.self),
-          .field("picture", String?.self),
-          .field("country", Int?.self),
-          .field("loginUserType", String?.self),
-          .field("isAddedList", Bool?.self),
-          .field("verification", Verification?.self),
-          .field("userData", UserData?.self),
-          .field("verificationCode", Int?.self),
-          .field("countryCode", String?.self),
+          .field("result", Result?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
         ] }
 
-        public var userId: PTProAPI.ID? { __data["userId"] }
-        public var profileId: Int? { __data["profileId"] }
-        public var firstName: String? { __data["firstName"] }
-        public var lastName: String? { __data["lastName"] }
-        public var displayName: String? { __data["displayName"] }
-        public var gender: String? { __data["gender"] }
-        public var dateOfBirth: String? { __data["dateOfBirth"] }
-        public var iosDOB: String? { __data["iosDOB"] }
-        public var email: String? { __data["email"] }
-        public var userBanStatus: Int? { __data["userBanStatus"] }
-        public var phoneNumber: String? { __data["phoneNumber"] }
-        public var preferredLanguage: String? { __data["preferredLanguage"] }
-        public var preferredLanguageName: String? { __data["preferredLanguageName"] }
-        public var preferredCurrency: String? { __data["preferredCurrency"] }
-        public var appTheme: String? { __data["appTheme"] }
-        public var location: String? { __data["location"] }
-        public var info: String? { __data["info"] }
-        public var createdAt: String? { __data["createdAt"] }
-        public var picture: String? { __data["picture"] }
-        public var country: Int? { __data["country"] }
-        public var loginUserType: String? { __data["loginUserType"] }
-        public var isAddedList: Bool? { __data["isAddedList"] }
-        public var verification: Verification? { __data["verification"] }
-        public var userData: UserData? { __data["userData"] }
-        public var verificationCode: Int? { __data["verificationCode"] }
-        public var countryCode: String? { __data["countryCode"] }
+        var result: Result? { __data["result"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
 
-        /// UserAccount.Result.Verification
+        /// UserAccount.Result
         ///
-        /// Parent Type: `UserVerifiedInfo`
-        public struct Verification: PTProAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+        /// Parent Type: `UserAccount`
+        struct Result: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: Apollo.ParentType { PTProAPI.Objects.UserVerifiedInfo }
-          public static var __selections: [Apollo.Selection] { [
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.UserAccount }
+          static var __selections: [Apollo.Selection] { [
             .field("__typename", String.self),
-            .field("id", Int?.self),
-            .field("isEmailConfirmed", Bool?.self),
-            .field("isFacebookConnected", Bool?.self),
-            .field("isGoogleConnected", Bool?.self),
-            .field("isIdVerification", Bool?.self),
-            .field("isPhoneVerified", Bool?.self),
+            .field("userId", PTProAPI.ID?.self),
+            .field("profileId", Int?.self),
+            .field("firstName", String?.self),
+            .field("lastName", String?.self),
+            .field("displayName", String?.self),
+            .field("gender", String?.self),
+            .field("dateOfBirth", String?.self),
+            .field("iosDOB", String?.self),
+            .field("email", String?.self),
+            .field("userBanStatus", Int?.self),
+            .field("phoneNumber", String?.self),
+            .field("preferredLanguage", String?.self),
+            .field("preferredLanguageName", String?.self),
+            .field("preferredCurrency", String?.self),
+            .field("appTheme", String?.self),
+            .field("location", String?.self),
+            .field("info", String?.self),
+            .field("createdAt", String?.self),
+            .field("picture", String?.self),
+            .field("country", Int?.self),
+            .field("loginUserType", String?.self),
+            .field("isAddedList", Bool?.self),
+            .field("verification", Verification?.self),
+            .field("userData", UserData?.self),
+            .field("verificationCode", Int?.self),
+            .field("countryCode", String?.self),
           ] }
 
-          public var id: Int? { __data["id"] }
-          public var isEmailConfirmed: Bool? { __data["isEmailConfirmed"] }
-          public var isFacebookConnected: Bool? { __data["isFacebookConnected"] }
-          public var isGoogleConnected: Bool? { __data["isGoogleConnected"] }
-          public var isIdVerification: Bool? { __data["isIdVerification"] }
-          public var isPhoneVerified: Bool? { __data["isPhoneVerified"] }
-        }
+          var userId: PTProAPI.ID? { __data["userId"] }
+          var profileId: Int? { __data["profileId"] }
+          var firstName: String? { __data["firstName"] }
+          var lastName: String? { __data["lastName"] }
+          var displayName: String? { __data["displayName"] }
+          var gender: String? { __data["gender"] }
+          var dateOfBirth: String? { __data["dateOfBirth"] }
+          var iosDOB: String? { __data["iosDOB"] }
+          var email: String? { __data["email"] }
+          var userBanStatus: Int? { __data["userBanStatus"] }
+          var phoneNumber: String? { __data["phoneNumber"] }
+          var preferredLanguage: String? { __data["preferredLanguage"] }
+          var preferredLanguageName: String? { __data["preferredLanguageName"] }
+          var preferredCurrency: String? { __data["preferredCurrency"] }
+          var appTheme: String? { __data["appTheme"] }
+          var location: String? { __data["location"] }
+          var info: String? { __data["info"] }
+          var createdAt: String? { __data["createdAt"] }
+          var picture: String? { __data["picture"] }
+          var country: Int? { __data["country"] }
+          var loginUserType: String? { __data["loginUserType"] }
+          var isAddedList: Bool? { __data["isAddedList"] }
+          var verification: Verification? { __data["verification"] }
+          var userData: UserData? { __data["userData"] }
+          var verificationCode: Int? { __data["verificationCode"] }
+          var countryCode: String? { __data["countryCode"] }
 
-        /// UserAccount.Result.UserData
-        ///
-        /// Parent Type: `UserType`
-        public struct UserData: PTProAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+          /// UserAccount.Result.Verification
+          ///
+          /// Parent Type: `UserVerifiedInfo`
+          struct Verification: PTProAPI.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: Apollo.ParentType { PTProAPI.Objects.UserType }
-          public static var __selections: [Apollo.Selection] { [
-            .field("__typename", String.self),
-            .field("type", String?.self),
-          ] }
+            static var __parentType: Apollo.ParentType { PTProAPI.Objects.UserVerifiedInfo }
+            static var __selections: [Apollo.Selection] { [
+              .field("__typename", String.self),
+              .field("id", Int?.self),
+              .field("isEmailConfirmed", Bool?.self),
+              .field("isFacebookConnected", Bool?.self),
+              .field("isGoogleConnected", Bool?.self),
+              .field("isIdVerification", Bool?.self),
+              .field("isPhoneVerified", Bool?.self),
+            ] }
 
-          public var type: String? { __data["type"] }
+            var id: Int? { __data["id"] }
+            var isEmailConfirmed: Bool? { __data["isEmailConfirmed"] }
+            var isFacebookConnected: Bool? { __data["isFacebookConnected"] }
+            var isGoogleConnected: Bool? { __data["isGoogleConnected"] }
+            var isIdVerification: Bool? { __data["isIdVerification"] }
+            var isPhoneVerified: Bool? { __data["isPhoneVerified"] }
+          }
+
+          /// UserAccount.Result.UserData
+          ///
+          /// Parent Type: `UserType`
+          struct UserData: PTProAPI.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
+
+            static var __parentType: Apollo.ParentType { PTProAPI.Objects.UserType }
+            static var __selections: [Apollo.Selection] { [
+              .field("__typename", String.self),
+              .field("type", String?.self),
+            ] }
+
+            var type: String? { __data["type"] }
+          }
         }
       }
     }
   }
+
 }

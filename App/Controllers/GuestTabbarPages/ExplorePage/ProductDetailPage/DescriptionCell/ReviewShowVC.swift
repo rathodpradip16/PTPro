@@ -22,13 +22,13 @@ class ReviewShowVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     @IBOutlet weak var reviewTitleView: UILabel!
     @IBOutlet weak var reviewHeaderHeightConstraint: NSLayoutConstraint!
 
-    var reiewListingArray = [UserReviewsQuery.Data.UserReviews.Result]()
+    var reiewListingArray = [PTProAPI.UserReviewsQuery.Data.UserReviews.Result]()
     var profileID = Int()
     var pageIndex : Int = 1
     var reviewcount = Int()
     var isForProfileReviews = false
     
-    var propertyReviewArray = [GetPropertyReviewsQuery.Data.GetPropertyReviews.Result]()
+    var propertyReviewArray = [PTProAPI.GetPropertyReviewsQuery.Data.GetPropertyReviews.Result]()
     var propertyReviewsCount = 0
     var reviewTitle = ""
     var isMoveToCell = true
@@ -75,7 +75,7 @@ class ReviewShowVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
 
     func getPropertyReviewsAPICall(lisId:Int){
         
-        let propertyReviewsQuery = GetPropertyReviewsQuery(currentPage: pageIndex, listId: profileID)
+        let propertyReviewsQuery = PTProAPI.GetPropertyReviewsQuery(currentPage: pageIndex, listId: profileID)
         Network.shared.apollo_headerClient.fetch(query: propertyReviewsQuery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -89,7 +89,7 @@ class ReviewShowVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                     self.propertyReviewArray.removeAll()
                 }
                 self.propertyReviewsCount = result.data?.getPropertyReviews?.count ?? 0
-                self.propertyReviewArray.append(contentsOf: ((result.data?.getPropertyReviews?.results)!) as! [GetPropertyReviewsQuery.Data.GetPropertyReviews.Result] )
+                self.propertyReviewArray.append(contentsOf: ((result.data?.getPropertyReviews?.results)!) as! [PTProAPI.GetPropertyReviewsQuery.Data.GetPropertyReviews.Result] )
                 self.reviewTable.reloadData()
                 
                 
@@ -379,7 +379,7 @@ class ReviewShowVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     }
     func reviewcountAPICall(profileid:Int)
     {
-        let reviewListquery = UserReviewsQuery(ownerType: "others", currentPage:.some(pageIndex), profileId:.some(profileid))
+        let reviewListquery = PTProAPI.UserReviewsQuery(ownerType: "others", currentPage:.some(pageIndex), profileId:.some(profileid))
         
         Network.shared.apollo_headerClient.fetch(query: reviewListquery){ response in
             switch response {
@@ -388,7 +388,7 @@ class ReviewShowVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                     print("Missing Data")
                     return
                 }
-                self.reiewListingArray.append(contentsOf: ((result.data?.userReviews?.results)!) as! [UserReviewsQuery.Data.UserReviews.Result])
+                self.reiewListingArray.append(contentsOf: ((result.data?.userReviews?.results)!) as! [PTProAPI.UserReviewsQuery.Data.UserReviews.Result])
                 
                 
                 //   self.reiewListingArray = (result.data?.userReviews?.results)! as! [UserReviewsQuery.Data.UserReview.Result]

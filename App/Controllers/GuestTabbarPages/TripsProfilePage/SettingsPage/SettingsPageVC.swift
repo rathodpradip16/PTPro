@@ -27,7 +27,7 @@ class SettingsPageVC: UIViewController,LanguageVCDelegate {
     @IBOutlet weak var pageTitleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     var apollo_headerClient:ApolloClient!
-    var EditProfileArray : GetProfileQuery.Data.UserAccount.Result?
+    var EditProfileArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor =   UIColor(named: "colorController")
@@ -66,7 +66,7 @@ class SettingsPageVC: UIViewController,LanguageVCDelegate {
     
     func EdiprofileAPICall()
     {
-        let profileQuery = GetProfileQuery()
+        let profileQuery = PTProAPI.GetProfileQuery()
         Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):

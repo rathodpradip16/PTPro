@@ -195,7 +195,7 @@ class EmailPageVC: UIViewController {
         self.lottieView.layer.cornerRadius = 6.0
         self.lottieView.clipsToBounds = true
         self.lottieView.play()
-        let checkemail = CheckEmailExistsQuery(email: emailTF.text!)
+        let checkemail = PTProAPI.CheckEmailExistsQuery(email: emailTF.text!)
         apollo.fetch(query: checkemail,cachePolicy:.fetchIgnoringCacheData){  response in
             switch response {
             case .success(let result):

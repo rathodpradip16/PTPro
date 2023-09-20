@@ -3,86 +3,89 @@
 
 @_exported import Apollo
 
-public class CreateWishListGroupMutation: GraphQLMutation {
-  public static let operationName: String = "CreateWishListGroup"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"mutation CreateWishListGroup($name: String!, $isPublic: String, $id: Int) { CreateWishListGroup(name: $name, isPublic: $isPublic, id: $id) { __typename status errorMessage results { __typename name isPublic id } } }"#
-    ))
+extension PTProAPI {
+  class CreateWishListGroupMutation: GraphQLMutation {
+    static let operationName: String = "CreateWishListGroup"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"mutation CreateWishListGroup($name: String!, $isPublic: String, $id: Int) { CreateWishListGroup(name: $name, isPublic: $isPublic, id: $id) { __typename status errorMessage results { __typename name isPublic id } } }"#
+      ))
 
-  public var name: String
-  public var isPublic: GraphQLNullable<String>
-  public var id: GraphQLNullable<Int>
+    public var name: String
+    public var isPublic: GraphQLNullable<String>
+    public var id: GraphQLNullable<Int>
 
-  public init(
-    name: String,
-    isPublic: GraphQLNullable<String>,
-    id: GraphQLNullable<Int>
-  ) {
-    self.name = name
-    self.isPublic = isPublic
-    self.id = id
-  }
+    public init(
+      name: String,
+      isPublic: GraphQLNullable<String>,
+      id: GraphQLNullable<Int>
+    ) {
+      self.name = name
+      self.isPublic = isPublic
+      self.id = id
+    }
 
-  public var __variables: Variables? { [
-    "name": name,
-    "isPublic": isPublic,
-    "id": id
-  ] }
-
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
-
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Apollo.Selection] { [
-      .field("CreateWishListGroup", CreateWishListGroup?.self, arguments: [
-        "name": .variable("name"),
-        "isPublic": .variable("isPublic"),
-        "id": .variable("id")
-      ]),
+    public var __variables: Variables? { [
+      "name": name,
+      "isPublic": isPublic,
+      "id": id
     ] }
 
-    public var createWishListGroup: CreateWishListGroup? { __data["CreateWishListGroup"] }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// CreateWishListGroup
-    ///
-    /// Parent Type: `GetWishListType`
-    public struct CreateWishListGroup: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.GetWishListType }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
-        .field("results", Results?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
+      static var __selections: [Apollo.Selection] { [
+        .field("CreateWishListGroup", CreateWishListGroup?.self, arguments: [
+          "name": .variable("name"),
+          "isPublic": .variable("isPublic"),
+          "id": .variable("id")
+        ]),
       ] }
 
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
-      public var results: Results? { __data["results"] }
+      var createWishListGroup: CreateWishListGroup? { __data["CreateWishListGroup"] }
 
-      /// CreateWishListGroup.Results
+      /// CreateWishListGroup
       ///
-      /// Parent Type: `WishListGroup`
-      public struct Results: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `GetWishListType`
+      struct CreateWishListGroup: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.WishListGroup }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.GetWishListType }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("name", String?.self),
-          .field("isPublic", String?.self),
-          .field("id", Int?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
+          .field("results", Results?.self),
         ] }
 
-        public var name: String? { __data["name"] }
-        public var isPublic: String? { __data["isPublic"] }
-        public var id: Int? { __data["id"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
+        var results: Results? { __data["results"] }
+
+        /// CreateWishListGroup.Results
+        ///
+        /// Parent Type: `WishListGroup`
+        struct Results: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
+
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.WishListGroup }
+          static var __selections: [Apollo.Selection] { [
+            .field("__typename", String.self),
+            .field("name", String?.self),
+            .field("isPublic", String?.self),
+            .field("id", Int?.self),
+          ] }
+
+          var name: String? { __data["name"] }
+          var isPublic: String? { __data["isPublic"] }
+          var id: Int? { __data["id"] }
+        }
       }
     }
   }
+
 }

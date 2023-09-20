@@ -3,79 +3,82 @@
 
 @_exported import Apollo
 
-public class GetApplicationVersionInfoQuery: GraphQLQuery {
-  public static let operationName: String = "getApplicationVersionInfo"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"query getApplicationVersionInfo($appType: String!, $version: String!) { getApplicationVersionInfo(appType: $appType, version: $version) { __typename status errorMessage result { __typename appStoreUrl playStoreUrl } } }"#
-    ))
+extension PTProAPI {
+  class GetApplicationVersionInfoQuery: GraphQLQuery {
+    static let operationName: String = "getApplicationVersionInfo"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"query getApplicationVersionInfo($appType: String!, $version: String!) { getApplicationVersionInfo(appType: $appType, version: $version) { __typename status errorMessage result { __typename appStoreUrl playStoreUrl } } }"#
+      ))
 
-  public var appType: String
-  public var version: String
+    public var appType: String
+    public var version: String
 
-  public init(
-    appType: String,
-    version: String
-  ) {
-    self.appType = appType
-    self.version = version
-  }
+    public init(
+      appType: String,
+      version: String
+    ) {
+      self.appType = appType
+      self.version = version
+    }
 
-  public var __variables: Variables? { [
-    "appType": appType,
-    "version": version
-  ] }
-
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
-
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Apollo.Selection] { [
-      .field("getApplicationVersionInfo", GetApplicationVersionInfo?.self, arguments: [
-        "appType": .variable("appType"),
-        "version": .variable("version")
-      ]),
+    public var __variables: Variables? { [
+      "appType": appType,
+      "version": version
     ] }
 
-    public var getApplicationVersionInfo: GetApplicationVersionInfo? { __data["getApplicationVersionInfo"] }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GetApplicationVersionInfo
-    ///
-    /// Parent Type: `SiteSettingsCommon`
-    public struct GetApplicationVersionInfo: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.SiteSettingsCommon }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
-        .field("result", Result?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
+      static var __selections: [Apollo.Selection] { [
+        .field("getApplicationVersionInfo", GetApplicationVersionInfo?.self, arguments: [
+          "appType": .variable("appType"),
+          "version": .variable("version")
+        ]),
       ] }
 
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
-      public var result: Result? { __data["result"] }
+      var getApplicationVersionInfo: GetApplicationVersionInfo? { __data["getApplicationVersionInfo"] }
 
-      /// GetApplicationVersionInfo.Result
+      /// GetApplicationVersionInfo
       ///
-      /// Parent Type: `ApplicationVersion`
-      public struct Result: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `SiteSettingsCommon`
+      struct GetApplicationVersionInfo: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ApplicationVersion }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.SiteSettingsCommon }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("appStoreUrl", String?.self),
-          .field("playStoreUrl", String?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
+          .field("result", Result?.self),
         ] }
 
-        public var appStoreUrl: String? { __data["appStoreUrl"] }
-        public var playStoreUrl: String? { __data["playStoreUrl"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
+        var result: Result? { __data["result"] }
+
+        /// GetApplicationVersionInfo.Result
+        ///
+        /// Parent Type: `ApplicationVersion`
+        struct Result: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
+
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.ApplicationVersion }
+          static var __selections: [Apollo.Selection] { [
+            .field("__typename", String.self),
+            .field("appStoreUrl", String?.self),
+            .field("playStoreUrl", String?.self),
+          ] }
+
+          var appStoreUrl: String? { __data["appStoreUrl"] }
+          var playStoreUrl: String? { __data["playStoreUrl"] }
+        }
       }
     }
   }
+
 }

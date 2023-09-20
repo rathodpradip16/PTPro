@@ -45,7 +45,7 @@ class IncreaseEarningViewController: BaseHostTableviewController {
     @IBOutlet var progressViewWidth: NSLayoutConstraint!
     @IBOutlet weak var requiredBtn: UIButton!
     @IBOutlet weak var noOneOptionBtn: UIButton!
-    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrencies.Result]()
+    var currencyDataArray = [PTProAPI.GetCurrenciesListQuery.Data.GetCurrencies.Result]()
     
     var weeklydiscountvalue = ""
     var monthlydiscountvalue = ""

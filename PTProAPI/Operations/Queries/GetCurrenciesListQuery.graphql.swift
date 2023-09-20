@@ -3,68 +3,71 @@
 
 @_exported import Apollo
 
-public class GetCurrenciesListQuery: GraphQLQuery {
-  public static let operationName: String = "getCurrenciesList"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"query getCurrenciesList { getCurrencies { __typename results { __typename id symbol isEnable isPayment isBaseCurrency } status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class GetCurrenciesListQuery: GraphQLQuery {
+    static let operationName: String = "getCurrenciesList"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"query getCurrenciesList { getCurrencies { __typename results { __typename id symbol isEnable isPayment isBaseCurrency } status errorMessage } }"#
+      ))
 
-  public init() {}
+    public init() {}
 
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Apollo.Selection] { [
-      .field("getCurrencies", GetCurrencies?.self),
-    ] }
-
-    public var getCurrencies: GetCurrencies? { __data["getCurrencies"] }
-
-    /// GetCurrencies
-    ///
-    /// Parent Type: `AllCurrenciesType`
-    public struct GetCurrencies: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.AllCurrenciesType }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("results", [Result?]?.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
+      static var __selections: [Apollo.Selection] { [
+        .field("getCurrencies", GetCurrencies?.self),
       ] }
 
-      public var results: [Result?]? { __data["results"] }
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var getCurrencies: GetCurrencies? { __data["getCurrencies"] }
 
-      /// GetCurrencies.Result
+      /// GetCurrencies
       ///
-      /// Parent Type: `Currencies`
-      public struct Result: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `AllCurrenciesType`
+      struct GetCurrencies: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Currencies }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.AllCurrenciesType }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("id", Int?.self),
-          .field("symbol", String?.self),
-          .field("isEnable", Bool?.self),
-          .field("isPayment", Bool?.self),
-          .field("isBaseCurrency", Bool?.self),
+          .field("results", [Result?]?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
         ] }
 
-        public var id: Int? { __data["id"] }
-        public var symbol: String? { __data["symbol"] }
-        public var isEnable: Bool? { __data["isEnable"] }
-        public var isPayment: Bool? { __data["isPayment"] }
-        public var isBaseCurrency: Bool? { __data["isBaseCurrency"] }
+        var results: [Result?]? { __data["results"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
+
+        /// GetCurrencies.Result
+        ///
+        /// Parent Type: `Currencies`
+        struct Result: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
+
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.Currencies }
+          static var __selections: [Apollo.Selection] { [
+            .field("__typename", String.self),
+            .field("id", Int?.self),
+            .field("symbol", String?.self),
+            .field("isEnable", Bool?.self),
+            .field("isPayment", Bool?.self),
+            .field("isBaseCurrency", Bool?.self),
+          ] }
+
+          var id: Int? { __data["id"] }
+          var symbol: String? { __data["symbol"] }
+          var isEnable: Bool? { __data["isEnable"] }
+          var isPayment: Bool? { __data["isPayment"] }
+          var isBaseCurrency: Bool? { __data["isBaseCurrency"] }
+        }
       }
     }
   }
+
 }

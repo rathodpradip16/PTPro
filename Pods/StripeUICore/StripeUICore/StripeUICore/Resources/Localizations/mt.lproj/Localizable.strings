@@ -18,6 +18,8 @@
 
 "City" = "Belt";
 
+"Code field" = "Taqsima tal-kodiċi";
+
 "Company" = "Kumpanija";
 
 "Continue" = "Kompli";
@@ -28,6 +30,8 @@
 
 "County" = "Kontea";
 
+"Date is empty." = "Id-data hija battala.";
+
 "Department" = "Dipartiment";
 
 "District" = "Distrett";
@@ -35,6 +39,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Bil-lest";
+
+"Double tap to edit" = "Taptap biex tibdel";
+
+"Edit" = "Editja";
 
 "Eircode" = "Eircode";
 
@@ -49,6 +57,8 @@
 "Full name" = "Isem sħiħ";
 
 "Incomplete phone number" = "In-numru tat-telefon mhuwiex komplut";
+
+"Invalid UPI ID" = "L-ID UPI mhix tajba";
 
 "Island" = "Gżira";
 
@@ -80,6 +90,8 @@
 
 "Remove bank account ending in %@" = "Neħħi l-kont tal-bank li jispiċċa b'%@";
 
+"Search" = "Fittex";
+
 "State" = "Stat";
 
 "Suburb" = "Subborg";
@@ -93,6 +105,8 @@
 "The account number you entered is incomplete." = "In-numru tal-kont li daħħalt mhux komplut.";
 
 "Town or city" = "Belt";
+
+"UPI ID" = "ID UPI";
 
 "Unable to parse phone number" = "Ma jistax jaqra n-numru tat-telefown";
 

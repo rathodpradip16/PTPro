@@ -1044,7 +1044,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     
     @IBAction func onClickHouseRulesBtn(_ sender: UIButton) {
         let houserulesObj = HouseRulesVC()
-        houserulesObj.houserulesArray = self.viewModel?.viewListingArray?.houseRules! as! [ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
+        houserulesObj.houserulesArray = self.viewModel?.viewListingArray?.houseRules! as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
         houserulesObj.titleString = "\((Utility.shared.getLanguage()?.value(forKey:"houserules"))!)"
         houserulesObj.modalPresentationStyle = .fullScreen
         self.present(houserulesObj, animated: true, completion: nil)
@@ -1508,7 +1508,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
 
 
 extension UpdatedViewListing {
-    func viewListValueUpdates(result: GraphQLResult<ViewListingDetailsQuery.Data>?){
+    func viewListValueUpdates(result: GraphQLResult<PTProAPI.ViewListingDetailsQuery.Data>?){
         guard (result?.data?.viewListing?.status) == 200 else{
             self.backBtn.backgroundColor = UIColor.clear
             self.bottomView.isHidden = true
@@ -2680,7 +2680,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
             self.isShowMoreAmenitiesClicked = !self.isShowMoreAmenitiesClicked
             
             let houserulesObj = HouseRulesVC()
-            houserulesObj.ameneties = self.viewModel?.viewListingArray?.userAmenities as! [ViewListingDetailsQuery.Data.ViewListing.Results.UserAmenity]
+            houserulesObj.ameneties = self.viewModel?.viewListingArray?.userAmenities as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.UserAmenity]
             
             houserulesObj.titleString = "\(Utility.shared.getLanguage()?.value(forKey: "whatplaceoffer") ?? "What the place offer")"
             houserulesObj.modalPresentationStyle = .fullScreen
@@ -2698,7 +2698,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
         }else if sender.tag == 2{
             self.isShowMoreUserSpaceClicked = !self.isShowMoreUserSpaceClicked
             let houserulesObj = HouseRulesVC()
-            houserulesObj.spaces = self.viewModel?.viewListingArray?.userSpaces as! [ViewListingDetailsQuery.Data.ViewListing.Results.UserSpace]
+            houserulesObj.spaces = self.viewModel?.viewListingArray?.userSpaces as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.UserSpace]
             houserulesObj.titleString = "\(Utility.shared.getLanguage()?.value(forKey: "userspace") ?? "Shared spaces")"
             houserulesObj.modalPresentationStyle = .fullScreen
             self.present(houserulesObj, animated: true, completion: nil)
@@ -2735,7 +2735,7 @@ extension UpdatedViewListing: UITableViewDelegate, UITableViewDataSource{
         else{
             self.isShowMoreSafetyAmenitiesClicked = !self.isShowMoreSafetyAmenitiesClicked
             let houserulesObj = HouseRulesVC()
-            houserulesObj.safetyAmeneties = self.viewModel?.viewListingArray?.userSafetyAmenities as! [ViewListingDetailsQuery.Data.ViewListing.Results.UserSafetyAmenity]
+            houserulesObj.safetyAmeneties = self.viewModel?.viewListingArray?.userSafetyAmenities as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.UserSafetyAmenity]
             houserulesObj.titleString = "\(Utility.shared.getLanguage()?.value(forKey: "usersafety") ?? "Safety amenities")"
             houserulesObj.modalPresentationStyle = .fullScreen
             self.present(houserulesObj, animated: true, completion: nil)

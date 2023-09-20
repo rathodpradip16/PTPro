@@ -3,200 +3,203 @@
 
 @_exported import Apollo
 
-public class CancellationDataQuery: GraphQLQuery {
-  public static let operationName: String = "CancellationData"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"query CancellationData($reservationId: Int!, $userType: String!, $currency: String) { cancelReservationData( reservationId: $reservationId userType: $userType currency: $currency ) { __typename results { __typename reservationId cancellationPolicy nonRefundableNightPrice refundToGuest payoutToHost guestServiceFee hostServiceFee startedIn stayingFor total listId guests threadId checkIn checkOut currency cancelledBy listTitle confirmationCode hostEmail guestName hostName guestProfilePicture hostProfilePicture isSpecialPriceAverage listData { __typename title id roomType beds reviewsCount reviewsStarRating bookingType listPhotos { __typename id name } listingData { __typename basePrice currency } } } status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class CancellationDataQuery: GraphQLQuery {
+    static let operationName: String = "CancellationData"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"query CancellationData($reservationId: Int!, $userType: String!, $currency: String) { cancelReservationData( reservationId: $reservationId userType: $userType currency: $currency ) { __typename results { __typename reservationId cancellationPolicy nonRefundableNightPrice refundToGuest payoutToHost guestServiceFee hostServiceFee startedIn stayingFor total listId guests threadId checkIn checkOut currency cancelledBy listTitle confirmationCode hostEmail guestName hostName guestProfilePicture hostProfilePicture isSpecialPriceAverage listData { __typename title id roomType beds reviewsCount reviewsStarRating bookingType listPhotos { __typename id name } listingData { __typename basePrice currency } } } status errorMessage } }"#
+      ))
 
-  public var reservationId: Int
-  public var userType: String
-  public var currency: GraphQLNullable<String>
+    public var reservationId: Int
+    public var userType: String
+    public var currency: GraphQLNullable<String>
 
-  public init(
-    reservationId: Int,
-    userType: String,
-    currency: GraphQLNullable<String>
-  ) {
-    self.reservationId = reservationId
-    self.userType = userType
-    self.currency = currency
-  }
+    public init(
+      reservationId: Int,
+      userType: String,
+      currency: GraphQLNullable<String>
+    ) {
+      self.reservationId = reservationId
+      self.userType = userType
+      self.currency = currency
+    }
 
-  public var __variables: Variables? { [
-    "reservationId": reservationId,
-    "userType": userType,
-    "currency": currency
-  ] }
-
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
-
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Apollo.Selection] { [
-      .field("cancelReservationData", CancelReservationData?.self, arguments: [
-        "reservationId": .variable("reservationId"),
-        "userType": .variable("userType"),
-        "currency": .variable("currency")
-      ]),
+    public var __variables: Variables? { [
+      "reservationId": reservationId,
+      "userType": userType,
+      "currency": currency
     ] }
 
-    public var cancelReservationData: CancelReservationData? { __data["cancelReservationData"] }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// CancelReservationData
-    ///
-    /// Parent Type: `CancellationResponse`
-    public struct CancelReservationData: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.CancellationResponse }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("results", Results?.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
+      static var __selections: [Apollo.Selection] { [
+        .field("cancelReservationData", CancelReservationData?.self, arguments: [
+          "reservationId": .variable("reservationId"),
+          "userType": .variable("userType"),
+          "currency": .variable("currency")
+        ]),
       ] }
 
-      public var results: Results? { __data["results"] }
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var cancelReservationData: CancelReservationData? { __data["cancelReservationData"] }
 
-      /// CancelReservationData.Results
+      /// CancelReservationData
       ///
-      /// Parent Type: `ReservationCancel`
-      public struct Results: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `CancellationResponse`
+      struct CancelReservationData: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ReservationCancel }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.CancellationResponse }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("reservationId", Int?.self),
-          .field("cancellationPolicy", String?.self),
-          .field("nonRefundableNightPrice", Double?.self),
-          .field("refundToGuest", Double?.self),
-          .field("payoutToHost", Double?.self),
-          .field("guestServiceFee", Double?.self),
-          .field("hostServiceFee", Double?.self),
-          .field("startedIn", Int?.self),
-          .field("stayingFor", Double?.self),
-          .field("total", Double?.self),
-          .field("listId", Int?.self),
-          .field("guests", Int?.self),
-          .field("threadId", Int?.self),
-          .field("checkIn", String?.self),
-          .field("checkOut", String?.self),
-          .field("currency", String?.self),
-          .field("cancelledBy", String?.self),
-          .field("listTitle", String?.self),
-          .field("confirmationCode", Int?.self),
-          .field("hostEmail", String?.self),
-          .field("guestName", String?.self),
-          .field("hostName", String?.self),
-          .field("guestProfilePicture", String?.self),
-          .field("hostProfilePicture", String?.self),
-          .field("isSpecialPriceAverage", Double?.self),
-          .field("listData", ListData?.self),
+          .field("results", Results?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
         ] }
 
-        public var reservationId: Int? { __data["reservationId"] }
-        public var cancellationPolicy: String? { __data["cancellationPolicy"] }
-        public var nonRefundableNightPrice: Double? { __data["nonRefundableNightPrice"] }
-        public var refundToGuest: Double? { __data["refundToGuest"] }
-        public var payoutToHost: Double? { __data["payoutToHost"] }
-        public var guestServiceFee: Double? { __data["guestServiceFee"] }
-        public var hostServiceFee: Double? { __data["hostServiceFee"] }
-        public var startedIn: Int? { __data["startedIn"] }
-        public var stayingFor: Double? { __data["stayingFor"] }
-        public var total: Double? { __data["total"] }
-        public var listId: Int? { __data["listId"] }
-        public var guests: Int? { __data["guests"] }
-        public var threadId: Int? { __data["threadId"] }
-        public var checkIn: String? { __data["checkIn"] }
-        public var checkOut: String? { __data["checkOut"] }
-        public var currency: String? { __data["currency"] }
-        public var cancelledBy: String? { __data["cancelledBy"] }
-        public var listTitle: String? { __data["listTitle"] }
-        public var confirmationCode: Int? { __data["confirmationCode"] }
-        public var hostEmail: String? { __data["hostEmail"] }
-        public var guestName: String? { __data["guestName"] }
-        public var hostName: String? { __data["hostName"] }
-        public var guestProfilePicture: String? { __data["guestProfilePicture"] }
-        public var hostProfilePicture: String? { __data["hostProfilePicture"] }
-        public var isSpecialPriceAverage: Double? { __data["isSpecialPriceAverage"] }
-        public var listData: ListData? { __data["listData"] }
+        var results: Results? { __data["results"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
 
-        /// CancelReservationData.Results.ListData
+        /// CancelReservationData.Results
         ///
-        /// Parent Type: `ShowListing`
-        public struct ListData: PTProAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+        /// Parent Type: `ReservationCancel`
+        struct Results: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ShowListing }
-          public static var __selections: [Apollo.Selection] { [
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.ReservationCancel }
+          static var __selections: [Apollo.Selection] { [
             .field("__typename", String.self),
-            .field("title", String?.self),
-            .field("id", Int?.self),
-            .field("roomType", String?.self),
-            .field("beds", Int?.self),
-            .field("reviewsCount", Int?.self),
-            .field("reviewsStarRating", Int?.self),
-            .field("bookingType", String?.self),
-            .field("listPhotos", [ListPhoto?]?.self),
-            .field("listingData", ListingData?.self),
+            .field("reservationId", Int?.self),
+            .field("cancellationPolicy", String?.self),
+            .field("nonRefundableNightPrice", Double?.self),
+            .field("refundToGuest", Double?.self),
+            .field("payoutToHost", Double?.self),
+            .field("guestServiceFee", Double?.self),
+            .field("hostServiceFee", Double?.self),
+            .field("startedIn", Int?.self),
+            .field("stayingFor", Double?.self),
+            .field("total", Double?.self),
+            .field("listId", Int?.self),
+            .field("guests", Int?.self),
+            .field("threadId", Int?.self),
+            .field("checkIn", String?.self),
+            .field("checkOut", String?.self),
+            .field("currency", String?.self),
+            .field("cancelledBy", String?.self),
+            .field("listTitle", String?.self),
+            .field("confirmationCode", Int?.self),
+            .field("hostEmail", String?.self),
+            .field("guestName", String?.self),
+            .field("hostName", String?.self),
+            .field("guestProfilePicture", String?.self),
+            .field("hostProfilePicture", String?.self),
+            .field("isSpecialPriceAverage", Double?.self),
+            .field("listData", ListData?.self),
           ] }
 
-          public var title: String? { __data["title"] }
-          public var id: Int? { __data["id"] }
-          public var roomType: String? { __data["roomType"] }
-          public var beds: Int? { __data["beds"] }
-          public var reviewsCount: Int? { __data["reviewsCount"] }
-          public var reviewsStarRating: Int? { __data["reviewsStarRating"] }
-          public var bookingType: String? { __data["bookingType"] }
-          public var listPhotos: [ListPhoto?]? { __data["listPhotos"] }
-          public var listingData: ListingData? { __data["listingData"] }
+          var reservationId: Int? { __data["reservationId"] }
+          var cancellationPolicy: String? { __data["cancellationPolicy"] }
+          var nonRefundableNightPrice: Double? { __data["nonRefundableNightPrice"] }
+          var refundToGuest: Double? { __data["refundToGuest"] }
+          var payoutToHost: Double? { __data["payoutToHost"] }
+          var guestServiceFee: Double? { __data["guestServiceFee"] }
+          var hostServiceFee: Double? { __data["hostServiceFee"] }
+          var startedIn: Int? { __data["startedIn"] }
+          var stayingFor: Double? { __data["stayingFor"] }
+          var total: Double? { __data["total"] }
+          var listId: Int? { __data["listId"] }
+          var guests: Int? { __data["guests"] }
+          var threadId: Int? { __data["threadId"] }
+          var checkIn: String? { __data["checkIn"] }
+          var checkOut: String? { __data["checkOut"] }
+          var currency: String? { __data["currency"] }
+          var cancelledBy: String? { __data["cancelledBy"] }
+          var listTitle: String? { __data["listTitle"] }
+          var confirmationCode: Int? { __data["confirmationCode"] }
+          var hostEmail: String? { __data["hostEmail"] }
+          var guestName: String? { __data["guestName"] }
+          var hostName: String? { __data["hostName"] }
+          var guestProfilePicture: String? { __data["guestProfilePicture"] }
+          var hostProfilePicture: String? { __data["hostProfilePicture"] }
+          var isSpecialPriceAverage: Double? { __data["isSpecialPriceAverage"] }
+          var listData: ListData? { __data["listData"] }
 
-          /// CancelReservationData.Results.ListData.ListPhoto
+          /// CancelReservationData.Results.ListData
           ///
-          /// Parent Type: `ListPhotosData`
-          public struct ListPhoto: PTProAPI.SelectionSet {
-            public let __data: DataDict
-            public init(_dataDict: DataDict) { __data = _dataDict }
+          /// Parent Type: `ShowListing`
+          struct ListData: PTProAPI.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListPhotosData }
-            public static var __selections: [Apollo.Selection] { [
+            static var __parentType: Apollo.ParentType { PTProAPI.Objects.ShowListing }
+            static var __selections: [Apollo.Selection] { [
               .field("__typename", String.self),
+              .field("title", String?.self),
               .field("id", Int?.self),
-              .field("name", String?.self),
+              .field("roomType", String?.self),
+              .field("beds", Int?.self),
+              .field("reviewsCount", Int?.self),
+              .field("reviewsStarRating", Int?.self),
+              .field("bookingType", String?.self),
+              .field("listPhotos", [ListPhoto?]?.self),
+              .field("listingData", ListingData?.self),
             ] }
 
-            public var id: Int? { __data["id"] }
-            public var name: String? { __data["name"] }
-          }
+            var title: String? { __data["title"] }
+            var id: Int? { __data["id"] }
+            var roomType: String? { __data["roomType"] }
+            var beds: Int? { __data["beds"] }
+            var reviewsCount: Int? { __data["reviewsCount"] }
+            var reviewsStarRating: Int? { __data["reviewsStarRating"] }
+            var bookingType: String? { __data["bookingType"] }
+            var listPhotos: [ListPhoto?]? { __data["listPhotos"] }
+            var listingData: ListingData? { __data["listingData"] }
 
-          /// CancelReservationData.Results.ListData.ListingData
-          ///
-          /// Parent Type: `ListingData`
-          public struct ListingData: PTProAPI.SelectionSet {
-            public let __data: DataDict
-            public init(_dataDict: DataDict) { __data = _dataDict }
+            /// CancelReservationData.Results.ListData.ListPhoto
+            ///
+            /// Parent Type: `ListPhotosData`
+            struct ListPhoto: PTProAPI.SelectionSet {
+              let __data: DataDict
+              init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListingData }
-            public static var __selections: [Apollo.Selection] { [
-              .field("__typename", String.self),
-              .field("basePrice", Double?.self),
-              .field("currency", String?.self),
-            ] }
+              static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListPhotosData }
+              static var __selections: [Apollo.Selection] { [
+                .field("__typename", String.self),
+                .field("id", Int?.self),
+                .field("name", String?.self),
+              ] }
 
-            public var basePrice: Double? { __data["basePrice"] }
-            public var currency: String? { __data["currency"] }
+              var id: Int? { __data["id"] }
+              var name: String? { __data["name"] }
+            }
+
+            /// CancelReservationData.Results.ListData.ListingData
+            ///
+            /// Parent Type: `ListingData`
+            struct ListingData: PTProAPI.SelectionSet {
+              let __data: DataDict
+              init(_dataDict: DataDict) { __data = _dataDict }
+
+              static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListingData }
+              static var __selections: [Apollo.Selection] { [
+                .field("__typename", String.self),
+                .field("basePrice", Double?.self),
+                .field("currency", String?.self),
+              ] }
+
+              var basePrice: Double? { __data["basePrice"] }
+              var currency: String? { __data["currency"] }
+            }
           }
         }
       }
     }
   }
+
 }

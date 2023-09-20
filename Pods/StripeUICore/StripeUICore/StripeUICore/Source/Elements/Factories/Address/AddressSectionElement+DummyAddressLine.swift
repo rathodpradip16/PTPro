@@ -3,6 +3,7 @@
 //  StripeUICore
 //
 //  Created by Yuki Tokuhiro on 7/21/22.
+//  Copyright © 2022 Stripe, Inc. All rights reserved.
 //
 
 import UIKit
@@ -20,7 +21,7 @@ extension AddressSectionElement {
                 attributedText: configuration.makeDisplayText(for: text),
                 keyboardProperties: configuration.keyboardProperties(for: text),
                 validationState: configuration.validate(text: text, isOptional: configuration.isOptional),
-                logo: configuration.logo(for: text),
+                accessoryView: configuration.accessoryView(for: text, theme: theme),
                 shouldShowClearButton: configuration.shouldShowClearButton,
                 theme: theme
             )
@@ -34,33 +35,34 @@ extension AddressSectionElement {
         public var validationState: ElementValidationState {
             return .invalid(error: TextFieldElement.Error.empty, shouldDisplay: false)
         }
-        public var didTap: () -> () = {}
+        let didTap: () -> Void
         public let theme: ElementsUITheme
         private lazy var autocompleteLineTapRecognizer: UITapGestureRecognizer = {
             let tap = UITapGestureRecognizer(target: self, action: #selector(_didTap))
             tap.delegate = self
             return tap
         }()
-        
+
         @objc func _didTap() {
             didTap()
         }
-        
+
         func textFieldViewDidUpdate(view: TextFieldView) {
             // no-op
         }
-        
+
         func textFieldViewContinueToNextField(view: TextFieldView) {
             // no-op
         }
-        
+
         public func beginEditing() -> Bool {
             // no-op but pretend we did begin editing
             return true
         }
-        
-        public init(theme: ElementsUITheme) {
+
+        public init(theme: ElementsUITheme, didTap: @escaping () -> Void = {}) {
             self.theme = theme
+            self.didTap = didTap
             super.init()
         }
     }

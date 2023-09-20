@@ -46,9 +46,9 @@ class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
     
     var placeholderLabel : UILabel!
     var placeholderLabel1 : UILabel!
-    var getListingStep2Array : GetListingDetailsStep2Query.Data.GetListingDetails.Results?
+    var getListingStep2Array : PTProAPI.GetListingDetailsStep2Query.Data.GetListingDetails.Results?
     var saveexit_Activated = String()
-    var showListingstepArray : ShowListingStepsQuery.Data.ShowListingSteps.Results?
+    var showListingstepArray : PTProAPI.ShowListingStepsQuery.Data.ShowListingSteps.Results?
     
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
     @IBOutlet weak var stepTitleHeightConstraint: NSLayoutConstraint!
@@ -378,7 +378,7 @@ class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
     
     func manageListingSteps(listId:String,currentStep:Int)
     {
-        let manageListingStepsMutation = ManageListingStepsMutation(listId:listId, currentStep:currentStep)
+        let manageListingStepsMutation = PTProAPI.ManageListingStepsMutation(listId:listId, currentStep:currentStep)
         Network.shared.apollo_headerClient.perform(mutation: manageListingStepsMutation){  response in
             switch response {
             case .success(let result):

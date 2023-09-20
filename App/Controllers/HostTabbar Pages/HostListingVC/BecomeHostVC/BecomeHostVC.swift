@@ -31,14 +31,14 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     @IBOutlet weak var errorCode404Lbl: UILabel!
     
     var lottieView: LottieAnimationView!
-    var showListingstepArray : ShowListingStepsQuery.Data.ShowListingSteps.Results?
-    var step1ListingDetails : GetStep1ListingDetailsQuery.Data.GetListingDetails.Results?
-    var step3ListingDetails : GetListingDetailsStep3Query.Data.GetListingDetails.Results?
+    var showListingstepArray : PTProAPI.ShowListingStepsQuery.Data.ShowListingSteps.Results?
+    var step1ListingDetails : PTProAPI.GetStep1ListingDetailsQuery.Data.GetListingDetails.Results?
+    var step3ListingDetails : PTProAPI.GetListingDetailsStep3Query.Data.GetListingDetails.Results?
     var listID = String()
     var ispublishenable:Bool = false
-    var siteSettingArray = [SiteSettingsQuery.Data.SiteSettings.Result]()
+    var siteSettingArray = [PTProAPI.SiteSettingsQuery.Data.SiteSettings.Result]()
     
-    var getListingStep2Array : GetListingDetailsStep2Query.Data.GetListingDetails.Results?
+    var getListingStep2Array : PTProAPI.GetListingDetailsStep2Query.Data.GetListingDetails.Results?
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -120,7 +120,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func submitForVerification(listID:Int)
     {
-        let submitforverificationmutation = SubmitForVerificationMutation(id:listID, listApprovalStatus:"pending")
+        let submitforverificationmutation = PTProAPI.SubmitForVerificationMutation(id:listID, listApprovalStatus:"pending")
         Network.shared.apollo_headerClient.perform(mutation: submitforverificationmutation){ response in
             switch response {
             case .success(let result):
@@ -140,7 +140,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func showListingStepsAPICall(listID:String)
     {
-        let showListingStepsquery = ShowListingStepsQuery(listId: listID)
+        let showListingStepsquery = PTProAPI.ShowListingStepsQuery(listId: listID)
         Network.shared.apollo_headerClient.fetch(query: showListingStepsquery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -180,7 +180,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func getStep3ListingDetails()
     {
-        let step3ListingDetailsquery = GetListingDetailsStep3Query(listId: listID, preview: .none)
+        let step3ListingDetailsquery = PTProAPI.GetListingDetailsStep3Query(listId: listID, preview: .none)
 //        Network.shared.apollo_headerClient.fetch(query: step3ListingDetailsquery, cachePolicy: .fetchIgnoringCacheData) { response in
 //            switch response {
 //            case .success(let result):
@@ -284,12 +284,12 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     func siteSettingsAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let siteSettingsquery = SiteSettingsQuery(type: .none)
+            let siteSettingsquery = PTProAPI.SiteSettingsQuery(type: .none)
             Network.shared.apollo_headerClient.fetch(query:siteSettingsquery,cachePolicy: .fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
                     if let data = result.data?.siteSettings?.status,data == 200 {
-                        self.siteSettingArray = result.data?.siteSettings?.results as! [SiteSettingsQuery.Data.SiteSettings.Result]
+                        self.siteSettingArray = result.data?.siteSettings?.results as! [PTProAPI.SiteSettingsQuery.Data.SiteSettings.Result]
                         for i in self.siteSettingArray{
                             if(i.name == "listingApproval")
                             {
@@ -312,7 +312,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
    
     func getStep1ListingDetails()
     {
-        let step1ListingDetailsquery = GetStep1ListingDetailsQuery(listId: listID, preview: true)
+        let step1ListingDetailsquery = PTProAPI.GetStep1ListingDetailsQuery(listId: listID, preview: true)
         Network.shared.apollo_headerClient.fetch(query: step1ListingDetailsquery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -757,7 +757,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func getListingDetailsStep2()
 {
-    let getlistingStep2query = GetListingDetailsStep2Query(listId:"\(showListingstepArray?.listId!)", preview: true)
+    let getlistingStep2query = PTProAPI.GetListingDetailsStep2Query(listId:"\(showListingstepArray?.listId!)", preview: true)
     Network.shared.apollo_headerClient.fetch(query: getlistingStep2query,cachePolicy:.fetchIgnoringCacheData){ response in
         switch response {
         case .success(let result):
@@ -897,7 +897,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func PublishAPICall(listid:Int,action:String,sender:UIButton,tag:Int)
 {
-    let managepublishstatusMutation = ManagePublishStatusMutation(listId: listid, action: action)
+    let managepublishstatusMutation = PTProAPI.ManagePublishStatusMutation(listId: listid, action: action)
     Network.shared.apollo_headerClient.perform(mutation: managepublishstatusMutation){ response in
         let btnsendtag: UIButton = sender
         let cell = self.view.viewWithTag(sender.tag + 2000) as? StepPublishCell

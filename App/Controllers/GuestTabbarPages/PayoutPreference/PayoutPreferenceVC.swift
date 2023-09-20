@@ -42,7 +42,7 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     @IBOutlet weak var nodataview: UIView!
     var lottieWholeView = UIView()
     var lottieView1 =  LottieAnimationView()
-     var getpayoutArray = [GetPayoutsQuery.Data.GetPayouts.Result]()
+    var getpayoutArray = [PTProAPI.GetPayoutsQuery.Data.GetPayouts.Result]()
     var lottieView: LottieAnimationView!
     
     override func viewDidLoad() {
@@ -411,7 +411,7 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     func setPayoutCall(accountid:String)
     {
         self.lottiewholeAnimation()
-        let setPayoutMutation = ConfirmPayoutMutation(currentAccountId:.some(accountid))
+        let setPayoutMutation = PTProAPI.ConfirmPayoutMutation(currentAccountId:.some(accountid))
         Network.shared.apollo_headerClient.perform(mutation:setPayoutMutation){ response in
             switch response {
             case .success(let result):
@@ -439,7 +439,7 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     func VerifyAPICall(stripeaccountID:String)
     {
-        let verifyPayoutmutation = VerifyPayoutMutation(stripeAccount: .some(stripeaccountID))
+        let verifyPayoutmutation = PTProAPI.VerifyPayoutMutation(stripeAccount: .some(stripeaccountID))
         Network.shared.apollo_headerClient.perform(mutation:verifyPayoutmutation) { response in
             switch response {
             case .success(let result):
@@ -524,7 +524,7 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func payoutAPICall()
     {
-        let getpayoutquery = GetPayoutsQuery()
+        let getpayoutquery = PTProAPI.GetPayoutsQuery()
         Network.shared.apollo_headerClient.fetch(query: getpayoutquery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -537,7 +537,7 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
                 }
                 
                 
-                self.getpayoutArray = ((result.data?.getPayouts?.results)!) as! [GetPayoutsQuery.Data.GetPayouts.Result]
+                self.getpayoutArray = ((result.data?.getPayouts?.results)!) as! [PTProAPI.GetPayoutsQuery.Data.GetPayouts.Result]
                 if(self.getpayoutArray.count>0)
                 {
                     self.payoutTable.isHidden = false
@@ -570,7 +570,7 @@ class PayoutPreferenceVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
 
     func setDefaultAPICall(id:Int,type:String){
-        let setdefaultMutation = SetDefaultPayoutMutation(id: id, type: type)
+        let setdefaultMutation = PTProAPI.SetDefaultPayoutMutation(id: id, type: type)
         Network.shared.apollo_headerClient.perform(mutation: setdefaultMutation) { response in
             switch response {
             case .success(let result):

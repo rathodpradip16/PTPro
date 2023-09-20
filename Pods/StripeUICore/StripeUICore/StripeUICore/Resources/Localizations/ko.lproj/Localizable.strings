@@ -18,6 +18,8 @@
 
 "City" = "시";
 
+"Code field" = "코드 필드";
+
 "Company" = "회사";
 
 "Continue" = "계속";
@@ -28,6 +30,8 @@
 
 "County" = "구/군";
 
+"Date is empty." = "날짜가 비어 있습니다.";
+
 "Department" = "행정구/현";
 
 "District" = "지구";
@@ -35,6 +39,10 @@
 "Do Si" = "도시";
 
 "Done" = "완료";
+
+"Double tap to edit" = "두 번 탭하여 편집";
+
+"Edit" = "편집";
 
 "Eircode" = "우편번호(Eircode)";
 
@@ -49,6 +57,8 @@
 "Full name" = "성명";
 
 "Incomplete phone number" = "불완전한 전화번호";
+
+"Invalid UPI ID" = "잘못된 UPI ID";
 
 "Island" = "섬";
 
@@ -80,6 +90,8 @@
 
 "Remove bank account ending in %@" = "%@(으)로 끝나는 은행 계좌 삭제";
 
+"Search" = "검색";
+
 "State" = "주";
 
 "Suburb" = "교외";
@@ -93,6 +105,8 @@
 "The account number you entered is incomplete." = "입력하신 계좌 번호가 불완전합니다.";
 
 "Town or city" = "마을 또는 도시";
+
+"UPI ID" = "UPI ID";
 
 "Unable to parse phone number" = "전화번호 구문 분석 불가능";
 

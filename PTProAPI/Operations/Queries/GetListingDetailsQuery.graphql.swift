@@ -3,191 +3,194 @@
 
 @_exported import Apollo
 
-public class GetListingDetailsQuery: GraphQLQuery {
-  public static let operationName: String = "getListingDetails"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"query getListingDetails($listId: String!, $preview: Boolean) { getListingDetails(listId: $listId, preview: $preview) { __typename results { __typename id userId bookingType isPublished houseRules { __typename id } listingData { __typename bookingNoticeTime checkInStart checkInEnd maxDaysNotice minNight maxNight basePrice cleaningPrice currency is_affiliate affiliate_commission weeklyDiscount monthlyDiscount cancellationPolicy } blockedDates { __typename blockedDates reservationId } calendars { __typename id name url listId status } } status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class GetListingDetailsQuery: GraphQLQuery {
+    static let operationName: String = "getListingDetails"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"query getListingDetails($listId: String!, $preview: Boolean) { getListingDetails(listId: $listId, preview: $preview) { __typename results { __typename id userId bookingType isPublished houseRules { __typename id } listingData { __typename bookingNoticeTime checkInStart checkInEnd maxDaysNotice minNight maxNight basePrice cleaningPrice currency is_affiliate affiliate_commission weeklyDiscount monthlyDiscount cancellationPolicy } blockedDates { __typename blockedDates reservationId } calendars { __typename id name url listId status } } status errorMessage } }"#
+      ))
 
-  public var listId: String
-  public var preview: GraphQLNullable<Bool>
+    public var listId: String
+    public var preview: GraphQLNullable<Bool>
 
-  public init(
-    listId: String,
-    preview: GraphQLNullable<Bool>
-  ) {
-    self.listId = listId
-    self.preview = preview
-  }
+    public init(
+      listId: String,
+      preview: GraphQLNullable<Bool>
+    ) {
+      self.listId = listId
+      self.preview = preview
+    }
 
-  public var __variables: Variables? { [
-    "listId": listId,
-    "preview": preview
-  ] }
-
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
-
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Apollo.Selection] { [
-      .field("getListingDetails", GetListingDetails?.self, arguments: [
-        "listId": .variable("listId"),
-        "preview": .variable("preview")
-      ]),
+    public var __variables: Variables? { [
+      "listId": listId,
+      "preview": preview
     ] }
 
-    public var getListingDetails: GetListingDetails? { __data["getListingDetails"] }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// GetListingDetails
-    ///
-    /// Parent Type: `AllListing`
-    public struct GetListingDetails: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.AllListing }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("results", Results?.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
+      static var __selections: [Apollo.Selection] { [
+        .field("getListingDetails", GetListingDetails?.self, arguments: [
+          "listId": .variable("listId"),
+          "preview": .variable("preview")
+        ]),
       ] }
 
-      public var results: Results? { __data["results"] }
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var getListingDetails: GetListingDetails? { __data["getListingDetails"] }
 
-      /// GetListingDetails.Results
+      /// GetListingDetails
       ///
-      /// Parent Type: `ShowListing`
-      public struct Results: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `AllListing`
+      struct GetListingDetails: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ShowListing }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.AllListing }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("id", Int?.self),
-          .field("userId", String?.self),
-          .field("bookingType", String?.self),
-          .field("isPublished", Bool?.self),
-          .field("houseRules", [HouseRule?]?.self),
-          .field("listingData", ListingData?.self),
-          .field("blockedDates", [BlockedDate?]?.self),
-          .field("calendars", [Calendar?]?.self),
+          .field("results", Results?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
         ] }
 
-        public var id: Int? { __data["id"] }
-        public var userId: String? { __data["userId"] }
-        public var bookingType: String? { __data["bookingType"] }
-        public var isPublished: Bool? { __data["isPublished"] }
-        public var houseRules: [HouseRule?]? { __data["houseRules"] }
-        public var listingData: ListingData? { __data["listingData"] }
-        public var blockedDates: [BlockedDate?]? { __data["blockedDates"] }
-        public var calendars: [Calendar?]? { __data["calendars"] }
+        var results: Results? { __data["results"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
 
-        /// GetListingDetails.Results.HouseRule
+        /// GetListingDetails.Results
         ///
-        /// Parent Type: `AllListSettingTypes`
-        public struct HouseRule: PTProAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+        /// Parent Type: `ShowListing`
+        struct Results: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: Apollo.ParentType { PTProAPI.Objects.AllListSettingTypes }
-          public static var __selections: [Apollo.Selection] { [
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.ShowListing }
+          static var __selections: [Apollo.Selection] { [
             .field("__typename", String.self),
             .field("id", Int?.self),
+            .field("userId", String?.self),
+            .field("bookingType", String?.self),
+            .field("isPublished", Bool?.self),
+            .field("houseRules", [HouseRule?]?.self),
+            .field("listingData", ListingData?.self),
+            .field("blockedDates", [BlockedDate?]?.self),
+            .field("calendars", [Calendar?]?.self),
           ] }
 
-          public var id: Int? { __data["id"] }
-        }
+          var id: Int? { __data["id"] }
+          var userId: String? { __data["userId"] }
+          var bookingType: String? { __data["bookingType"] }
+          var isPublished: Bool? { __data["isPublished"] }
+          var houseRules: [HouseRule?]? { __data["houseRules"] }
+          var listingData: ListingData? { __data["listingData"] }
+          var blockedDates: [BlockedDate?]? { __data["blockedDates"] }
+          var calendars: [Calendar?]? { __data["calendars"] }
 
-        /// GetListingDetails.Results.ListingData
-        ///
-        /// Parent Type: `ListingData`
-        public struct ListingData: PTProAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+          /// GetListingDetails.Results.HouseRule
+          ///
+          /// Parent Type: `AllListSettingTypes`
+          struct HouseRule: PTProAPI.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListingData }
-          public static var __selections: [Apollo.Selection] { [
-            .field("__typename", String.self),
-            .field("bookingNoticeTime", String?.self),
-            .field("checkInStart", String?.self),
-            .field("checkInEnd", String?.self),
-            .field("maxDaysNotice", String?.self),
-            .field("minNight", Int?.self),
-            .field("maxNight", Int?.self),
-            .field("basePrice", Double?.self),
-            .field("cleaningPrice", Double?.self),
-            .field("currency", String?.self),
-            .field("is_affiliate", Int?.self),
-            .field("affiliate_commission", Double?.self),
-            .field("weeklyDiscount", Int?.self),
-            .field("monthlyDiscount", Int?.self),
-            .field("cancellationPolicy", Int?.self),
-          ] }
+            static var __parentType: Apollo.ParentType { PTProAPI.Objects.AllListSettingTypes }
+            static var __selections: [Apollo.Selection] { [
+              .field("__typename", String.self),
+              .field("id", Int?.self),
+            ] }
 
-          public var bookingNoticeTime: String? { __data["bookingNoticeTime"] }
-          public var checkInStart: String? { __data["checkInStart"] }
-          public var checkInEnd: String? { __data["checkInEnd"] }
-          public var maxDaysNotice: String? { __data["maxDaysNotice"] }
-          public var minNight: Int? { __data["minNight"] }
-          public var maxNight: Int? { __data["maxNight"] }
-          public var basePrice: Double? { __data["basePrice"] }
-          public var cleaningPrice: Double? { __data["cleaningPrice"] }
-          public var currency: String? { __data["currency"] }
-          public var is_affiliate: Int? { __data["is_affiliate"] }
-          public var affiliate_commission: Double? { __data["affiliate_commission"] }
-          public var weeklyDiscount: Int? { __data["weeklyDiscount"] }
-          public var monthlyDiscount: Int? { __data["monthlyDiscount"] }
-          public var cancellationPolicy: Int? { __data["cancellationPolicy"] }
-        }
+            var id: Int? { __data["id"] }
+          }
 
-        /// GetListingDetails.Results.BlockedDate
-        ///
-        /// Parent Type: `ListBlockedDates`
-        public struct BlockedDate: PTProAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+          /// GetListingDetails.Results.ListingData
+          ///
+          /// Parent Type: `ListingData`
+          struct ListingData: PTProAPI.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListBlockedDates }
-          public static var __selections: [Apollo.Selection] { [
-            .field("__typename", String.self),
-            .field("blockedDates", String?.self),
-            .field("reservationId", Int?.self),
-          ] }
+            static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListingData }
+            static var __selections: [Apollo.Selection] { [
+              .field("__typename", String.self),
+              .field("bookingNoticeTime", String?.self),
+              .field("checkInStart", String?.self),
+              .field("checkInEnd", String?.self),
+              .field("maxDaysNotice", String?.self),
+              .field("minNight", Int?.self),
+              .field("maxNight", Int?.self),
+              .field("basePrice", Double?.self),
+              .field("cleaningPrice", Double?.self),
+              .field("currency", String?.self),
+              .field("is_affiliate", Int?.self),
+              .field("affiliate_commission", Double?.self),
+              .field("weeklyDiscount", Int?.self),
+              .field("monthlyDiscount", Int?.self),
+              .field("cancellationPolicy", Int?.self),
+            ] }
 
-          public var blockedDates: String? { __data["blockedDates"] }
-          public var reservationId: Int? { __data["reservationId"] }
-        }
+            var bookingNoticeTime: String? { __data["bookingNoticeTime"] }
+            var checkInStart: String? { __data["checkInStart"] }
+            var checkInEnd: String? { __data["checkInEnd"] }
+            var maxDaysNotice: String? { __data["maxDaysNotice"] }
+            var minNight: Int? { __data["minNight"] }
+            var maxNight: Int? { __data["maxNight"] }
+            var basePrice: Double? { __data["basePrice"] }
+            var cleaningPrice: Double? { __data["cleaningPrice"] }
+            var currency: String? { __data["currency"] }
+            var is_affiliate: Int? { __data["is_affiliate"] }
+            var affiliate_commission: Double? { __data["affiliate_commission"] }
+            var weeklyDiscount: Int? { __data["weeklyDiscount"] }
+            var monthlyDiscount: Int? { __data["monthlyDiscount"] }
+            var cancellationPolicy: Int? { __data["cancellationPolicy"] }
+          }
 
-        /// GetListingDetails.Results.Calendar
-        ///
-        /// Parent Type: `ListCalendar`
-        public struct Calendar: PTProAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+          /// GetListingDetails.Results.BlockedDate
+          ///
+          /// Parent Type: `ListBlockedDates`
+          struct BlockedDate: PTProAPI.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListCalendar }
-          public static var __selections: [Apollo.Selection] { [
-            .field("__typename", String.self),
-            .field("id", Int.self),
-            .field("name", String?.self),
-            .field("url", String?.self),
-            .field("listId", Int.self),
-            .field("status", String?.self),
-          ] }
+            static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListBlockedDates }
+            static var __selections: [Apollo.Selection] { [
+              .field("__typename", String.self),
+              .field("blockedDates", String?.self),
+              .field("reservationId", Int?.self),
+            ] }
 
-          public var id: Int { __data["id"] }
-          public var name: String? { __data["name"] }
-          public var url: String? { __data["url"] }
-          public var listId: Int { __data["listId"] }
-          public var status: String? { __data["status"] }
+            var blockedDates: String? { __data["blockedDates"] }
+            var reservationId: Int? { __data["reservationId"] }
+          }
+
+          /// GetListingDetails.Results.Calendar
+          ///
+          /// Parent Type: `ListCalendar`
+          struct Calendar: PTProAPI.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
+
+            static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListCalendar }
+            static var __selections: [Apollo.Selection] { [
+              .field("__typename", String.self),
+              .field("id", Int.self),
+              .field("name", String?.self),
+              .field("url", String?.self),
+              .field("listId", Int.self),
+              .field("status", String?.self),
+            ] }
+
+            var id: Int { __data["id"] }
+            var name: String? { __data["name"] }
+            var url: String? { __data["url"] }
+            var listId: Int { __data["listId"] }
+            var status: String? { __data["status"] }
+          }
         }
       }
     }
   }
+
 }

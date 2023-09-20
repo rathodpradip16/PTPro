@@ -50,9 +50,9 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
         return PHCachingImageManager()
     }()
      var imagesData = [Data]()
-    var showListingstepArray : ShowListingStepsQuery.Data.ShowListingSteps.Results?
-    var showListPhotosArray = [ShowListPhotosQuery.Data.ShowListPhotos.Result]()
-    var getListingStep2Array : GetListingDetailsStep2Query.Data.GetListingDetails.Results?
+    var showListingstepArray : PTProAPI.ShowListingStepsQuery.Data.ShowListingSteps.Results?
+    var showListPhotosArray = [PTProAPI.ShowListPhotosQuery.Data.ShowListPhotos.Result]()
+    var getListingStep2Array : PTProAPI.GetListingDetailsStep2Query.Data.GetListingDetails.Results?
     
     var multiimages_Selected:Bool = false
     var multiimages_count:Int = 0
@@ -223,7 +223,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     func showlistingPhotosAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let showlistingphotosquery = ShowListPhotosQuery(listId:showListingstepArray?.listId! ?? 0)
+            let showlistingphotosquery = PTProAPI.ShowListPhotosQuery(listId:showListingstepArray?.listId! ?? 0)
             Network.shared.apollo_headerClient.fetch(query: showlistingphotosquery, cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -237,7 +237,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
                         self.collectionView.reloadData()
                         return
                     }
-                    self.showListPhotosArray = (result.data?.showListPhotos?.results)! as! [ShowListPhotosQuery.Data.ShowListPhotos.Result]
+                    self.showListPhotosArray = (result.data?.showListPhotos?.results)! as! [PTProAPI.ShowListPhotosQuery.Data.ShowListPhotos.Result]
                     if(self.showListPhotosArray.count > 0)
                     {
                         self.skipBtn.isHidden = true
@@ -278,7 +278,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     func getListingDetailsStep2()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let getlistingStep2query = GetListingDetailsStep2Query(listId:"\(String(describing: showListingstepArray?.listId!))", preview: true)
+            let getlistingStep2query = PTProAPI.GetListingDetailsStep2Query(listId:"\(String(describing: showListingstepArray?.listId!))", preview: true)
             Network.shared.apollo_headerClient.fetch(query: getlistingStep2query,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -305,7 +305,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     func deleteAPICall(name:String)
     {
         if Utility.shared.isConnectedToNetwork(){
-            let RemoveListPhotosmutation = RemoveListPhotosMutation(listId: (showListingstepArray?.listId!)!, name:.some(name))
+            let RemoveListPhotosmutation = PTProAPI.RemoveListPhotosMutation(listId: (showListingstepArray?.listId!)!, name:.some(name))
             Network.shared.apollo_headerClient.perform(mutation: RemoveListPhotosmutation){ response in
                 switch response {
                 case .success(let result):
@@ -431,7 +431,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
                 title = ""
             }
             
-            let UpdateListingStep2mutation = UpdateListingStep2Mutation(id: .some(getListingStep2Array?.__data._data["id"] as! Int), description: .some(desc), title:.some(title), coverPhoto:.some(coverphoto))
+            let UpdateListingStep2mutation = PTProAPI.UpdateListingStep2Mutation(id: .some(getListingStep2Array?.__data._data["id"] as! Int), description: .some(desc), title:.some(title), coverPhoto:.some(coverphoto))
             Network.shared.apollo_headerClient.perform(mutation: UpdateListingStep2mutation){  response in
                 switch response {
                 case .success(let result):

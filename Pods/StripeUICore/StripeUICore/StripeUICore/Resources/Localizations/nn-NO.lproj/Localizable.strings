@@ -10,6 +10,8 @@
 
 "Area" = "Område";
 
+"BLIK code" = "BLIK-kode";
+
 "BSB number" = "BSB-nummer";
 
 "Billing address is same as shipping" = "Fakturaadressa er den same som leveringsadressa";
@@ -17,6 +19,8 @@
 "Cancel" = "Avbryt";
 
 "City" = "Stad";
+
+"Code field" = "Kodefelt";
 
 "Company" = "Selskap";
 
@@ -28,6 +32,8 @@
 
 "County" = "Fylke";
 
+"Date is empty." = "Dato er tom.";
+
 "Department" = "Område";
 
 "District" = "Distrikt";
@@ -35,6 +41,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Ferdig";
+
+"Double tap to edit" = "Dobbeltæpp for å redigere";
+
+"Edit" = "Rediger";
 
 "Eircode" = "Eircode";
 
@@ -49,6 +59,8 @@
 "Full name" = "Fullt namn";
 
 "Incomplete phone number" = "Ufullstendig telefonnummer";
+
+"Invalid UPI ID" = "Ugyldig UPI ID";
 
 "Island" = "Øy";
 
@@ -80,6 +92,8 @@
 
 "Remove bank account ending in %@" = "Fjern bankkonto som sluttar på %@";
 
+"Search" = "Søk";
+
 "State" = "Stat";
 
 "Suburb" = "Forstad";
@@ -94,9 +108,13 @@
 
 "Town or city" = "Stad";
 
+"UPI ID" = "UPI ID";
+
 "Unable to parse phone number" = "Kan ikkje analysere telefonnummer";
 
 "Use rotor to access links" = "Bruk rotor for å opne koplingar";
+
+"Your BLIK code is incomplete." = "BLIK-koden er ufullstendig.";
 
 "Your ZIP is incomplete." = "ZIP-koden er ufullstendig.";
 

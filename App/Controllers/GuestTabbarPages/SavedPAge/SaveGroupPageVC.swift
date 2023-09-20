@@ -45,7 +45,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
     @IBOutlet weak var nothingsavedesLabel: UILabel!
     @IBOutlet weak var nowhishlistView: UIView!
     @IBOutlet weak var wishlistTitle: UILabel!
-    var groupwhishlistArray = [GetWishListGroupQuery.Data.GetWishListGroup.Results.WishList]()
+    var groupwhishlistArray = [PTProAPI.GetWishListGroupQuery.Data.GetWishListGroup.Results.WishList]()
     @IBOutlet weak var offlineView: UIView!
     @IBOutlet weak var groupCollection: UICollectionView!
     @IBOutlet weak var topView: UIView!
@@ -220,7 +220,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
     func savedGroupAPICall(groupID:Int,PageIndex:Int)
     {
         if Utility.shared.isConnectedToNetwork(){
-            let getwhishlistgroupquery = GetWishListGroupQuery(id: groupID, currentPage: .some(PageIndex))
+            let getwhishlistgroupquery = PTProAPI.GetWishListGroupQuery(id: groupID, currentPage: .some(PageIndex))
             Network.shared.apollo_headerClient.fetch(query: getwhishlistgroupquery,cachePolicy:.fetchIgnoringCacheData){  response in
                 self.lottieView.isHidden = true
                 switch response {
@@ -241,7 +241,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
                         {
                             self.nowhishlistView.isHidden = true
                             
-                            self.groupwhishlistArray.append(contentsOf:(((result.data?.getWishListGroup?.results?.wishLists!)!) as! [GetWishListGroupQuery.Data.GetWishListGroup.Results.WishList]))
+                            self.groupwhishlistArray.append(contentsOf:(((result.data?.getWishListGroup?.results?.wishLists!)!) as! [PTProAPI.GetWishListGroupQuery.Data.GetWishListGroup.Results.WishList]))
                             self.groupCollection.hideSkeleton()
                             self.groupCollection.isSkeletonable = false
                             self.groupCollection.reloadData()
@@ -296,7 +296,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
 
     func createWhishlistAPICall(listId:Int,wishListGroupId:Int,eventKey:Bool)
     {
-        let createWhishlistMutation = CreateWishListMutation(listId: listId, wishListGroupId: .some(wishListGroupId), eventKey: .some(eventKey))
+        let createWhishlistMutation = PTProAPI.CreateWishListMutation(listId: listId, wishListGroupId: .some(wishListGroupId), eventKey: .some(eventKey))
         Network.shared.apollo_headerClient.perform(mutation: createWhishlistMutation){  response in
             switch response {
             case .success(let result):
@@ -318,7 +318,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
     func createWhishlistAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let createWhishlistMutation = CreateWishListGroupMutation(name:editTextView.text!,isPublic: .none, id: .none)
+            let createWhishlistMutation = PTProAPI.CreateWishListGroupMutation(name:editTextView.text!,isPublic: .none, id: .none)
             Network.shared.apollo_headerClient.perform(mutation: createWhishlistMutation){ [self] response in
                 switch response {
                 case .success(let result):
@@ -364,7 +364,7 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
     func deleteAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let deletewhishlistMutation = DeleteWishListGroupMutation(id: groupID)
+            let deletewhishlistMutation = PTProAPI.DeleteWishListGroupMutation(id: groupID)
             Network.shared.apollo_headerClient.perform(mutation: deletewhishlistMutation){  response in
                 switch response {
                 case .success(let result):

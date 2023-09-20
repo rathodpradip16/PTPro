@@ -349,7 +349,7 @@ class ResetPasswordVC: UIViewController {
             if newPasswordTF.text!.count >= 8 && confirmPasswordTF.text!.count >= 3{
                 
                 if newPasswordTF.text == confirmPasswordTF.text {
-                    let resetpass = ResetPasswordMutation(email: Utility.shared.deepLinkEmail, password: newPasswordTF.text!, token: Utility.shared.deepLinkToken)
+                    let resetpass = PTProAPI.ResetPasswordMutation(email: Utility.shared.deepLinkEmail, password: newPasswordTF.text!, token: Utility.shared.deepLinkToken)
                     apollo.perform(mutation: resetpass){ response in
                         switch response {
                         case .success(let result):

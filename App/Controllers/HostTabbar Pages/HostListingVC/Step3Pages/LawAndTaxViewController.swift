@@ -30,11 +30,11 @@ class LawAndTaxViewController: BaseHostTableviewController {
     @IBOutlet weak var labelOne: UILabel!
     @IBOutlet weak var labelTwo: UILabel!
     var lottieView1: LottieAnimationView!
-    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrencies.Result]()
+    var currencyDataArray = [PTProAPI.GetCurrenciesListQuery.Data.GetCurrencies.Result]()
     
     var weeklydiscountvalue = ""
     var monthlydiscountvalue = ""
-    var updateResults : UpdateListingStep3Mutation.Data.UpdateListingStep3.Results?
+    var updateResults : PTProAPI.UpdateListingStep3Mutation.Data.UpdateListingStep3.Results?
     
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
     @IBOutlet weak var stepTitleHeightConstraint: NSLayoutConstraint!
@@ -141,7 +141,7 @@ class LawAndTaxViewController: BaseHostTableviewController {
     
     func updateListingAPI()
     {
-        let updatelist = UpdateListingStep3Mutation(id: .some(Utility.shared.step3ValuesInfo["id"] as! Int),
+        let updatelist = PTProAPI.UpdateListingStep3Mutation(id: .some(Utility.shared.step3ValuesInfo["id"] as! Int),
                                                     houseRules: .some(Utility.shared.step3ValuesInfo["houseRules"] as! [Int]),
                                                     bookingNoticeTime: .some("\(Utility.shared.step3ValuesInfo["bookingNoticeTime"] ?? "")"),
                                                     checkInStart: .some("\(Utility.shared.step3ValuesInfo["checkInStart"] ?? "")"),

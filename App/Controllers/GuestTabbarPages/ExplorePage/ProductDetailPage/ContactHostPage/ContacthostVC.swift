@@ -32,8 +32,8 @@ class ContacthostVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     @IBOutlet weak var retryBtn: UIButton!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var contacthostTable: UITableView!
-    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
-    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
+    var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
+    var getbillingArray : PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     var currencyvalue_from_API_base = String()
     var currency_Dict = NSDictionary()
     var addDateinLabel = String()
@@ -126,7 +126,7 @@ class ContacthostVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 func ContacthostAPICall(message:String)
 {
 
-    let contacthostMutation = ContactHostMutation(listId:  viewListingArray?.__data._data["id"] as! Int  , hostId: viewListingArray?.userId! ?? "", content:message, userId: "\(Utility.shared.getCurrentUserID()!)", type: "inquiry", startDate: selected_datein_Label, endDate: selected_dateout_Label, personCapacity:.some(guest_Count))
+    let contacthostMutation = PTProAPI.ContactHostMutation(listId:  viewListingArray?.__data._data["id"] as! Int  , hostId: viewListingArray?.userId! ?? "", content:message, userId: "\(Utility.shared.getCurrentUserID()!)", type: "inquiry", startDate: selected_datein_Label, endDate: selected_dateout_Label, personCapacity:.some(guest_Count))
     
     Utility.shared.personCapcityForMessagePage = guest_Count
     
@@ -560,7 +560,7 @@ func ContacthostAPICall(message:String)
             currency = Utility.shared.currencyvalue_from_API_base
         }
         if viewListingArray?.id != nil {
-            let billingListquery = GetBillingCalculationQuery(listId: viewListingArray?.__data._data["id"] as! Int, startDate: startDate, endDate: endDate, guests: Utility.shared.guestCountToBeSend, convertCurrency:currency)
+            let billingListquery = PTProAPI.GetBillingCalculationQuery(listId: viewListingArray?.__data._data["id"] as! Int, startDate: startDate, endDate: endDate, guests: Utility.shared.guestCountToBeSend, convertCurrency:currency)
             Network.shared.apollo_headerClient.fetch(query: billingListquery){ response in
                 switch response {
                 case .success(let result):

@@ -248,7 +248,7 @@ class BankAccountVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     {
         self.lottiewholeAnimation()
         
-        let setPayoutMutation = ConfirmPayoutMutation(currentAccountId:.some(accountid))
+        let setPayoutMutation = PTProAPI.ConfirmPayoutMutation(currentAccountId:.some(accountid))
         Network.shared.apollo_headerClient.perform(mutation:setPayoutMutation){ response in
             switch response {
             case .success(let result):
@@ -470,7 +470,7 @@ class BankAccountVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         {
             Utility.shared.setEmail(email: "demo@radicalstart.com")
         }
-        let addpayoutmutation = AddPayoutMutation(methodId: 2,
+        let addpayoutmutation = PTProAPI.AddPayoutMutation(methodId: 2,
                                                   payEmail: "\(Utility.shared.getEmail())", address1:"\(Utility.shared.payout_Address_Dict["address1"]!)", address2:"\(Utility.shared.payout_Address_Dict["address2"] ?? "")", city:Utility.shared.payout_Address_Dict["city"] as! String, state:Utility.shared.payout_Address_Dict["state"] as! String, country:Utility.shared.selected_Countrycode_Payout, zipcode:Utility.shared.payout_Address_Dict["zipcode"] as! String, currency:self.getpaymentmethodCurrency, firstname: .some(bankaccount_Dict["firstnam?"] as! String), lastname: .some(bankaccount_Dict["lastname"] as! String), accountNumber: .some(bankaccount_Dict["accnum"] as! String), routingNumber: .some(bankaccount_Dict["routingnum"] as! String), businessType:.some(bankaccount_Dict["accounttype"] as! String), accountToken: .some(self.bankToken) , personToken: .some(self.personToken))
         
         Network.shared.apollo_headerClient.perform(mutation: addpayoutmutation){ response in

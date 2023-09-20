@@ -147,7 +147,7 @@ class SocialSigninPage: UIViewController {
                         "email": "\(userEmail)",
                         
                     ]
-                    let signupMutation = SocialLoginQuery(firstName: .some("\(name)"), lastName: "", email: "\(userEmail)", dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "facebook", gender: "", profilePicture:.some("\(url)"))
+                    let signupMutation = PTProAPI.SocialLoginQuery(firstName: .some("\(name)"), lastName: "", email: "\(userEmail)", dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "facebook", gender: "", profilePicture:.some("\(url)"))
                     
                     apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
                         switch response {
@@ -251,7 +251,7 @@ class SocialSigninPage: UIViewController {
                 "image": "\(userImageURL)"
             ]
             
-            let signupMutation = SocialLoginQuery(firstName: .some("\(name ?? "")"), lastName: "", email: "\(email ?? "")", dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "google", gender: "", profilePicture:.some("\(userImageURL)"))
+            let signupMutation = PTProAPI.SocialLoginQuery(firstName: .some("\(name ?? "")"), lastName: "", email: "\(email ?? "")", dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "google", gender: "", profilePicture:.some("\(userImageURL)"))
             
             apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
                 switch response {
@@ -343,7 +343,7 @@ class SocialSigninPage: UIViewController {
                 "image": "\(userImageURL)"
             ]
             
-            let signupMutation = SocialLoginQuery(firstName: .some("\(name ?? "")"), lastName: .some(""), email: "\(email ?? "")", dateOfBirth: .some(""), deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: .some("google"), gender: .some(""), profilePicture:.some("\(userImageURL)"))
+            let signupMutation = PTProAPI.SocialLoginQuery(firstName: .some("\(name ?? "")"), lastName: .some(""), email: "\(email ?? "")", dateOfBirth: .some(""), deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: .some("google"), gender: .some(""), profilePicture:.some("\(userImageURL)"))
             
             apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
                 switch response {
@@ -447,7 +447,7 @@ extension SocialSigninPage: ASAuthorizationControllerDelegate {
         let name = KeychainService.loadUsername() != nil ? KeychainService.loadUsername()! : ""
        
         
-        let signupMutation = SocialLoginQuery(firstName: .some(name as String), lastName: "", email:email as String, dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "apple", gender: "", profilePicture:"")
+        let signupMutation = PTProAPI.SocialLoginQuery(firstName: .some(name as String), lastName: "", email:email as String, dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "apple", gender: "", profilePicture:"")
         
          apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
             switch response {

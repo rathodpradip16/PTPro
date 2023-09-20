@@ -150,7 +150,7 @@ class AmenitiesViewController: BaseHostTableviewController,UICollectionViewDeleg
             {
                 for i in 0..<typeInfo.count
                 {
-                    if let userAmenityTypes = typeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserAmenity
+                    if let userAmenityTypes = typeInfo[i] as?  PTProAPI.GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserAmenity
                     {
                         if amenityList.contains(where: { (item) -> Bool in
                             (item["itemName"] as? String == (userAmenityTypes.itemName!))

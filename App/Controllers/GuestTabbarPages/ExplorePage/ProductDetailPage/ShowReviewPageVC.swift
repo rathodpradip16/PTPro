@@ -17,7 +17,7 @@ class ShowReviewPageVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     var profilename = String()
     var totalListcount:Int = 0
     var PageIndex : Int = 1
-    var showReivewArray = [UserReviewsQuery.Data.UserReviews.Result]()
+    var showReivewArray = [PTProAPI.UserReviewsQuery.Data.UserReviews.Result]()
        
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,12 +40,12 @@ class ShowReviewPageVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     func showreviewAPICall()
     {
-        let userreviewsquery = UserReviewsQuery(ownerType:"others",currentPage:.some(PageIndex), profileId:.some(profileid))
+        let userreviewsquery = PTProAPI.UserReviewsQuery(ownerType:"others",currentPage:.some(PageIndex), profileId:.some(profileid))
         Network.shared.apollo_headerClient.fetch(query: userreviewsquery, cachePolicy: .fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
                 if let data = result.data?.userReviews?.status,data == 200 {
-                    self.showReivewArray.append(contentsOf: ((result.data?.userReviews?.results)!) as! [UserReviewsQuery.Data.UserReviews.Result])
+                    self.showReivewArray.append(contentsOf: ((result.data?.userReviews?.results)!) as! [PTProAPI.UserReviewsQuery.Data.UserReviews.Result])
                     self.totalListcount = (result.data?.userReviews?.results!.count)!
                 } else {
                     self.view.makeToast(result.data?.userReviews?.errorMessage!)

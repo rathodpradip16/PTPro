@@ -29,8 +29,8 @@ class ListingDescriptionVC: BaseHostTableviewController,UITextViewDelegate {
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var progressBGView: UIView!
     @IBOutlet weak var currentProgressView: UIView!
-    var getListingStep2Array : GetListingDetailsStep2Query.Data.GetListingDetails.Results?
-    var showListingstepArray : ShowListingStepsQuery.Data.ShowListingSteps.Results?
+    var getListingStep2Array : PTProAPI.GetListingDetailsStep2Query.Data.GetListingDetails.Results?
+    var showListingstepArray : PTProAPI.ShowListingStepsQuery.Data.ShowListingSteps.Results?
     var saveexit_Activated = String()
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
     @IBOutlet weak var stepTitleHeightConstraint: NSLayoutConstraint!
@@ -301,7 +301,7 @@ class ListingDescriptionVC: BaseHostTableviewController,UITextViewDelegate {
    
   
     func manageListingSteps(listId:String,currentStep:Int){
-        let manageListingStepsMutation = ManageListingStepsMutation(listId:listId, currentStep:currentStep)
+        let manageListingStepsMutation = PTProAPI.ManageListingStepsMutation(listId:listId, currentStep:currentStep)
         Network.shared.apollo_headerClient.perform(mutation: manageListingStepsMutation){  response in
             switch response {
             case .success(let result):

@@ -66,7 +66,7 @@ class DeleteAccountVC: UIViewController {
     
     @IBAction func deleteAaction(_ sender: Any) {
         if Utility.shared.isConnectedToNetwork(){
-            let deleteMutation = DeleteUserMutation()
+            let deleteMutation = PTProAPI.DeleteUserMutation()
             Network.shared.apollo_headerClient.perform(mutation: deleteMutation){ response in
                 switch response {
                 case .success(let result):

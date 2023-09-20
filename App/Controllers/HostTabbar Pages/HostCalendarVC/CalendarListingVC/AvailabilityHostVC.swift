@@ -137,7 +137,7 @@ class AvailabilityHostVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func SaveAPICall(listid:Int,blockedDates:[String],calendarStatus:String,isSpecialPrice:Double)
     {
-        let updateSpecialPriceMutation = UpdateSpecialPriceMutation(listId: listid, blockedDates: .some(blockedDates), calendarStatus: .some(calendarStatus), isSpecialPrice: .some(isSpecialPrice))
+        let updateSpecialPriceMutation = PTProAPI.UpdateSpecialPriceMutation(listId: listid, blockedDates: .some(blockedDates), calendarStatus: .some(calendarStatus), isSpecialPrice: .some(isSpecialPrice))
         Network.shared.apollo_headerClient.perform(mutation: updateSpecialPriceMutation){ response in
             switch response {
             case .success(let result):
@@ -159,7 +159,7 @@ class AvailabilityHostVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     func SaveAPICall(listid:Int,blockedDates:[String],calendarStatus:String)
     {
-        let updateSpecialPriceMutation = UpdateSpecialPriceMutation(listId: listid, blockedDates: .some(blockedDates), calendarStatus: .some(calendarStatus), isSpecialPrice: nil)
+        let updateSpecialPriceMutation = PTProAPI.UpdateSpecialPriceMutation(listId: listid, blockedDates: .some(blockedDates), calendarStatus: .some(calendarStatus), isSpecialPrice: nil)
         Network.shared.apollo_headerClient.perform(mutation: updateSpecialPriceMutation){ response in
             switch response {
             case .success(let result):

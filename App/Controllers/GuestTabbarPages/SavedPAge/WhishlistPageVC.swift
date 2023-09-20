@@ -41,8 +41,8 @@ class WhishlistPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
         fatalError("init(coder:) has not been implemented")
     }
     
-    var whishlistarray = [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]()
-    var whishlistarrayReverse = [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]()
+    var whishlistarray = [PTProAPI.GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]()
+    var whishlistarrayReverse = [PTProAPI.GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]()
     var listID = Int()
     var listimage = String()
     var senderID = Int()
@@ -114,7 +114,7 @@ class WhishlistPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
     }
     func WhishlistAPICall()
     {
-        let whishlistQuery = GetAllWishListGroupQuery(currentPage: .none)
+        let whishlistQuery = PTProAPI.GetAllWishListGroupQuery(currentPage: .none)
         Network.shared.apollo_headerClient.fetch(query: whishlistQuery,cachePolicy:.fetchIgnoringCacheData){  response in
             switch response {
             case .success(let result):
@@ -126,7 +126,7 @@ class WhishlistPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
                     self.whishlistCollection.isHidden = true
                     return
                 }
-                self.whishlistarrayReverse = ((result.data?.getAllWishListGroup?.results)!) as! [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
+                self.whishlistarrayReverse = ((result.data?.getAllWishListGroup?.results)!) as! [PTProAPI.GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
                 
                 self.whishlistarray  = self.whishlistarrayReverse.reversed()
                 
@@ -159,7 +159,7 @@ class WhishlistPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
     
     func createWhishlistAPICall(listId:Int,wishListGroupId:Int,eventKey:Bool)
     {
-        let createWhishlistMutation = CreateWishListMutation(listId: listId, wishListGroupId:.some(wishListGroupId), eventKey: .some(eventKey))
+        let createWhishlistMutation = PTProAPI.CreateWishListMutation(listId: listId, wishListGroupId:.some(wishListGroupId), eventKey: .some(eventKey))
         Network.shared.apollo_headerClient.perform(mutation: createWhishlistMutation){  response in
             switch response {
             case .success(let result):

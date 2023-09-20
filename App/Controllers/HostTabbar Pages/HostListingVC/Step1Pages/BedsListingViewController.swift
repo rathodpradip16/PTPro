@@ -169,7 +169,7 @@ class BedsListingViewController: BaseHostTableviewController {
 
                        for i in 0..<bedTypeInfo.count
                        {
-                           if let userBedTypes = bedTypeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserBedsType
+                           if let userBedTypes = bedTypeInfo[i] as? PTProAPI.GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserBedsType
                            {
                                let index = bedTypes.firstIndex(where: { (item) -> Bool in
                                    item?.id == userBedTypes.bedType

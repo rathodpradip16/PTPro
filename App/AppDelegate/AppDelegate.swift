@@ -370,7 +370,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     
     func getStripePublishableKey(){
         
-        let getStripeKey = GetPaymentSettingsQuery()
+        let getStripeKey = PTProAPI.GetPaymentSettingsQuery()
         
         apollo.fetch(query: getStripeKey){ response in
             switch response {
@@ -684,7 +684,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     
     func sendMessageAPICall(threadid:Int,message:GraphQLNullable<String>)
     {
-        let sendMsgMutation = SendMessageMutation(threadId: threadid, content: message , type: .some(""))
+        let sendMsgMutation = PTProAPI.SendMessageMutation(threadId: threadid, content: message , type: .some(""))
         
         Network.shared.apollo_headerClient.perform(mutation: sendMsgMutation){ response in
             switch response {
@@ -714,7 +714,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     {
         if(Utility.shared.getCurrentUserToken() != nil)
         {
-            let mostlistingquery = GetDefaultSettingQuery()
+            let mostlistingquery = PTProAPI.GetDefaultSettingQuery()
             Network.shared.apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -746,7 +746,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         if Utility.shared.isConnectedToNetwork(){
             if(Utility.shared.getCurrentUserToken() != nil)
             {
-                let profileQuery = GetProfileQuery()
+                let profileQuery = PTProAPI.GetProfileQuery()
                 Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
                     switch response {
                     case .success(let result):
@@ -798,7 +798,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     {
         if(Utility.shared.getCurrentUserToken() != nil)
         {
-            let currencyQuery = GetCurrenciesListQuery()
+            let currencyQuery = PTProAPI.GetCurrenciesListQuery()
             Network.shared.apollo_headerClient.fetch(query: currencyQuery){ response in
                 switch response {
                 case .success(let result):
@@ -806,7 +806,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
                         print("Missing Data")
                         return
                     }
-                    Utility.shared.currencyDataArray = ((result.data?.getCurrencies?.results)!) as! [GetCurrenciesListQuery.Data.GetCurrencies.Result]
+                    Utility.shared.currencyDataArray = ((result.data?.getCurrencies?.results)!) as! [PTProAPI.GetCurrenciesListQuery.Data.GetCurrencies.Result]
                     Utility.shared.currencyvalue = Utility.shared.currencyDataArray.first!.symbol!
                 case .failure(_): break
             }
@@ -817,7 +817,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     //MARK:CHECK USERBAN STATUS
     func UserBanStatus()
     {
-        let UserbanstatusQuery = UserBanStatusQuery()
+        let UserbanstatusQuery = PTProAPI.UserBanStatusQuery()
         
         Network.shared.apollo_headerClient.fetch(query: UserbanstatusQuery){ response in
             switch response {

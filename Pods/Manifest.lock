@@ -262,7 +262,7 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
-  - PayPalCheckout (0.110.0)
+  - PayPalCheckout (1.1.0)
   - PromisesObjC (2.3.1)
   - PromisesSwift (2.3.1):
     - PromisesObjC (= 2.3.1)
@@ -279,20 +279,26 @@ PODS:
   - SKPhotoBrowser (7.1.0)
   - SnapKit (5.6.0)
   - StepIndicator (1.0.8)
-  - Stripe (22.8.4):
-    - Stripe/Stripe3DS2 (= 22.8.4)
-    - StripeApplePay (= 22.8.4)
-    - StripeCore (= 22.8.4)
-    - StripeUICore (= 22.8.4)
-  - Stripe/Stripe3DS2 (22.8.4):
-    - StripeApplePay (= 22.8.4)
-    - StripeCore (= 22.8.4)
-    - StripeUICore (= 22.8.4)
-  - StripeApplePay (22.8.4):
-    - StripeCore (= 22.8.4)
-  - StripeCore (22.8.4)
-  - StripeUICore (22.8.4):
-    - StripeCore (= 22.8.4)
+  - Stripe (23.16.0):
+    - StripeApplePay (= 23.16.0)
+    - StripeCore (= 23.16.0)
+    - StripePayments (= 23.16.0)
+    - StripePaymentsUI (= 23.16.0)
+    - StripeUICore (= 23.16.0)
+  - StripeApplePay (23.16.0):
+    - StripeCore (= 23.16.0)
+  - StripeCore (23.16.0)
+  - StripePayments (23.16.0):
+    - StripeCore (= 23.16.0)
+    - StripePayments/Stripe3DS2 (= 23.16.0)
+  - StripePayments/Stripe3DS2 (23.16.0):
+    - StripeCore (= 23.16.0)
+  - StripePaymentsUI (23.16.0):
+    - StripeCore (= 23.16.0)
+    - StripePayments (= 23.16.0)
+    - StripeUICore (= 23.16.0)
+  - StripeUICore (23.16.0):
+    - StripeCore (= 23.16.0)
   - STTabbar (0.1.0)
   - SwiftMessages (9.0.6):
     - SwiftMessages/App (= 9.0.6)
@@ -410,6 +416,8 @@ SPEC REPOS:
     - Stripe
     - StripeApplePay
     - StripeCore
+    - StripePayments
+    - StripePaymentsUI
     - StripeUICore
     - STTabbar
     - SwiftMessages
@@ -461,7 +469,7 @@ SPEC CHECKSUMS:
   MDFTextAccessibility: f4bb4cc2194286651b59a215fdeaa0e05dc90ba5
   MKToolTip: 69509b1cada10f96bd9f4ab559a768e7c6557933
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  PayPalCheckout: 91b3b728e2bfff22ecffcafcf374574b760f52f9
+  PayPalCheckout: ec442f9026c4ec6eee58f768b3cfd81c0ff569bf
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
   RangeSeekSlider: 650b11fa1edcb92e1e0ede797669d98622570fb5
@@ -475,16 +483,18 @@ SPEC CHECKSUMS:
   SKPhotoBrowser: cd95b95a6f352fc2a50992721299f75ead77f9ab
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   StepIndicator: 748b293f671355b021253f82031ac002f153dc81
-  Stripe: 59f6659e8ea413def19c97c57e23f5ec6ea48cf8
-  StripeApplePay: 6e9aebd3d248464836e9fbdaef6e5fb1817d56a6
-  StripeCore: 193f27552fb98108ebfe0df11651fe5f38948305
-  StripeUICore: 6a5bbea0164d63bd91000f001903e7901859e1a4
+  Stripe: fcab417424a45d995aa1e62a39bc942233b61ba3
+  StripeApplePay: 81de266a964b3ad02fb25e8b22fd8c235d2916a8
+  StripeCore: ac141047bca25f5ae945a1cbdd00a90b0d08c616
+  StripePayments: 5804cb9b02cca488042e5cf8cf57a86a5080006b
+  StripePaymentsUI: 24a0349ae8c7e8c7402086703720fe06c52ddea0
+  StripeUICore: ce85e040a22bf0335061d14973d37757528b3d2d
   STTabbar: fe93da755010233b348b2d0147c43bb1bef290fa
   SwiftMessages: f0c7ef4705a570ad6c5e208b611f4333e660ed92
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   WHTabbar: add14cb164535a8e5db2068c85a6c523345b681f
 
-PODFILE CHECKSUM: 48a3b23d57be116b45fa3ff2028b7f8874ca433b
+PODFILE CHECKSUM: 5658886c3d4a4ead793ef11c62326d67a23efe3b
 
 COCOAPODS: 1.12.1

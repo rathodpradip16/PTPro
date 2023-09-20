@@ -235,7 +235,7 @@ class DateofBirthVC: UIViewController {
     
     func signupAPICall(){
         // SignupApi
-        let signupMutation = SignupMutation(firstName:.some(Utility.shared.signupArray[0] as! String), lastName: .some(Utility.shared.signupArray[1] as! String), email: Utility.shared.signupArray[2] as! String, password: Utility.shared.signupArray[3] as! String, dateOfBirth:.some(birthTF.text ?? ""), deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "email")
+        let signupMutation = PTProAPI.SignupMutation(firstName:.some(Utility.shared.signupArray[0] as! String), lastName: .some(Utility.shared.signupArray[1] as! String), email: Utility.shared.signupArray[2] as! String, password: Utility.shared.signupArray[3] as! String, dateOfBirth:.some(birthTF.text ?? ""), deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "email")
         apollo.perform(mutation: signupMutation){  response in
             switch response {
             case .success(let result):

@@ -17,7 +17,7 @@ class MapPageVC: UIViewController,GMSMapViewDelegate {
     
     var mapView: GMSMapView!
     var cirlce: GMSCircle!
-    var mapArray : ViewListingDetailsQuery.Data.ViewListing.Results?
+    var mapArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var HeadlocationLabel: UILabel!

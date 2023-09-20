@@ -36,14 +36,14 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     @IBOutlet weak var bookBtn: UIButton!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var requestTable: UITableView!
-    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
+    var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
      var currencyvalue_from_API_base = String()
     var currency_Dict = NSDictionary()
      var lottieView: LottieAnimationView!
     public var selectedStartDate: Date?
     public var selectedEndDate: Date?
     var delegate:RequestbookVCDelegate?
-    var ProfileAPIArray : GetProfileQuery.Data.UserAccount.Result?
+    var ProfileAPIArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
     var addDateinLabel = String()
     var addDateoutLabel = String()
     var totalPriceLabel = String()
@@ -59,7 +59,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
    
     
     
-    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
+    var getbillingArray : PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     override func viewDidLoad() {
         super.viewDidLoad()
         offlineView.backgroundColor =  UIColor(named: "Button_Grey_Color")
@@ -832,7 +832,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     @objc func handleTapGesture(sender: UITapGestureRecognizer) {
     let houserulesObj = HouseRulesVC()
-    houserulesObj.houserulesArray = viewListingArray?.houseRules! as! [ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
+        houserulesObj.houserulesArray = viewListingArray?.houseRules! as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
     houserulesObj.titleString = "\((Utility.shared.getLanguage()?.value(forKey:"houserules"))!)"
     houserulesObj.modalPresentationStyle = .fullScreen
     self.present(houserulesObj, animated: true, completion: nil)
@@ -889,7 +889,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         {
             currency = Utility.shared.currencyvalue_from_API_base
         }
-        let billingListquery = GetBillingCalculationQuery(listId: viewListingArray?.__data._data["id"] as! Int as Int, startDate: startDate, endDate: endDate, guests: Utility.shared.guestCountToBeSend, convertCurrency:currency)
+        let billingListquery = PTProAPI.GetBillingCalculationQuery(listId: viewListingArray?.__data._data["id"] as! Int as Int, startDate: startDate, endDate: endDate, guests: Utility.shared.guestCountToBeSend, convertCurrency:currency)
         Network.shared.apollo_headerClient.fetch(query: billingListquery){ response in
             switch response {
             case .success(let result):
@@ -926,7 +926,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
     func profileAPICall()
     {
-        let profileQuery = GetProfileQuery()
+        let profileQuery = PTProAPI.GetProfileQuery()
         
         Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {

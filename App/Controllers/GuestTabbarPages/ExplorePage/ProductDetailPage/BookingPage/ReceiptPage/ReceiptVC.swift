@@ -20,9 +20,9 @@ class ReceiptVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIDo
     @IBOutlet weak var topView: UIView!
     var documentInteractionController: UIDocumentInteractionController!
     
-    var getReservationArray : GetReservationQuery.Data.GetReservation.Results?
-    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
-    var getReservation_currencyArray : GetReservationQuery.Data.GetReservation?
+    var getReservationArray : PTProAPI.GetReservationQuery.Data.GetReservation.Results?
+    var getbillingArray : PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
+    var getReservation_currencyArray : PTProAPI.GetReservationQuery.Data.GetReservation?
     var totalPriceLabel = String()
     var currencyvalue_from_API_base = String()
     var ISfromShortcut = false

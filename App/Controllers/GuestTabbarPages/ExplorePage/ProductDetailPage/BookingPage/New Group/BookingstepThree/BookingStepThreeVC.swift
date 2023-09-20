@@ -34,10 +34,10 @@ class BookingStepThreeVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     var lottieWholeView = UIView()
      var pickedimageString = String()
     var lottieView: LottieAnimationView!
-    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
-    var ProfileAPIArray : GetProfileQuery.Data.UserAccount.Result?
+    var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
+    var ProfileAPIArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
     var currencyvalue_from_API_base = ""
-    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
+    var getbillingArray : PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     
     
     override func viewDidLoad() {
@@ -396,7 +396,7 @@ class BookingStepThreeVC: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func profileAPICall()
     {
-        let profileQuery = GetProfileQuery()
+        let profileQuery = PTProAPI.GetProfileQuery()
         
         Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {

@@ -23,7 +23,7 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     //MARK:**************************************************** GLOBAL VARIABLE DECLARATIONS ***************************************************>
     var TitleArray = NSMutableArray()
     var imageArray = NSMutableArray()
-    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
+    var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initialSetup()

@@ -49,10 +49,10 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     var lottieViewbtn: LottieAnimationView!
     var ispublish:Bool = false
     
-    var manageListingArray = [ManageListingsQuery.Data.ManageListings.Result]()
-    var siteSettingArray = [SiteSettingsQuery.Data.SiteSettings.Result]()
-    var inprogress_List_Array = [ManageListingsQuery.Data.ManageListings.Result]()
-    var completed_List_Array = [ManageListingsQuery.Data.ManageListings.Result]()
+    var manageListingArray = [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]()
+    var siteSettingArray = [PTProAPI.SiteSettingsQuery.Data.SiteSettings.Result]()
+    var inprogress_List_Array = [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]()
+    var completed_List_Array = [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]()
     
     @IBOutlet var topContainerView: UIView!
     
@@ -282,7 +282,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     //MARK: - CALL COUNTRYLIST API
     func CountryAPICAll()
     {
-        let getcountrycodeQuery = GetCountrycodeQuery()
+        let getcountrycodeQuery = PTProAPI.GetCountrycodeQuery()
         apollo.fetch(query: getcountrycodeQuery,cachePolicy: .fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -290,7 +290,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                     //                self.view.makeToast("Missing Data")
                     return
                 }
-                Utility.shared.countrylist =  ((result.data?.getCountries?.results)!) as! [GetCountrycodeQuery.Data.GetCountries.Result]
+                Utility.shared.countrylist =  ((result.data?.getCountries?.results)!) as! [PTProAPI.GetCountrycodeQuery.Data.GetCountries.Result]
             case .failure(_): break
             }
         }
@@ -300,7 +300,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     //MARK: - Getlistsettingcall Function
     func GetListSettingAPICall()
     {
-        let getlistsettingsquery = GetListingSettingQuery()
+        let getlistsettingsquery = PTProAPI.GetListingSettingQuery()
         Network.shared.apollo_headerClient.fetch(query: getlistsettingsquery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -480,12 +480,12 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     func siteSettingsAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let siteSettingsquery = SiteSettingsQuery(type: .some(""))
+            let siteSettingsquery = PTProAPI.SiteSettingsQuery(type: .some(""))
             Network.shared.apollo_headerClient.fetch(query:siteSettingsquery,cachePolicy: .fetchIgnoringCacheData){ [self] response in
                 switch response {
                 case .success(let result):
                     if let data = result.data?.siteSettings?.status,data == 200 {
-                        self.siteSettingArray = result.data?.siteSettings?.results as! [SiteSettingsQuery.Data.SiteSettings.Result]
+                        self.siteSettingArray = result.data?.siteSettings?.results as! [PTProAPI.SiteSettingsQuery.Data.SiteSettings.Result]
                         for i in self.siteSettingArray{
                             if(i.name == "listingApproval")
                             {
@@ -510,7 +510,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 
     func manageListingAPI()
 {
-    let manageListingquery = ManageListingsQuery()
+    let manageListingquery = PTProAPI.ManageListingsQuery()
     Network.shared.apollo_headerClient.fetch(query: manageListingquery,cachePolicy:.fetchIgnoringCacheData){ response in
         switch response {
         case .success(let result):
@@ -546,7 +546,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 self.inprogress_List_Array.removeAll()
                 self.completed_List_Array.removeAll()
                 self.becomeListingTable.isHidden = false
-                self.manageListingArray = ((result.data?.manageListings?.results)!) as! [ManageListingsQuery.Data.ManageListings.Result]
+                self.manageListingArray = ((result.data?.manageListings?.results)!) as! [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]
                 
                 for i in self.manageListingArray
                 {
@@ -628,7 +628,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 {
     if Utility.shared.isConnectedToNetwork() {
         
-        let deleteListingMutation = RemoveListingMutation(listId: listId)
+        let deleteListingMutation = PTProAPI.RemoveListingMutation(listId: listId)
         Network.shared.apollo_headerClient.perform(mutation: deleteListingMutation){ response in
             switch response {
             case .success(let result):
@@ -1110,7 +1110,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     }
     func submitForVerification(listID:Int)
 {
-    let submitforverificationmutation = SubmitForVerificationMutation(id:listID, listApprovalStatus:"pending")
+    let submitforverificationmutation = PTProAPI.SubmitForVerificationMutation(id:listID, listApprovalStatus:"pending")
     Network.shared.apollo_headerClient.perform(mutation: submitforverificationmutation){ response in
         switch response {
         case .success(let result):
@@ -1211,7 +1211,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     func PublishAPICall(listid:Int,action:String,sender:UIButton)
 {
     let btnsendtag: UIButton = sender
-    let managepublishstatusMutation = ManagePublishStatusMutation(listId: listid, action: action)
+    let managepublishstatusMutation = PTProAPI.ManagePublishStatusMutation(listId: listid, action: action)
     Network.shared.apollo_headerClient.perform(mutation: managepublishstatusMutation){ response in
         switch response {
         case .success(let result):

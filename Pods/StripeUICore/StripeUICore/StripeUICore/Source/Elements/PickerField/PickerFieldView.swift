@@ -3,6 +3,7 @@
 //  StripeUICore
 //
 //  Created by Mel Ludowise on 10/1/21.
+//  Copyright © 2021 Stripe, Inc. All rights reserved.
 //
 
 import UIKit
@@ -14,7 +15,7 @@ protocol PickerFieldViewDelegate: AnyObject {
 
 /**
  An input field that looks like TextFieldView but whose input is another view.
- 
+
  - Note: This view has padding according to `directionalLayoutMargins`.
  For internal SDK use only
  */
@@ -57,13 +58,13 @@ final class PickerFieldView: UIView {
         return hStackView
     }()
     private let pickerView: UIView
-    
+
     // MARK: - Other private properties
     private let label: String?
     private let shouldShowChevron: Bool
     private weak var delegate: PickerFieldViewDelegate?
     private let theme: ElementsUITheme
-    
+
     // MARK: - Public properties
     var displayText: String? {
         get {
@@ -76,18 +77,18 @@ final class PickerFieldView: UIView {
             textField.text = newValue
         }
     }
-    
-    var displayTextAccessibilityLabel: String? {
+
+    var displayTextAccessibilityValue: String? {
         get {
-            return textField.accessibilityLabel
+            return textField.accessibilityValue
         }
         set {
-            textField.accessibilityLabel = newValue
+            textField.accessibilityValue = newValue
         }
     }
-    
+
     // MARK: - Initializers
-    
+
     /**
      - Parameter label: The label of this picker
      - Parameter shouldShowChevron: Whether a downward chevron should be displayed in this field
@@ -110,40 +111,34 @@ final class PickerFieldView: UIView {
         super.init(frame: .zero)
         addAndPinSubview(hStackView, directionalLayoutMargins: ElementsUI.contentViewInsets)
         layer.borderColor = theme.colors.border.cgColor
-        defer {
-            isUserInteractionEnabled = true
-        }
+        isUserInteractionEnabled = true
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Overrides
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         floatingPlaceholderTextFieldView?.updatePlaceholder(animated: false)
     }
-    
+
     override var isUserInteractionEnabled: Bool {
         didSet {
-            if isUserInteractionEnabled {
-                textField.textColor = theme.colors.textFieldText
-            } else {
-                textField.textColor = CompatibleColor.tertiaryLabel
-            }
+            textField.textColor = theme.colors.textFieldText.disabled(!isUserInteractionEnabled)
             if frame.size != .zero {
-                textField.layoutIfNeeded() // Fixes an issue on iOS 15 where setting textField properties causes it to lay out from zero size.
+                textField.layoutIfNeeded()  // Fixes an issue on iOS 15 where setting textField properties causes it to lay out from zero size.
             }
         }
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         layer.borderColor = theme.colors.border.cgColor
     }
-    
+
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard isUserInteractionEnabled, !isHidden, self.point(inside: point, with: event) else {
             return nil
@@ -151,7 +146,7 @@ final class PickerFieldView: UIView {
         // Forward all events within our bounds to the textfield
         return textField
     }
-    
+
     override var intrinsicContentSize: CGSize {
         // I'm implementing this to disambiguate layout of a horizontal stack view containing this view
         let hStackViewSize = hStackView.systemLayoutSizeFitting(.zero)
@@ -160,7 +155,7 @@ final class PickerFieldView: UIView {
             height: hStackViewSize.height + directionalLayoutMargins.top + directionalLayoutMargins.bottom
         )
     }
-    
+
     override func becomeFirstResponder() -> Bool {
         if super.becomeFirstResponder() {
             return true
@@ -178,6 +173,8 @@ extension PickerFieldView: EventHandler {
             isUserInteractionEnabled = true
         case .shouldDisableUserInteraction:
             isUserInteractionEnabled = false
+        default:
+            break
         }
     }
 }
@@ -187,9 +184,10 @@ extension PickerFieldView: EventHandler {
 extension PickerFieldView: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         UIAccessibility.post(notification: .layoutChanged, argument: pickerView)
+        floatingPlaceholderTextFieldView?.updatePlaceholder()
         delegate?.didBeginEditing(self)
     }
-    
+
     func textField(
         _ textField: UITextField,
         shouldChangeCharactersIn range: NSRange,
@@ -197,8 +195,9 @@ extension PickerFieldView: UITextFieldDelegate {
     ) -> Bool {
         return false
     }
-    
+
     func textFieldDidEndEditing(_ textField: UITextField) {
+        floatingPlaceholderTextFieldView?.updatePlaceholder()
         delegate?.didFinish(self)
     }
 }

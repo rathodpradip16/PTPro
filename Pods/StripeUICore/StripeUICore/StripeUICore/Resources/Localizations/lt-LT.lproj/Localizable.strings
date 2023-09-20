@@ -18,6 +18,8 @@
 
 "City" = "Miestas";
 
+"Code field" = "Kodo laukas";
+
 "Company" = "Bendrovė";
 
 "Continue" = "Tęsti";
@@ -28,6 +30,8 @@
 
 "County" = "Apygarda";
 
+"Date is empty." = "Data neužpildyta.";
+
 "Department" = "Skyrius";
 
 "District" = "Rajonas";
@@ -35,6 +39,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Atlikta";
+
+"Double tap to edit" = "Norėdami redaguoti, dukart bakstelėkite";
+
+"Edit" = "Redaguoti";
 
 "Eircode" = "Pašto kodas (EIR)";
 
@@ -49,6 +57,8 @@
 "Full name" = "Vardas, pavardė";
 
 "Incomplete phone number" = "Ne visas telefono numeris";
+
+"Invalid UPI ID" = "Netinkamas UPI ID";
 
 "Island" = "Sala";
 
@@ -80,6 +90,8 @@
 
 "Remove bank account ending in %@" = "Pašalinti banko sąskaitą, kurios paskutiniai skaičiai %@";
 
+"Search" = "Paieška";
+
 "State" = "Valstija";
 
 "Suburb" = "Priemiestis";
@@ -93,6 +105,8 @@
 "The account number you entered is incomplete." = "Įvedėte ne visą sąskaitos numerį.";
 
 "Town or city" = "Miestelis arba miestas";
+
+"UPI ID" = "UPI ID";
 
 "Unable to parse phone number" = "Nepavyko išanalizuoti telefono numerio";
 

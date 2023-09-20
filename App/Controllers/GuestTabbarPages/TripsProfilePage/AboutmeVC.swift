@@ -23,7 +23,7 @@ class AboutmeVC: UIViewController,UITextViewDelegate{
     @IBOutlet var cancelBtn: UIButton!
     var lottieView: LottieAnimationView!
     @IBOutlet var containerView: UIView!
-    var aboutvaluArray : GetProfileQuery.Data.UserAccount.Result?
+    var aboutvaluArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
     
     func lottienextAnimation(sender:UIButton)
     {
@@ -129,7 +129,7 @@ class AboutmeVC: UIViewController,UITextViewDelegate{
     }
     func EditProfileAPICall(fieldName:String,fieldValue:String)
     {
-        let editprofileMutation = EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: .some(fieldValue) , deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
+        let editprofileMutation = PTProAPI.EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: .some(fieldValue) , deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
         Network.shared.apollo_headerClient.perform(mutation: editprofileMutation){  response in
             switch response {
             case .success(let result):

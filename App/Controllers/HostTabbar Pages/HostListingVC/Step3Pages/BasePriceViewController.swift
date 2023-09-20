@@ -27,7 +27,7 @@ class BasePriceViewController: BaseHostTableviewController {
       @IBOutlet weak var retryBtn: UIButton!
     
     @IBOutlet var progressViewWidth: NSLayoutConstraint!
-    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrencies.Result]()
+    var currencyDataArray = [PTProAPI.GetCurrenciesListQuery.Data.GetCurrencies.Result]()
     
     var basePriceValue = ""
     var cleaningPriceValue = ""

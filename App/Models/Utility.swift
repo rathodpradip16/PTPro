@@ -45,7 +45,7 @@ public class Utility: NSObject {
     var maximum_Count_for_booking = Int()
     var maximum_days_notice = Int()
     var isprofilepictureVerified :Bool = false
-    var passbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
+    var passbillingArray : PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     var passCurrencyvaluefromAPI = String()
     var currencyvalue_from_API_base = String()
      var currency_Dict = NSDictionary()
@@ -83,14 +83,14 @@ public class Utility: NSObject {
     
     // Currency Data and Language Data for Edit Profile Page
     
-    var LanguageDataArray = [UserLanguageQuery.Data.UserLanguages.Result]()
-    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrencies.Result]()
+    var LanguageDataArray = [PTProAPI.UserLanguageQuery.Data.UserLanguages.Result]()
+    var currencyDataArray = [PTProAPI.GetCurrenciesListQuery.Data.GetCurrencies.Result]()
     var ListID = String()
     var PreApprovedID: Bool = Bool()
     // Explore Page Call back
-   var recommendListingArray = [GetDefaultSettingQuery.Data.GetRecommend.Result]()
+    var recommendListingArray = [PTProAPI.GetDefaultSettingQuery.Data.GetRecommend.Result]()
 //    var mostListingArray = [GetDefaultSettingQuery.Data.GetMostViewedListing.Result]()
-    var GetAffiliateUserStep: GetAffiliateUserStepQuery.Data.GetAffiliateUserStep?
+    var GetAffiliateUserStep: PTProAPI.GetAffiliateUserStepQuery.Data.GetAffiliateUserStep?
 
     //MARK: - Receipt Page
     var isreceiptAccepted : Bool = false
@@ -113,7 +113,7 @@ public class Utility: NSObject {
     var userName = String ()
     var imgGalleryChanged:Bool = false
     
-    var EditProfileArray : GetProfileQuery.Data.UserAccount.Result?
+    var EditProfileArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
 
     //MoreFilterPage
     
@@ -229,11 +229,11 @@ public class Utility: NSObject {
     var step2_Description = String()
     var bedcount = 0
     
-    var getListSettingsArray : GetListingSettingQuery.Data.GetListingSettings.Results?
+    var getListSettingsArray : PTProAPI.GetListingSettingQuery.Data.GetListingSettings.Results?
     
-    var countrylist = [GetCountrycodeQuery.Data.GetCountries.Result]()
+    var countrylist = [PTProAPI.GetCountrycodeQuery.Data.GetCountries.Result]()
 
-    var ProfileAPIArray : GetProfileQuery.Data.UserAccount.Result?
+    var ProfileAPIArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
     var isPhonenumberCountrycode : Bool = false
     
     var listingApproval = String()

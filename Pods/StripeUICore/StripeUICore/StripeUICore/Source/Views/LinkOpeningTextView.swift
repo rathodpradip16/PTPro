@@ -3,6 +3,7 @@
 //  StripeUICore
 //
 //  Created by Mel Ludowise on 5/11/22.
+//  Copyright © 2022 Stripe, Inc. All rights reserved.
 //
 
 import Foundation
@@ -23,12 +24,12 @@ class LinkOpeningTextView: UITextView {
      the view using `isTextSelectable`.
      */
     override var isSelectable: Bool {
+        get {
+            return isTextSelectable
+        }
         set {
             super.isSelectable = true
             isTextSelectable = newValue
-        }
-        get {
-            return isTextSelectable
         }
     }
 

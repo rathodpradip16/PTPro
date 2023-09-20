@@ -32,9 +32,9 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     @IBOutlet weak var iterationTable: UITableView!
     var wishlistIndex:Int = -1
     var lottieView: LottieAnimationView!
-    var getReservationArray : GetReservationQuery.Data.GetReservation.Results?
-    var getReservation_currencyArray : GetReservationQuery.Data.GetReservation?
-    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
+    var getReservationArray : PTProAPI.GetReservationQuery.Data.GetReservation.Results?
+    var getReservation_currencyArray : PTProAPI.GetReservationQuery.Data.GetReservation?
+    var getbillingArray : PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     var currencyvalue_from_API_base = String()
     var isFromReviewPage = false
     var reservID = 0
@@ -73,7 +73,7 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     {
         if Utility.shared.isConnectedToNetwork(){
             self.lottieAnimation()
-            let createReservationquery = GetReservationQuery(reservationId: reservationid, convertCurrency: .none)
+            let createReservationquery = PTProAPI.GetReservationQuery(reservationId: reservationid, convertCurrency: .none)
             Network.shared.apollo_headerClient.fetch(query: createReservationquery){ response in
                 self.lottieView.isHidden = true
                 self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)
@@ -196,7 +196,7 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             currency = Utility.shared.currencyvalue_from_API_base
         }
         self.lottieAnimation()
-        let createReservationquery = GetReservationQuery(reservationId: reservationid,convertCurrency:.some(currency))
+        let createReservationquery = PTProAPI.GetReservationQuery(reservationId: reservationid,convertCurrency:.some(currency))
         Network.shared.apollo_headerClient.fetch(query: createReservationquery,cachePolicy:.fetchIgnoringCacheData){ response in
             self.lottieView.isHidden = true
             self.lottieView.frame = CGRect(x:FULLWIDTH/2-40, y:FULLHEIGHT/2-50, width:0, height:0)

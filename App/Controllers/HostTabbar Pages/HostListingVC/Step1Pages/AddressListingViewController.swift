@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import Lottie
 import IQKeyboardManagerSwift
+import Apollo
 
 class AddressListingViewController: BaseHostTableviewController, CountryDelegate {
 
@@ -41,7 +42,7 @@ class AddressListingViewController: BaseHostTableviewController, CountryDelegate
     var city = ""
     var state = ""
     var pincode = ""
-    var createResults:CreateListingMutation.Data.CreateListing.Results?
+    var createResults: PTProAPI.CreateListingMutation.Data.CreateListing.Results?
     var lottieView1: LottieAnimationView!
     
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
@@ -225,7 +226,7 @@ class AddressListingViewController: BaseHostTableviewController, CountryDelegate
         
         if Utility.shared.isConnectedToNetwork()
         {
-            let createlist = CreateListingMutation(listId: nil,
+            let createlist = PTProAPI.CreateListingMutation(listId: nil,
                                                    roomType: Utility.shared.step1ValuesInfo["roomType"] as? GraphQLNullable<String> ?? "",
                                                    houseType: Utility.shared.step1ValuesInfo["houseType"] as? GraphQLNullable<String> ?? "",
                                                    residenceType: Utility.shared.step1ValuesInfo["residenceType"] as? GraphQLNullable<String> ?? "",
@@ -295,7 +296,7 @@ class AddressListingViewController: BaseHostTableviewController, CountryDelegate
     
     func manageListingSteps(listId:String,currentStep:Int)
     {
-        let manageListingStepsMutation = ManageListingStepsMutation(listId:listId, currentStep:currentStep)
+        let manageListingStepsMutation = PTProAPI.ManageListingStepsMutation(listId:listId, currentStep:currentStep)
         Network.shared.apollo_headerClient.perform(mutation: manageListingStepsMutation){  response in
             switch response {
             case .success(let result):

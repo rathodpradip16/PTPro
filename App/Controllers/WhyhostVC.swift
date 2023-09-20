@@ -26,8 +26,8 @@ class WhyhostVC: UIViewController,UIScrollViewDelegate {
     
      let arrImg: [UIImage] = [#imageLiteral(resourceName: "bg_image1"),#imageLiteral(resourceName: "bg_image4"),#imageLiteral(resourceName: "bg_image3"),#imageLiteral(resourceName: "bg_image2")]
     var titleArray = [String]()
-    var getpayoutArray = [GetPayoutsQuery.Data.GetPayouts.Result]()
-    var whyHostArray = [GetWhyHostDataQuery.Data.GetWhyHostData.Result]()
+    var getpayoutArray = [PTProAPI.GetPayoutsQuery.Data.GetPayouts.Result]()
+    var whyHostArray = [PTProAPI.GetWhyHostDataQuery.Data.GetWhyHostData.Result]()
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -157,7 +157,7 @@ class WhyhostVC: UIViewController,UIScrollViewDelegate {
     @objc func listingBtnTapped()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let getlistsettingsquery = GetListingSettingQuery()
+            let getlistsettingsquery = PTProAPI.GetListingSettingQuery()
             Network.shared.apollo_headerClient.fetch(query: getlistsettingsquery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -207,7 +207,7 @@ class WhyhostVC: UIViewController,UIScrollViewDelegate {
     }
 
     func dataAPICall(){
-        let getwhyhostquery = GetWhyHostDataQuery()
+        let getwhyhostquery = PTProAPI.GetWhyHostDataQuery()
         
         Network.shared.apollo_headerClient.fetch(query: getwhyhostquery, cachePolicy: .fetchIgnoringCacheData){ response in
             switch response {
@@ -219,7 +219,7 @@ class WhyhostVC: UIViewController,UIScrollViewDelegate {
                     return
                 }
                 print(result.data?.getWhyHostData?.results!)
-                self.whyHostArray = ((result.data?.getWhyHostData?.results)!) as! [GetWhyHostDataQuery.Data.GetWhyHostData.Result]
+                self.whyHostArray = ((result.data?.getWhyHostData?.results)!) as! [PTProAPI.GetWhyHostDataQuery.Data.GetWhyHostData.Result]
                 self.scrollView.contentSize = CGSize(width:self.scrollView.frame.size.width * CGFloat(self.whyHostArray.count),height: self.scrollView.frame.size.height)
                 self.setScrollViewdata()
             case .failure(let error):

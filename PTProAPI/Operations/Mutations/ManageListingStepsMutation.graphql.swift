@@ -3,127 +3,130 @@
 
 @_exported import Apollo
 
-public class ManageListingStepsMutation: GraphQLMutation {
-  public static let operationName: String = "manageListingSteps"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"mutation manageListingSteps($listId: String!, $currentStep: Int!) { ManageListingSteps(listId: $listId, currentStep: $currentStep) { __typename results { __typename id listId step1 step2 step3 listing { __typename id isReady listApprovalStatus isPublished user { __typename userBanStatus } } } status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class ManageListingStepsMutation: GraphQLMutation {
+    static let operationName: String = "manageListingSteps"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"mutation manageListingSteps($listId: String!, $currentStep: Int!) { ManageListingSteps(listId: $listId, currentStep: $currentStep) { __typename results { __typename id listId step1 step2 step3 listing { __typename id isReady listApprovalStatus isPublished user { __typename userBanStatus } } } status errorMessage } }"#
+      ))
 
-  public var listId: String
-  public var currentStep: Int
+    public var listId: String
+    public var currentStep: Int
 
-  public init(
-    listId: String,
-    currentStep: Int
-  ) {
-    self.listId = listId
-    self.currentStep = currentStep
-  }
+    public init(
+      listId: String,
+      currentStep: Int
+    ) {
+      self.listId = listId
+      self.currentStep = currentStep
+    }
 
-  public var __variables: Variables? { [
-    "listId": listId,
-    "currentStep": currentStep
-  ] }
-
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
-
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Apollo.Selection] { [
-      .field("ManageListingSteps", ManageListingSteps?.self, arguments: [
-        "listId": .variable("listId"),
-        "currentStep": .variable("currentStep")
-      ]),
+    public var __variables: Variables? { [
+      "listId": listId,
+      "currentStep": currentStep
     ] }
 
-    public var manageListingSteps: ManageListingSteps? { __data["ManageListingSteps"] }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// ManageListingSteps
-    ///
-    /// Parent Type: `ShowListingCommon`
-    public struct ManageListingSteps: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ShowListingCommon }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("results", Results?.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
+      static var __selections: [Apollo.Selection] { [
+        .field("ManageListingSteps", ManageListingSteps?.self, arguments: [
+          "listId": .variable("listId"),
+          "currentStep": .variable("currentStep")
+        ]),
       ] }
 
-      public var results: Results? { __data["results"] }
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var manageListingSteps: ManageListingSteps? { __data["ManageListingSteps"] }
 
-      /// ManageListingSteps.Results
+      /// ManageListingSteps
       ///
-      /// Parent Type: `ShowListingSteps`
-      public struct Results: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `ShowListingCommon`
+      struct ManageListingSteps: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ShowListingSteps }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.ShowListingCommon }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("id", Int?.self),
-          .field("listId", Int?.self),
-          .field("step1", String?.self),
-          .field("step2", String?.self),
-          .field("step3", String?.self),
-          .field("listing", Listing?.self),
+          .field("results", Results?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
         ] }
 
-        public var id: Int? { __data["id"] }
-        public var listId: Int? { __data["listId"] }
-        public var step1: String? { __data["step1"] }
-        public var step2: String? { __data["step2"] }
-        public var step3: String? { __data["step3"] }
-        public var listing: Listing? { __data["listing"] }
+        var results: Results? { __data["results"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
 
-        /// ManageListingSteps.Results.Listing
+        /// ManageListingSteps.Results
         ///
-        /// Parent Type: `ShowListing`
-        public struct Listing: PTProAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+        /// Parent Type: `ShowListingSteps`
+        struct Results: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ShowListing }
-          public static var __selections: [Apollo.Selection] { [
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.ShowListingSteps }
+          static var __selections: [Apollo.Selection] { [
             .field("__typename", String.self),
             .field("id", Int?.self),
-            .field("isReady", Bool?.self),
-            .field("listApprovalStatus", String?.self),
-            .field("isPublished", Bool?.self),
-            .field("user", User?.self),
+            .field("listId", Int?.self),
+            .field("step1", String?.self),
+            .field("step2", String?.self),
+            .field("step3", String?.self),
+            .field("listing", Listing?.self),
           ] }
 
-          public var id: Int? { __data["id"] }
-          public var isReady: Bool? { __data["isReady"] }
-          public var listApprovalStatus: String? { __data["listApprovalStatus"] }
-          public var isPublished: Bool? { __data["isPublished"] }
-          public var user: User? { __data["user"] }
+          var id: Int? { __data["id"] }
+          var listId: Int? { __data["listId"] }
+          var step1: String? { __data["step1"] }
+          var step2: String? { __data["step2"] }
+          var step3: String? { __data["step3"] }
+          var listing: Listing? { __data["listing"] }
 
-          /// ManageListingSteps.Results.Listing.User
+          /// ManageListingSteps.Results.Listing
           ///
-          /// Parent Type: `User`
-          public struct User: PTProAPI.SelectionSet {
-            public let __data: DataDict
-            public init(_dataDict: DataDict) { __data = _dataDict }
+          /// Parent Type: `ShowListing`
+          struct Listing: PTProAPI.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
 
-            public static var __parentType: Apollo.ParentType { PTProAPI.Objects.User }
-            public static var __selections: [Apollo.Selection] { [
+            static var __parentType: Apollo.ParentType { PTProAPI.Objects.ShowListing }
+            static var __selections: [Apollo.Selection] { [
               .field("__typename", String.self),
-              .field("userBanStatus", Int?.self),
+              .field("id", Int?.self),
+              .field("isReady", Bool?.self),
+              .field("listApprovalStatus", String?.self),
+              .field("isPublished", Bool?.self),
+              .field("user", User?.self),
             ] }
 
-            public var userBanStatus: Int? { __data["userBanStatus"] }
+            var id: Int? { __data["id"] }
+            var isReady: Bool? { __data["isReady"] }
+            var listApprovalStatus: String? { __data["listApprovalStatus"] }
+            var isPublished: Bool? { __data["isPublished"] }
+            var user: User? { __data["user"] }
+
+            /// ManageListingSteps.Results.Listing.User
+            ///
+            /// Parent Type: `User`
+            struct User: PTProAPI.SelectionSet {
+              let __data: DataDict
+              init(_dataDict: DataDict) { __data = _dataDict }
+
+              static var __parentType: Apollo.ParentType { PTProAPI.Objects.User }
+              static var __selections: [Apollo.Selection] { [
+                .field("__typename", String.self),
+                .field("userBanStatus", Int?.self),
+              ] }
+
+              var userBanStatus: Int? { __data["userBanStatus"] }
+            }
           }
         }
       }
     }
   }
+
 }

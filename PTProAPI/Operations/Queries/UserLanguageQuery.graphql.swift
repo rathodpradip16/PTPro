@@ -3,62 +3,65 @@
 
 @_exported import Apollo
 
-public class UserLanguageQuery: GraphQLQuery {
-  public static let operationName: String = "userLanguage"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"query userLanguage { userLanguages { __typename status errorMessage result { __typename label value } } }"#
-    ))
+extension PTProAPI {
+  class UserLanguageQuery: GraphQLQuery {
+    static let operationName: String = "userLanguage"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"query userLanguage { userLanguages { __typename status errorMessage result { __typename label value } } }"#
+      ))
 
-  public init() {}
+    public init() {}
 
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Apollo.Selection] { [
-      .field("userLanguages", UserLanguages?.self),
-    ] }
-
-    public var userLanguages: UserLanguages? { __data["userLanguages"] }
-
-    /// UserLanguages
-    ///
-    /// Parent Type: `UserLanguagesType`
-    public struct UserLanguages: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.UserLanguagesType }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
-        .field("result", [Result?]?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
+      static var __selections: [Apollo.Selection] { [
+        .field("userLanguages", UserLanguages?.self),
       ] }
 
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
-      public var result: [Result?]? { __data["result"] }
+      var userLanguages: UserLanguages? { __data["userLanguages"] }
 
-      /// UserLanguages.Result
+      /// UserLanguages
       ///
-      /// Parent Type: `LanguageItemType`
-      public struct Result: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `UserLanguagesType`
+      struct UserLanguages: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.LanguageItemType }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.UserLanguagesType }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("label", String?.self),
-          .field("value", String?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
+          .field("result", [Result?]?.self),
         ] }
 
-        public var label: String? { __data["label"] }
-        public var value: String? { __data["value"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
+        var result: [Result?]? { __data["result"] }
+
+        /// UserLanguages.Result
+        ///
+        /// Parent Type: `LanguageItemType`
+        struct Result: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
+
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.LanguageItemType }
+          static var __selections: [Apollo.Selection] { [
+            .field("__typename", String.self),
+            .field("label", String?.self),
+            .field("value", String?.self),
+          ] }
+
+          var label: String? { __data["label"] }
+          var value: String? { __data["value"] }
+        }
       }
     }
   }
+
 }

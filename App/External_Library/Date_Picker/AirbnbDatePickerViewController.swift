@@ -73,7 +73,7 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
         return floor(view.frame.size.width / 7)
     }
     var collectionViewWidthConstraint: NSLayoutConstraint?
-    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
+    var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
     
     var isSelectedstartDate  = Bool()
     

@@ -70,15 +70,15 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     var PageIndex:Int = 1
     var totalPages = Int()
     var isScrollBottom:Bool = false
-    var ResultArray : GetThreadsQuery.Data.GetThreads.Results?
-    var getmessageListquery = [GetThreadsQuery.Data.GetThreads.Results.ThreadItem]()
-    var viewUpdateQuery : GetThreadsQuery.Data.GetThreads.Results.ThreadItemForType?
-    var sendMessageArray : SendMessageMutation.Data.SendMessage.Results?
-    var getunreadthreadCount : GetUnReadThreadCountQuery.Data.GetUnReadThreadCount.Results?
+    var ResultArray : PTProAPI.GetThreadsQuery.Data.GetThreads.Results?
+    var getmessageListquery = [PTProAPI.GetThreadsQuery.Data.GetThreads.Results.ThreadItem]()
+    var viewUpdateQuery : PTProAPI.GetThreadsQuery.Data.GetThreads.Results.ThreadItemForType?
+    var sendMessageArray : PTProAPI.SendMessageMutation.Data.SendMessage.Results?
+    var getunreadthreadCount : PTProAPI.GetUnReadThreadCountQuery.Data.GetUnReadThreadCount.Results?
     //var getallreservationquery = [GetAllReservationQuery.Data.GetAllReservation.Result]()
     
-    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
-    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
+    var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
+    var getbillingArray : PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     
     
     var releaseDate: NSDate?
@@ -226,7 +226,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
         
         if Utility.shared.isConnectedToNetwork() {
             
-            let viewlistingQuery = ViewListingDetailsQuery(listId: listid, preview: .none)
+            let viewlistingQuery = PTProAPI.ViewListingDetailsQuery(listId: listid, preview: .none)
             Network.shared.apollo_headerClient.fetch(query: viewlistingQuery, cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -300,7 +300,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             let timestamp = Date().currentTimeMillis()
            
                 let json: [String: AnyHashable] = ["id": self.sendMessageArray?.__data._data["id"] as? Int, "threadId": self.threadId,"reservationId":self.sendMessageArray?.reservationId,"content":messageTxtView.text, "sentBy":Utility.shared.getCurrentUserID()! as String,"type":"message","startDate":self.sendMessageArray?.startDate,"endDate":self.sendMessageArray?.endDate,"createdAt":"\(timestamp)"]
-                let array = GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
+                let array = PTProAPI.GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
                 
                 print(sendMessageArray)
             self.getmessageListquery.insert(array, at:0)
@@ -356,7 +356,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     func sendMessageAPICall()
     {
         
-        let sendMsgMutation = SendMessageMutation(threadId:threadId, content:.some(message), type: "message")
+        let sendMsgMutation = PTProAPI.SendMessageMutation(threadId:threadId, content:.some(message), type: "message")
         
         Network.shared.apollo_headerClient.perform(mutation: sendMsgMutation){ response in
             switch response {
@@ -468,7 +468,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     
   func readMessage()
     {
-        let readMessageMutation = ReadMessageMutation(threadId: threadId)
+        let readMessageMutation = PTProAPI.ReadMessageMutation(threadId: threadId)
         Network.shared.apollo_headerClient.perform(mutation: readMessageMutation){ response in
             switch response {
             case .success(let result):
@@ -501,7 +501,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     @objc func getUnreadCountMessage()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let getunreadmessageCount = GetUnReadThreadCountQuery(threadId: .some(threadId))
+            let getunreadmessageCount = PTProAPI.GetUnReadThreadCountQuery(threadId: .some(threadId))
             Network.shared.apollo_headerClient.fetch(query: getunreadmessageCount,cachePolicy: .fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -572,7 +572,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             print("threadType \(threadtype)")
             print("threadID \(threadId)")
             
-            let getmessagequery = GetThreadsQuery(threadType:.some(threadtype), threadId: .some(threadId), currentPage: .some(PageIndex), sortOrder: .none)
+            let getmessagequery = PTProAPI.GetThreadsQuery(threadType:.some(threadtype), threadId: .some(threadId), currentPage: .some(PageIndex), sortOrder: .none)
             Network.shared.apollo_headerClient.fetch(query:getmessagequery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -590,7 +590,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     if(!self.isnewMessage)
                     {
                         self.totalListcount = (result.data?.getThreads?.results?.getThreadCount)!
-                        self.getmessageListquery.append(contentsOf: ((result.data?.getThreads?.results?.threadItems)!) as! [GetThreadsQuery.Data.GetThreads.Results.ThreadItem])
+                        self.getmessageListquery.append(contentsOf: ((result.data?.getThreads?.results?.threadItems)!) as! [PTProAPI.GetThreadsQuery.Data.GetThreads.Results.ThreadItem])
                         
                         self.viewUpdateQuery =  (result.data?.getThreads?.results?.threadItemForType)!
                         // self.getmessageListquery = self.getmessageListquery.reversed()
@@ -615,9 +615,9 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                         
                         self.unreadView.isHidden = true
                         //self.isnewMessage = false
-                        var messageArray = [GetThreadsQuery.Data.GetThreads.Results.ThreadItem]()
+                        var messageArray = [PTProAPI.GetThreadsQuery.Data.GetThreads.Results.ThreadItem]()
                         messageArray.removeAll()
-                        messageArray.append(contentsOf: ((result.data?.getThreads?.results?.threadItems)!) as! [GetThreadsQuery.Data.GetThreads.Results.ThreadItem])
+                        messageArray.append(contentsOf: ((result.data?.getThreads?.results?.threadItems)!) as! [PTProAPI.GetThreadsQuery.Data.GetThreads.Results.ThreadItem])
                         for i in 0..<messageArray.count
                         {
                             if messageArray[i].id != self.getmessageListquery[i].id
@@ -2246,7 +2246,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
         
         if(Utility.shared.getCurrentUserToken() != nil)
         {
-            let profileQuery = GetProfileQuery()
+            let profileQuery = PTProAPI.GetProfileQuery()
             Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -2453,7 +2453,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 currency = Utility.shared.currencyvalue_from_API_base
             }
             
-            let billingListquery = GetBillingCalculationQuery(listId:Int(Utility.shared.ListID)!, startDate:dateFormaatter.string(from: startingDate), endDate:dateFormaatter.string(from: EndingDate), guests: PersonCap, convertCurrency:currency)
+            let billingListquery = PTProAPI.GetBillingCalculationQuery(listId:Int(Utility.shared.ListID)!, startDate:dateFormaatter.string(from: startingDate), endDate:dateFormaatter.string(from: EndingDate), guests: PersonCap, convertCurrency:currency)
             Network.shared.apollo_headerClient.fetch(query: billingListquery){ response in
                 switch response {
                 case .success(let result):
@@ -2642,7 +2642,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let edate =  endString //getmessageListquery.first?.endDate
                     
                     let json: [String: AnyHashable] = ["id": self.sendMessageArray?.__data._data["id"] as? Int, "threadId": self.threadId,"reservationId":reservartion,"content":"", "sentBy":Utility.shared.getCurrentUserID()! as String,"type":"declined","startDate":sDate,"endDate":edate,"createdAt":"\(timestamp)"]
-                    let array = GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
+                    let array = PTProAPI.GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
 
                     //     print( getmessageListquery.first?.startDate)
                     
@@ -2662,7 +2662,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     print(datefetchedStart)
                     print(datefetchedEnd)
                     
-                    let reservationMutation = ReservationStatusMutation(threadId: threadId, content: "", type: "declined", startDate: .some(datefetchedStart), endDate: .some(datefetchedEnd), personCapacity: .some(PersonCap), reservationId: .some(reservartion), actionType: "declined")
+                    let reservationMutation = PTProAPI.ReservationStatusMutation(threadId: threadId, content: "", type: "declined", startDate: .some(datefetchedStart), endDate: .some(datefetchedEnd), personCapacity: .some(PersonCap), reservationId: .some(reservartion), actionType: "declined")
                     Network.shared.apollo_headerClient.perform(mutation: reservationMutation){ response  in
                         switch response{
                         case .success(let result):
@@ -2765,7 +2765,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     
 
                     let json: [String: AnyHashable] = ["id":self.sendMessageArray?.__data._data["id"] as? Int, "threadId":self.threadId, "reservationId":reservartion, "content":"", "sentBy":Utility.shared.getCurrentUserID()! as String, "type":"approved", "startDate": sDate, "endDate":edate, "createdAt":"\(timestamp)"]
-                    let array = GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
+                    let array = PTProAPI.GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
                     
                     //     print( getmessageListquery.first?.startDate)
                     
@@ -2785,7 +2785,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     print(datefetchedStart)
                     print(datefetchedEnd)
                     
-                    let reservationMutation = ReservationStatusMutation(threadId: threadId, content: "", type: .some("approved"), startDate: .some(datefetchedStart), endDate: .some(datefetchedEnd), personCapacity: .some(PersonCap), reservationId: .some(reservartion), actionType: "approved")
+                    let reservationMutation = PTProAPI.ReservationStatusMutation(threadId: threadId, content: "", type: .some("approved"), startDate: .some(datefetchedStart), endDate: .some(datefetchedEnd), personCapacity: .some(PersonCap), reservationId: .some(reservartion), actionType: "approved")
                     Network.shared.apollo_headerClient.perform(mutation: reservationMutation){ response in
                         switch response{
                         case .success(let result):
@@ -2895,7 +2895,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     
                     
                     let json: [String: AnyHashable] = ["id":self.sendMessageArray?.__data._data["id"] as? Int, "threadId":self.threadId, "reservationId":reservartion, "content":"", "sentBy":Utility.shared.getCurrentUserID()! as String, "type":"preApproved", "startDate": sDate, "endDate":edate, "createdAt":"\(timestamp)"]
-                    let array = GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
+                    let array = PTProAPI.GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
                     
                     //     print( getmessageListquery.first?.startDate)
                     
@@ -2914,7 +2914,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     
                     print(datefetchedStart)
                     
-                    let preapproveMutation = PreapproveMutation(threadId: threadId, content: "", type: "preApproved", startDate: .some(datefetchedStart), endDate: .some(datefetchedEnd), personCapacity: .some(PersonCap), reservationId: .some(reservartion))
+                    let preapproveMutation = PTProAPI.PreapproveMutation(threadId: threadId, content: "", type: "preApproved", startDate: .some(datefetchedStart), endDate: .some(datefetchedEnd), personCapacity: .some(PersonCap), reservationId: .some(reservartion))
                     Network.shared.apollo_headerClient.perform(mutation: preapproveMutation){ response in
                         self.lottieView.isHidden = true
                         self.inboxlistingTable.hideSkeleton()
@@ -3028,7 +3028,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     
                     
                     let json: [String: AnyHashable]  =   ["id":self.sendMessageArray?.__data._data["id"] as? Int, "threadId":self.threadId, "reservationId":reservartion, "content":"", "sentBy":Utility.shared.getCurrentUserID()! as String, "type":"preApproved", "startDate": sDate, "endDate":edate, "createdAt":"\(timestamp)"]
-                    let array = GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
+                    let array = PTProAPI.GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
                     
                     //     print( getmessageListquery.first?.startDate)
                     
@@ -3146,7 +3146,7 @@ class InboxListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     
                     
                     let json: [String: AnyHashable]  = ["id":self.sendMessageArray?.__data._data["id"], "threadId":self.threadId, "reservationId":reservartion, "content":"", "sentBy":Utility.shared.getCurrentUserID()! as String, "type":"preApproved", "startDate": sDate, "endDate":edate, "createdAt":"\(timestamp)"]
-                    let array = GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
+                    let array = PTProAPI.GetThreadsQuery.Data.GetThreads.Results.ThreadItem(_dataDict: DataDict(data: json, fulfilledFragments: []))
                     
                     //     print( getmessageListquery.first?.startDate)
                     

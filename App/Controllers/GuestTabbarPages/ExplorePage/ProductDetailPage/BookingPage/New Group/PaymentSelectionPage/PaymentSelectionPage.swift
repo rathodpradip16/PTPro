@@ -26,11 +26,11 @@ class PaymentSelectionPage: UIViewController {
     var selectedPaymentType: Int = 0
     var inputPickerView = UIPickerView()
     var inputUIView = UIView()
-    var currencyPaymentTypes: [GetCurrenciesListQuery.Data.GetCurrencies.Result]? = []
+    var currencyPaymentTypes: [PTProAPI.GetCurrenciesListQuery.Data.GetCurrencies.Result]? = []
     var selectedCurrency = ""
     
-    var getpaymentmethodsArray = [GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
-    var getpaymentmethodsArrayFilter = [GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
+    var getpaymentmethodsArray = [PTProAPI.GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
+    var getpaymentmethodsArrayFilter = [PTProAPI.GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
     
     @IBOutlet var lblPaymentType: UILabel!
     var braintreeClient: BTAPIClient!
@@ -40,8 +40,8 @@ class PaymentSelectionPage: UIViewController {
     
     
     var currencyvalue_from_API_base = ""
-    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
-    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
+    var getbillingArray : PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
+    var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
     var reservID = 0
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +61,7 @@ class PaymentSelectionPage: UIViewController {
     {
         
         self.lottieAnimation()
-        let getpayoutquery = GetPaymentMethodsQuery()
+        let getpayoutquery = PTProAPI.GetPaymentMethodsQuery()
         Network.shared.apollo_headerClient.fetch(query: getpayoutquery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
             switch response {
             case .success(let result):
@@ -75,7 +75,7 @@ class PaymentSelectionPage: UIViewController {
                 
                 self.lottieView.isHidden = true
                 self.lottieWholeView.isHidden = true
-                self.getpaymentmethodsArray = ((result.data?.getPaymentMethods?.results)!) as! [GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]
+                self.getpaymentmethodsArray = ((result.data?.getPaymentMethods?.results)!) as! [PTProAPI.GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]
                 getpaymentmethodsArrayFilter  =  getpaymentmethodsArray.filter { result in
                     result.isEnable == true
                 }
@@ -232,7 +232,7 @@ class PaymentSelectionPage: UIViewController {
     }
     
 func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
-    let confirmpaymentmutation = ConfirmReservationMutation(reservationId: reservationId, paymentIntentId: paymentIntentId)
+    let confirmpaymentmutation = PTProAPI.ConfirmReservationMutation(reservationId: reservationId, paymentIntentId: paymentIntentId)
     Network.shared.apollo_headerClient.perform(mutation: confirmpaymentmutation){ response in
         switch response {
         case .success(let result):
@@ -312,7 +312,7 @@ func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
             
         }
         
-        let paymentMutation = CreateReservationMutation(listId: viewListingArray?.__data._data["id"] as? Int ?? 0, checkIn: getbillingArray?.checkIn! ?? "", checkOut: getbillingArray?.checkOut! ?? "", guests: Utility.shared.guestCountToBeSend, message: Utility.shared.booking_message, basePrice: getbillingArray?.averagePrice! ?? 0.0, cleaningPrice: getbillingArray?.cleaningPrice! ?? 0.0, currency: getbillingArray?.currency! ?? "", discount: .some(getbillingArray?.discount! ?? 0.0), discountType: .some(getbillingArray?.discountLabel ?? ""), guestServiceFee: .some(getbillingArray?.guestServiceFee! ?? 0.0), hostServiceFee: .some( getbillingArray?.hostServiceFee! ?? 0.0), total: getbillingArray?.total! ?? 0.0, bookingType: .some(bookedArrayType), cardToken: cardtoken, paymentType: .some(self.selectedPaymentType == 1 ? 2 : self.selectedPaymentType), convCurrency: currency_con, averagePrice: .some(getbillingArray?.averagePrice! ?? 0.0), nights: .some(getbillingArray?.nights! ?? 0), paymentCurrency: .some(self.selectedCurrency))
+        let paymentMutation = PTProAPI.CreateReservationMutation(listId: viewListingArray?.__data._data["id"] as? Int ?? 0, checkIn: getbillingArray?.checkIn! ?? "", checkOut: getbillingArray?.checkOut! ?? "", guests: Utility.shared.guestCountToBeSend, message: Utility.shared.booking_message, basePrice: getbillingArray?.averagePrice! ?? 0.0, cleaningPrice: getbillingArray?.cleaningPrice! ?? 0.0, currency: getbillingArray?.currency! ?? "", discount: .some(getbillingArray?.discount! ?? 0.0), discountType: .some(getbillingArray?.discountLabel ?? ""), guestServiceFee: .some(getbillingArray?.guestServiceFee! ?? 0.0), hostServiceFee: .some( getbillingArray?.hostServiceFee! ?? 0.0), total: getbillingArray?.total! ?? 0.0, bookingType: .some(bookedArrayType), cardToken: cardtoken, paymentType: .some(self.selectedPaymentType == 1 ? 2 : self.selectedPaymentType), convCurrency: currency_con, averagePrice: .some(getbillingArray?.averagePrice! ?? 0.0), nights: .some(getbillingArray?.nights! ?? 0), paymentCurrency: .some(self.selectedCurrency))
                 
         Network.shared.apollo_headerClient.perform(mutation: paymentMutation){  response in
             switch response {
@@ -571,7 +571,7 @@ extension PaymentSelectionPage: UITextFieldDelegate , WebviewVCDelegate{
     
     
     func ConfirmPayPal(paymentID: String, PayerID: String){
-        let confirmPayPal = ConfirmPayPalExecuteMutation(paymentId: paymentID, payerId: PayerID)
+        let confirmPayPal = PTProAPI.ConfirmPayPalExecuteMutation(paymentId: paymentID, payerId: PayerID)
         
         Network.shared.apollo_headerClient.perform(mutation: confirmPayPal){ response in
             switch response {

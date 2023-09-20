@@ -360,7 +360,7 @@ class SignUpViewController: UIViewController {
     
     func signupAPICall(){
         // SignupApi
-        let signupMutation = SignupMutation(firstName: firstNametxtField.text ?? "", lastName: lastNameTxtField.text ?? "", email: EmailTxtField.text ?? "", password: passwordTxtField.text ?? "", dateOfBirth: .some(convertedDate) , deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "email")
+        let signupMutation = PTProAPI.SignupMutation(firstName: firstNametxtField.text ?? "", lastName: lastNameTxtField.text ?? "", email: EmailTxtField.text ?? "", password: passwordTxtField.text ?? "", dateOfBirth: .some(convertedDate) , deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "email")
         apollo.perform(mutation: signupMutation){  response in
             switch response {
             case .success(let result):

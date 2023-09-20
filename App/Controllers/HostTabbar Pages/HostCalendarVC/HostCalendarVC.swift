@@ -64,10 +64,10 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
     
     
     
-    var manageListingArray = [ManageListingsQuery.Data.ManageListings.Result]()
-    var inprogress_List_Array = [ManageListingsQuery.Data.ManageListings.Result]()
-    var completed_List_Array = [ManageListingsQuery.Data.ManageListings.Result]()
-    var getListingSpecialPrice_Array = [GetListingSpecialPriceQuery.Data.GetListingSpecialPrice.Result]()
+    var manageListingArray = [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]()
+    var inprogress_List_Array = [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]()
+    var completed_List_Array = [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]()
+    var getListingSpecialPrice_Array = [PTProAPI.GetListingSpecialPriceQuery.Data.GetListingSpecialPrice.Result]()
     open weak var delegate: WWCalendarTimeSelectorProtocol?
     
     open var optionCurrentDateRange: WWCalendarTimeSelectorDateRange = WWCalendarTimeSelectorDateRange()
@@ -323,7 +323,7 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
     {
         
         if Utility.shared.isConnectedToNetwork(){
-            let manageListingquery = ManageListingsQuery()
+            let manageListingquery = PTProAPI.ManageListingsQuery()
             Network.shared.apollo_headerClient.fetch(query: manageListingquery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -334,7 +334,7 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
                         return
                     }
                     self.lottieView.isHidden = true
-                    self.manageListingArray = ((result.data?.manageListings?.results)!) as! [ManageListingsQuery.Data.ManageListings.Result]
+                    self.manageListingArray = ((result.data?.manageListings?.results)!) as! [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]
                     self.completed_List_Array.removeAll()
                     self.inprogress_List_Array.removeAll()
                     for i in self.manageListingArray
@@ -496,7 +496,7 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
     {
         self.lottieAnimation()
         if Utility.shared.isConnectedToNetwork(){
-            let getListingSpecialPricequery = GetListingSpecialPriceQuery(listId: listId)
+            let getListingSpecialPricequery = PTProAPI.GetListingSpecialPriceQuery(listId: listId)
             Network.shared.apollo_headerClient.fetch(query: getListingSpecialPricequery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -506,7 +506,7 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
                         self.lottieView.isHidden = true
                         return
                     }
-                    self.getListingSpecialPrice_Array = (result.data?.getListingSpecialPrice?.results)! as! [GetListingSpecialPriceQuery.Data.GetListingSpecialPrice.Result]
+                    self.getListingSpecialPrice_Array = (result.data?.getListingSpecialPrice?.results)! as! [PTProAPI.GetListingSpecialPriceQuery.Data.GetListingSpecialPrice.Result]
                     Utility.shared.host_blockedDates_Array.removeAllObjects()
                     Utility.shared.host_bookedPricing_Array.removeAllObjects()
                     Utility.shared.host_specialPricing_Array.removeAllObjects()

@@ -47,9 +47,9 @@ class ViewReviewPage: UIViewController, WriteReviewProtocol,UITableViewDelegate 
     var pageIndex = 1
     var selectedOwnerType = "other"
     var totalCount = 0
-    var aboutYouReviewArray = [GetUserReviewsQuery.Data.GetUserReviews.Result]()
-    var byYouReviewArray = [GetUserReviewsQuery.Data.GetUserReviews.Result]()
-    var pendingReviewArray = [GetPendingUserReviewsQuery.Data.GetPendingUserReviews.Result]()
+    var aboutYouReviewArray = [PTProAPI.GetUserReviewsQuery.Data.GetUserReviews.Result]()
+    var byYouReviewArray = [PTProAPI.GetUserReviewsQuery.Data.GetUserReviews.Result]()
+    var pendingReviewArray = [PTProAPI.GetPendingUserReviewsQuery.Data.GetPendingUserReviews.Result]()
     var pendingPageIndex = 1
     var pendingTotalCount = 0
     
@@ -98,7 +98,7 @@ class ViewReviewPage: UIViewController, WriteReviewProtocol,UITableViewDelegate 
             self.offlineView.isHidden = true
             self.NoReviewsFoundView.isHidden = true
             self.ReviewsTableView.isHidden = false
-            let getUserReview = GetUserReviewsQuery(currentPage: .some(self.pageIndex), ownerType: .some(self.selectedOwnerType))
+            let getUserReview = PTProAPI.GetUserReviewsQuery(currentPage: .some(self.pageIndex), ownerType: .some(self.selectedOwnerType))
             if pageIndex == 1{
                 self.aboutYouReviewArray.removeAll()
                 self.byYouReviewArray.removeAll()
@@ -131,9 +131,9 @@ class ViewReviewPage: UIViewController, WriteReviewProtocol,UITableViewDelegate 
                         }
                         self.totalCount = result.data?.getUserReviews?.count ?? 0
                         if self.selectedOwnerType == "other"{
-                            self.aboutYouReviewArray.append(contentsOf: (result.data?.getUserReviews?.results)! as! [GetUserReviewsQuery.Data.GetUserReviews.Result])
+                            self.aboutYouReviewArray.append(contentsOf: (result.data?.getUserReviews?.results)! as! [PTProAPI.GetUserReviewsQuery.Data.GetUserReviews.Result])
                         }else{
-                            self.byYouReviewArray.append(contentsOf: (result.data?.getUserReviews?.results)! as! [GetUserReviewsQuery.Data.GetUserReviews.Result])
+                            self.byYouReviewArray.append(contentsOf: (result.data?.getUserReviews?.results)! as! [PTProAPI.GetUserReviewsQuery.Data.GetUserReviews.Result])
                         }
                         self.ReviewsTableView.hideSkeleton()
                         self.ReviewsTableView.isSkeletonable = false
@@ -181,7 +181,7 @@ class ViewReviewPage: UIViewController, WriteReviewProtocol,UITableViewDelegate 
             self.offlineView.isHidden = true
             self.NoReviewsFoundView.isHidden = true
             
-            let getPendingReviews = GetPendingUserReviewsQuery(currentPage: .some(self.pendingPageIndex))
+            let getPendingReviews = PTProAPI.GetPendingUserReviewsQuery(currentPage: .some(self.pendingPageIndex))
             
             if self.pendingPageIndex == 1{
                 self.pendingReviewArray.removeAll()
@@ -211,7 +211,7 @@ class ViewReviewPage: UIViewController, WriteReviewProtocol,UITableViewDelegate 
                     }
                     
                     self.pendingTotalCount = result.data?.getPendingUserReviews?.count ?? 0
-                    self.pendingReviewArray.append(contentsOf: (result.data?.getPendingUserReviews?.results)! as! [GetPendingUserReviewsQuery.Data.GetPendingUserReviews.Result])
+                    self.pendingReviewArray.append(contentsOf: (result.data?.getPendingUserReviews?.results)! as! [PTProAPI.GetPendingUserReviewsQuery.Data.GetPendingUserReviews.Result])
                     self.ReviewsTableView.hideSkeleton()
                     self.ReviewsTableView.isSkeletonable = false
                     self.lottieView.isHidden = true

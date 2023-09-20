@@ -3,17 +3,24 @@
 //  StripeUICore
 //
 //  Created by Mel Ludowise on 10/1/21.
+//  Copyright © 2021 Stripe, Inc. All rights reserved.
 //
 
 import Foundation
-import UIKit
 @_spi(STP) import StripeCore
+import UIKit
 
 /**
  A textfield whose input view is a `UIDatePicker`
  */
 @_spi(STP) public class DateFieldElement {
     public typealias DidUpdateSelectedDate = (Date) -> Void
+    struct DateEmptyError: ElementValidationError {
+        var localizedDescription: String = STPLocalizedString(
+            "Date is empty.",
+            "Error message for empty date."
+        )
+    }
 
     weak public var delegate: ElementDelegate?
     private(set) lazy var datePickerView: UIDatePicker = {
@@ -48,9 +55,16 @@ import UIKit
         }
     }
     private var previouslySelectedDate: Date?
+    public var validationState: ElementValidationState {
+        if selectedDate != nil {
+            return .valid
+        } else {
+            return .invalid(error: DateEmptyError(), shouldDisplay: false)
+        }
+    }
     public var didUpdate: DidUpdateSelectedDate?
 
-    private let label: String
+    private let label: String?
     private let theme: ElementsUITheme
 
     /**
@@ -69,17 +83,21 @@ import UIKit
        - `didUpdate` is not called if the user does not change their input before hitting "Done"
      */
     public init(
-        label: String,
+        label: String? = nil,
         defaultDate: Date? = nil,
         minimumDate: Date? = nil,
         maximumDate: Date? = nil,
         locale: Locale = .current,
         timeZone: TimeZone = .current,
         theme: ElementsUITheme = .default,
+        customDateFormatter: DateFormatter? = nil,
         didUpdate: DidUpdateSelectedDate? = nil
     ) {
         self.label = label
         self.theme = theme
+        if let customDateFormatter = customDateFormatter {
+            self.dateFormatter = customDateFormatter
+        }
         dateFormatter.locale = locale
         dateFormatter.timeZone = timeZone
 
@@ -114,7 +132,7 @@ extension DateFieldElement: Element {
     public var view: UIView {
         return pickerFieldView
     }
-    
+
     public func beginEditing() -> Bool {
         return pickerFieldView.becomeFirstResponder()
     }
@@ -129,9 +147,11 @@ extension DateFieldElement: PickerFieldViewDelegate {
 
     func didFinish(_ pickerFieldView: PickerFieldView) {
         if previouslySelectedDate != selectedDate,
-           let selectedDate = selectedDate {
+            let selectedDate = selectedDate
+        {
             didUpdate?(selectedDate)
             previouslySelectedDate = selectedDate
+            delegate?.didUpdate(element: self)
         }
         delegate?.continueToNextField(element: self)
     }
@@ -151,12 +171,14 @@ private extension DateFieldElement {
         }
 
         if let min = min,
-           date < min {
+            date < min
+        {
             return nil
         }
 
         if let max = max,
-           date > max {
+            date > max
+        {
             return nil
         }
 

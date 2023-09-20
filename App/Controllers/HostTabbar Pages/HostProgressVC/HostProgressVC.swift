@@ -32,10 +32,10 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var headerLineView: UIView!
     var lottieView: LottieAnimationView!
-    var getallreservationquery = [GetAllReservationQuery.Data.GetAllReservation.Result]()
-    var getpreviousReservationquery = [GetAllReservationQuery.Data.GetAllReservation.Result]()
-    var getReservationArray : GetReservationQuery.Data.GetReservation.Results?
-    var getReservation_currencyArray : GetReservationQuery.Data.GetReservation?
+    var getallreservationquery = [PTProAPI.GetAllReservationQuery.Data.GetAllReservation.Result]()
+    var getpreviousReservationquery = [PTProAPI.GetAllReservationQuery.Data.GetAllReservation.Result]()
+    var getReservationArray : PTProAPI.GetReservationQuery.Data.GetReservation.Results?
+    var getReservation_currencyArray : PTProAPI.GetReservationQuery.Data.GetReservation?
     var checkinDate = String()
     var checkoutDate = String()
     
@@ -285,7 +285,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     func getTripsAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let getallreservationQuery = GetAllReservationQuery(userType: "host", currentPage: .some(PageIndex), dateFilter: "upcoming")
+            let getallreservationQuery = PTProAPI.GetAllReservationQuery(userType: "host", currentPage: .some(PageIndex), dateFilter: "upcoming")
             
             Network.shared.apollo_headerClient.fetch(query:getallreservationQuery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
@@ -325,7 +325,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     //            if(result.data?.searchListing?.currentPage == 1){
                     //                self.FilterArray.removeAll()
                     //            }
-                    self.getallreservationquery.append(contentsOf: ((result.data?.getAllReservation?.result)!) as! [GetAllReservationQuery.Data.GetAllReservation.Result])
+                    self.getallreservationquery.append(contentsOf: ((result.data?.getAllReservation?.result)!) as! [PTProAPI.GetAllReservationQuery.Data.GetAllReservation.Result])
                     
                     
                     self.isSkeletable = false
@@ -376,7 +376,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     {
         if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
-            let getallreservationQuery = GetAllReservationQuery(userType: "host", currentPage:.some(previousPageIndex), dateFilter: "previous")
+            let getallreservationQuery = PTProAPI.GetAllReservationQuery(userType: "host", currentPage:.some(previousPageIndex), dateFilter: "previous")
             
             Network.shared.apollo_headerClient.fetch(query:getallreservationQuery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
@@ -384,7 +384,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     if let data = result.data?.getAllReservation?.status,data == 200 {
                         self.previoustotalListcount = (result.data?.getAllReservation?.count != nil ? (result.data?.getAllReservation?.count!)! : 0)
                         
-                        self.getpreviousReservationquery.append(contentsOf: ((result.data?.getAllReservation?.result)!) as! [GetAllReservationQuery.Data.GetAllReservation.Result])
+                        self.getpreviousReservationquery.append(contentsOf: ((result.data?.getAllReservation?.result)!) as! [PTProAPI.GetAllReservationQuery.Data.GetAllReservation.Result])
                         
                         if(self.upcomingLabel.isHidden == false && self.getallreservationquery.count == 0)
                         {
@@ -1189,7 +1189,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             {
                 currency = Utility.shared.currencyvalue_from_API_base
             }
-            let createReservationquery = GetReservationQuery(reservationId: reservationid,convertCurrency:.some(currency))
+            let createReservationquery = PTProAPI.GetReservationQuery(reservationId: reservationid,convertCurrency:.some(currency))
             Network.shared.apollo_headerClient.fetch(query: createReservationquery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -1526,7 +1526,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     func approveDeclineAPICall(threadid:Int,content:String,type:String,startDate:String,endDate:String,personCapacity:Int,reservationId:Int,actionType:String)
     {
         if Utility.shared.isConnectedToNetwork(){
-            let reservationstatusMutation = ReservationStatusMutation(threadId: threadid, content: .some(content), type: .some(type), startDate: .some(startDate), endDate: .some(endDate), personCapacity: .some(personCapacity), reservationId: .some(reservationId), actionType: .some(actionType))
+            let reservationstatusMutation = PTProAPI.ReservationStatusMutation(threadId: threadid, content: .some(content), type: .some(type), startDate: .some(startDate), endDate: .some(endDate), personCapacity: .some(personCapacity), reservationId: .some(reservationId), actionType: .some(actionType))
             Network.shared.apollo_headerClient.perform(mutation: reservationstatusMutation){ response in
                 switch response {
                 case .success(let result):
@@ -1580,7 +1580,7 @@ class HostProgressVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     {
         if(Utility.shared.getCurrentUserToken() != nil)
         {
-            let mostlistingquery = GetDefaultSettingQuery()
+            let mostlistingquery = PTProAPI.GetDefaultSettingQuery()
             Network.shared.apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):

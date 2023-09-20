@@ -26,7 +26,7 @@ class TripsMessageVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     @IBOutlet weak var inboxTable: UITableView!
     var totalListcount:Int = 0
     var PageIndex : Int = 1
-    var getallMessageArray = [GetAllThreadsQuery.Data.GetAllThreads.Result]()
+    var getallMessageArray = [PTProAPI.GetAllThreadsQuery.Data.GetAllThreads.Result]()
   
     var apollo_headerClient:ApolloClient!
      var lottieView: LottieAnimationView!
@@ -286,7 +286,7 @@ class TripsMessageVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 threadtype = GUEST
             }
             
-            let getmessagequery = GetAllThreadsQuery(threadType:.some(threadtype), threadId: .none, currentPage:.some(PageIndex))
+            let getmessagequery = PTProAPI.GetAllThreadsQuery(threadType:.some(threadtype), threadId: .none, currentPage:.some(PageIndex))
             
             Network.shared.apollo_headerClient.fetch(query:getmessagequery,cachePolicy:.fetchIgnoringCacheData){ response in
                 self.inboxTable.isSkeletonable = false
@@ -329,7 +329,7 @@ class TripsMessageVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     self.inboxTable.isHidden = false
                     self.lottieView.isHidden = true
                     self.totalListcount = (result.data?.getAllThreads?.count)!
-                    self.getallMessageArray.append(contentsOf: ((result.data?.getAllThreads?.results)!) as! [GetAllThreadsQuery.Data.GetAllThreads.Result])
+                    self.getallMessageArray.append(contentsOf: ((result.data?.getAllThreads?.results)!) as! [PTProAPI.GetAllThreadsQuery.Data.GetAllThreads.Result])
                     self.inboxTable.isSkeletonable = false
                     self.inboxTable.hideSkeleton()
                     

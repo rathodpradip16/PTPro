@@ -18,6 +18,8 @@
 
 "City" = "Plaats";
 
+"Code field" = "Codeveld";
+
 "Company" = "Bedrijf";
 
 "Continue" = "Doorgaan";
@@ -28,6 +30,8 @@
 
 "County" = "Graafschap";
 
+"Date is empty." = "Datum is leeg.";
+
 "Department" = "Departement";
 
 "District" = "District";
@@ -35,6 +39,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Gereed";
+
+"Double tap to edit" = "Dubbeltikken om te bewerken";
+
+"Edit" = "Bewerken";
 
 "Eircode" = "Eircode";
 
@@ -49,6 +57,8 @@
 "Full name" = "Volledige naam";
 
 "Incomplete phone number" = "Onvolledig telefoonnummer";
+
+"Invalid UPI ID" = "Ongeldige UPI-ID";
 
 "Island" = "Eiland";
 
@@ -80,6 +90,8 @@
 
 "Remove bank account ending in %@" = "Bankrekening verwijderen die eindigt op %@";
 
+"Search" = "Zoeken";
+
 "State" = "Staat";
 
 "Suburb" = "Voorstad";
@@ -93,6 +105,8 @@
 "The account number you entered is incomplete." = "Het opgegeven rekeningnummer is onvolledig.";
 
 "Town or city" = "Stad of plaats";
+
+"UPI ID" = "UPI-ID";
 
 "Unable to parse phone number" = "Kan telefoonnummer niet parseren";
 

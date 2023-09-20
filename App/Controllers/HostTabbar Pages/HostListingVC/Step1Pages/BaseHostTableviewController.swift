@@ -79,8 +79,8 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     
     //MARK: - This Property
     
-    var getListSettingsArray : GetListingSettingQuery.Data.GetListingSettings.Results?
-    var ProfileAPIArray : GetProfileQuery.Data.UserAccount.Result?
+    var getListSettingsArray : PTProAPI.GetListingSettingQuery.Data.GetListingSettings.Results?
+    var ProfileAPIArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
     var itemNameArray = [String]()
     var guestArrayCount = Int()
     var guestsDropdownArray = [String]()
@@ -147,7 +147,7 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     //MARK: - ConfigureItemName for Property Type
     func GetListSettingAPICall()
     {
-        let getlistsettingsquery = GetListingSettingQuery()
+        let getlistsettingsquery = PTProAPI.GetListingSettingQuery()
         Network.shared.apollo_headerClient.fetch(query: getlistsettingsquery,cachePolicy: .fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -166,7 +166,7 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     //MARK: - CALL COUNTRYLIST API
     func CountryAPICAll()
     {
-        let getcountrycodeQuery = GetCountrycodeQuery()
+        let getcountrycodeQuery = PTProAPI.GetCountrycodeQuery()
         apollo.fetch(query: getcountrycodeQuery,cachePolicy: .fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -174,7 +174,7 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
                     //                self.view.makeToast("Missing Data")
                     return
                 }
-                Utility.shared.countrylist =  ((result.data?.getCountries?.results)!) as! [GetCountrycodeQuery.Data.GetCountries.Result]
+                Utility.shared.countrylist =  ((result.data?.getCountries?.results)!) as! [PTProAPI.GetCountrycodeQuery.Data.GetCountries.Result]
             case .failure(let error):
                 self.view.makeToast(error.localizedDescription)
             }
@@ -272,7 +272,7 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
         }
         
         
-        let updatelist = UpdateListingStep3Mutation(id: .some(Utility.shared.step3ValuesInfo["id"] as! Int),
+        let updatelist = PTProAPI.UpdateListingStep3Mutation(id: .some(Utility.shared.step3ValuesInfo["id"] as! Int),
                                                     houseRules: .some(Utility.shared.step3ValuesInfo["houseRules"] as! [Int?]), bookingNoticeTime: .some("\(Utility.shared.step3ValuesInfo["bookingNoticeTime"] ?? "")"), checkInStart: .some("\(Utility.shared.step3ValuesInfo["checkInStart"] ?? "")"), checkInEnd: .some("\(Utility.shared.step3ValuesInfo["checkInEnd"] ?? "")"), maxDaysNotice:  .some("\(Utility.shared.step3ValuesInfo["maxDaysNotice"] ?? "")"), minNight: Utility.shared.step3ValuesInfo["minNight"] as! GraphQLNullable<Int>, maxNight: Utility.shared.step3ValuesInfo["maxNight"] as! GraphQLNullable<Int>, basePrice: .some(Utility.shared.host_basePrice), cleaningPrice: .some(Utility.shared.host_cleanPrice), currency: .some("\(Utility.shared.step3ValuesInfo["currency"] ?? "")"), weeklyDiscount: .some(Int(weekprice) ?? 0), monthlyDiscount: .some(Int(monthprice) ?? 0), blockedDates: .some([]), bookingType: Utility.shared.step3ValuesInfo["bookingType"] as! String, cancellationPolicy: .some(Utility.shared.step3ValuesInfo["cancellationPolicy"] as! Int))
         
         Network.shared.apollo_headerClient.perform(mutation: updatelist){  response in
@@ -291,7 +291,7 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     }
               
     func manageListingStepsvalue(listId:String,currentStep:Int){
-        let manageListingStepsMutation = ManageListingStepsMutation(listId:listId, currentStep:currentStep)
+        let manageListingStepsMutation = PTProAPI.ManageListingStepsMutation(listId:listId, currentStep:currentStep)
         Network.shared.apollo_headerClient.perform(mutation: manageListingStepsMutation){  response in
             switch response {
             case .success(let result):
@@ -366,7 +366,7 @@ func updateListingAPICall(completion: (_ success: Bool) -> Void) {
         {
             for i in 0..<bedTypeInfo.count
             {
-                if let userBedTypes = bedTypeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserBedsType
+                if let userBedTypes = bedTypeInfo[i] as? PTProAPI.GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserBedsType
                 {
                     
                     var bedTypeInfo = [String : Any]()
@@ -394,7 +394,7 @@ func updateListingAPICall(completion: (_ success: Bool) -> Void) {
         
         
         
-        let createlist = CreateListingMutation(listId: .some(Utility.shared.createId),
+        let createlist = PTProAPI.CreateListingMutation(listId: .some(Utility.shared.createId),
                                                roomType: .some("\(Utility.shared.step1ValuesInfo["roomType"] ?? "")"),
                                                houseType: .some("\(Utility.shared.step1ValuesInfo["houseType"] ?? "")"),
                                                residenceType: .some("\(Utility.shared.step1ValuesInfo["residenceType"] ?? "")"),
@@ -467,7 +467,7 @@ func updateListingAPICall(completion: (_ success: Bool) -> Void) {
         }
         else {
             completion(false)
-            let UpdateListingStep2mutation = UpdateListingStep2Mutation(id:Utility.shared.step2ValuesInfo["id"] != nil ? .some(Utility.shared.step2ValuesInfo["id"] as! Int) : .some(0), description:.some("\(Utility.shared.step2ValuesInfo["description"] ?? "")"), title:.some("\(Utility.shared.step2ValuesInfo["title"] ?? "")"), coverPhoto:Utility.shared.step2ValuesInfo["coverPhoto"] != nil ? .some(Utility.shared.step2ValuesInfo["coverPhoto"] as! Int) : .some(0))
+            let UpdateListingStep2mutation = PTProAPI.UpdateListingStep2Mutation(id:Utility.shared.step2ValuesInfo["id"] != nil ? .some(Utility.shared.step2ValuesInfo["id"] as! Int) : .some(0), description:.some("\(Utility.shared.step2ValuesInfo["description"] ?? "")"), title:.some("\(Utility.shared.step2ValuesInfo["title"] ?? "")"), coverPhoto:Utility.shared.step2ValuesInfo["coverPhoto"] != nil ? .some(Utility.shared.step2ValuesInfo["coverPhoto"] as! Int) : .some(0))
             Network.shared.apollo_headerClient.perform(mutation: UpdateListingStep2mutation){  response in
                 switch response {
                 case .success(let result):
@@ -496,7 +496,7 @@ func updateListingAPICall(completion: (_ success: Bool) -> Void) {
             
             if (Utility.shared.getCurrentUserID() != nil){
                 
-                let profileQuery = GetProfileQuery()
+                let profileQuery = PTProAPI.GetProfileQuery()
                 
                 Network.shared.apollo_headerClient.fetch(query: profileQuery, cachePolicy: .fetchIgnoringCacheData){ response in
                     switch response {

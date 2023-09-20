@@ -38,7 +38,7 @@ class SavedPageVC: UIViewController,UICollectionViewDelegate,UICollectionViewDat
     
     @IBOutlet var nodataImage: UIImageView!
     @IBOutlet weak var savedPageTitle: UILabel!
-    var whishlistarray = [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]()
+    var whishlistarray = [PTProAPI.GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]()
     override func viewDidLoad() {
         super.viewDidLoad()
         offlineView.backgroundColor =  UIColor(named: "Button_Grey_Color")
@@ -164,7 +164,7 @@ class SavedPageVC: UIViewController,UICollectionViewDelegate,UICollectionViewDat
     {
         
         if Utility.shared.isConnectedToNetwork(){
-            let whishlistQuery = GetAllWishListGroupQuery(currentPage: .none)
+            let whishlistQuery = PTProAPI.GetAllWishListGroupQuery(currentPage: .none)
             Network.shared.apollo_headerClient.fetch(query: whishlistQuery,cachePolicy:.fetchIgnoringCacheData){  response in
                 switch response {
                 case .success(let result):
@@ -198,7 +198,7 @@ class SavedPageVC: UIViewController,UICollectionViewDelegate,UICollectionViewDat
                     }
                     self.nowhishlistView.isHidden = true
                     self.savedTable.isHidden = false
-                    self.whishlistarray = ((result.data?.getAllWishListGroup?.results)!) as! [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
+                    self.whishlistarray = ((result.data?.getAllWishListGroup?.results)!) as! [PTProAPI.GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
                     self.lottieView.isHidden = true
                     self.savedTable?.hideSkeleton()
                     self.savedTable.isSkeletonable = false

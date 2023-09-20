@@ -3,68 +3,71 @@
 
 @_exported import Apollo
 
-public class GetImageBannerQuery: GraphQLQuery {
-  public static let operationName: String = "getImageBanner"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"query getImageBanner { getImageBanner { __typename result { __typename id title description buttonLabel image } status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class GetImageBannerQuery: GraphQLQuery {
+    static let operationName: String = "getImageBanner"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"query getImageBanner { getImageBanner { __typename result { __typename id title description buttonLabel image } status errorMessage } }"#
+      ))
 
-  public init() {}
+    public init() {}
 
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Apollo.Selection] { [
-      .field("getImageBanner", GetImageBanner?.self),
-    ] }
-
-    public var getImageBanner: GetImageBanner? { __data["getImageBanner"] }
-
-    /// GetImageBanner
-    ///
-    /// Parent Type: `ImageBannerCommonType`
-    public struct GetImageBanner: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ImageBannerCommonType }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("result", Result?.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
+      static var __selections: [Apollo.Selection] { [
+        .field("getImageBanner", GetImageBanner?.self),
       ] }
 
-      public var result: Result? { __data["result"] }
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var getImageBanner: GetImageBanner? { __data["getImageBanner"] }
 
-      /// GetImageBanner.Result
+      /// GetImageBanner
       ///
-      /// Parent Type: `ImageBanner`
-      public struct Result: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `ImageBannerCommonType`
+      struct GetImageBanner: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ImageBanner }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.ImageBannerCommonType }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("id", Int?.self),
-          .field("title", String?.self),
-          .field("description", String?.self),
-          .field("buttonLabel", String?.self),
-          .field("image", String?.self),
+          .field("result", Result?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
         ] }
 
-        public var id: Int? { __data["id"] }
-        public var title: String? { __data["title"] }
-        public var description: String? { __data["description"] }
-        public var buttonLabel: String? { __data["buttonLabel"] }
-        public var image: String? { __data["image"] }
+        var result: Result? { __data["result"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
+
+        /// GetImageBanner.Result
+        ///
+        /// Parent Type: `ImageBanner`
+        struct Result: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
+
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.ImageBanner }
+          static var __selections: [Apollo.Selection] { [
+            .field("__typename", String.self),
+            .field("id", Int?.self),
+            .field("title", String?.self),
+            .field("description", String?.self),
+            .field("buttonLabel", String?.self),
+            .field("image", String?.self),
+          ] }
+
+          var id: Int? { __data["id"] }
+          var title: String? { __data["title"] }
+          var description: String? { __data["description"] }
+          var buttonLabel: String? { __data["buttonLabel"] }
+          var image: String? { __data["image"] }
+        }
       }
     }
   }
+
 }

@@ -18,6 +18,8 @@
 
 "City" = "By";
 
+"Code field" = "Kodefelt";
+
 "Company" = "Virksomhed";
 
 "Continue" = "Fortsæt";
@@ -28,6 +30,8 @@
 
 "County" = "Amt";
 
+"Date is empty." = "Dato er tom.";
+
 "Department" = "Afdeling";
 
 "District" = "Distrikt";
@@ -35,6 +39,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Færdig";
+
+"Double tap to edit" = "Tryk to gange for at redigere";
+
+"Edit" = "Rediger";
 
 "Eircode" = "Eircode";
 
@@ -49,6 +57,8 @@
 "Full name" = "Fulde navn";
 
 "Incomplete phone number" = "Ufuldstændigt telefonnummer";
+
+"Invalid UPI ID" = "Ugyldigt UPI ID";
 
 "Island" = "Ø";
 
@@ -80,6 +90,8 @@
 
 "Remove bank account ending in %@" = "Fjern bankkonto, der ender på %@";
 
+"Search" = "Søg";
+
 "State" = "Stat";
 
 "Suburb" = "Forstad";
@@ -93,6 +105,8 @@
 "The account number you entered is incomplete." = "Det indtastede kontonummer er ikke komplet.";
 
 "Town or city" = "Landsby eller by";
+
+"UPI ID" = "UPI ID";
 
 "Unable to parse phone number" = "Kunne ikke analysere telefonnummer";
 

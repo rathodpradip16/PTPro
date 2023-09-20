@@ -27,7 +27,7 @@ class DiscountViewController: BaseHostTableviewController {
     @IBOutlet weak var offlineUIView: UIView!
     @IBOutlet weak var retryBtn: UIButton!
     
-    var currencyDataArray = [GetCurrenciesListQuery.Data.GetCurrencies.Result]()
+    var currencyDataArray = [PTProAPI.GetCurrenciesListQuery.Data.GetCurrencies.Result]()
     
     @IBOutlet weak var errorLabel: UILabel!
     var weeklydiscountvalue = String()

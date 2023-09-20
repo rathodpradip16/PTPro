@@ -37,10 +37,10 @@ class BookingStepFourVC: UIViewController,UITableViewDataSource,UITableViewDeleg
     var currencyvalue_from_API_base = String()
     var totalPriceLabel = String()
     var totalAmount = ""
-    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
-    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
+    var getbillingArray : PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
+    var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
     var attdList : JSON = [:]
-    var JSON_obj = [GetBillingCalculationQuery.Data.GetBillingCalculation.Result.SpecialPricing]()
+    var JSON_obj = [PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result.SpecialPricing]()
     var lottieWholeView = UIView()
     var lottieView =  LottieAnimationView()
     var array = NSMutableArray()

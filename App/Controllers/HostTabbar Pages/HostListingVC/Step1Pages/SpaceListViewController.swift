@@ -33,7 +33,7 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
     var spaces = ""
     var spacesList = [[String : Any]]()
     //var selectedAmenityIdList = [Int]()
-    var updateResultsStep1 : CreateListingMutation.Data.CreateListing.Results?
+    var updateResultsStep1 : PTProAPI.CreateListingMutation.Data.CreateListing.Results?
      var lottieView1: LottieAnimationView!
         
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
@@ -140,7 +140,7 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
         {
             for i in 0..<typeInfo.count
             {
-                if let usertypes = typeInfo[i] as? GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserSpace
+                if let usertypes = typeInfo[i] as? PTProAPI.GetStep1ListingDetailsQuery.Data.GetListingDetails.Results.UserSpace
                 {
                     if spacesList.contains(where: { (item) -> Bool in
                         (item["itemName"] as? String == (usertypes.itemName!))
@@ -169,7 +169,7 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
     //MARK: - Update Listing Step 1
     func updateListingAPICallAfterCreate()
     {
-        let createlist = CreateListingMutation(listId: .some(Utility.shared.createId),
+        let createlist = PTProAPI.CreateListingMutation(listId: .some(Utility.shared.createId),
                                                roomType: .some("\(Utility.shared.step1ValuesInfo["roomType"] ?? "")"),
                                                houseType: .some("\(Utility.shared.step1ValuesInfo["houseType"] ?? "")") ,
                                                residenceType: .some("\(Utility.shared.step1ValuesInfo["residenceType"] ?? "")"),
@@ -214,7 +214,7 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
     
     func manageListingSteps(listId:String,currentStep:Int)
     {
-        let manageListingStepsMutation = ManageListingStepsMutation(listId:listId, currentStep:currentStep)
+        let manageListingStepsMutation = PTProAPI.ManageListingStepsMutation(listId:listId, currentStep:currentStep)
         Network.shared.apollo_headerClient.perform(mutation: manageListingStepsMutation){  response in
             switch response {
             case .success(let result):

@@ -29,7 +29,7 @@ class PhonekitVC: UIViewController,UITextFieldDelegate,CountryDelegate{
     
     @IBOutlet weak var nextBtn: UIButton!
     @IBOutlet weak var phoneTF: CustomUITextField!
-    var userphonekitArray : GetProfileQuery.Data.UserAccount.Result?
+    var userphonekitArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
      
     var lottieView1: LottieAnimationView!
     
@@ -151,7 +151,7 @@ class PhonekitVC: UIViewController,UITextFieldDelegate,CountryDelegate{
     }
     func addPhonenumberCall()
     {
-        let addphonenumberMutation = AddPhoneNumberMutation(countryCode:(countryBtn.titleLabel?.text!)!, phoneNumber: phoneTF.text!)
+        let addphonenumberMutation = PTProAPI.AddPhoneNumberMutation(countryCode:(countryBtn.titleLabel?.text!)!, phoneNumber: phoneTF.text!)
         Network.shared.apollo_headerClient.perform(mutation: addphonenumberMutation){ response in
             switch response {
             case .success(let result):
@@ -186,7 +186,7 @@ class PhonekitVC: UIViewController,UITextFieldDelegate,CountryDelegate{
     func EditProfileAPICall(fieldName:String,fieldValue:String)
     {
         Utility.shared.isfromPhonePage = true
-        let editprofileMutation = EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: .some(fieldValue), deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
+        let editprofileMutation = PTProAPI.EditProfileMutation(userId: (Utility.shared.getCurrentUserID()! as String), fieldName: fieldName, fieldValue: .some(fieldValue), deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
         Network.shared.apollo_headerClient.perform(mutation: editprofileMutation){  response in
             switch response {
             case .success(let result):

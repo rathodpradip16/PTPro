@@ -18,6 +18,8 @@
 
 "City" = "City";
 
+"Code field" = "Code field";
+
 "Company" = "Company";
 
 "Continue" = "Continue";
@@ -28,6 +30,8 @@
 
 "County" = "County";
 
+"Date is empty." = "Date is empty.";
+
 "Department" = "Department";
 
 "District" = "District";
@@ -35,6 +39,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Done";
+
+"Double tap to edit" = "Double tap to edit";
+
+"Edit" = "Edit";
 
 "Eircode" = "Eircode";
 
@@ -49,6 +57,8 @@
 "Full name" = "Full name";
 
 "Incomplete phone number" = "Incomplete phone number";
+
+"Invalid UPI ID" = "Invalid UPI ID";
 
 "Island" = "Island";
 
@@ -80,6 +90,8 @@
 
 "Remove bank account ending in %@" = "Remove bank account ending in %@";
 
+"Search" = "Search";
+
 "State" = "State";
 
 "Suburb" = "Suburb";
@@ -93,6 +105,8 @@
 "The account number you entered is incomplete." = "The account number you entered is incomplete.";
 
 "Town or city" = "Town or city";
+
+"UPI ID" = "UPI ID";
 
 "Unable to parse phone number" = "Unable to parse phone number";
 

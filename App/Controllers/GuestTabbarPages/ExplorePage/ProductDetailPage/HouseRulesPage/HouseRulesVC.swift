@@ -16,11 +16,11 @@ class HouseRulesVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     @IBOutlet weak var houseTV: UITableView!
     @IBOutlet weak var topView: UIView!
     var titleString = ""
-    var houserulesArray = [ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]()
-    var safetyAmeneties = [ViewListingDetailsQuery.Data.ViewListing.Results.UserSafetyAmenity]()
-    var beds = [ViewListingDetailsQuery.Data.ViewListing.Results.UserBedsType?]()
-    var ameneties = [ViewListingDetailsQuery.Data.ViewListing.Results.UserAmenity]()
-    var spaces =  [ViewListingDetailsQuery.Data.ViewListing.Results.UserSpace]()
+    var houserulesArray = [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]()
+    var safetyAmeneties = [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.UserSafetyAmenity]()
+    var beds = [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.UserBedsType?]()
+    var ameneties = [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.UserAmenity]()
+    var spaces =  [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.UserSpace]()
     
     override func viewDidLoad() {
         super.viewDidLoad()

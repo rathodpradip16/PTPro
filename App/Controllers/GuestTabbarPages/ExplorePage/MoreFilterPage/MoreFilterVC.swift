@@ -96,8 +96,8 @@ class MoreFilterVC: UIViewController,UITableViewDelegate,UITableViewDataSource,R
     var maxCount = Int()
     var minsliderValue = String()
     var maxsliderValue = String()
-    var getsearchPriceArray : GetDefaultSettingQuery.Data.GetSearchSettings.Results?
-    var RoomsFilterArray = [GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]()
+    var getsearchPriceArray : PTProAPI.GetDefaultSettingQuery.Data.GetSearchSettings.Results?
+    var RoomsFilterArray = [PTProAPI.GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]()
     
     var lottieView: LottieAnimationView!
     
@@ -219,7 +219,7 @@ class MoreFilterVC: UIViewController,UITableViewDelegate,UITableViewDataSource,R
     
     func FilterAPICall(){
         if Utility.shared.isConnectedToNetwork(){
-            let priceRangequery = GetDefaultSettingQuery()
+            let priceRangequery = PTProAPI.GetDefaultSettingQuery()
             Network.shared.apollo_headerClient.fetch(query: priceRangequery){ response in
                 switch response {
                 case .success(let result):
@@ -238,7 +238,7 @@ class MoreFilterVC: UIViewController,UITableViewDelegate,UITableViewDataSource,R
                     guard (result.data?.getListingSettingsCommon?.results) != nil else{
                         return
                     }
-                    self.RoomsFilterArray = ((result.data?.getListingSettingsCommon?.results)!) as! [GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]
+                    self.RoomsFilterArray = ((result.data?.getListingSettingsCommon?.results)!) as! [PTProAPI.GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]
                     
                     self.filterTV.reloadData()
                     self.lottieView.isHidden = true

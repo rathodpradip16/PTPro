@@ -45,12 +45,12 @@ class TripsMainVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UI
     @IBOutlet var contactsView: UIView!
     
     
-    var getReservationArray : GetReservationQuery.Data.GetReservation.Results?
+    var getReservationArray : PTProAPI.GetReservationQuery.Data.GetReservation.Results?
     var apollo_headerClient:ApolloClient!
-    var getallreservationquery = [GetAllReservationQuery.Data.GetAllReservation.Result]()
-    var getpreviousReservationquery = [GetAllReservationQuery.Data.GetAllReservation.Result]()
+    var getallreservationquery = [PTProAPI.GetAllReservationQuery.Data.GetAllReservation.Result]()
+    var getpreviousReservationquery = [PTProAPI.GetAllReservationQuery.Data.GetAllReservation.Result]()
      var lottieView: LottieAnimationView!
-    var getReservation_currencyArray : GetReservationQuery.Data.GetReservation?
+    var getReservation_currencyArray : PTProAPI.GetReservationQuery.Data.GetReservation?
     var previousEnabled = Bool()
     var menuOptionNameArray = [String]()
     var menuOprionImageArray = [UIImage]()
@@ -274,14 +274,14 @@ class TripsMainVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UI
     func getTripsAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let getallreservationQuery = GetAllReservationQuery(userType: .some(GUEST), currentPage:.some(PageIndex), dateFilter: "upcoming")
+            let getallreservationQuery = PTProAPI.GetAllReservationQuery(userType: .some(GUEST), currentPage:.some(PageIndex), dateFilter: "upcoming")
             Network.shared.apollo_headerClient.fetch(query:getallreservationQuery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
                     if let data = result.data?.getAllReservation?.status,data == 200 {
                         self.totalListcount = (result.data?.getAllReservation?.count != nil ? (result.data?.getAllReservation?.count!)! : 0)
                         
-                        self.getallreservationquery.append(contentsOf: ((result.data?.getAllReservation?.result)!) as! [GetAllReservationQuery.Data.GetAllReservation.Result])
+                        self.getallreservationquery.append(contentsOf: ((result.data?.getAllReservation?.result)!) as! [PTProAPI.GetAllReservationQuery.Data.GetAllReservation.Result])
                         self.WhereView.isHidden = true
                         self.upcomingTable.isHidden = false
                         self.lottieView.isHidden = true
@@ -368,7 +368,7 @@ class TripsMainVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UI
     {
         if Utility.shared.isConnectedToNetwork(){
             self.offlineView.isHidden = true
-            let getallreservationQuery = GetAllReservationQuery(userType:.some(GUEST), currentPage:.some(previousPageIndex), dateFilter: "previous")
+            let getallreservationQuery = PTProAPI.GetAllReservationQuery(userType:.some(GUEST), currentPage:.some(previousPageIndex), dateFilter: "previous")
             
             Network.shared.apollo_headerClient.fetch(query:getallreservationQuery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
@@ -379,7 +379,7 @@ class TripsMainVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UI
                         //            if(result.data?.searchListing?.currentPage == 1){
                         //                self.FilterArray.removeAll()
                         //            }
-                        self.getpreviousReservationquery.append(contentsOf: ((result.data?.getAllReservation?.result)!) as! [GetAllReservationQuery.Data.GetAllReservation.Result])
+                        self.getpreviousReservationquery.append(contentsOf: ((result.data?.getAllReservation?.result)!) as! [PTProAPI.GetAllReservationQuery.Data.GetAllReservation.Result])
                         //                    self.upcomingTable.isHidden = true
                         //                    self.previousTable.isHidden = false
                         if(self.upcomingLabel.isHidden == false && self.getallreservationquery.count == 0)
@@ -1474,7 +1474,7 @@ class TripsMainVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UI
             {
                 currency = Utility.shared.currencyvalue_from_API_base
             }
-            let createReservationquery = GetReservationQuery(reservationId: reservationid,convertCurrency:.some(currency))
+            let createReservationquery = PTProAPI.GetReservationQuery(reservationId: reservationid,convertCurrency:.some(currency))
             Network.shared.apollo_headerClient.fetch(query: createReservationquery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -1541,7 +1541,7 @@ class TripsMainVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UI
             {
                 currency = Utility.shared.currencyvalue_from_API_base
             }
-            let createReservationquery = GetReservationQuery(reservationId: reservationid, convertCurrency:.some(currency))
+            let createReservationquery = PTProAPI.GetReservationQuery(reservationId: reservationid, convertCurrency:.some(currency))
             Network.shared.apollo_headerClient.fetch(query: createReservationquery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):

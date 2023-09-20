@@ -59,7 +59,7 @@ class WriteReview: UIViewController {
     
     var reservationID = 0
     var listID = 0
-    var pendingReviewListData : GetPendingUserReviewQuery.Data.GetPendingUserReview.Result?
+    var pendingReviewListData : PTProAPI.GetPendingUserReviewQuery.Data.GetPendingUserReview.Result?
     
     var delegate: WriteReviewProtocol?
     var isFromEmailNavigation = false
@@ -101,7 +101,7 @@ class WriteReview: UIViewController {
             self.scrollView.isHidden = true
             self.offlineView.isHidden = true
             
-            let getPendingReview = GetPendingUserReviewQuery(reservationId: self.reservationID)
+            let getPendingReview = PTProAPI.GetPendingUserReviewQuery(reservationId: self.reservationID)
             
             
             Network.shared.apollo_headerClient.fetch(query:getPendingReview,cachePolicy:.fetchIgnoringCacheData){ response in
@@ -126,7 +126,7 @@ class WriteReview: UIViewController {
                         })
                         return
                     }
-                    self.pendingReviewListData = result.data?.getPendingUserReview?.result! as! GetPendingUserReviewQuery.Data.GetPendingUserReview.Result
+                    self.pendingReviewListData = result.data?.getPendingUserReview?.result! as! PTProAPI.GetPendingUserReviewQuery.Data.GetPendingUserReview.Result
                     self.listID = self.pendingReviewListData?.listId ?? 0
                     if self.pendingReviewListData?.listData == nil{
                         self.scrollView.isHidden = true
@@ -325,7 +325,7 @@ class WriteReview: UIViewController {
                 receiverID = self.pendingReviewListData?.guestId ?? ""
             }
             
-            let submitWriteReview = WriteUserReviewMutation(reservationId: self.reservationID, listId: self.listID, reviewContent: self.textView.text.replacingOccurrences(of: "\\s+", with: " " , options: .regularExpression), rating: self.overALLRatingView.rating, receiverId: receiverID)
+            let submitWriteReview = PTProAPI.WriteUserReviewMutation(reservationId: self.reservationID, listId: self.listID, reviewContent: self.textView.text.replacingOccurrences(of: "\\s+", with: " " , options: .regularExpression), rating: self.overALLRatingView.rating, receiverId: receiverID)
             
             
             Network.shared.apollo_headerClient.perform(mutation: submitWriteReview){ response in

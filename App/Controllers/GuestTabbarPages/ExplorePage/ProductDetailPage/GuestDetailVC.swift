@@ -31,7 +31,7 @@ class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     
     
-    func passbillingArray(getbillingarray: GetBillingCalculationQuery.Data.GetBillingCalculation.Result) {
+    func passbillingArray(getbillingarray: PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result) {
         
     }
     
@@ -107,14 +107,14 @@ class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     var apollo_headerClient: ApolloClient!
     
-    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
-    var similarlistingArray = [GetSimilarListingQuery.Data.GetSimilarListing.Result]()
-    var propertyReviewArray = [GetPropertyReviewsQuery.Data.GetPropertyReviews.Result]()
+    var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
+    var similarlistingArray = [PTProAPI.GetSimilarListingQuery.Data.GetSimilarListing.Result]()
+    var propertyReviewArray = [PTProAPI.GetPropertyReviewsQuery.Data.GetPropertyReviews.Result]()
     var propertyReviewsCount = 0
     var reviewTitle = ""
-    var reiewListingArray = [UserReviewsQuery.Data.UserReviews.Result]()
-    var getreviewArray = [GetReviewsListQuery.Data.GetReviews.Result]()
-    var getbillingArray : GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
+    var reiewListingArray = [PTProAPI.UserReviewsQuery.Data.UserReviews.Result]()
+    var getreviewArray = [PTProAPI.GetReviewsListQuery.Data.GetReviews.Result]()
+    var getbillingArray : PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     var delegate:GuestDetailVCDelegate?
     var Pagecontrol:ISPageControl!
     var isamenityTapped:Bool = false
@@ -424,16 +424,16 @@ func initialSetup()
     func viewDetailAPICall(listid:Int)
     {
        if Utility.shared.isConnectedToNetwork(){
-           var viewListQuery = ViewListingDetailsQuery(listId:listid, preview: .none)
+           var viewListQuery = PTProAPI.ViewListingDetailsQuery(listId:listid, preview: .none)
         
         if(Utility.shared.unpublish_preview_check)
         {
-            viewListQuery = ViewListingDetailsQuery(listId: listid, preview: true)
+            viewListQuery = PTProAPI.ViewListingDetailsQuery(listId: listid, preview: true)
             
         }
         else
         {
-            viewListQuery = ViewListingDetailsQuery(listId:listid, preview: .none)
+            viewListQuery = PTProAPI.ViewListingDetailsQuery(listId:listid, preview: .none)
         }
          Network.shared.apollo_headerClient.fetch(query: viewListQuery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
@@ -626,7 +626,7 @@ func initialSetup()
     
     func similarListingAPICall(lat:Double,lng:Double,lisId:Int)
     {
-        let similarlistingquery = GetSimilarListingQuery(lat: .some(lat), lng: .some(lng), listId: .some(lisId))
+        let similarlistingquery = PTProAPI.GetSimilarListingQuery(lat: .some(lat), lng: .some(lng), listId: .some(lisId))
         Network.shared.apollo_headerClient.fetch(query: similarlistingquery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -634,7 +634,7 @@ func initialSetup()
                     print("Missing Data")
                     return
                 }
-                self.similarlistingArray = ((result.data?.getSimilarListing?.results)!) as! [GetSimilarListingQuery.Data.GetSimilarListing.Result]
+                self.similarlistingArray = ((result.data?.getSimilarListing?.results)!) as! [PTProAPI.GetSimilarListingQuery.Data.GetSimilarListing.Result]
                 self.detailTable.reloadData()
             case .failure(let error):
                 self.view.makeToast(error.localizedDescription)
@@ -643,7 +643,7 @@ func initialSetup()
     }
     func getPropertyReviewsAPICall(lisId:Int){
         self.propertyReviewArray.removeAll()
-        let propertyReviewsQuery = GetPropertyReviewsQuery(currentPage: 1, listId: listID)
+        let propertyReviewsQuery = PTProAPI.GetPropertyReviewsQuery(currentPage: 1, listId: listID)
         Network.shared.apollo_headerClient.fetch(query: propertyReviewsQuery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -652,7 +652,7 @@ func initialSetup()
                     return
                 }
                 self.propertyReviewsCount = result.data?.getPropertyReviews?.count ?? 0
-                self.propertyReviewArray = ((result.data?.getPropertyReviews?.results)!) as! [GetPropertyReviewsQuery.Data.GetPropertyReviews.Result]
+                self.propertyReviewArray = ((result.data?.getPropertyReviews?.results)!) as! [PTProAPI.GetPropertyReviewsQuery.Data.GetPropertyReviews.Result]
                 self.detailTable.reloadData()
             case .failure(let error):
                 self.view.makeToast(error.localizedDescription)
@@ -698,7 +698,7 @@ func initialSetup()
             currency = self.currencyvalue_from_API_base
         }
         
-        let billingListquery = GetBillingCalculationQuery(listId:listID, startDate: startDate, endDate: endDate, guests: Utility.shared.guestCountToBeSend, convertCurrency:currency)
+        let billingListquery = PTProAPI.GetBillingCalculationQuery(listId:listID, startDate: startDate, endDate: endDate, guests: Utility.shared.guestCountToBeSend, convertCurrency:currency)
         Network.shared.apollo_headerClient.fetch(query: billingListquery){ response in
             switch response {
             case .success(let result):
@@ -2426,7 +2426,7 @@ func initialSetup()
                 if(indexPath.row == 2)
                 {
                     let houserulesObj = HouseRulesVC()
-                    houserulesObj.houserulesArray = self.viewListingArray?.houseRules! as! [ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
+                    houserulesObj.houserulesArray = self.viewListingArray?.houseRules! as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
                     houserulesObj.modalPresentationStyle = .fullScreen
                     self.present(houserulesObj, animated: true, completion: nil)
                 }
@@ -2632,7 +2632,7 @@ func initialSetup()
                     if(indexPath.row == 3)
                     {
                         let houserulesObj = HouseRulesVC()
-                        houserulesObj.houserulesArray = self.viewListingArray?.houseRules! as! [ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
+                        houserulesObj.houserulesArray = self.viewListingArray?.houseRules! as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
                         houserulesObj.modalPresentationStyle = .fullScreen
                         self.present(houserulesObj, animated: true, completion: nil)
                     }
@@ -3078,7 +3078,7 @@ func initialSetup()
     
     func reviewcountAPICall(profileid:Int)
     {
-        let reviewListquery = UserReviewsQuery(ownerType: "others", currentPage: 1, profileId: .some(profileid))
+        let reviewListquery = PTProAPI.UserReviewsQuery(ownerType: "others", currentPage: 1, profileId: .some(profileid))
         
         Network.shared.apollo_headerClient.fetch(query: reviewListquery){ response in
             switch response {
@@ -3087,7 +3087,7 @@ func initialSetup()
                     print("Missing Data")
                     return
                 }
-                self.reiewListingArray = (result.data?.userReviews?.results)! as! [UserReviewsQuery.Data.UserReviews.Result]
+                self.reiewListingArray = (result.data?.userReviews?.results)! as! [PTProAPI.UserReviewsQuery.Data.UserReviews.Result]
                 
                 //  self.timestampconvert(timestamp:self.reiewListingArray[0].createdAt!)
                 
@@ -3100,12 +3100,12 @@ func initialSetup()
     }
     
     func getreviewAPICall(listId:Int,hostId:String){
-        let getreviewquery = GetReviewsListQuery(listId: .some(listId), currentPage: 1, hostId: hostId)
+        let getreviewquery = PTProAPI.GetReviewsListQuery(listId: .some(listId), currentPage: 1, hostId: hostId)
         Network.shared.apollo_headerClient.fetch(query: getreviewquery){ response in
             switch response {
             case .success(let result):
                 if let data = result.data?.getReviews?.status,data == 200 {
-                    self.getreviewArray = (result.data?.getReviews?.results!)! as! [GetReviewsListQuery.Data.GetReviews.Result]
+                    self.getreviewArray = (result.data?.getReviews?.results!)! as! [PTProAPI.GetReviewsListQuery.Data.GetReviews.Result]
                     if(self.getreviewArray.count > 0){
                         self.timestampconvert(timestamp:self.getreviewArray[0].createdAt!)
                     }

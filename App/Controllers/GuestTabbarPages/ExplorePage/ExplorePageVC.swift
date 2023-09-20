@@ -37,14 +37,14 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
         }
         else
         {
-            let whishlistQuery = GetAllWishListGroupQuery(currentPage: .none)
+            let whishlistQuery = PTProAPI.GetAllWishListGroupQuery(currentPage: .none)
             Network.shared.apollo_headerClient.fetch(query: whishlistQuery,cachePolicy:.fetchIgnoringCacheData){ [self]  response in
                 switch response {
                 case .success(let result):
                     guard (result.data?.getAllWishListGroup?.results) != nil else{
                         return
                     }
-                    self.whishlistarray = ((result.data?.getAllWishListGroup?.results)!) as! [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
+                    self.whishlistarray = ((result.data?.getAllWishListGroup?.results)!) as! [PTProAPI.GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
                     if(self.whishlistarray.count>0)
                     {
                         if(mostListingArray.count > 0) {
@@ -156,7 +156,7 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
     
     @IBOutlet weak var collectionViewFilterPage: UICollectionView!
     
-    var whishlistarray = [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]()
+    var whishlistarray = [PTProAPI.GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]()
     
     @IBOutlet weak var scrollView: UIScrollView!
     var refreshControl = UIRefreshControl()
@@ -233,14 +233,14 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
     let filterBtn = UIButton()
     public var selectedStartDate: Date?
     public var selectedEndDate: Date?
-    var FilterArray = [SearchListingQuery.Data.SearchListing.Result]()
-    var recommendListingArray = [GetDefaultSettingQuery.Data.GetRecommend.Result]()
-    var mostListingArray = [GetDefaultSettingQuery.Data.GetMostViewedListing.Result]()
-var currencyvalue_from_API : GetDefaultSettingQuery.Data.Currency.Result?
-    var RoomsFilterArray = [GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]()
-var getsearchPriceArray : GetDefaultSettingQuery.Data.GetSearchSettings.Results?
+    var FilterArray = [PTProAPI.SearchListingQuery.Data.SearchListing.Result]()
+    var recommendListingArray = [PTProAPI.GetDefaultSettingQuery.Data.GetRecommend.Result]()
+    var mostListingArray = [PTProAPI.GetDefaultSettingQuery.Data.GetMostViewedListing.Result]()
+    var currencyvalue_from_API : PTProAPI.GetDefaultSettingQuery.Data.Currency.Result?
+    var RoomsFilterArray = [PTProAPI.GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]()
+    var getsearchPriceArray : PTProAPI.GetDefaultSettingQuery.Data.GetSearchSettings.Results?
     
-    var populardestinationArray = [GetPopularLocationsQuery.Data.GetPopularLocations.Result]()
+    var populardestinationArray = [PTProAPI.GetPopularLocationsQuery.Data.GetPopularLocations.Result]()
     var currency_Dict = NSDictionary()
     var adultCount: Int = 1
     var childrenCount: Int = 0
@@ -307,7 +307,7 @@ var getsearchPriceArray : GetDefaultSettingQuery.Data.GetSearchSettings.Results?
     if Utility.shared.isConnectedToNetwork(){
         if(Utility.shared.getCurrentUserToken() != nil)
         {
-            let profileQuery = GetProfileQuery()
+            let profileQuery = PTProAPI.GetProfileQuery()
             Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
@@ -596,7 +596,7 @@ var getsearchPriceArray : GetDefaultSettingQuery.Data.GetSearchSettings.Results?
 func checkForUpdate(){
     
     let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-    let appVersionUpdate = GetApplicationVersionInfoQuery(appType: "iosVersion", version: currentVersion)
+    let appVersionUpdate = PTProAPI.GetApplicationVersionInfoQuery(appType: "iosVersion", version: currentVersion)
     
     
     apollo.fetch(query: appVersionUpdate){ response in
@@ -651,7 +651,7 @@ func checkForUpdate(){
         }
         else
         {
-            let whishlistQuery = GetAllWishListGroupQuery(currentPage: .none)
+            let whishlistQuery = PTProAPI.GetAllWishListGroupQuery(currentPage: .none)
             Network.shared.apollo_headerClient.fetch(query: whishlistQuery,cachePolicy:.fetchIgnoringCacheData){ [self]  response in
                 switch response {
                 case .success(let result):
@@ -660,7 +660,7 @@ func checkForUpdate(){
                         
                         return
                     }
-                    self.whishlistarray = ((result.data?.getAllWishListGroup?.results)!) as! [GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
+                    self.whishlistarray = ((result.data?.getAllWishListGroup?.results)!) as! [PTProAPI.GetAllWishListGroupQuery.Data.GetAllWishListGroup.Result]
                     if(self.whishlistarray.count>0)
                     {
                         if(mostListingArray.count > 0) {
@@ -2447,7 +2447,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     func popularAPICall() {
         
         if Utility.shared.isConnectedToNetwork(){
-            let mostlistingquery = GetPopularLocationsQuery()
+            let mostlistingquery = PTProAPI.GetPopularLocationsQuery()
             //            self.scrollView.isHidden = true
             Network.shared.apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
                 self.popularCollectionView.isSkeletonable = false
@@ -2467,7 +2467,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
                         return
                     }
                                         
-                    self.populardestinationArray = (result.data?.getPopularLocations?.results) as! [GetPopularLocationsQuery.Data.GetPopularLocations.Result]
+                    self.populardestinationArray = (result.data?.getPopularLocations?.results) as! [PTProAPI.GetPopularLocationsQuery.Data.GetPopularLocations.Result]
                     
                     
                     
@@ -2535,7 +2535,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
             self.getImageBannerFromAdmin()
             Utility.shared.selectedstartDate = ""
             Utility.shared.selectedEndDate = ""
-            let mostlistingquery = GetDefaultSettingQuery()
+            let mostlistingquery = PTProAPI.GetDefaultSettingQuery()
             //            self.scrollView.isHidden = true
             Network.shared.apollo_headerClient.fetch(query: mostlistingquery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
                 self.scrollView.isHidden = false
@@ -2588,7 +2588,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
                     self.reviewStart_ratingArray.removeAllObjects()
                     self.entirehomeArray.removeAllObjects()
                     self.wishlistArray.removeAllObjects()
-                    self.recommendListingArray = ((result.data?.getRecommend?.results)!) as! [GetDefaultSettingQuery.Data.GetRecommend.Result]
+                    self.recommendListingArray = ((result.data?.getRecommend?.results)!) as! [PTProAPI.GetDefaultSettingQuery.Data.GetRecommend.Result]
                     if self.recommendListingArray.count > 0{
                         self.recommendedTitle.text = "\(Utility.shared.getLanguage()?.value(forKey: "recommended") ?? "Recommended")"
                         self.recommendedTitle.isHidden = false
@@ -2658,7 +2658,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
                     self.mostwishlist_Array.removeAllObjects()
                     self.mostbookingTypeArray.removeAllObjects()
                     
-                    self.mostListingArray = ((result.data?.getMostViewedListing?.results)!) as! [GetDefaultSettingQuery.Data.GetMostViewedListing.Result]
+                    self.mostListingArray = ((result.data?.getMostViewedListing?.results)!) as! [PTProAPI.GetDefaultSettingQuery.Data.GetMostViewedListing.Result]
                     
                     
                     
@@ -2751,7 +2751,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
                     guard (result.data?.getListingSettingsCommon?.results) != nil else{
                         return
                     }
-                    self.RoomsFilterArray = ((result.data?.getListingSettingsCommon?.results)!) as! [GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]
+                    self.RoomsFilterArray = ((result.data?.getListingSettingsCommon?.results)!) as! [PTProAPI.GetDefaultSettingQuery.Data.GetListingSettingsCommon.Result]
                     if let endval = (self.RoomsFilterArray[1].listSettings?[0]?.endValue) {
                         Utility.shared.maximum_guest_count = endval
                     }
@@ -2863,7 +2863,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     }
     
     func getImageBannerFromAdmin(){
-        let getImageBanner = GetImageBannerQuery()
+        let getImageBanner = PTProAPI.GetImageBannerQuery()
         Network.shared.apollo_headerClient.fetch(query: getImageBanner,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -2987,7 +2987,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
         }
         
         self.collectionViewFilterPage.isHidden = PageIndex == 1 ? false : false
-        var searchListingquery = SearchListingQuery(personCapacity: .some(guest_filter), currentPage: .some(PageIndex), dates:  .some("'\( Utility.shared.selectedstartDate_filter)' AND '\(Utility.shared.selectedEndDate_filter)'"), lat: 0, lng: 0, amenities: .some(Utility.shared.amenitiesArray as! [Int]), beds: .some(Utility.shared.beds_count as Int), bedrooms:.some(Utility.shared.bedrooms_count as Int), bathrooms:.some(Utility.shared.bathroom_count as Int), roomType: .some((Utility.shared.roomtypeArray as? [Int] ?? [])), spaces:.some(Utility.shared.facilitiesArray as! [Int]), houseRules: .some(Utility.shared.houseRulesArray as! [Int]), priceRange: .some(Utility.shared.priceRangeArray as! [Int]), geoType: .none, geography:.none , bookingType: .some(bookingtype), address: .some(Utility.shared.locationfromSearch),currency: .some(currency))
+        var searchListingquery = PTProAPI.SearchListingQuery(personCapacity: .some(guest_filter), currentPage: .some(PageIndex), dates:  .some("'\( Utility.shared.selectedstartDate_filter)' AND '\(Utility.shared.selectedEndDate_filter)'"), lat: 0, lng: 0, amenities: .some(Utility.shared.amenitiesArray as! [Int]), beds: .some(Utility.shared.beds_count as Int), bedrooms:.some(Utility.shared.bedrooms_count as Int), bathrooms:.some(Utility.shared.bathroom_count as Int), roomType: .some((Utility.shared.roomtypeArray as? [Int] ?? [])), spaces:.some(Utility.shared.facilitiesArray as! [Int]), houseRules: .some(Utility.shared.houseRulesArray as! [Int]), priceRange: .some(Utility.shared.priceRangeArray as! [Int]), geoType: .none, geography:.none , bookingType: .some(bookingtype), address: .some(Utility.shared.locationfromSearch),currency: .some(currency))
         self.scrollView.isHidden = true
         Network.shared.apollo_headerClient.fetch(query: searchListingquery,cachePolicy:.fetchIgnoringCacheData){ response in
             self.scrollView.isHidden = false
@@ -3060,7 +3060,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
                         self.FilterArray.removeAll()
                     }
                     
-                    self.FilterArray.append(contentsOf: ((result.data?.searchListing?.results)!) as! [SearchListingQuery.Data.SearchListing.Result])
+                    self.FilterArray.append(contentsOf: ((result.data?.searchListing?.results)!) as! [PTProAPI.SearchListingQuery.Data.SearchListing.Result])
                     
                     self.collectionViewFilterPage.isHidden = false
                     self.totalListcount = (result.data?.searchListing?.count)!

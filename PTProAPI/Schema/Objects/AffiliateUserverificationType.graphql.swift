@@ -3,7 +3,7 @@
 
 import Apollo
 
-public extension Objects {
+extension PTProAPI.Objects {
   static let AffiliateUserverificationType = Object(
     typename: "AffiliateUserverificationType",
     implementedInterfaces: []

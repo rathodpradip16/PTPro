@@ -3,7 +3,7 @@
 
 import Apollo
 
-public extension Objects {
+extension PTProAPI.Objects {
   static let Searchlistaffiliate = Object(
     typename: "searchlistaffiliate",
     implementedInterfaces: []

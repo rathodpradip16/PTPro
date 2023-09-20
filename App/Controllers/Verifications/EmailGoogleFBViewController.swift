@@ -220,7 +220,7 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func emailAPICall(sender : UIButton)
     {
-        let resendAPIquery = ResendConfirmEmailQuery()
+        let resendAPIquery = PTProAPI.ResendConfirmEmailQuery()
         Network.shared.apollo_headerClient.fetch(query: resendAPIquery,cachePolicy: .fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -247,7 +247,7 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
         } else {
             actiontype = "false"
         }
-        let socialloginverifyMutation = SocialLoginVerifyMutation(verificationType:"google", actionType:actiontype)
+        let socialloginverifyMutation = PTProAPI.SocialLoginVerifyMutation(verificationType:"google", actionType:actiontype)
         Network.shared.apollo_headerClient.perform(mutation:socialloginverifyMutation){ response in
             switch response {
             case .success(let result):
@@ -317,7 +317,7 @@ class EmailGoogleFBViewController: UIViewController, UITableViewDelegate, UITabl
             
             actiontype = "false"
         }
-        let socialloginverifyMutation = SocialLoginVerifyMutation(verificationType:"facebook", actionType: actiontype)
+        let socialloginverifyMutation = PTProAPI.SocialLoginVerifyMutation(verificationType:"facebook", actionType: actiontype)
         Network.shared.apollo_headerClient.perform(mutation:socialloginverifyMutation){ response in
             switch response {
             case .success(let result):

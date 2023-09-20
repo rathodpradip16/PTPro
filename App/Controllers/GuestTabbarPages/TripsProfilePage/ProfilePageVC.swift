@@ -33,7 +33,7 @@ class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,
     var ProfileTickImageArray = NSMutableArray()
     var lottieView: LottieAnimationView!
     
-    var ProfileAPIArray : GetProfileQuery.Data.UserAccount.Result?
+    var ProfileAPIArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,7 +110,7 @@ class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,
     func profileAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let profileQuery = GetProfileQuery()
+            let profileQuery = PTProAPI.GetProfileQuery()
             
             Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
                 switch response {
@@ -747,7 +747,7 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 func LanguageAPICall()
 {
     if Utility.shared.isConnectedToNetwork(){
-        let languageQuery = UserLanguageQuery()
+        let languageQuery = PTProAPI.UserLanguageQuery()
         Network.shared.apollo_headerClient.fetch(query: languageQuery){ response in
             switch response {
             case .success(let result):
@@ -758,7 +758,7 @@ func LanguageAPICall()
                 }
                 
                 Utility.shared.LanguageDataArray.removeAll()
-                Utility.shared.LanguageDataArray = ((result.data?.userLanguages?.result)!) as! [UserLanguageQuery.Data.UserLanguages.Result]
+                Utility.shared.LanguageDataArray = ((result.data?.userLanguages?.result)!) as! [PTProAPI.UserLanguageQuery.Data.UserLanguages.Result]
                 // self.languageTable.reloadData()
             case .failure(let error):
                 self.view.makeToast(error.localizedDescription)
@@ -800,7 +800,7 @@ func logoutCall()
 
 func userlogoutAPICall(){
     if Utility.shared.isConnectedToNetwork(){
-        let logoutMutation = LogoutMutation(deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
+        let logoutMutation = PTProAPI.LogoutMutation(deviceType: "iOS", deviceId:Utility.shared.pushnotification_devicetoken)
         Network.shared.apollo_headerClient.perform(mutation:logoutMutation){ response in
             switch response {
             case .success(let result):
@@ -845,7 +845,7 @@ func userlogoutAPICall(){
 func currencyAPICall()
 {
     if Utility.shared.isConnectedToNetwork(){
-        let currencyQuery = GetCurrenciesListQuery()
+        let currencyQuery = PTProAPI.GetCurrenciesListQuery()
         Network.shared.apollo_headerClient.fetch(query: currencyQuery){ response in
             switch response {
             case .success(let result):
@@ -853,7 +853,7 @@ func currencyAPICall()
                     self.view.makeToast(result.data?.getCurrencies?.errorMessage)
                     return
                 }
-                Utility.shared.currencyDataArray = ((result.data?.getCurrencies?.results)!) as! [GetCurrenciesListQuery.Data.GetCurrencies.Result]
+                Utility.shared.currencyDataArray = ((result.data?.getCurrencies?.results)!) as! [PTProAPI.GetCurrenciesListQuery.Data.GetCurrencies.Result]
                 Utility.shared.currencyvalue = Utility.shared.currencyDataArray.first!.symbol != nil ?
                 Utility.shared.currencyDataArray.first!.symbol! : ""
             case .failure(let error):

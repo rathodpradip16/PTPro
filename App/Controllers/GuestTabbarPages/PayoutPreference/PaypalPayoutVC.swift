@@ -169,7 +169,7 @@ finishBtn.titleLabel?.font = UIFont(name: APP_FONT_MEDIUM, size: 18)
     
     func finishAPICall()
     {
-        let addpayoutmutation = AddPayoutMutation(methodId: 1, payEmail: payemail, address1: Utility.shared.payout_Address_Dict["address1"] as? String ?? "", address2: Utility.shared.payout_Address_Dict["address2"] as? String ?? "", city: Utility.shared.payout_Address_Dict["city"] as? String ?? "", state: Utility.shared.payout_Address_Dict["state"] as? String ?? "", country: Utility.shared.selected_Countrycode_Payout, zipcode: Utility.shared.payout_Address_Dict["zipcode"] as? String ?? "", currency: currencycode, firstname: .none, lastname: .none, accountNumber: .none, routingNumber: .none, businessType: .none, accountToken: .none, personToken: .none)
+        let addpayoutmutation = PTProAPI.AddPayoutMutation(methodId: 1, payEmail: payemail, address1: Utility.shared.payout_Address_Dict["address1"] as? String ?? "", address2: Utility.shared.payout_Address_Dict["address2"] as? String ?? "", city: Utility.shared.payout_Address_Dict["city"] as? String ?? "", state: Utility.shared.payout_Address_Dict["state"] as? String ?? "", country: Utility.shared.selected_Countrycode_Payout, zipcode: Utility.shared.payout_Address_Dict["zipcode"] as? String ?? "", currency: currencycode, firstname: .none, lastname: .none, accountNumber: .none, routingNumber: .none, businessType: .none, accountToken: .none, personToken: .none)
         
         Network.shared.apollo_headerClient.perform(mutation: addpayoutmutation){ response in
             switch response {

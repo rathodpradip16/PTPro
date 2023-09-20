@@ -22,7 +22,7 @@ class BookingsteptwoVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     @IBOutlet weak var bookingtwoTV: UITableView!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var nextBtn: UIButton!
-    var viewListingArray : ViewListingDetailsQuery.Data.ViewListing.Results?
+    var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -172,7 +172,7 @@ class BookingsteptwoVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             
             if (Utility.shared.getCurrentUserID() != nil){
                 
-                let profileQuery = GetProfileQuery()
+                let profileQuery = PTProAPI.GetProfileQuery()
                 
                 Network.shared.apollo_headerClient.fetch(query: profileQuery, cachePolicy: .fetchIgnoringCacheData){ response in
                     switch response {

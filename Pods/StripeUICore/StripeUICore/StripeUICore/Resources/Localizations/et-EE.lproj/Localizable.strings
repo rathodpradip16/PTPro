@@ -18,6 +18,8 @@
 
 "City" = "Linn";
 
+"Code field" = "Koodi väli";
+
 "Company" = "Ettevõte";
 
 "Continue" = "Jätka";
@@ -28,6 +30,8 @@
 
 "County" = "Maakond";
 
+"Date is empty." = "Kuupäev on tühi.";
+
 "Department" = "Departemang";
 
 "District" = "Regioon";
@@ -35,6 +39,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Valmis";
+
+"Double tap to edit" = "Redigeerimiseks topeltklõpsake";
+
+"Edit" = "Muutmine";
 
 "Eircode" = "Eircode";
 
@@ -49,6 +57,8 @@
 "Full name" = "Täisnimi";
 
 "Incomplete phone number" = "Telefoninumber puudulik";
+
+"Invalid UPI ID" = "Kehtetu UPI ID";
 
 "Island" = "Saar";
 
@@ -80,6 +90,8 @@
 
 "Remove bank account ending in %@" = "Eemaldage pangakonto lõpuga %@";
 
+"Search" = "Otsing";
+
 "State" = "Osariik";
 
 "Suburb" = "Eeslinn";
@@ -93,6 +105,8 @@
 "The account number you entered is incomplete." = "Sisestatud kontonumber on puudulik.";
 
 "Town or city" = "Linn";
+
+"UPI ID" = "UPI ID";
 
 "Unable to parse phone number" = "Telefoninumbri parsimine ebaõnnestus";
 

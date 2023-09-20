@@ -3,59 +3,62 @@
 
 @_exported import Apollo
 
-public class SetDefaultPayoutMutation: GraphQLMutation {
-  public static let operationName: String = "setDefaultPayout"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"mutation setDefaultPayout($id: Int!, $type: String!) { setDefaultPayout(id: $id, type: $type) { __typename status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class SetDefaultPayoutMutation: GraphQLMutation {
+    static let operationName: String = "setDefaultPayout"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"mutation setDefaultPayout($id: Int!, $type: String!) { setDefaultPayout(id: $id, type: $type) { __typename status errorMessage } }"#
+      ))
 
-  public var id: Int
-  public var type: String
+    public var id: Int
+    public var type: String
 
-  public init(
-    id: Int,
-    type: String
-  ) {
-    self.id = id
-    self.type = type
-  }
+    public init(
+      id: Int,
+      type: String
+    ) {
+      self.id = id
+      self.type = type
+    }
 
-  public var __variables: Variables? { [
-    "id": id,
-    "type": type
-  ] }
-
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
-
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Apollo.Selection] { [
-      .field("setDefaultPayout", SetDefaultPayout?.self, arguments: [
-        "id": .variable("id"),
-        "type": .variable("type")
-      ]),
+    public var __variables: Variables? { [
+      "id": id,
+      "type": type
     ] }
 
-    public var setDefaultPayout: SetDefaultPayout? { __data["setDefaultPayout"] }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    /// SetDefaultPayout
-    ///
-    /// Parent Type: `Payout`
-    public struct SetDefaultPayout: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Payout }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
+      static var __selections: [Apollo.Selection] { [
+        .field("setDefaultPayout", SetDefaultPayout?.self, arguments: [
+          "id": .variable("id"),
+          "type": .variable("type")
+        ]),
       ] }
 
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var setDefaultPayout: SetDefaultPayout? { __data["setDefaultPayout"] }
+
+      /// SetDefaultPayout
+      ///
+      /// Parent Type: `Payout`
+      struct SetDefaultPayout: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
+
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.Payout }
+        static var __selections: [Apollo.Selection] { [
+          .field("__typename", String.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
+        ] }
+
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
+      }
     }
   }
+
 }

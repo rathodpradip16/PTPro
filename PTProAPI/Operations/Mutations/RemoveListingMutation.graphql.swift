@@ -3,68 +3,71 @@
 
 @_exported import Apollo
 
-public class RemoveListingMutation: GraphQLMutation {
-  public static let operationName: String = "RemoveListing"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"mutation RemoveListing($listId: Int!) { RemoveListing(listId: $listId) { __typename results { __typename id name } status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class RemoveListingMutation: GraphQLMutation {
+    static let operationName: String = "RemoveListing"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"mutation RemoveListing($listId: Int!) { RemoveListing(listId: $listId) { __typename results { __typename id name } status errorMessage } }"#
+      ))
 
-  public var listId: Int
+    public var listId: Int
 
-  public init(listId: Int) {
-    self.listId = listId
-  }
+    public init(listId: Int) {
+      self.listId = listId
+    }
 
-  public var __variables: Variables? { ["listId": listId] }
+    public var __variables: Variables? { ["listId": listId] }
 
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Apollo.Selection] { [
-      .field("RemoveListing", RemoveListing?.self, arguments: ["listId": .variable("listId")]),
-    ] }
-
-    public var removeListing: RemoveListing? { __data["RemoveListing"] }
-
-    /// RemoveListing
-    ///
-    /// Parent Type: `ListPhotosCommon`
-    public struct RemoveListing: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListPhotosCommon }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("results", [Result?]?.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
+      static var __selections: [Apollo.Selection] { [
+        .field("RemoveListing", RemoveListing?.self, arguments: ["listId": .variable("listId")]),
       ] }
 
-      public var results: [Result?]? { __data["results"] }
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var removeListing: RemoveListing? { __data["RemoveListing"] }
 
-      /// RemoveListing.Result
+      /// RemoveListing
       ///
-      /// Parent Type: `ListPhotos`
-      public struct Result: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `ListPhotosCommon`
+      struct RemoveListing: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListPhotos }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListPhotosCommon }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("id", Int.self),
-          .field("name", String?.self),
+          .field("results", [Result?]?.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
         ] }
 
-        public var id: Int { __data["id"] }
-        public var name: String? { __data["name"] }
+        var results: [Result?]? { __data["results"] }
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
+
+        /// RemoveListing.Result
+        ///
+        /// Parent Type: `ListPhotos`
+        struct Result: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
+
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListPhotos }
+          static var __selections: [Apollo.Selection] { [
+            .field("__typename", String.self),
+            .field("id", Int.self),
+            .field("name", String?.self),
+          ] }
+
+          var id: Int { __data["id"] }
+          var name: String? { __data["name"] }
+        }
       }
     }
   }
+
 }

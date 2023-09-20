@@ -3,48 +3,51 @@
 
 @_exported import Apollo
 
-public class ConfirmPayoutMutation: GraphQLMutation {
-  public static let operationName: String = "confirmPayout"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"mutation confirmPayout($currentAccountId: String) { confirmPayout(currentAccountId: $currentAccountId) { __typename status errorMessage } }"#
-    ))
+extension PTProAPI {
+  class ConfirmPayoutMutation: GraphQLMutation {
+    static let operationName: String = "confirmPayout"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"mutation confirmPayout($currentAccountId: String) { confirmPayout(currentAccountId: $currentAccountId) { __typename status errorMessage } }"#
+      ))
 
-  public var currentAccountId: GraphQLNullable<String>
+    public var currentAccountId: GraphQLNullable<String>
 
-  public init(currentAccountId: GraphQLNullable<String>) {
-    self.currentAccountId = currentAccountId
-  }
+    public init(currentAccountId: GraphQLNullable<String>) {
+      self.currentAccountId = currentAccountId
+    }
 
-  public var __variables: Variables? { ["currentAccountId": currentAccountId] }
+    public var __variables: Variables? { ["currentAccountId": currentAccountId] }
 
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
-    public static var __selections: [Apollo.Selection] { [
-      .field("confirmPayout", ConfirmPayout?.self, arguments: ["currentAccountId": .variable("currentAccountId")]),
-    ] }
-
-    public var confirmPayout: ConfirmPayout? { __data["confirmPayout"] }
-
-    /// ConfirmPayout
-    ///
-    /// Parent Type: `PayoutWholeType`
-    public struct ConfirmPayout: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.PayoutWholeType }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("status", Int?.self),
-        .field("errorMessage", String?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Mutation }
+      static var __selections: [Apollo.Selection] { [
+        .field("confirmPayout", ConfirmPayout?.self, arguments: ["currentAccountId": .variable("currentAccountId")]),
       ] }
 
-      public var status: Int? { __data["status"] }
-      public var errorMessage: String? { __data["errorMessage"] }
+      var confirmPayout: ConfirmPayout? { __data["confirmPayout"] }
+
+      /// ConfirmPayout
+      ///
+      /// Parent Type: `PayoutWholeType`
+      struct ConfirmPayout: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
+
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.PayoutWholeType }
+        static var __selections: [Apollo.Selection] { [
+          .field("__typename", String.self),
+          .field("status", Int?.self),
+          .field("errorMessage", String?.self),
+        ] }
+
+        var status: Int? { __data["status"] }
+        var errorMessage: String? { __data["errorMessage"] }
+      }
     }
   }
+
 }

@@ -18,6 +18,8 @@
 
 "City" = "Şehir";
 
+"Code field" = "Kod alanı";
+
 "Company" = "Şirket";
 
 "Continue" = "Devam et";
@@ -28,6 +30,8 @@
 
 "County" = "Ülke";
 
+"Date is empty." = "Tarih boş.";
+
 "Department" = "İdari Bölüm";
 
 "District" = "İlçe";
@@ -35,6 +39,10 @@
 "Do Si" = "Do Si";
 
 "Done" = "Tamam";
+
+"Double tap to edit" = "Düzenlemek için iki kez dokunun";
+
+"Edit" = "Düzenle";
 
 "Eircode" = "Eircode";
 
@@ -49,6 +57,8 @@
 "Full name" = "Ad ve soyadınız";
 
 "Incomplete phone number" = "Eksik telefon numarası";
+
+"Invalid UPI ID" = "Geçersiz UPI Numarası";
 
 "Island" = "Ada";
 
@@ -80,6 +90,8 @@
 
 "Remove bank account ending in %@" = "%@ ile biten banka hesabını kaldır";
 
+"Search" = "Ara";
+
 "State" = "Eyalet";
 
 "Suburb" = "Banliyö";
@@ -93,6 +105,8 @@
 "The account number you entered is incomplete." = "Girdiğiniz hesap numarası eksik.";
 
 "Town or city" = "Kasaba veya şehir";
+
+"UPI ID" = "UPI Numarası";
 
 "Unable to parse phone number" = "Telefon numaranızı ayrıştırılamadı";
 

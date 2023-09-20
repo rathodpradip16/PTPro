@@ -3,106 +3,109 @@
 
 @_exported import Apollo
 
-public class GetPayoutsQuery: GraphQLQuery {
-  public static let operationName: String = "getPayouts"
-  public static let operationDocument: Apollo.OperationDocument = .init(
-    definition: .init(
-      #"query getPayouts { getPayouts { __typename results { __typename id methodId paymentMethod { __typename id name } userId payEmail address1 address2 city default state country zipcode currency default createdAt last4Digits isVerified status } } }"#
-    ))
+extension PTProAPI {
+  class GetPayoutsQuery: GraphQLQuery {
+    static let operationName: String = "getPayouts"
+    static let operationDocument: Apollo.OperationDocument = .init(
+      definition: .init(
+        #"query getPayouts { getPayouts { __typename results { __typename id methodId paymentMethod { __typename id name } userId payEmail address1 address2 city default state country zipcode currency default createdAt last4Digits isVerified status } } }"#
+      ))
 
-  public init() {}
+    public init() {}
 
-  public struct Data: PTProAPI.SelectionSet {
-    public let __data: DataDict
-    public init(_dataDict: DataDict) { __data = _dataDict }
+    struct Data: PTProAPI.SelectionSet {
+      let __data: DataDict
+      init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
-    public static var __selections: [Apollo.Selection] { [
-      .field("getPayouts", GetPayouts?.self),
-    ] }
-
-    public var getPayouts: GetPayouts? { __data["getPayouts"] }
-
-    /// GetPayouts
-    ///
-    /// Parent Type: `PayoutWholeType`
-    public struct GetPayouts: PTProAPI.SelectionSet {
-      public let __data: DataDict
-      public init(_dataDict: DataDict) { __data = _dataDict }
-
-      public static var __parentType: Apollo.ParentType { PTProAPI.Objects.PayoutWholeType }
-      public static var __selections: [Apollo.Selection] { [
-        .field("__typename", String.self),
-        .field("results", [Result?]?.self),
+      static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
+      static var __selections: [Apollo.Selection] { [
+        .field("getPayouts", GetPayouts?.self),
       ] }
 
-      public var results: [Result?]? { __data["results"] }
+      var getPayouts: GetPayouts? { __data["getPayouts"] }
 
-      /// GetPayouts.Result
+      /// GetPayouts
       ///
-      /// Parent Type: `Payout`
-      public struct Result: PTProAPI.SelectionSet {
-        public let __data: DataDict
-        public init(_dataDict: DataDict) { __data = _dataDict }
+      /// Parent Type: `PayoutWholeType`
+      struct GetPayouts: PTProAPI.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: Apollo.ParentType { PTProAPI.Objects.Payout }
-        public static var __selections: [Apollo.Selection] { [
+        static var __parentType: Apollo.ParentType { PTProAPI.Objects.PayoutWholeType }
+        static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("id", Int?.self),
-          .field("methodId", Int?.self),
-          .field("paymentMethod", PaymentMethod?.self),
-          .field("userId", String?.self),
-          .field("payEmail", String?.self),
-          .field("address1", String?.self),
-          .field("address2", String?.self),
-          .field("city", String?.self),
-          .field("default", Bool?.self),
-          .field("state", String?.self),
-          .field("country", String?.self),
-          .field("zipcode", String?.self),
-          .field("currency", String?.self),
-          .field("createdAt", String?.self),
-          .field("last4Digits", Int?.self),
-          .field("isVerified", Bool?.self),
-          .field("status", Int?.self),
+          .field("results", [Result?]?.self),
         ] }
 
-        public var id: Int? { __data["id"] }
-        public var methodId: Int? { __data["methodId"] }
-        public var paymentMethod: PaymentMethod? { __data["paymentMethod"] }
-        public var userId: String? { __data["userId"] }
-        public var payEmail: String? { __data["payEmail"] }
-        public var address1: String? { __data["address1"] }
-        public var address2: String? { __data["address2"] }
-        public var city: String? { __data["city"] }
-        public var `default`: Bool? { __data["default"] }
-        public var state: String? { __data["state"] }
-        public var country: String? { __data["country"] }
-        public var zipcode: String? { __data["zipcode"] }
-        public var currency: String? { __data["currency"] }
-        public var createdAt: String? { __data["createdAt"] }
-        public var last4Digits: Int? { __data["last4Digits"] }
-        public var isVerified: Bool? { __data["isVerified"] }
-        public var status: Int? { __data["status"] }
+        var results: [Result?]? { __data["results"] }
 
-        /// GetPayouts.Result.PaymentMethod
+        /// GetPayouts.Result
         ///
-        /// Parent Type: `PaymentMethods`
-        public struct PaymentMethod: PTProAPI.SelectionSet {
-          public let __data: DataDict
-          public init(_dataDict: DataDict) { __data = _dataDict }
+        /// Parent Type: `Payout`
+        struct Result: PTProAPI.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: Apollo.ParentType { PTProAPI.Objects.PaymentMethods }
-          public static var __selections: [Apollo.Selection] { [
+          static var __parentType: Apollo.ParentType { PTProAPI.Objects.Payout }
+          static var __selections: [Apollo.Selection] { [
             .field("__typename", String.self),
             .field("id", Int?.self),
-            .field("name", String?.self),
+            .field("methodId", Int?.self),
+            .field("paymentMethod", PaymentMethod?.self),
+            .field("userId", String?.self),
+            .field("payEmail", String?.self),
+            .field("address1", String?.self),
+            .field("address2", String?.self),
+            .field("city", String?.self),
+            .field("default", Bool?.self),
+            .field("state", String?.self),
+            .field("country", String?.self),
+            .field("zipcode", String?.self),
+            .field("currency", String?.self),
+            .field("createdAt", String?.self),
+            .field("last4Digits", Int?.self),
+            .field("isVerified", Bool?.self),
+            .field("status", Int?.self),
           ] }
 
-          public var id: Int? { __data["id"] }
-          public var name: String? { __data["name"] }
+          var id: Int? { __data["id"] }
+          var methodId: Int? { __data["methodId"] }
+          var paymentMethod: PaymentMethod? { __data["paymentMethod"] }
+          var userId: String? { __data["userId"] }
+          var payEmail: String? { __data["payEmail"] }
+          var address1: String? { __data["address1"] }
+          var address2: String? { __data["address2"] }
+          var city: String? { __data["city"] }
+          var `default`: Bool? { __data["default"] }
+          var state: String? { __data["state"] }
+          var country: String? { __data["country"] }
+          var zipcode: String? { __data["zipcode"] }
+          var currency: String? { __data["currency"] }
+          var createdAt: String? { __data["createdAt"] }
+          var last4Digits: Int? { __data["last4Digits"] }
+          var isVerified: Bool? { __data["isVerified"] }
+          var status: Int? { __data["status"] }
+
+          /// GetPayouts.Result.PaymentMethod
+          ///
+          /// Parent Type: `PaymentMethods`
+          struct PaymentMethod: PTProAPI.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
+
+            static var __parentType: Apollo.ParentType { PTProAPI.Objects.PaymentMethods }
+            static var __selections: [Apollo.Selection] { [
+              .field("__typename", String.self),
+              .field("id", Int?.self),
+              .field("name", String?.self),
+            ] }
+
+            var id: Int? { __data["id"] }
+            var name: String? { __data["name"] }
+          }
         }
       }
     }
   }
+
 }
