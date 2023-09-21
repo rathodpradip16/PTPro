@@ -47,6 +47,7 @@ class WelcomePageVC: UIViewController  {
     @IBOutlet weak var signUpButton: UIButton!
     
     
+    var loginData: PTProAPI.LoginQuery.Data?
     @IBOutlet weak var offlineView: UIView!
     @IBOutlet weak var offlineTextLabel: UILabel!
     @IBOutlet weak var retryBtn: UIButton!
@@ -306,7 +307,7 @@ class WelcomePageVC: UIViewController  {
     
     func checkLoginAPI()
     {
-        let loginquery = PTProAPI.LoginQuery(email: emailTextView.text! , password: passwordTextField.text!, deviceType:"iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken)
+        let loginquery = PTProAPI.LoginQuery(email: emailTextView.text! , password: passwordTextField.text!, deviceType:"iOS", deviceDetail: .some(""), deviceId: Utility.shared.pushnotification_devicetoken)
         let apollo = ApolloClient(url: URL(string:graphQLEndpoint)!)
         apollo.fetch(query: loginquery,cachePolicy:.fetchIgnoringCacheData) {  response in
             switch response {
@@ -376,26 +377,31 @@ class WelcomePageVC: UIViewController  {
                         Utility.shared.searchLocationDict.setValue(nil, forKey: "lat")
                         Utility.shared.searchLocationDict.setValue(nil, forKey: "lon")
                     }
-                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                    Utility.shared.setTab(index: 0)
-                    
-                    appDelegate.profileAPICall()
-                    self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
-                    
-                    appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
+                    DispatchQueue.main.async {
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        Utility.shared.setTab(index: 0)
+                        
+                        appDelegate.profileAPICall()
+                        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+                        
+                        appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
+                    }
                     
                 } else if result.data?.userLogin?.status == 500 {
-                    self.lottieView.isHidden = true
-                    self.lottieWholeView.isHidden = true
-                    self.view.makeToast("\((result.data?.userLogin?.errorMessage)!)")
-                    // Utility.shared.showAlert(msg: "\((result.data?.userLogin?.errorMessage)!)")
+                    DispatchQueue.main.async {
+                        self.lottieView.isHidden = true
+                        self.lottieWholeView.isHidden = true
+                        self.view.makeToast("\((result.data?.userLogin?.errorMessage)!)")
+                        // Utility.shared.showAlert(msg: "\((result.data?.userLogin?.errorMessage)!)")
+                    }
                 }
                 else{
-                    self.passwordTextField.resignFirstResponder()
-                    
-                    self.lottieView.isHidden = true
-                    self.lottieWholeView.isHidden = true
-                    self.view.makeToast("\(result.data?.userLogin?.errorMessage ?? "\(Utility.shared.getLanguage()?.value(forKey: "somethingwrong") ?? "Something went wrong!")")")
+                    DispatchQueue.main.async {
+                        self.passwordTextField.resignFirstResponder()
+                        self.lottieView.isHidden = true
+                        self.lottieWholeView.isHidden = true
+                        self.view.makeToast("\(result.data?.userLogin?.errorMessage ?? "\(Utility.shared.getLanguage()?.value(forKey: "somethingwrong") ?? "Something went wrong!")")")
+                    }
                 }
             case .failure(let error):
                 self.view.makeToast(error.localizedDescription)
@@ -403,6 +409,132 @@ class WelcomePageVC: UIViewController  {
         }
     }
 
+//    func checkLoginAPI(){
+//        
+//        let parameters = "{\"query\":\"query Login(\\r\\n$email: String!,\\r\\n$password: String!,\\r\\n$deviceType: String!,\\r\\n$deviceDetail: String,\\r\\n$deviceId: String!\\r\\n) {\\r\\nuserLogin (\\r\\nemail: $email,\\r\\npassword: $password,\\r\\ndeviceType: $deviceType,\\r\\ndeviceDetail: $deviceDetail,\\r\\ndeviceId: $deviceId\\r\\n) {\\r\\nresult {\\r\\nuserId\\r\\nuserToken\\r\\nuser {\\r\\nfirstName\\r\\nlastName\\r\\ngender\\r\\ndateOfBirth\\r\\nphoneNumber\\r\\npreferredLanguage\\r\\npreferredCurrency\\r\\ncreatedAt\\r\\npicture\\r\\nverification{\\r\\nid\\r\\nisPhoneVerified\\r\\nisEmailConfirmed\\r\\nisIdVerification\\r\\nisGoogleConnected\\r\\nisFacebookConnected\\r\\n}\\r\\nuserData{\\r\\ntype\\r\\n}\\r\\n}\\r\\n}\\r\\nstatus\\r\\nerrorMessage\\r\\n}\\r\\n}\\r\\n\",\"variables\":{\"email\":\"\(emailTextView.text!)\",\"password\":\"\(passwordTextField.text!)\",\"deviceType\":\"iOS\",\"deviceDetail\":\"\",\"deviceId\":\"\(Utility.shared.pushnotification_devicetoken)\"}}"
+//        let postData = parameters.data(using: .utf8)
+//
+//        var request = URLRequest(url: URL(string: "http://ptpro.paperbirdtech.com:4000/graphql")!,timeoutInterval: Double.infinity)
+//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//        request.addValue("lang=en-US", forHTTPHeaderField: "Cookie")
+//
+//        request.httpMethod = "POST"
+//        request.httpBody = postData
+//
+//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//          guard let data = data else {
+//            print(String(describing: error))
+//            return
+//          }
+//            do {
+//                if let dic = try JSONSerialization.jsonObject(with: data, options: []) as? [String : AnyHashable]{
+//                
+//                    self.loginData = .init(_dataDict: DataDict(data: dic["data"] as! [String : AnyHashable], fulfilledFragments: []))
+//                    self.loginData = .init(data: dic["data"] as! JSONObject)
+//                    if let result = self.loginData {
+//                        if let data = result.userLogin?.status, data  == 200{
+//                            Utility.shared.logindataArray.removeAll()
+//                            if let user = result.userLogin?.result?.user, user.preferredCurrency != nil{
+//                                Utility.shared.setPreferredCurrency(currency_rate: (user.preferredCurrency as AnyObject) as! String)
+//                            }
+//                            else
+//                            {
+//                                Utility.shared.setPreferredCurrency(currency_rate:"USD")
+//                                Utility.shared.selectedCurrency = "USD"
+//                            }
+//                            Utility.shared.setopenTabbar(iswhichtabbar:false)
+//                            
+//                            if let usertoken = result.userLogin?.result?.userToken {
+//                                Utility.shared.setUserToken(userID:"\(usertoken)" as NSString)
+//                                Utility.shared.logindataArray.append(usertoken as AnyObject)
+//                            }
+//                            
+//                            if let userId = result.userLogin?.result?.userId {
+//                                Utility.shared.setUserID(userid:"\(userId)" as NSString)
+//                                Utility.shared.logindataArray.append(userId as AnyObject)
+//                            }
+//                            
+//                            Utility.shared.setPassword(password: self.passwordTextField.text! as NSString)
+//                            if let userId = result.userLogin?.result?.userToken {
+//                                Utility.shared.setUserToken(userID: "\(userId)" as NSString)
+//                                Utility.shared.user_token = "\(userId)"
+//                            }
+//                            if let user = result.userLogin?.result?.user{
+//                                if let firstName = user.firstName {
+//                                    Utility.shared.logindataArray.append(firstName as AnyObject)
+//                                }
+//                                if let picture = user.picture {
+//                                    Utility.shared.logindataArray.append(picture as AnyObject)
+//                                }
+//                                if let createdAt = user.createdAt {
+//                                    Utility.shared.logindataArray.append(createdAt as AnyObject)
+//                                }
+//                                if let verification = user.verification{
+//                                    if let isPhoneVerified = verification.isPhoneVerified {
+//                                        Utility.shared.logindataArray.append(isPhoneVerified as AnyObject)
+//                                    }
+//                                    if let isEmailConfirmed = verification.isEmailConfirmed {
+//                                        Utility.shared.logindataArray.append(isEmailConfirmed as AnyObject)
+//                                    }
+//                                    if let isIdVerification = verification.isIdVerification {
+//                                        Utility.shared.logindataArray.append(isIdVerification as AnyObject)
+//                                    }
+//                                    if let isGoogleConnected = verification.isGoogleConnected {
+//                                        Utility.shared.logindataArray.append(isGoogleConnected as AnyObject)
+//                                    }
+//                                    
+//                                    if let isFacebookConnected = verification.isFacebookConnected {
+//                                        Utility.shared.logindataArray.append(isFacebookConnected as AnyObject)
+//                                    }
+//                                }
+//                            }
+//                            
+//                            Utility.shared.locationfromSearch = ""
+//                            Utility.shared.isfromfloatmap_Page = false
+//                            Utility.shared.isfromGuestProfile = false
+//                            if(Utility.shared.searchLocationDict.count > 0)
+//                            {
+//                                Utility.shared.searchLocationDict.setValue(nil, forKey: "lat")
+//                                Utility.shared.searchLocationDict.setValue(nil, forKey: "lon")
+//                            }
+//                            DispatchQueue.main.async {
+//                                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//                                Utility.shared.setTab(index: 0)
+//                                
+//                                appDelegate.profileAPICall()
+//                                self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+//                                
+//                                appDelegate.GuestTabbarInitialize(initialView: CustomTabbar())
+//                            }
+//                            
+//                        } else if let status = result.userLogin?.status ,status == 500 {
+//                            DispatchQueue.main.async {
+//                                self.lottieView.isHidden = true
+//                                self.lottieWholeView.isHidden = true
+//                                self.view.makeToast("\(result.userLogin?.errorMessage)")
+//                                // Utility.shared.showAlert(msg: "\((result.userLogin?.errorMessage)!)")
+//                            }
+//                        }
+//                        else{
+//                            DispatchQueue.main.async {
+//                                self.passwordTextField.resignFirstResponder()
+//                                
+//                                self.lottieView.isHidden = true
+//                                self.lottieWholeView.isHidden = true
+//                                self.view.makeToast("\(String(describing: result.userLogin?.errorMessage ?? "\(Utility.shared.getLanguage()?.value(forKey: "somethingwrong") ?? "Something went wrong!")" as? String?))")
+//                            }
+//                        }
+//                    }
+//                }else{
+//                    
+//                }
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+//        }
+//
+//        task.resume()
+//    }
    
     // Mark:Functions *******************************************************************************************>
     
@@ -1035,5 +1167,12 @@ extension WelcomePageVC: ASAuthorizationControllerPresentationContextProviding ,
     @available(iOS 13.0, *)
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!
+    }
+}
+
+extension RootSelectionSet {
+    init(data: JSONObject) {
+        // swiftlint:disable:next force_try
+        try! self.init(data: data, variables: nil)
     }
 }
