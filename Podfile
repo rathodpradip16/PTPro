@@ -50,6 +50,7 @@ pod 'StepIndicator'
 pod 'FTPopOverMenu'
 pod 'NKVPhonePicker'
 pod 'GrowingTextView'
+pod 'iOSDropDown'
 
   target 'AppTests' do
     inherit! :search_paths
