@@ -7,7 +7,7 @@
 //
 
 import UIKit
-protocol checkTextviewCellDelegate: class {
+protocol checkTextviewCellDelegate: AnyObject {
     func didChangeText(text: String?, cell: checkTextviewCell)
 }
 

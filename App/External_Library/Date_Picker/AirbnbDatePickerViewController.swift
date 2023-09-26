@@ -1891,7 +1891,7 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
     
     func findIndexPath(forDate date: Date) -> IndexPath? {
         var indexPath: IndexPath? = nil
-        if let section = months.index(where: {
+        if let section = months.firstIndex(where: {
             calendar.component(.year, from: $0) == calendar.component(.year, from: date) && calendar.component(.month, from: $0) == calendar.component(.month, from: date)}) {
             let item = days[section].prepend + calendar.component(.day, from: date) - 1
             indexPath = IndexPath(item: item, section: section)

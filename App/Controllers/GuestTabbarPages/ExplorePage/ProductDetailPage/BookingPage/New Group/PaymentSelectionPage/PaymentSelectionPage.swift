@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import PayPalCheckout
 import Stripe
 import Braintree
 import BraintreeDropIn
@@ -177,30 +176,30 @@ class PaymentSelectionPage: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    func configurePaypalCheckOut(){
-        Checkout.setCreateOrderCallback { (createOrderAction) in
-            let amount = PurchaseUnit.Amount(currencyCode: .usd, value: "10.00")
-            let purchaseUnit = PurchaseUnit(amount: amount)
-            let order = OrderRequest(intent: .capture, purchaseUnits: [purchaseUnit])
-            
-            createOrderAction.create(order: order)
-        }
-        
-        Checkout.setOnApproveCallback { (approve) in
-            approve.actions.capture { (response, error) in
-                print("Approve Response",response,"----",error)
-            }
-        }
-        
-        Checkout.setOnCancelCallback {
-            print("Cancelled")
-        }
-        
-        Checkout.setOnErrorCallback { (error) in
-            print("Error", error)
-        }
-        
-    }
+    func configurePaypalCheckOut(){}
+//        Checkout.setCreateOrderCallback { (createOrderAction) in
+//            let amount = PurchaseUnit.Amount(currencyCode: .usd, value: "10.00")
+//            let purchaseUnit = PurchaseUnit(amount: amount)
+//            let order = OrderRequest(intent: .capture, purchaseUnits: [purchaseUnit])
+//            
+//            createOrderAction.create(order: order)
+//        }
+//        
+//        Checkout.setOnApproveCallback { (approve) in
+//            approve.actions.capture { (response, error) in
+//                print("Approve Response",response,"----",error)
+//            }
+//        }
+//        
+//        Checkout.setOnCancelCallback {
+//            print("Cancelled")
+//        }
+//        
+//        Checkout.setOnErrorCallback { (error) in
+//            print("Error", error)
+//        }
+//        
+//    }
     
     @IBAction func proceedToPayTapped(_ sender: UIButton) {
         

@@ -196,7 +196,7 @@ class EmailPageVC: UIViewController {
         self.lottieView.clipsToBounds = true
         self.lottieView.play()
         let checkemail = PTProAPI.CheckEmailExistsQuery(email: emailTF.text!)
-        apollo.fetch(query: checkemail,cachePolicy:.fetchIgnoringCacheData){  response in
+        Network.shared.apollo_headerClient.fetch(query: checkemail,cachePolicy:.fetchIgnoringCacheData){  response in
             switch response {
             case .success(let result):
                 if let data = result.data?.validateEmailExist?.status,data == 200 {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ReservationTextviewCellDelegate: class {
+protocol ReservationTextviewCellDelegate: AnyObject {
     func didChangeText(text: String?, cell: ReservationCancelCell)
     func textendEditing(text:String?, cell:ReservationCancelCell)
 }

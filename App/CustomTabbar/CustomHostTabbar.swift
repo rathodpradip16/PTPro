@@ -163,7 +163,7 @@ class CustomHostTabbar: UITabBarController,UITabBarControllerDelegate {
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         //DispatchQueue.main.async {
             //apply spring animation
-            let index = self.tabBar.items?.index(of: item)
+        let index = self.tabBar.items?.firstIndex(of: item)
             let subView = tabBar.subviews[index!+1].subviews.first as! UIImageView
             self.performSpringAnimation(imgView: subView)
        // }

@@ -425,7 +425,7 @@ class BedsListingViewController: BaseHostTableviewController {
           array_Count.removeAll()
         if((Utility.shared.getListSettingsArray?.bedType?.listSettings![indexPath.row]!.id!) == bed_type_id[indexPath.row])
         {
-            let index = bedtypeInfoArr.index(where: { dictionary in
+            let index = bedtypeInfoArr.firstIndex(where: { dictionary in
                 guard let value = dictionary["bedType"] as? Int
                     else { return false }
                 return value == (Utility.shared.getListSettingsArray?.bedType?.listSettings![indexPath.row]!.id!)
@@ -446,7 +446,7 @@ class BedsListingViewController: BaseHostTableviewController {
                             {
                                 let userbedCount = "\(userBedTypes["bedCount"]!)"
                                 let bedTypes = (Utility.shared.getListSettingsArray?.bedType?.listSettings!)!
-                                let index = bedTypes.index(where: { (item) -> Bool in
+                                let index = bedTypes.firstIndex(where: { (item) -> Bool in
                                     item?.id == userbedType
                                 })
                                 bedTypeValue = bedType[index!]
@@ -537,7 +537,7 @@ class BedsListingViewController: BaseHostTableviewController {
                     {
                         if((Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!) == bed_type_id[sender.tag])
                         {
-                            let index = bedtypeInfoArr.index(where: { dictionary in
+                            let index = bedtypeInfoArr.firstIndex(where: { dictionary in
                                 guard let value = dictionary["bedType"] as? Int
                                     else { return false }
                                 return value == (Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!)
@@ -616,7 +616,7 @@ class BedsListingViewController: BaseHostTableviewController {
                 
                 if((Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!) == bed_type_id[sender.tag])
                 {
-                    let index = bedtypeInfoArr.index(where: { dictionary in
+                    let index = bedtypeInfoArr.firstIndex(where: { dictionary in
                         guard let value = dictionary["bedType"] as? Int
                             else { return false }
                         return value == (Utility.shared.getListSettingsArray?.bedType?.listSettings![sender.tag]!.id!)

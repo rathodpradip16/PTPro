@@ -139,7 +139,7 @@ class WelcomePageVC: UIViewController  {
             
             let signupMutation = PTProAPI.SocialLoginQuery(firstName: .some("\(name ?? "")"), lastName: .some("\(fname ?? "")"), email: "\(email ?? "")", dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "google", gender: "", profilePicture:.some("\(userImageURL)"))
             
-            apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
+            Network.shared.apollo_headerClient.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
                 
                 self.lottieWholeView.isHidden = true
                 self.lottieView.isHidden = true
@@ -308,8 +308,7 @@ class WelcomePageVC: UIViewController  {
     func checkLoginAPI()
     {
         let loginquery = PTProAPI.LoginQuery(email: emailTextView.text! , password: passwordTextField.text!, deviceType:"iOS", deviceDetail: .some(""), deviceId: Utility.shared.pushnotification_devicetoken)
-        let apollo = ApolloClient(url: URL(string:graphQLEndpoint)!)
-        apollo.fetch(query: loginquery,cachePolicy:.fetchIgnoringCacheData) {  response in
+        Network.shared.apollo_headerClient.fetch(query: loginquery, cachePolicy: .fetchIgnoringCacheData){  response in
             switch response {
             case .success(let result):
                 if let data = result.data?.userLogin?.status,data == 200 {
@@ -761,7 +760,7 @@ class WelcomePageVC: UIViewController  {
             
             let signupMutation = PTProAPI.SocialLoginQuery(firstName: .some("\(name ?? "")"), lastName: "", email: "\(email ?? "")", dateOfBirth: "", deviceType: "iOS", deviceDetail: .some(""), deviceId: Utility.shared.pushnotification_devicetoken, registerType: .some("google"), gender: .some(""), profilePicture:.some("\(userImageURL)"))
             
-            apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
+            Network.shared.apollo_headerClient.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
                 switch response {
                 case .success(let result):
                     if let data = result.data?.userSocialLogin?.status,data == 200 {
@@ -882,7 +881,7 @@ class WelcomePageVC: UIViewController  {
                     
                     let signupMutation = PTProAPI.SocialLoginQuery(firstName: .some("\(name)"), lastName: "", email: "\(userEmail)", dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "facebook", gender: "", profilePicture:.some("\(url)"))
                     
-                    apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
+                    Network.shared.apollo_headerClient.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
                         switch response {
                         case .success(let result):
                             if let data = result.data?.userSocialLogin?.status,data == 200 {
@@ -1089,7 +1088,7 @@ extension WelcomePageVC: ASAuthorizationControllerPresentationContextProviding ,
         
         let signupMutation = PTProAPI.SocialLoginQuery(firstName:.some(name as String), lastName: .some(fname as String), email:email as String, dateOfBirth: "", deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "apple", gender: "", profilePicture:"")
         
-        apollo.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
+        Network.shared.apollo_headerClient.fetch(query: signupMutation,cachePolicy:.fetchIgnoringCacheData){  response in
             switch response {
             case .success(let result):
                 if let data = result.data?.userSocialLogin?.status,data == 200 {

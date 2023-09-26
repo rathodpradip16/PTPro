@@ -11,6 +11,7 @@ import Apollo
 import Lottie
 import SkeletonView
 import SwiftMessages
+import FTPopOverMenu_Swift
 
 class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate,SkeletonTableViewDataSource{
    
@@ -283,7 +284,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     func CountryAPICAll()
     {
         let getcountrycodeQuery = PTProAPI.GetCountrycodeQuery()
-        apollo.fetch(query: getcountrycodeQuery,cachePolicy: .fetchIgnoringCacheData){ response in
+        Network.shared.apollo_headerClient.fetch(query: getcountrycodeQuery,cachePolicy: .fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
                 guard (result.data?.getCountries?.results) != nil else{
@@ -352,10 +353,10 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     {
         if(inprogressTapped) {
         delRow = sender.tag
-        let window = UIApplication.shared.keyWindow!
+            let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
         deleteListingView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
-        window.addSubview(deleteListingView)
-        window.bringSubviewToFront(deleteListingView)
+            window?.addSubview(deleteListingView)
+            window?.bringSubviewToFront(deleteListingView)
         }
         
         

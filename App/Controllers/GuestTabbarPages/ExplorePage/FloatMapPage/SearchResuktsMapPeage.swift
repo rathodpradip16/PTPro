@@ -9,7 +9,6 @@
 import UIKit
 import GoogleMaps
 import GooglePlaces
-import GooglePlacePicker
 
 struct State {
     let name: String

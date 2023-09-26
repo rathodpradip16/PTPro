@@ -10,7 +10,6 @@ import UIKit
 import JJFloatingActionButton
 import GoogleMaps
 import GooglePlaces
-import GooglePlacePicker
 import MaterialComponents
 import Lottie
 

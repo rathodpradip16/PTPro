@@ -115,7 +115,7 @@ class CountrycodeVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     func CountryAPICAll()
     {
         let getcountrycodeQuery = PTProAPI.GetCountrycodeQuery()
-        apollo.fetch(query: getcountrycodeQuery){ response in
+        Network.shared.apollo_headerClient.fetch(query: getcountrycodeQuery){ response in
             switch response {
             case .success(let result):
                 

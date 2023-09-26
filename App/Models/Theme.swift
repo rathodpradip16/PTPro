@@ -136,6 +136,9 @@ class Theme {
     static let inboxReflectionStatusColor = UIColor().hexValue(hex: "00D3E2")
     static let BecomeAHostStepTitleUnselectColor = UIColor().hexValue(hex: "888888")
     static let SearchShadowColor = UIColor().hexValue(hex:"9F9F9F" )
+    
+    static let affiliatePurpleColor = UIColor().hexValue(hex:"8c52ff" )
+
 }
 
 

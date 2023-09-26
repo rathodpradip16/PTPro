@@ -146,7 +146,6 @@ var graphQLEndpoint : String {
 }
 
 let GOOGLE_CLIENT_ID = "1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at.apps.googleusercontent.com"
-let apollo = ApolloClient(url: URL(string:graphQLEndpoint)!)
 
 func convertToDictionary(text: String) -> [[String: Any]]? {
     if let data = text.data(using: .utf8) {

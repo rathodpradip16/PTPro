@@ -361,7 +361,7 @@ class SignUpViewController: UIViewController {
     func signupAPICall(){
         // SignupApi
         let signupMutation = PTProAPI.SignupMutation(firstName: firstNametxtField.text ?? "", lastName: lastNameTxtField.text ?? "", email: EmailTxtField.text ?? "", password: passwordTxtField.text ?? "", dateOfBirth: .some(convertedDate) , deviceType: "iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken, registerType: "email")
-        apollo.perform(mutation: signupMutation){  response in
+        Network.shared.apollo_headerClient.perform(mutation: signupMutation){  response in
             switch response {
             case .success(let result):
                 if let data = result.data?.createUser?.status,data == 200 {

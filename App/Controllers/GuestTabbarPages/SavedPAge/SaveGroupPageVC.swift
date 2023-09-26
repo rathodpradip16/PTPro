@@ -11,7 +11,7 @@ import Lottie
 import Apollo
 import SkeletonView
 
-protocol SaveGroupPageVCDelegate: class {
+protocol SaveGroupPageVCDelegate: AnyObject {
     func whishDeleteAPIcall()
 }
 

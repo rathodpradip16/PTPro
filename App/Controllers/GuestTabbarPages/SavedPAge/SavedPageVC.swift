@@ -69,15 +69,8 @@ class SavedPageVC: UIViewController,UICollectionViewDelegate,UICollectionViewDat
     }
     func checkApolloStatus()
     {
-        if((Utility.shared.getCurrentUserToken()) != nil)
-        {
-        }
-        else{
-            apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
-        }
-        
+        apollo_headerClient = Network.shared.apollo_headerClient
     }
-    
     func initialSetup()
     {
         savedTable.register(UINib(nibName: "WhishlistCell", bundle: nil), forCellWithReuseIdentifier: "WhishlistCell")

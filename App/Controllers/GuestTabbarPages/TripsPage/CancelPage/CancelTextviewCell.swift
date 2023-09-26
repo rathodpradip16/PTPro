@@ -9,7 +9,7 @@
 import UIKit
 import IQKeyboardManagerSwift
 
-protocol CancelTextviewCellDelegate: class {
+protocol CancelTextviewCellDelegate: AnyObject {
     func didChangeText(text: String?, cell: CancelTextviewCell)
     func textendEditing(text:String?, cell:CancelTextviewCell)
 }

@@ -8,11 +8,17 @@
 
 import UIKit
 
-class AffiliateRegistrationWebsite: AffiliateRegistration {
+class AffiliateRegistrationWebsite: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+//        if let parent =  self.parent as? AffiliateRegistration{
+//            parent.lblAccount.alpha = 0.0
+//            parent.lblWebsite.alpha = 1.0
+//            parent.lblWebsite.textColor = Theme.affiliatePurpleColor
+//            parent.lblDocument.textColor = Theme.TextLightColor
+//            parent.stepIndicator.currentStep = 2
+//        }
         // Do any additional setup after loading the view.
     }
 

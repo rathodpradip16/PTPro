@@ -11,7 +11,6 @@ import IQKeyboardManagerSwift
 import FBSDKLoginKit
 import GoogleSignIn
 import GoogleMaps
-import GooglePlacePicker
 import Apollo
 import Stripe
 import Firebase
@@ -20,8 +19,7 @@ import UserNotifications
 import FirebaseMessaging
 import Siren
 import Braintree
-import PayPalCheckout
-
+import GooglePlaces
 //#import "PayPalMobile.h"
 
 //MARK: **************************************** GLOBAL VARIABLE DECLARATIONS **************************************************************>
@@ -50,13 +48,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        let config = CheckoutConfig(clientID: PayPal_Client_ID, returnUrl: "Your_app_BundleID://paypalpay", environment: .sandbox)
-        
+     //   let config = CheckoutConfig(clientID: PayPal_Client_ID, returnUrl: "Your_app_BundleID://paypalpay", environment: .sandbox)
+        // Checkout.set(config: config)
+
+        BTAppContextSwitcher.setReturnURLScheme("com.ptpro.solutionvalley.payments")
+
         
         Utility.shared.showGuestCount = false
         Utility.shared.showbedRoomCount = false
         
-        Checkout.set(config: config)
         //config goole api
         GMSServices.provideAPIKey(GOOGLE_API_KEY)
         GMSPlacesClient.provideAPIKey(GOOGLE_API_KEY)
@@ -372,7 +372,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
         let getStripeKey = PTProAPI.GetPaymentSettingsQuery()
         
-        apollo.fetch(query: getStripeKey){ response in
+        Network.shared.apollo_headerClient.fetch(query: getStripeKey){ response in
             switch response {
             case .success(let result):
                 if result == nil{
@@ -389,7 +389,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     
 
     func themeInitialSetUp(){
-        let window = UIApplication.shared.keyWindow
+        let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
         if Utility.shared.getAppTheme() == nil || Utility.shared.getAppTheme() == "auto"{
             Utility.shared.setAppTheme(Language: "auto")
             Utility.shared.selectedAppearance = "auto"
@@ -750,6 +750,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
                 Network.shared.apollo_headerClient.fetch(query:profileQuery,cachePolicy:.fetchIgnoringCacheData){ response in
                     switch response {
                     case .success(let result):
+                        
                         guard (result.data?.userAccount?.result) != nil else
                         {
                             print("Missing Data")
@@ -759,7 +760,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
                         
                         
                         Utility.shared.ProfileAPIArray = ((result.data?.userAccount?.result)!)
-                        Utility.shared.userName  = "\(Utility.shared.ProfileAPIArray?.firstName != nil ? Utility.shared.ProfileAPIArray?.firstName! : "User")!"
+                        Utility.shared.userName  = "\(String(describing: Utility.shared.ProfileAPIArray?.firstName != nil ? Utility.shared.ProfileAPIArray?.firstName! : "User"))!"
                         
                         
                         
@@ -785,7 +786,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
                         
                         Utility.shared.setEmail(email:(result.data?.userAccount?.result?.email as AnyObject)as! NSString)
                         break;
-                    case .failure(let error): break
+                    case .failure(_): break
                     }
                 }                
             }

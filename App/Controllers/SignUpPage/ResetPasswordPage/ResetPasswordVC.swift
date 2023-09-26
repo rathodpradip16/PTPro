@@ -350,7 +350,7 @@ class ResetPasswordVC: UIViewController {
                 
                 if newPasswordTF.text == confirmPasswordTF.text {
                     let resetpass = PTProAPI.ResetPasswordMutation(email: Utility.shared.deepLinkEmail, password: newPasswordTF.text!, token: Utility.shared.deepLinkToken)
-                    apollo.perform(mutation: resetpass){ response in
+                    Network.shared.apollo_headerClient.perform(mutation: resetpass){ response in
                         switch response {
                         case .success(let result):
                             if let data = result.data?.updateForgotPassword?.status,data == 200 {

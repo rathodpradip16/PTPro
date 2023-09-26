@@ -167,7 +167,7 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     func CountryAPICAll()
     {
         let getcountrycodeQuery = PTProAPI.GetCountrycodeQuery()
-        apollo.fetch(query: getcountrycodeQuery,cachePolicy: .fetchIgnoringCacheData){ response in
+        Network.shared.apollo_headerClient.fetch(query: getcountrycodeQuery,cachePolicy: .fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
                 guard (result.data?.getCountries?.results) != nil else{

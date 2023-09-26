@@ -236,7 +236,7 @@ class ForgotPasswordVC: UIViewController {
             
             self.Offline_View.isHidden = true
             let forgotmutation = PTProAPI.ForgotPasswordMutation(email:forgotTF.text!)
-            apollo.perform(mutation: forgotmutation){ response in
+            Network.shared.apollo_headerClient.perform(mutation: forgotmutation){ response in
                 switch response {
                 case .success(let result):
                     if let data = result.data?.userForgotPassword?.status,data == 200 {

@@ -142,13 +142,7 @@ class MoreFilterVC: UIViewController,UITableViewDelegate,UITableViewDataSource,R
     }
     func checkApolloStatus()
     {
-        if((Utility.shared.getCurrentUserToken()) != nil)
-        {
-        }
-        else{
-            apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
-        }
-        
+        apollo_headerClient = Network.shared.apollo_headerClient
     }
     func registerCells(){
         filterTV.register(UINib(nibName: "InstantBookCell", bundle: nil), forCellReuseIdentifier: "InstantBookCell")

@@ -11,10 +11,6 @@ import Apollo
 import  Lottie
 import SwiftMessages
 
-
-
-
-
 class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,UITabBarControllerDelegate,UITabBarDelegate{
     
     
@@ -290,10 +286,10 @@ func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> 
     case 0:
         return 1
     case 1:
-        if( Utility.shared.host_message_isfromHost) {
-            return 2
+        if(Utility.shared.host_message_isfromHost) {
+            return 1
         }
-        return 1
+        return 2
     case 2:
         if(Utility.shared.host_message_isfromHost)
         {
@@ -376,24 +372,8 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
                 
             }
         }else if indexPath.row == 1 {
-            if let stepInfo = Utility.shared.GetAffiliateUserStep?.stepInfo{
-                switch stepInfo{
-                case StepInfo.None.rawValue:
-                    cell.profileSettingLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"BecomeAffiliateMarketer") ?? "Become a Affiliate Marketer")"
-                    cell.iconImage.image =  #imageLiteral(resourceName: "switch-to-travelling-25")
-                    break
-                case StepInfo.Account.rawValue:
-                    break
-                case StepInfo.Website.rawValue:
-                    break
-                case StepInfo.Documents.rawValue:
-                    break
-                case StepInfo.Success.rawValue:
-                    break
-                default:
-                    break
-                }
-            }
+            cell.profileSettingLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"BecomeAffiliateMarketer") ?? "Become a Affiliate Marketer")"
+            cell.iconImage.image =  #imageLiteral(resourceName: "switch-to-travelling-25")
         }
         
         
@@ -571,7 +551,10 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
                     
                 }
             }else{
-                
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "AffiliateRegistration") as! AffiliateRegistration
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true, completion: nil)
             }
         } else{
             self.offlineView.isHidden = false
@@ -720,7 +703,8 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         }
         Utility.shared.TotalFilterCount = 0
         
-   //     Utility.shared.ProfileAPIArray = GetProfileQuery.Data.UserAccount.Result
+//        Utility.shared.ProfileAPIArray = PTProAPI.GetProfileQuery.Data.UserAccount.Result?
+        
         Utility.shared.userName  =  ""
         Utility.shared.pickedimageString = ""
         self.userlogoutAPICall()
@@ -886,54 +870,22 @@ func currencyAPICall()
     func getAffiliateUserStepAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-//            let affiliateUserQuery = GetAffiliateUserStepQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""))
-//            Network.shared.apollo_headerClient.fetch(query: affiliateUserQuery){ response in
-//                switch response {
-//                case .success(let result):
-//                    if let status = result.data?.getAffiliateUserStep?.status,status == 200{
-//                        
-//                    }else{
-//                        self.view.makeToast(result.data?.getAffiliateUserStep?.errorMessage)
-//                    }
-//                    Utility.shared.currencyDataArray = ((result.data?.getCurrencies?.results)!) as! [GetCurrenciesListQuery.Data.GetCurrencies.Result]
-//                    Utility.shared.currencyvalue = Utility.shared.currencyDataArray.first!.symbol != nil ?
-//                    Utility.shared.currencyDataArray.first!.symbol! : ""
-//                case .failure(let error):
-//                    self.view.makeToast(error.localizedDescription)
-//                }
-//            }
-            
-            
-            let parameters = "{\"query\":\"query getAffiliateUserStep($userId:String) {\\r\\n  getAffiliateUserStep(userId: $userId) {\\r\\n    status\\r\\n    errorMessage\\r\\n    stepInfo\\r\\n    stepDetails {\\r\\n      userId\\r\\n      payeeName\\r\\n      address\\r\\n      city\\r\\n      state\\r\\n      zipcode\\r\\n      country\\r\\n      phoneNumber\\r\\n      websiteName\\r\\n      websiteUrl\\r\\n      typesOfWebsite\\r\\n      primryJoining\\r\\n      websiteVisitors\\r\\n      buildLinks\\r\\n      websiteMonitize\\r\\n    }\\r\\n  }\\r\\n}\\r\\n\",\"variables\":{\"userId\":\"\(Utility.shared.ProfileAPIArray?.userId ?? "")\"}}"
-            let postData = parameters.data(using: .utf8)
-
-            var request = URLRequest(url: URL(string: "http://ptpro.paperbirdtech.com:4000/graphql")!,timeoutInterval: Double.infinity)
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.addValue("lang=en-US", forHTTPHeaderField: "Cookie")
-
-            request.httpMethod = "POST"
-            request.httpBody = postData
-
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-              guard let data = data else {
-                print(String(describing: error))
-                return
-              }
-                do {
-                    if let dic = try JSONSerialization.jsonObject(with: data, options: []) as? [String: AnyHashable]{
-                        Utility.shared.GetAffiliateUserStep = .init(_dataDict: DataDict(data:  dic, fulfilledFragments: []))
+            let affiliateUserQuery = PTProAPI.GetAffiliateUserStepQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""))
+            Network.shared.apollo_headerClient.fetch(query: affiliateUserQuery){ response in
+                switch response {
+                case .success(let result):
+                    if let status = result.data?.getAffiliateUserStep?.status,status == 200{
+                        if let GetAffiliateUserStep = result.data?.getAffiliateUserStep{
+                            Utility.shared.GetAffiliateUserStep = GetAffiliateUserStep
+                        }
                         self.intializeAffiliateRegistration()
                     }else{
-                        self.intializeAffiliateRegistration()
+                        self.view.makeToast(result.data?.getAffiliateUserStep?.errorMessage)
                     }
-                } catch {
-                    print(error.localizedDescription)
-                    self.intializeAffiliateRegistration()
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
             }
-
-            task.resume()
-
         }else{
             self.offlineView.isHidden = false
             let shadowSize2 : CGFloat = 3.0
@@ -959,7 +911,7 @@ func currencyAPICall()
         if let stepInfo = Utility.shared.GetAffiliateUserStep?.stepInfo as? String{
             switch stepInfo{
             case StepInfo.None.rawValue:
-                
+
                 break
             case StepInfo.Account.rawValue:
                 break
@@ -972,6 +924,7 @@ func currencyAPICall()
             default:
                 break
             }
+            self.profileTable.reloadData()
         }else{
             
         }

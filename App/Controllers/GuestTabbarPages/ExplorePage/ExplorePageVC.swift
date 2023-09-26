@@ -554,13 +554,7 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
     }
     func checkApolloStatus()
     {
-        if((Utility.shared.getCurrentUserToken()) != nil)
-        {
-        }
-        else{
-            apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
-        }
-        
+        apollo_headerClient = Network.shared.apollo_headerClient
     }
     override func viewWillAppear(_ animated: Bool) {
         self.mostViewedCOllectionView.hideSkeleton()
@@ -596,10 +590,8 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
 func checkForUpdate(){
     
     let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-    let appVersionUpdate = PTProAPI.GetApplicationVersionInfoQuery(appType: "iosVersion", version: currentVersion)
-    
-    
-    apollo.fetch(query: appVersionUpdate){ response in
+    let appVersionUpdate = PTProAPI.GetApplicationVersionInfoQuery(appType: "iosVersion", version: currentVersion)    
+    Network.shared.apollo_headerClient.fetch(query: appVersionUpdate){ response in
         switch response {
         case .success(let result):
             if result != nil{
@@ -2597,7 +2589,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
                         
                         self.recommendedTotalPage  = (self.recommendListingArray.count - 1)
                         recommendedPageControl.pageIndicatorTintColor = UIColor(named: "Review_Page_Line_Color")!
-                        recommendedPageControl.currentPageIndicatorTintColor = Theme.Button_BG
+       //                 recommendedPageControl.currentPageIndicatorTintColor = Theme.Button_BG
                         recommendedPageControl.numberOfPages = self.recommendedTotalPage
                         recommendedPageControl.setCurrentPage(at: 0)
                         let config = FlexiblePageControl.Config(

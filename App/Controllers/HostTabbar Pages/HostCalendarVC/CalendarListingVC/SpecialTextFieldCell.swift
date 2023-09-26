@@ -7,7 +7,7 @@
 //
 
 import UIKit
-protocol SpecialTextFieldCellDelegate: class {
+protocol SpecialTextFieldCellDelegate: AnyObject {
     func didChangeText(text: String?, cell: SpecialTextFieldCell)
 }
 

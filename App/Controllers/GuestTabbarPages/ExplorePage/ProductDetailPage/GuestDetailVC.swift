@@ -10,14 +10,13 @@ import UIKit
 import Cosmos
 import GoogleMaps
 import GooglePlaces
-import GooglePlacePicker
 import SKPhotoBrowser
 import Apollo
 import Lottie
 import SDWebImage
 import ISPageControl
 
-protocol GuestDetailVCDelegate: class {
+protocol GuestDetailVCDelegate: AnyObject {
     func removeWhishlistAPICall()
 }
 
@@ -175,6 +174,7 @@ class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             moreBtn.isHidden = true
             
         }
+        apollo_headerClient = Network.shared.apollo_headerClient
     }
     
     func APIMethodCall(listId:Int, status:Bool) {

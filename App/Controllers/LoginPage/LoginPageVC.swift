@@ -91,7 +91,7 @@ class LoginPageVC: UIViewController {
             // Fallback on earlier versions
         }
         print("Button Constraints \(Gobtn_Constraints)")
-        Gobtn_Constraints.isActive = true
+     //   Gobtn_Constraints.isActive = true
         //self.signinView.layer.add(rightToLeftTransition, forKey: "rightToLeftTransition")
     signinView.frame = CGRect(x: 0, y: 0, width: FULLWIDTH, height: FULLHEIGHT)
         //self.signinView.applyGradient(colours:Theme.LOGIN_GRADIENT_PRIMARY_COLOR)
@@ -323,9 +323,8 @@ class LoginPageVC: UIViewController {
     
     func checkLoginAPI()
     {
-        let loginquery = PTProAPI.LoginQuery(email: emailTF.text!, password: passwordTF.text!, deviceType:"iOS", deviceDetail: "", deviceId:Utility.shared.pushnotification_devicetoken)
-        let apollo = ApolloClient(url: URL(string:graphQLEndpoint)!)
-        apollo.fetch(query: loginquery,cachePolicy:.fetchIgnoringCacheData) {  response in
+        let loginquery = PTProAPI.LoginQuery(email: emailTF.text!, password: passwordTF.text!, deviceType:"iOS", deviceDetail: .some(""), deviceId: "" )
+        Network.shared.apollo_headerClient.fetch(query: loginquery,cachePolicy:.fetchIgnoringCacheData) {  response in
             switch response {
             case .success(let result):
                 if let data = result.data?.userLogin?.status,data == 200 {

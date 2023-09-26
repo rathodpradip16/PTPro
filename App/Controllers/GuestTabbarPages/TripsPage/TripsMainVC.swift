@@ -13,6 +13,7 @@ import SwiftMessages
 import Cheers
 import SkeletonView
 import MessageUI
+import FTPopOverMenu_Swift
 
 class TripsMainVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate, SkeletonTableViewDataSource,MFMailComposeViewControllerDelegate{
     
@@ -126,13 +127,7 @@ class TripsMainVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UI
     }
     func checkApolloStatus()
     {
-        if((Utility.shared.getCurrentUserToken()) != nil && (Utility.shared.getCurrentUserToken() != ""))
-        {
-        }
-        else{
-            apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
-        }
-        
+        apollo_headerClient = Network.shared.apollo_headerClient
     }
     func lottieAnimation(){
         lottieView = LottieAnimationView.init(name:"animation")

@@ -17,12 +17,9 @@ import SwiftMessages
 import GoogleSignIn
 import Apollo
 import FBSDKLoginKit
+import FTPopOverMenu_Swift
 
 class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDataSource,UIPickerViewDelegate{
-   
-   
-    
-    
     
     //****************************************************** IBOUTLET CONNECTIONS **********************************************************>
     
@@ -1590,7 +1587,7 @@ func facebookVerifyAPICall(){
         
         self.lottieAnimation()
         let checkemail = PTProAPI.CheckEmailExistsQuery(email:currentTF.text!)
-        apollo.fetch(query: checkemail){  response in
+        Network.shared.apollo_headerClient.fetch(query: checkemail){  response in
             switch response {
             case .success(let result):
                 if let data = result.data?.validateEmailExist?.status,data == 200 {

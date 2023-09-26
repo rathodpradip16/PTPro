@@ -130,7 +130,8 @@ PODS:
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesSwift (~> 2.1)
   - FlexiblePageControl (1.0.8)
-  - FTPopOverMenu_Swift (0.1.4)
+  - FTPopOverMenu (2.1.3)
+  - FTPopOverMenu_Swift (0.4.3)
   - GoogleAppMeasurement (10.15.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.15.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
@@ -155,16 +156,12 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleMaps (3.1.0):
-    - GoogleMaps/Maps (= 3.1.0)
-  - GoogleMaps/Base (3.1.0)
-  - GoogleMaps/Maps (3.1.0):
+  - GoogleMaps (7.4.0):
+    - GoogleMaps/Maps (= 7.4.0)
+  - GoogleMaps/Base (7.4.0)
+  - GoogleMaps/Maps (7.4.0):
     - GoogleMaps/Base
-  - GooglePlacePicker (3.1.0):
-    - GoogleMaps (= 3.1.0)
-    - GooglePlaces (= 3.1.0)
-  - GooglePlaces (3.1.0):
-    - GoogleMaps/Base (= 3.1.0)
+  - GooglePlaces (7.4.0)
   - GoogleSignIn (7.0.0):
     - AppAuth (~> 1.5)
     - GTMAppAuth (< 3.0, >= 1.3)
@@ -262,19 +259,19 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
-  - PayPalCheckout (1.1.0)
+  - NKVPhonePicker (2.1.1)
   - PromisesObjC (2.3.1)
   - PromisesSwift (2.3.1):
     - PromisesObjC (= 2.3.1)
   - RangeSeekSlider (1.8.0)
   - SCPageControl (0.4.0)
-  - SDWebImage (5.12.6):
-    - SDWebImage/Core (= 5.12.6)
-  - SDWebImage/Core (5.12.6)
+  - SDWebImage (5.18.2):
+    - SDWebImage/Core (= 5.18.2)
+  - SDWebImage/Core (5.18.2)
   - Shimmer (1.0.2)
   - ShimmerEffect-iOS (1.3)
   - ShimmerSwift (2.1.1)
-  - Siren (5.5.1)
+  - Siren (6.1.2)
   - SkeletonView (1.30.4)
   - SKPhotoBrowser (7.1.0)
   - SnapKit (5.6.0)
@@ -323,27 +320,27 @@ DEPENDENCIES:
   - Firebase/Crashlytics
   - Firebase/Messaging
   - FlexiblePageControl
-  - FTPopOverMenu_Swift (~> 0.1.4)
+  - FTPopOverMenu
+  - FTPopOverMenu_Swift
   - GoogleMaps
-  - GooglePlacePicker
   - GooglePlaces
   - GoogleSignIn
   - GrowingTextView
   - IQKeyboardManagerSwift
-  - ISPageControl (~> 0.1.0)
+  - ISPageControl
   - JJFloatingActionButton
   - JXPageControl
   - lottie-ios
   - MaterialComponents/Buttons
   - MKToolTip
-  - PayPalCheckout
+  - NKVPhonePicker
   - RangeSeekSlider
   - SCPageControl
-  - SDWebImage (~> 5.12.0)
-  - Shimmer (~> 1.0.2)
+  - SDWebImage
+  - Shimmer
   - ShimmerEffect-iOS
   - ShimmerSwift
-  - Siren (~> 5.5.1)
+  - Siren
   - SkeletonView
   - SKPhotoBrowser
   - StepIndicator
@@ -378,11 +375,11 @@ SPEC REPOS:
     - FirebaseMessaging
     - FirebaseSessions
     - FlexiblePageControl
+    - FTPopOverMenu
     - FTPopOverMenu_Swift
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleMaps
-    - GooglePlacePicker
     - GooglePlaces
     - GoogleSignIn
     - GoogleUtilities
@@ -399,7 +396,7 @@ SPEC REPOS:
     - MDFTextAccessibility
     - MKToolTip
     - nanopb
-    - PayPalCheckout
+    - NKVPhonePicker
     - PromisesObjC
     - PromisesSwift
     - RangeSeekSlider
@@ -448,12 +445,12 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 0c0ae1eb722ef0c07f7801e5ded8dccd1357d6d4
   FirebaseSessions: ee59a7811bef4c15f65ef6472f3210faa293f9c8
   FlexiblePageControl: 07f7765054f16b3f0bc3f14dfd95ab5f45817ea4
-  FTPopOverMenu_Swift: e4cafd1085d8125339c710fa9e53477fd615b1e2
+  FTPopOverMenu: ddfbc47d626fb5ad34558b150e5b40070c53af59
+  FTPopOverMenu_Swift: 85ac1c04b04f6b4ac394414602c6a71ef3f66cc2
   GoogleAppMeasurement: 722db6550d1e6d552b08398b69a975ac61039338
   GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
-  GoogleMaps: 5c13302e6fe6bb6e686b267196586b91cd594225
-  GooglePlacePicker: fa975116ac202ac29822c0a79758ea1c4db5a95f
-  GooglePlaces: e874db179f2675c4f3eeda0b686b540273a578b0
+  GoogleMaps: 032f676450ba0779bd8ce16840690915f84e57ac
+  GooglePlaces: 544e908d94860bf6f8fc1865b80d2c7eb6b5f937
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
   GoogleUtilities: 13e2c67ede716b8741c7989e26893d151b2b2084
   GrowingTextView: 876bf42005b5e4a4fd740597db12caaf41f0fe6c
@@ -469,16 +466,16 @@ SPEC CHECKSUMS:
   MDFTextAccessibility: f4bb4cc2194286651b59a215fdeaa0e05dc90ba5
   MKToolTip: 69509b1cada10f96bd9f4ab559a768e7c6557933
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  PayPalCheckout: ec442f9026c4ec6eee58f768b3cfd81c0ff569bf
+  NKVPhonePicker: c71b3e8e53ce74e0b4e4d5c5adf54cbb3dd16fd8
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
   RangeSeekSlider: 650b11fa1edcb92e1e0ede797669d98622570fb5
   SCPageControl: 8a8dfbba7d7d8c66487a317cb4c4578a7e4af27a
-  SDWebImage: a47aea9e3d8816015db4e523daff50cfd294499d
+  SDWebImage: c0de394d7cf7f9838aed1fd6bb6037654a4572e4
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
   ShimmerEffect-iOS: b07f4b6c5d5653a69491366a1d4667f109208f9e
   ShimmerSwift: f7ed2daf9c246de8299dfd9e12c6ab465cba9842
-  Siren: 645909bdb55ace938ea73a85942acb5a88494284
+  Siren: c951ae243b57160629fb2e4d2f630cbfc5d5452b
   SkeletonView: 5a050f6411e697abd4cda0a8d767013399dccd69
   SKPhotoBrowser: cd95b95a6f352fc2a50992721299f75ead77f9ab
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
@@ -495,6 +492,6 @@ SPEC CHECKSUMS:
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   WHTabbar: add14cb164535a8e5db2068c85a6c523345b681f
 
-PODFILE CHECKSUM: 5658886c3d4a4ead793ef11c62326d67a23efe3b
+PODFILE CHECKSUM: 482a20ee5068d11b1a60d1ad9983a8e2efeed4d4
 
 COCOAPODS: 1.12.1

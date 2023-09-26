@@ -106,7 +106,7 @@ public class FTPopOverMenu: NSObject, FTPopOverMenuViewDelegate {
         self.done = done
         self.cancel = cancel
         
-        UIApplication.shared.keyWindow?.addSubview(self.backgroundView)
+        UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.addSubview(self.backgroundView)
         self.adjustPostionForPopOverMenu()
     }
     

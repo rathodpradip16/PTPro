@@ -539,7 +539,8 @@ class LanguageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                 selectedAppearanceArray.add(appearanceArray[indexPath.row].lowercased())
                 //selectedLanguageArray.add(Utility.shared.LanguageDataArray[indexPath.row].label!)
             }
-            let window = UIApplication.shared.keyWindow
+            
+            let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
             if indexPath.row == 0{
                 if #available(iOS 13.0, *) {
                     if UITraitCollection.current.userInterfaceStyle == .dark {

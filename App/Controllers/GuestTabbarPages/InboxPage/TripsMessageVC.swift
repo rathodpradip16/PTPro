@@ -44,13 +44,7 @@ class TripsMessageVC: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     func checkApolloStatus()
     {
-        if((Utility.shared.getCurrentUserToken()) != nil)
-        {
-        }
-        else{
-            apollo_headerClient = ApolloClient(url: URL(string:graphQLEndpoint)!)
-        }
-        
+        apollo_headerClient = Network.shared.apollo_headerClient
     }
     override func viewWillAppear(_ animated: Bool) {
         Utility.shared.timer.invalidate()

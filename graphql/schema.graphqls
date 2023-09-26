@@ -74,7 +74,7 @@ type Query {
   getPopularLocations: PopularLocationCommonType
   getApplicationVersionInfo(appType: String!, version: String!): SiteSettingsCommon
   getcouponuse(userId: String, couponCode: String, listId: Int): Couponmanager
-  getHostSuggested(userId: String, currentPage: Int, lat: Float, lng: Float, priceRange: [Int]): HostSuggested
+  getHostSuggested(userId: String, currentPage: Int, lat: Float, lng: Float, priceRange: [Int], review: String): HostSuggested
   getcouponcode(userId: String, couponType: String, listId: Int, subscriptionType: String): Couponmanager
 }
 
@@ -1603,6 +1603,7 @@ type Getcoupon {
 
 type HostSuggested {
   userId: String
+  review: String
   count: Int
   checkIn: String
   checkOut: String
