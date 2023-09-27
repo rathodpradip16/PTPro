@@ -539,7 +539,6 @@ class WelcomePageVC: UIViewController  {
     
     func initialSetup()
     {
-        
         closeBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey: "Skip") ?? "Skip")", for: .normal)
         closeBtn.setTitleColor(UIColor(named: "Title_Header"), for: .normal)
         closeBtn.layer.borderColor = UIColor(named: "text_borderColor")?.cgColor

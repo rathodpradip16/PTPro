@@ -8,7 +8,7 @@ extension PTProAPI {
     static let operationName: String = "getAffiliateUserStep"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query getAffiliateUserStep($userId: String) { getAffiliateUserStep(userId: $userId) { __typename status errorMessage stepInfo stepDetails { __typename userId payeeName address city state zipcode country phoneNumber websiteName websiteUrl typesOfWebsite primryJoining websiteVisitors buildLinks websiteMonitize } } }"#
+        #"query getAffiliateUserStep($userId: String) { getAffiliateUserStep(userId: $userId) { __typename status errorMessage stepInfo stepDetails { __typename userId payeeName address city state zipcode country phoneNumber websiteName websiteUrl typeList websiteDrive typesOfWebsite primryJoining websiteVisitors buildLinks websiteMonitize } } }"#
       ))
 
     public var userId: GraphQLNullable<String>
@@ -71,6 +71,8 @@ extension PTProAPI {
             .field("phoneNumber", String?.self),
             .field("websiteName", String?.self),
             .field("websiteUrl", String?.self),
+            .field("typeList", String?.self),
+            .field("websiteDrive", String?.self),
             .field("typesOfWebsite", String?.self),
             .field("primryJoining", String?.self),
             .field("websiteVisitors", String?.self),
@@ -88,6 +90,8 @@ extension PTProAPI {
           var phoneNumber: String? { __data["phoneNumber"] }
           var websiteName: String? { __data["websiteName"] }
           var websiteUrl: String? { __data["websiteUrl"] }
+          var typeList: String? { __data["typeList"] }
+          var websiteDrive: String? { __data["websiteDrive"] }
           var typesOfWebsite: String? { __data["typesOfWebsite"] }
           var primryJoining: String? { __data["primryJoining"] }
           var websiteVisitors: String? { __data["websiteVisitors"] }

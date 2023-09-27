@@ -239,22 +239,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C2E74AA9-B128-4CB4-ADBA-77C141E02F05"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "App/Controllers/WelcomePage/WelcomePageVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "543"
-            endingLineNumber = "543"
-            landmarkName = "initialSetup()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "1FEBCE90-C789-4A95-87D4-CBCE31AEAE14"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -262,11 +246,26 @@
             filePath = "App/Controllers/WelcomePage/WelcomePageVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1092"
-            endingLineNumber = "1092"
+            startingLineNumber = "1091"
+            endingLineNumber = "1091"
             landmarkName = "authorizationController(controller:didCompleteWithAuthorization:)"
             landmarkType = "7">
             <Locations>
+               <Location
+                  uuid = "1FEBCE90-C789-4A95-87D4-CBCE31AEAE14 - 5aa721214d9de52d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "App.WelcomePageVC.authorizationController(controller: __C.ASAuthorizationController, didCompleteWithAuthorization: __C.ASAuthorization) -&gt; ()"
+                  moduleName = "App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/WelcomePage/WelcomePageVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1091"
+                  endingLineNumber = "1091"
+                  offsetFromSymbolStart = "6648">
+               </Location>
                <Location
                   uuid = "1FEBCE90-C789-4A95-87D4-CBCE31AEAE14 - 80b9779b2492ffd3"
                   shouldBeEnabled = "Yes"
@@ -283,7 +282,7 @@
                   offsetFromSymbolStart = "216">
                </Location>
                <Location
-                  uuid = "1FEBCE90-C789-4A95-87D4-CBCE31AEAE14 - 80b9779b2492ffd3"
+                  uuid = "1FEBCE90-C789-4A95-87D4-CBCE31AEAE14 - 80b9779b2492ff30"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -293,12 +292,27 @@
                   urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/WelcomePage/WelcomePageVC.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1093"
-                  endingLineNumber = "1093"
+                  startingLineNumber = "1092"
+                  endingLineNumber = "1092"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "1FEBCE90-C789-4A95-87D4-CBCE31AEAE14 - 80b9779b2492ff30"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.SocialLoginQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.WelcomePageVC.authorizationController(controller: __C.ASAuthorizationController, didCompleteWithAuthorization: __C.ASAuthorization) -&gt; ()"
+                  moduleName = "App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/WelcomePage/WelcomePageVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1092"
+                  endingLineNumber = "1092"
                   offsetFromSymbolStart = "252">
                </Location>
                <Location
-                  uuid = "1FEBCE90-C789-4A95-87D4-CBCE31AEAE14 - 80b9779b2492ffd3"
+                  uuid = "1FEBCE90-C789-4A95-87D4-CBCE31AEAE14 - 80b9779b2492ff30"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -308,8 +322,8 @@
                   urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/WelcomePage/WelcomePageVC.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1093"
-                  endingLineNumber = "1093"
+                  startingLineNumber = "1092"
+                  endingLineNumber = "1092"
                   offsetFromSymbolStart = "8928">
                </Location>
             </Locations>
@@ -325,10 +339,42 @@
             filePath = "App/Controllers/WelcomePage/WelcomePageVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "811"
-            endingLineNumber = "811"
+            startingLineNumber = "810"
+            endingLineNumber = "810"
             landmarkName = "sign(_:didSignInFor:withError:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "C9F6128C-1AF3-4922-8FF1-3B52C77C6899 - b58d8902e91ba009"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.SocialLoginQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.WelcomePageVC.sign(_: Swift.Optional&lt;__C.GIDSignIn&gt;, didSignInFor: Swift.Optional&lt;__C.GIDGoogleUser&gt;, withError: Swift.Optional&lt;Swift.Error&gt;) -&gt; ()"
+                  moduleName = "App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/WelcomePage/WelcomePageVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "810"
+                  endingLineNumber = "810"
+                  offsetFromSymbolStart = "6992">
+               </Location>
+               <Location
+                  uuid = "C9F6128C-1AF3-4922-8FF1-3B52C77C6899 - b58d8902e91ba009"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.SocialLoginQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.WelcomePageVC.sign(_: Swift.Optional&lt;__C.GIDSignIn&gt;, didSignInFor: Swift.Optional&lt;__C.GIDGoogleUser&gt;, withError: Swift.Optional&lt;Swift.Error&gt;) -&gt; ()"
+                  moduleName = "App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/WelcomePage/WelcomePageVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "810"
+                  endingLineNumber = "810"
+                  offsetFromSymbolStart = "7044">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

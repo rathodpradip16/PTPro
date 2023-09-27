@@ -28,7 +28,7 @@ type Query {
   getListingDetails(listId: String!, preview: Boolean): AllListing
   getSimilarListing(lat: Float, lng: Float, listId: Int, limit: Int): AllList
   getReviews(listId: Int, currentPage: Int, hostId: String!): AllReview
-  SearchListing(userId: String, personCapacity: Int, dates: String, currentPage: Int, lat: Float, lng: Float, roomType: [Int], bedrooms: Int, bathrooms: Int, beds: Int, amenities: [Int], spaces: [Int], houseRules: [Int], priceRange: [Int], geography: String, bookingType: String, geoType: String, address: String, currency: String, checkIn: String, checkOut: String, city: String): SearchListing
+  SearchListing(personCapacity: Int, dates: String, currentPage: Int, lat: Float, lng: Float, roomType: [Int], bedrooms: Int, bathrooms: Int, beds: Int, amenities: [Int], spaces: [Int], houseRules: [Int], priceRange: [Int], geography: String, bookingType: String, geoType: String, address: String, currency: String): SearchListing
   dateAvailability(listId: Int!, startDate: String!, endDate: String!): DateAvailabilityType
   getListingSettingsCommon(step: String): listingSettingCommonTypes
   getAllReservation(userType: String, currentPage: Int, dateFilter: String): AllReservation
@@ -1604,6 +1604,7 @@ type Getcoupon {
 type HostSuggested {
   userId: String
   review: String
+  aaddress: String
   count: Int
   checkIn: String
   checkOut: String
@@ -1651,7 +1652,7 @@ type Mutation {
   AddPhoneNumber(countryCode: String!, phoneNumber: String!): UserAccount
   RemovePhoneNumber: UserAccount
   EmailVerification(token: String!, email: String!): AllEmailToken
-  createSubscriptionPayment(userId: String, total: Float!, paymentType: Int, planId: Int, cardToken: String, paymentCurrency: String, currency: String!, planType: String, couponCode: String, totaldiscount: Float): subscriptionPaymentType
+  createSubscriptionPayment(userId: String, total: Float!, paymentType: Int, planId: Int, cardToken: String, paymentCurrency: String, currency: String, planType: String, couponCode: String, totaldiscount: Float): subscriptionPaymentType
   VerifyPhoneNumber(verificationCode: Int!): UserAccount
   SocialVerification(verificationType: String!, actionType: String!): SocialVerification
   createListing(listId: Int, roomType: String, houseType: String, residenceType: String, bedrooms: String, buildingSize: String, bedType: String, beds: Int, personCapacity: Int, bathrooms: Float, bathroomType: String, country: String, street: String, buildingName: String, city: String, state: String, zipcode: String, lat: Float, lng: Float, bedTypes: String, isMapTouched: Boolean, amenities: [Int], safetyAmenities: [Int], spaces: [Int]): ListingResponse

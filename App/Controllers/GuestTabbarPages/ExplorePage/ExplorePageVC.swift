@@ -781,8 +781,8 @@ func checkForUpdate(){
         
         
         guestBtn.frame = CGRect(x:(self.dateBtn.frame.origin.x+self.dateBtn.frame.size.width + 10), y: 10, width:110, height: 33)
-        guestBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"guest"))!)", for: .normal)
-        guestBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"guest"))!)", for: .selected)
+        guestBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"guest")) ?? "")", for: .normal)
+        guestBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"guest")) ?? "")", for: .selected)
         guestBtn.setTitleColor(Theme.TextDarkColor, for: .normal)
         guestBtn.setTitleColor(Theme.TextDarkColor, for: .selected)
         guestBtn.layer.borderColor = Theme.TextBorderColor.cgColor

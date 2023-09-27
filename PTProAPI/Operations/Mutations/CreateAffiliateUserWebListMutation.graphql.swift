@@ -5,10 +5,10 @@
 
 extension PTProAPI {
   class CreateAffiliateUserWebListMutation: GraphQLMutation {
-    static let operationName: String = "createAffiliateUserWebList"
+    static let operationName: String = "CreateAffiliateUserWebList"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"mutation createAffiliateUserWebList($userId: String, $websiteName: String, $websiteUrl: String, $websiteAbout: String, $typeList: String, $websiteDrive: String, $primryJoining: String, $websiteVisitors: String, $buildLinks: String, $websiteMonitize: String) { createAffiliateUserWebList( userId: $userId websiteName: $websiteName websiteUrl: $websiteUrl websiteAbout: $websiteAbout typeList: $typeList websiteDrive: $websiteDrive primryJoining: $primryJoining websiteVisitors: $websiteVisitors buildLinks: $buildLinks websiteMonitize: $websiteMonitize ) { __typename status errorMessage } }"#
+        #"mutation CreateAffiliateUserWebList($userId: String, $websiteName: String, $websiteUrl: String, $websiteAbout: String, $typeList: String, $websiteDrive: String, $typesOfWebsite: String, $primryJoining: String, $websiteVisitors: String, $buildLinks: String, $websiteMonitize: String) { createAffiliateUserWebList( userId: $userId websiteName: $websiteName websiteUrl: $websiteUrl websiteAbout: $websiteAbout typeList: $typeList websiteDrive: $websiteDrive typesOfWebsite: $typesOfWebsite primryJoining: $primryJoining websiteVisitors: $websiteVisitors buildLinks: $buildLinks websiteMonitize: $websiteMonitize ) { __typename status errorMessage } }"#
       ))
 
     public var userId: GraphQLNullable<String>
@@ -17,6 +17,7 @@ extension PTProAPI {
     public var websiteAbout: GraphQLNullable<String>
     public var typeList: GraphQLNullable<String>
     public var websiteDrive: GraphQLNullable<String>
+    public var typesOfWebsite: GraphQLNullable<String>
     public var primryJoining: GraphQLNullable<String>
     public var websiteVisitors: GraphQLNullable<String>
     public var buildLinks: GraphQLNullable<String>
@@ -29,6 +30,7 @@ extension PTProAPI {
       websiteAbout: GraphQLNullable<String>,
       typeList: GraphQLNullable<String>,
       websiteDrive: GraphQLNullable<String>,
+      typesOfWebsite: GraphQLNullable<String>,
       primryJoining: GraphQLNullable<String>,
       websiteVisitors: GraphQLNullable<String>,
       buildLinks: GraphQLNullable<String>,
@@ -40,6 +42,7 @@ extension PTProAPI {
       self.websiteAbout = websiteAbout
       self.typeList = typeList
       self.websiteDrive = websiteDrive
+      self.typesOfWebsite = typesOfWebsite
       self.primryJoining = primryJoining
       self.websiteVisitors = websiteVisitors
       self.buildLinks = buildLinks
@@ -53,6 +56,7 @@ extension PTProAPI {
       "websiteAbout": websiteAbout,
       "typeList": typeList,
       "websiteDrive": websiteDrive,
+      "typesOfWebsite": typesOfWebsite,
       "primryJoining": primryJoining,
       "websiteVisitors": websiteVisitors,
       "buildLinks": buildLinks,
@@ -72,6 +76,7 @@ extension PTProAPI {
           "websiteAbout": .variable("websiteAbout"),
           "typeList": .variable("typeList"),
           "websiteDrive": .variable("websiteDrive"),
+          "typesOfWebsite": .variable("typesOfWebsite"),
           "primryJoining": .variable("primryJoining"),
           "websiteVisitors": .variable("websiteVisitors"),
           "buildLinks": .variable("buildLinks"),

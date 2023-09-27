@@ -43,15 +43,23 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
         super.viewDidLoad()
         self.initializeLocalization()
         self.initializeView()
+        self.initializeText()
      }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        if let parent =  self.parent as? AffiliateRegistration{
-            parent.showAccountView()
+
+    //MARK: - custom methods
+    func initializeText(){
+        if let stepDetails = Utility.shared.GetAffiliateUserStep?.stepDetails?.first{
+            self.txtPayeeName.text = stepDetails?.payeeName ?? ""
+            self.txtAddressLine1.text = stepDetails?.address ?? ""
+            self.txtAddressLine2.text = stepDetails?.address ?? ""
+            self.txtCity.text = stepDetails?.city ?? ""
+            self.txtState.text = stepDetails?.state ?? ""
+            self.txtZipCode.text = stepDetails?.zipcode ?? ""
+            self.txtCountry.text = stepDetails?.country ?? ""
+            self.txtPhoneNumber.text = stepDetails?.phoneNumber ?? ""
         }
     }
     
-    //MARK: - custom methods
     func initializeView(){
         tblCityDataSource = GMSAutocompleteTableDataSource()
         tblCityDataSource.delegate = self
@@ -192,7 +200,6 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
         lblZipCode.text = "\((Utility.shared.getLanguage()?.value(forKey:"zipcode")) ?? "ZIP code / Postal code")"
         lblCountry.text = "\((Utility.shared.getLanguage()?.value(forKey:"country")) ?? "Country")"
         lblPhoneNumber.text = "\((Utility.shared.getLanguage()?.value(forKey:"PhoneNumber")) ?? "Phone number")"
-
     }
 
     //MARK: - CountriesViewControllerDelegate

@@ -22,32 +22,37 @@ class AffiliateRegistration: UIViewController {
     @IBOutlet weak var lblWebsite: UILabel!
     @IBOutlet weak var lblDocument: UILabel!
     
+    @IBOutlet weak var btnBack: UIButton!
+    
+    var viewAccountvc:AffiliateRegistrationAccount?
+    var viewWebsitevc:AffiliateRegistrationWebsite?
+    var viewDocumentvc:AffiliateRegistrationDocument?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if let stepInfo = Utility.shared.GetAffiliateUserStep?.stepInfo{
-            self.viewAccount.isHidden = true
-            self.viewWebsite.isHidden = true
-            self.viewDocumnet.isHidden = true
             switch stepInfo{
             case StepInfo.None.rawValue:
-                self.viewAccount.isHidden = false
+                self.showAccountView()
                 break
             case StepInfo.Account.rawValue:
-                self.viewAccount.isHidden = false
+                self.showWebsiteview()
                 break
             case StepInfo.Website.rawValue:
-                self.viewWebsite.isHidden = false
+                self.showWebsiteview()
                 break
             case StepInfo.Documents.rawValue:
-                self.viewDocumnet.isHidden = false
+                self.showWebsiteview()
                 break
             case StepInfo.Success.rawValue:
-                self.viewAccount.isHidden = false
+                self.showAccountView()
                 break
             default:
-                self.viewAccount.isHidden = false
+                self.showAccountView()
                 break
             }
+        }else{
+            self.showAccountView()
         }
         // Do any additional setup after loading the view.
     }
@@ -84,19 +89,17 @@ class AffiliateRegistration: UIViewController {
         self.viewWebsite.isHidden = true
         self.viewDocumnet.isHidden = false
     }
+    
+    @IBAction func onClickBtnBack(_ sender: Any) {
+        self.dismiss(animated: true)
+    }
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-        if segue.identifier == Segues.viewAccount{
-            let viewAccountVC = segue.destination as! AffiliateRegistrationAccount
-        }else if segue.identifier == Segues.viewWebsite{
-            let viewWebsiteVC = segue.destination as! AffiliateRegistrationWebsite
-        }else if segue.identifier == Segues.viewDocumnet{
-            let viewDocumentVC = segue.destination as! AffiliateRegistrationDocument
-        }
+        // Pass the selected object to the new view controller
     }
     
     enum Segues{
