@@ -6,12 +6,12 @@
 //  Created by Jishnu Raj T on 26/04/18.
 //  Copyright © 2018 JRiOSdev. All rights reserved.
 //
+
 import UIKit
-@objc(JRDropDown)
 open class DropDown: UITextField {
     var arrow: Arrow!
     var table: UITableView!
-    var shadow: UIView!
+    var shadoww: UIView!
     public var selectedIndex: Int?
 
     // MARK: IBInspectable
@@ -20,7 +20,7 @@ open class DropDown: UITextField {
     @IBInspectable public var rowBackgroundColor: UIColor = .white
     @IBInspectable public var itemsColor: UIColor = .darkGray
     @IBInspectable public var itemsTintColor: UIColor = .blue
-    @IBInspectable public var selectedRowColor: UIColor = .systemPink
+    @IBInspectable public var selectedRowColor: UIColor = Theme.affiliatePurpleColor
     @IBInspectable public var hideOptionsWhenSelect = true
     @IBInspectable public var isSearchEnable: Bool = true {
         didSet {
@@ -28,9 +28,9 @@ open class DropDown: UITextField {
         }
     }
 
-    @IBInspectable public var borderColor: UIColor = UIColor.lightGray {
+    @IBInspectable public var borderC: UIColor = UIColor.lightGray {
         didSet {
-            layer.borderColor = borderColor.cgColor
+            layer.borderColor = borderC.cgColor
         }
     }
 
@@ -39,15 +39,15 @@ open class DropDown: UITextField {
         }
     }
 
-    @IBInspectable public var borderWidth: CGFloat = 0.0 {
+    @IBInspectable public var borderW: CGFloat = 0.0 {
         didSet {
-            layer.borderWidth = borderWidth
+            layer.borderWidth = borderW
         }
     }
 
-    @IBInspectable public var cornerRadius: CGFloat = 5.0 {
+    @IBInspectable public var cornerR: CGFloat = 5.0 {
         didSet {
-            layer.cornerRadius = cornerRadius
+            layer.cornerRadius = cornerR
         }
     }
 
@@ -221,8 +221,8 @@ open class DropDown: UITextField {
                                           y: pointToParent.y + frame.height,
                                           width: frame.width,
                                           height: frame.height))
-        shadow = UIView(frame: table.frame)
-        shadow.backgroundColor = .clear
+        shadoww = UIView(frame: table.frame)
+        shadoww.backgroundColor = .clear
 
         table.dataSource = self
         table.delegate = self
@@ -231,7 +231,7 @@ open class DropDown: UITextField {
         table.layer.cornerRadius = 3
         table.backgroundColor = rowBackgroundColor
         table.rowHeight = rowHeight
-        parentController?.view.addSubview(shadow)
+        parentController?.view.addSubview(shadoww)
         parentController?.view.addSubview(table)
         isSelected = true
         let height = (parentController?.view.frame.height ?? 0) - (pointToParent.y + frame.height + 5)
@@ -239,7 +239,7 @@ open class DropDown: UITextField {
         if height < (keyboardHeight + tableheightX) {
             y = pointToParent.y - tableheightX
         }
-        UIView.animate(withDuration: 0.9,
+        UIView.animate(withDuration: 0.5,
                        delay: 0,
                        usingSpringWithDamping: 0.4,
                        initialSpringVelocity: 0.1,
@@ -251,8 +251,8 @@ open class DropDown: UITextField {
                                                      width: self.frame.width,
                                                      height: self.tableheightX)
                            self.table.alpha = 1
-                           self.shadow.frame = self.table.frame
-                           self.shadow.dropShadow()
+                           self.shadoww.frame = self.table.frame
+                           self.shadoww.dropShadoww()
                            self.arrow.position = .up
 
                        },
@@ -264,7 +264,7 @@ open class DropDown: UITextField {
 
     public func hideList() {
         TableWillDisappearCompletion()
-        UIView.animate(withDuration: 1.0,
+        UIView.animate(withDuration: 0.5,
                        delay: 0.4,
                        usingSpringWithDamping: 0.9,
                        initialSpringVelocity: 0.1,
@@ -274,13 +274,13 @@ open class DropDown: UITextField {
                                                      y: self.pointToParent.y + self.frame.height,
                                                      width: self.frame.width,
                                                      height: 0)
-                           self.shadow.alpha = 0
-                           self.shadow.frame = self.table.frame
+                           self.shadoww.alpha = 0
+                           self.shadoww.frame = self.table.frame
                            self.arrow.position = .down
                        },
                        completion: { (_) -> Void in
 
-                           self.shadow.removeFromSuperview()
+                           self.shadoww.removeFromSuperview()
                            self.table.removeFromSuperview()
                            self.backgroundView.removeFromSuperview()
                            self.isSelected = false
@@ -313,8 +313,8 @@ open class DropDown: UITextField {
                                                      y: y,
                                                      width: self.frame.width,
                                                      height: self.tableheightX)
-                           self.shadow.frame = self.table.frame
-                           self.shadow.dropShadow()
+                           self.shadoww.frame = self.table.frame
+                           self.shadoww.dropShadoww()
 
                        },
                        completion: { (_) -> Void in
@@ -428,8 +428,11 @@ extension DropDown: UITableViewDataSource {
 
 extension DropDown: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedIndex = (indexPath as NSIndexPath).row
-        let selectedText = dataArray[selectedIndex!]
+        
+        let currentIndex = (indexPath as NSIndexPath).row
+        let selectedText = dataArray[currentIndex]
+        selectedIndex = isSearchEnable ? (optionArray.firstIndex(of: selectedText) ?? currentIndex) : currentIndex // Correct Index For Searched Text
+
         tableView.cellForRow(at: indexPath)?.alpha = 0
         UIView.animate(withDuration: 0.5,
                        animations: { () -> Void in
@@ -531,7 +534,7 @@ class Arrow: UIView {
 }
 
 extension UIView {
-    func dropShadow(scale: Bool = true) {
+    func dropShadoww(scale: Bool = true) {
         layer.masksToBounds = false
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.5

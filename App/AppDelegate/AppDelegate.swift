@@ -363,8 +363,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
             
         }
         
-        
-        
         return true
     }
     

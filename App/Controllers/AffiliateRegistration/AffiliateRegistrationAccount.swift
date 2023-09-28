@@ -10,8 +10,9 @@ import UIKit
 import NKVPhonePicker
 import GooglePlaces
 import IQKeyboardManagerSwift
+import GrowingTextView
 
-class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,CountriesViewControllerDelegate{
+class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,CountriesViewControllerDelegate, UITextViewDelegate{
 
     //MARK: - variable initialization
     @IBOutlet weak var lblPayeeName: UILabel!
@@ -24,8 +25,7 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
     @IBOutlet weak var lblCountry: UILabel!
     @IBOutlet weak var lblPhoneNumber: UILabel!
     @IBOutlet weak var txtPayeeName: CustomUITextField!
-    @IBOutlet weak var txtAddressLine1: CustomUITextField!
-    @IBOutlet weak var txtAddressLine2: CustomUITextField!
+    
     @IBOutlet weak var txtCity: CustomUITextField!
     @IBOutlet weak var txtState: CustomUITextField!
     @IBOutlet weak var txtZipCode: CustomUITextField!
@@ -34,6 +34,9 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
     @IBOutlet weak var btnNext: UIButton!
     @IBOutlet weak var tblCity: UITableView!
     
+    @IBOutlet weak var txtAddressLine1: GrowingTextView!
+    @IBOutlet weak var txtAddressLine2: GrowingTextView!
+
     var returnKeyHandler:IQKeyboardReturnKeyHandler?
 
     private var tblCityDataSource: GMSAutocompleteTableDataSource!
@@ -84,6 +87,9 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
         returnKeyHandler = IQKeyboardReturnKeyHandler(controller: self)
         returnKeyHandler?.lastTextFieldReturnKeyType = .next
         
+        txtAddressLine1.returnKeyType = .default
+        txtAddressLine2.returnKeyType = .default
+
         txtPayeeName.keyboardToolbar.nextBarButton.tag = 0
         txtAddressLine1.keyboardToolbar.nextBarButton.tag = 1
         txtAddressLine2.keyboardToolbar.nextBarButton.tag = 2
@@ -119,24 +125,24 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
                 txtPayeeName.resignFirstResponder()
                 break
             case 1:
-                txtAddressLine1.resignFirstResponder()
                 txtPayeeName.becomeFirstResponder()
+                txtAddressLine1.resignFirstResponder()
                 break
             case 2:
-                txtAddressLine2.resignFirstResponder()
                 txtAddressLine1.becomeFirstResponder()
+                txtAddressLine2.resignFirstResponder()
                 break
             case 3: 
-                txtCity.resignFirstResponder()
                 txtAddressLine2.becomeFirstResponder()
+                txtCity.resignFirstResponder()
                 break
             case 4: 
-                txtZipCode.resignFirstResponder()
                 txtCity.becomeFirstResponder()
+                txtZipCode.resignFirstResponder()
                 break
             case 5: 
-                txtPhoneNumber.resignFirstResponder()
                 txtZipCode.becomeFirstResponder()
+                txtPhoneNumber.resignFirstResponder()
                 break
 
             default: break
@@ -150,24 +156,24 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
             let tag = button.tag
             switch tag{
             case 0:
-                txtPayeeName.resignFirstResponder()
                 txtAddressLine1.becomeFirstResponder()
+                txtPayeeName.resignFirstResponder()
                 break
             case 1:
-                txtAddressLine1.resignFirstResponder()
                 txtAddressLine2.becomeFirstResponder()
+                txtAddressLine1.resignFirstResponder()
                 break
             case 2:
-                txtAddressLine2.resignFirstResponder()
                 txtCity.becomeFirstResponder()
+                txtAddressLine2.resignFirstResponder()
                 break
             case 3:
-                txtCity.resignFirstResponder()
                 txtZipCode.becomeFirstResponder()
+                txtCity.resignFirstResponder()
                 break
             case 4:
-                txtZipCode.resignFirstResponder()
                 txtPhoneNumber.becomeFirstResponder()
+                txtZipCode.resignFirstResponder()
                 break
             case 5:
                 txtPhoneNumber.resignFirstResponder()
@@ -218,7 +224,7 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
             if(txtPayeeName.isEmpty())
             {
                 self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"enterPayeeName")) ?? "Please Enter Payee Name")")
-            }else if(txtAddressLine1.isEmpty() || txtAddressLine2.isEmpty())
+            }else if(txtAddressLine1.text.isEmpty || txtAddressLine2.text.isEmpty)
             {
                 self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"enterAddress")) ?? "Please Enter Address")")
             }

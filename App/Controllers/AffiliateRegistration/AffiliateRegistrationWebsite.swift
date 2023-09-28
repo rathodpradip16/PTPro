@@ -8,10 +8,9 @@
 
 import UIKit
 import GrowingTextView
-import iOSDropDown
 
-class AffiliateRegistrationWebsite: UIViewController {
-
+class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
+    //MARK: - variable initialization
     @IBOutlet weak var lblNameOfYourWebsite: UILabel!
     @IBOutlet weak var lblURLYouWillSendTheTraffic: UILabel!
     @IBOutlet weak var lblWhatIsYourWebsiteAccount: UILabel!
@@ -34,13 +33,8 @@ class AffiliateRegistrationWebsite: UIViewController {
     
     
     @IBOutlet weak var btnAmenities: UIButton!
-    @IBOutlet weak var lblAmenities: UILabel!
-    
     @IBOutlet weak var btnCountry: UIButton!
-    @IBOutlet weak var lblCountry: UILabel!
-
     @IBOutlet weak var btnLorem: UIButton!
-    @IBOutlet weak var lblLorem: UILabel!
 
     @IBOutlet weak var btnECommerceWebsite: UIButton!
     @IBOutlet weak var btnBusinessWebsite: UIButton!
@@ -52,17 +46,6 @@ class AffiliateRegistrationWebsite: UIViewController {
     @IBOutlet weak var btnNonprofitWebsite: UIButton!
     @IBOutlet weak var btnInformationalWebsite: UIButton!
     @IBOutlet weak var btnOnlineWebsite: UIButton!
-
-    @IBOutlet weak var lblECommerceWebsite: UILabel!
-    @IBOutlet weak var lblBusinessWebsite: UILabel!
-    @IBOutlet weak var lblBlogWebsite: UILabel!
-    @IBOutlet weak var lblPortfolioWebsite: UILabel!
-    @IBOutlet weak var lblEventWebsite: UILabel!
-    @IBOutlet weak var lblPersonalWebsite: UILabel!
-    @IBOutlet weak var lblMembershipWebsite: UILabel!
-    @IBOutlet weak var lblNonprofitWebsite: UILabel!
-    @IBOutlet weak var lblInformationalWebsite: UILabel!
-    @IBOutlet weak var lblOnlineWebsite: UILabel!
     
     @IBOutlet weak var dropDownWhatTypeOfSiteIsYourWebsite: DropDown!
 
@@ -81,15 +64,35 @@ class AffiliateRegistrationWebsite: UIViewController {
                                        "Informational website":false,
                                        "Online forum":false]
 
-
+    //MARK: - VIEW LIFE CYCLE
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initializeUserData()
         self.initializeBtnTitle()
         self.initializeLocalization()
         self.initializeBtnListData()
+        
+        // The list of array to display. Can be changed dynamically
+        dropDownWhatTypeOfSiteIsYourWebsite.optionArray = ["ECommerce website",
+                                                           "Business website",
+                                                           "Blog website",
+                                                           "Portfolio website",
+                                                           "Event website",
+                                                           "Personal website",
+                                                           "Membership website",
+                                                           "Nonprofit website",
+                                                           "Informational website",
+                                                           "Online forum"]
+        dropDownWhatTypeOfSiteIsYourWebsite.rowHeight = 40
+        dropDownWhatTypeOfSiteIsYourWebsite.listHeight = 200
+        dropDownWhatTypeOfSiteIsYourWebsite.borderC = UIColor.lightGray
+        dropDownWhatTypeOfSiteIsYourWebsite.didSelect{(selectedText , index ,id) in
+            self.dropDownWhatTypeOfSiteIsYourWebsite.text = selectedText
+        }
+        dropDownWhatTypeOfSiteIsYourWebsite.delegate = self
     }
     
+    //MARK: - custom Methods
     func initializeUserData(){
         if let stepDetails = Utility.shared.GetAffiliateUserStep?.stepDetails?.first{
             self.txtNameOfYourWebsite.text = stepDetails?.websiteName ?? ""
@@ -143,9 +146,9 @@ class AffiliateRegistrationWebsite: UIViewController {
     
     func initializeBtnTitle(){
         if #available(iOS 15.0, *) {
-            btnAmenities.configuration?.imagePadding = 10
-            btnCountry.configuration?.imagePadding = 10
-            btnLorem.configuration?.imagePadding = 10
+//            btnAmenities.configuration?.imagePadding = 10
+//            btnCountry.configuration?.imagePadding = 10
+//            btnLorem.configuration?.imagePadding = 10
             btnECommerceWebsite.configuration?.imagePadding = 10
             btnBusinessWebsite.configuration?.imagePadding = 10
             btnBlogWebsite.configuration?.imagePadding = 10
@@ -157,9 +160,9 @@ class AffiliateRegistrationWebsite: UIViewController {
             btnInformationalWebsite.configuration?.imagePadding = 10
             btnOnlineWebsite.configuration?.imagePadding = 10
         } else {
-            btnAmenities.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
-            btnCountry.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
-            btnLorem.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+//            btnAmenities.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+//            btnCountry.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+//            btnLorem.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
             btnECommerceWebsite.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
             btnBusinessWebsite.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
             btnBlogWebsite.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
@@ -186,24 +189,25 @@ class AffiliateRegistrationWebsite: UIViewController {
             lblHowElseDoYouMonetize.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowElseDoYouMonetize")) ?? "How else do you monetize your Website")"
     }
 
-    func initializeDropDown(){
-        dropDownWhatTypeOfSiteIsYourWebsite.optionArray = ["ECommerce Website",
-                                "Business Website",
-                                "Blog Website",
-                                "Portfolio Website",
-                                "Event Website",
-                                "Personal Website",
-                                "Membership Website",
-                                "Nonprofit Website",
-                                "Informational Website",
-                                "Online forum"]
-        //Its Id Values and its optional
-        dropDownWhatTypeOfSiteIsYourWebsite.optionIds = [0,1,2,3,4,5,6,7,8,9]
-        dropDownWhatTypeOfSiteIsYourWebsite.didSelect{(selectedText , index ,id) in
-            self.dropDownWhatTypeOfSiteIsYourWebsite.text = selectedText
-        }
-    }
+//    func initializeDropDown(){
+//        dropDownWhatTypeOfSiteIsYourWebsite.optionArray = ["ECommerce Website",
+//                                "Business Website",
+//                                "Blog Website",
+//                                "Portfolio Website",
+//                                "Event Website",
+//                                "Personal Website",
+//                                "Membership Website",
+//                                "Nonprofit Website",
+//                                "Informational Website",
+//                                "Online forum"]
+//        //Its Id Values and its optional
+//        dropDownWhatTypeOfSiteIsYourWebsite.optionIds = [0,1,2,3,4,5,6,7,8,9]
+//        dropDownWhatTypeOfSiteIsYourWebsite.didSelect{(selectedText , index ,id) in
+//            self.dropDownWhatTypeOfSiteIsYourWebsite.text = selectedText
+//        }
+//    }
     
+    //MARK: - Action Methods
     @IBAction func onClickAmenities(_ sender: UIButton) {
         if(dicSelectedTypeList[sender.titleLabel!.text!]!){
             dicSelectedTypeList[sender.titleLabel!.text!] = false
@@ -271,6 +275,15 @@ class AffiliateRegistrationWebsite: UIViewController {
         }
     }
     
+    //MARK: TExtfiled delegate
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if(textField == dropDownWhatTypeOfSiteIsYourWebsite){
+            self.view.endEditing(true)
+            self.dropDownWhatTypeOfSiteIsYourWebsite.showList()
+            return false
+        }
+        return true
+    }
     //MARK: - API CALL
     func apiCreateAffiliateUserWebList(){
         let createAffiliateUserWebsite = PTProAPI.CreateAffiliateUserWebListMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), websiteName: .some(txtNameOfYourWebsite.text!), websiteUrl: .some(txtURLYouWillSendTheTraffic.text!), websiteAbout: .some(txtWhatIsYourWebsiteAccount.text!), typeList: .some(convertTypeListToString()), websiteDrive: .some(convertDriveWebsiteListToString()), typesOfWebsite: .some(dropDownWhatTypeOfSiteIsYourWebsite.text ?? ""), primryJoining: .some(txtPrimaryReasonForJoining.text!), websiteVisitors: .some(txtHowManyVisitorsShouldYourWebsiteGet.text!), buildLinks: .some(txtHowDoYouUsuallyBuildLinks.text!), websiteMonitize: .some(txtHowElseDoYouMonetize.text!))
@@ -291,6 +304,7 @@ class AffiliateRegistrationWebsite: UIViewController {
         }
     }
     
+    //MARK: - helper
     func convertToDictionary(text: String) -> [String: Bool]? {
         if let data = text.data(using: .utf8) {
             do {

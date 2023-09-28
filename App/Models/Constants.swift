@@ -67,6 +67,8 @@ let ABOUT_URL = "\(BASE_URL)/about"
 let TERMS_URL = "\(BASE_URL)/privacy"
 let HELP_URL = "\(BASE_URL)/contact"
 let Banner_URL = "\(BASE_URL)/images/banner/"
+let AffiliateDocument_URL =  "\(BASE_URL)/images/AffiliateDocument/"
+let AffiliateDocument_UPLOAD_PHOTO = "\(BASE_URL)/AffiliateDocument"
 let GUEST = "guest"
 let HOST = "host"
 
@@ -183,18 +185,3 @@ extension String {
     }
 }
 
-extension UIView {
-    @discardableResult
-    func addLineDashedStroke(pattern: [NSNumber]?, radius: CGFloat, color: CGColor) -> CALayer {
-        let borderLayer = CAShapeLayer()
-
-        borderLayer.strokeColor = color
-        borderLayer.lineDashPattern = pattern
-        borderLayer.frame = bounds
-        borderLayer.fillColor = nil
-        borderLayer.path = UIBezierPath(roundedRect: bounds, byRoundingCorners: .allCorners, cornerRadii: CGSize(width: radius, height: radius)).cgPath
-
-        layer.addSublayer(borderLayer)
-        return borderLayer
-    }
-}

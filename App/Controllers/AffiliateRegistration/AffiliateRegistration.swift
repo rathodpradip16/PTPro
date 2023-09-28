@@ -39,10 +39,10 @@ class AffiliateRegistration: UIViewController {
                 self.showWebsiteview()
                 break
             case StepInfo.Website.rawValue:
-                self.showWebsiteview()
+                self.showDocumentview()
                 break
             case StepInfo.Documents.rawValue:
-                self.showWebsiteview()
+                self.showDocumentview()
                 break
             case StepInfo.Success.rawValue:
                 self.showAccountView()

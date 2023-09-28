@@ -9,7 +9,7 @@ fileType
 
 #RemoveAffiliateDocumentList
 mutation removeAffiliateDocumentList($id:Int,$userId:String) {
-  removeAffiliateDocumentList (id: $id,userId:$userId) {
+removeAffiliateDocumentList (id: $id,userId:$userId) {
 status
 photosCount
 removePhoto
@@ -17,7 +17,7 @@ removePhoto
 }
 
 #createDocumentAffiliateUser
-mutation  createDocumentAffiliateUser($userId:String!, $fileName: String, $fileType: String) {
+mutation createDocumentAffiliateUser($userId:String!, $fileName: String, $fileType: String) {
 createDocumentAffiliateUser (userId:$userId, fileName: $fileName, fileType: $fileType) {
 status
 photosCount
