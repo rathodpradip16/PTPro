@@ -158,8 +158,9 @@ public class Utility: NSObject {
     var step3_Edit:Bool = false
     var isfromshowmap:Bool = false
 
-    //MARK: - Host Variables
-    
+    //MARK: - Affiliate Variables
+    var isAffiliateProfile = false
+
      //MARK: - Host Variables
     var host_specialDay_Array = NSMutableArray()
     var host_bookDay_Array = NSMutableArray()
@@ -388,6 +389,14 @@ public class Utility: NSObject {
     }
     func tabHostIndex() -> Int {
         return UserDefaults.standard.value(forKey: "host_tab_index") as! Int
+    }
+    
+    //MARK: store & get Host tab index
+    func setAffiliateTab(index: Int){
+        UserDefaults.standard.set(index, forKey: "Affiliate_tab_index")
+    }
+    func tabAffiliateIndex() -> Int {
+        return UserDefaults.standard.value(forKey: "Affiliate_tab_index") as! Int
     }
     //MARK: Show normal alertview
     func showAlert(msg:String){

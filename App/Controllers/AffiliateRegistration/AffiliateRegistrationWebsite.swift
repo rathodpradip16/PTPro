@@ -185,7 +185,7 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
             lblWhatTypeOfSiteIsYourWebsite.text = "\((Utility.shared.getLanguage()?.value(forKey:"WhatTypeOfSiteIsYourWebsite")) ?? "What type of site is your website")"
             lblPrimaryReasonForJoining.text = "\((Utility.shared.getLanguage()?.value(forKey:"PrimaryReasonForJoining")) ?? "What is the Primary reason for joining")"
             lblHowManyVisitorsShouldYourWebsiteGet.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowManyVisitorsShouldYourWebsiteGet")) ?? "How Many Visitors Should Your Website Get")"
-            lblHowDoYouUsuallyBuildLinks.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowManyVisitorsShouldYourWebsiteGet")) ?? "How do you usually build links")"
+            lblHowDoYouUsuallyBuildLinks.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowDoYouUsuallyBuildLinks")) ?? "How do you usually build links")"
             lblHowElseDoYouMonetize.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowElseDoYouMonetize")) ?? "How else do you monetize your Website")"
     }
 

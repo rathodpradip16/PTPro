@@ -17,7 +17,7 @@ class CustomTabbar: UITabBarController,UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureTabBarView()
-        self.tabBar.tintColor = Theme.SECONDARY_COLOR
+        self.tabBar.tintColor = Theme.affiliatePurpleColor
         self.tabBar.unselectedItemTintColor =   UIColor(named: "Title_Header")
         //self.tabBar.isTranslucent = false
         self.delegate = self
@@ -96,7 +96,7 @@ class CustomTabbar: UITabBarController,UITabBarControllerDelegate {
         menuButtonFrame.origin.y =  self.tabBar.frame.origin.y - (middleButton.frame.size.height/2)
                menuButtonFrame.origin.x = view.bounds.width/2 - menuButtonFrame.size.width/2
         middleButton.frame = menuButtonFrame
-        middleButton.backgroundColor = Theme.Button_BG
+        middleButton.backgroundColor = Theme.affiliatePurpleColor
         middleButton.layer.cornerRadius = menuButtonFrame.height/2
         
        
@@ -105,17 +105,17 @@ class CustomTabbar: UITabBarController,UITabBarControllerDelegate {
               
               let center = CGPoint (x: middleButton.frame.size.width / 2, y: middleButton.frame.size.height / 2)
               let circleRadius = middleButton.frame.size.width / 2
-              let circlePath = UIBezierPath(arcCenter: center, radius: circleRadius, startAngle: CGFloat(Double.pi * 2), endAngle: CGFloat(Double.pi), clockwise: true)
+        let circlePath = UIBezierPath(arcCenter: center, radius: circleRadius + 1.5, startAngle: CGFloat(Double.pi * 2), endAngle: CGFloat(Double.pi), clockwise: true)
               
               semiCircleLayer.path = circlePath.cgPath
               semiCircleLayer.strokeColor = UIColor.clear.cgColor
               semiCircleLayer.fillColor = UIColor.clear.cgColor
               semiCircleLayer.lineWidth = 8
-              semiCircleLayer.shadowColor = UIColor.red.cgColor
-              semiCircleLayer.shadowRadius = 8.0
+              semiCircleLayer.shadowColor = UIColor.lightGray.cgColor
+              semiCircleLayer.shadowRadius = 0
               semiCircleLayer.shadowOpacity = 0.5
               semiCircleLayer.shadowPath = circlePath.cgPath.copy(strokingWithWidth:5, lineCap: .round, lineJoin: .miter, miterLimit: 0)
-              semiCircleLayer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+              semiCircleLayer.shadowOffset = CGSize(width: 0.0, height: 0.0)
              middleButton.layer.addSublayer(semiCircleLayer)
 
        
@@ -182,8 +182,7 @@ class CustomTabbar: UITabBarController,UITabBarControllerDelegate {
     func config(viewController:UIViewController,selImg:UIImage, unselectImg:UIImage,index:Int,title:String) {
         let iconImageView = UIImageView()
         iconImageView.image = unselectImg
-        let customBarItem = UITabBarItem.init(title:title, image: unselectImg, selectedImage: selImg.withRenderingMode(.alwaysOriginal))
-        
+        let customBarItem = UITabBarItem.init(title:title, image: unselectImg, selectedImage: selImg.withTintColor(Theme.affiliatePurpleColor))
         // change and adjust center icon by using image insets
         customBarItem.imageInsets = UIEdgeInsets(top:2, left: 0, bottom: -2, right: 0)
         

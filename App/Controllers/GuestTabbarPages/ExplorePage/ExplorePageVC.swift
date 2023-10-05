@@ -795,8 +795,8 @@ func checkForUpdate(){
         filterView.addSubview(guestBtn)
         
         filterBtn.frame = CGRect(x:220, y: 10, width: 70, height: 33)
-        filterBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"filter"))!)", for: .normal)
-        filterBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"filter"))!)", for: .selected)
+        filterBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"filter")) ?? "")", for: .normal)
+        filterBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"filter")) ?? "")", for: .selected)
         filterBtn.setTitleColor(Theme.TextDarkColor, for: .normal)
         filterBtn.setTitleColor(Theme.TextDarkColor, for: .selected)
         filterBtn.layer.borderColor = Theme.TextBorderColor.cgColor

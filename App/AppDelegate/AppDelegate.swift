@@ -923,10 +923,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         self.themeInitialSetUp()
         
     }
+    
     func HostTabbarInitialize(initialView:UITabBarController)
     {
-        
-        
         Utility.shared.setopenTabbar(iswhichtabbar:true)
         Utility.shared.host_message_isfromHost = true
         Utility.shared.host_message_isfrommessage = false
@@ -940,7 +939,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         
     }
     
-    
+    func AffiliateTabbarInitialize(initialView:UITabBarController)
+    {
+        Utility.shared.setopenTabbar(iswhichtabbar:true)
+        Utility.shared.host_message_isfromHost = false
+        Utility.shared.isAffiliateProfile = true
+        Utility.shared.host_message_isfrommessage = false
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.backgroundColor =  UIColor(named: "colorController")
+      //   window?.rootViewController?.dismiss(animated: false, completion: nil)
+        window?.rootViewController = initialView
+        window?.rootViewController?.view.backgroundColor = UIColor(named: "colorController")
+        window?.makeKeyAndVisible()
+        self.themeInitialSetUp()
+    }
 
     public func application(_ application: UIApplication,
                             continue userActivity: NSUserActivity,
@@ -1371,7 +1383,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
                 ], for: .normal)
         }
     
-        tabBarController.tabBar.tintColor = Theme.PRIMARY_COLOR
+        tabBarController.tabBar.tintColor = Theme.affiliatePurpleColor
         tabBarController.tabBar.unselectedItemTintColor = .black
        // tabBarController.tabBar.isTranslucent = true
         UITabBar.appearance().barTintColor = UIColor(named: "colorController")
@@ -1466,7 +1478,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         menuButtonFrame.origin.y =  tabBarController.tabBar.frame.origin.y - (middleButton.frame.size.height-20)
                menuButtonFrame.origin.x = tabBarController.tabBar.bounds.width/2 - menuButtonFrame.size.width/2
         middleButton.frame = menuButtonFrame
-        middleButton.backgroundColor = Theme.Button_BG
+        middleButton.backgroundColor = Theme.affiliatePurpleColor
         middleButton.layer.cornerRadius = menuButtonFrame.height/2
         
        
@@ -1474,18 +1486,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
               
               let center = CGPoint (x: middleButton.frame.size.width / 2, y: middleButton.frame.size.height / 2)
               let circleRadius = middleButton.frame.size.width / 2
-              let circlePath = UIBezierPath(arcCenter: center, radius: circleRadius, startAngle: CGFloat(Double.pi * 2), endAngle: CGFloat(Double.pi), clockwise: true)
+        let circlePath = UIBezierPath(arcCenter: center, radius: circleRadius + 1.5, startAngle: CGFloat(Double.pi * 2), endAngle: CGFloat(Double.pi), clockwise: true)
               
               semiCircleLayer.path = circlePath.cgPath
               semiCircleLayer.strokeColor = UIColor.clear.cgColor
               semiCircleLayer.fillColor = UIColor.clear.cgColor
               semiCircleLayer.lineWidth = 8
-              semiCircleLayer.shadowColor = UIColor.red.cgColor
-              semiCircleLayer.shadowRadius = 8.0
+              semiCircleLayer.shadowColor = UIColor.lightGray.cgColor
+        semiCircleLayer.shadowRadius = 0
         semiCircleLayer.shadowOpacity = 0.5
               semiCircleLayer.shadowPath = circlePath.cgPath.copy(strokingWithWidth:5, lineCap: .round, lineJoin: .miter, miterLimit: 0)
 
-              semiCircleLayer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+              semiCircleLayer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         middleButton.layer.addSublayer(semiCircleLayer)
         
       

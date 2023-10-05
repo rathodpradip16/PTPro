@@ -53,7 +53,20 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
     func initializeText(){
         if let stepDetails = Utility.shared.GetAffiliateUserStep?.stepDetails?.first{
             self.txtPayeeName.text = stepDetails?.payeeName ?? ""
-            self.txtAddressLine1.text = stepDetails?.address ?? ""
+            if let arr = stepDetails?.address?.components(separatedBy: ";;;"),arr.count != 0{
+                if arr.count == 2{
+                    self.txtAddressLine1.text = arr[0]
+                    self.txtAddressLine2.text = arr[1]
+                }else if arr.count == 1{
+                    self.txtAddressLine1.text = arr[0]
+                }else{
+                    self.txtAddressLine1.text = stepDetails?.address ?? ""
+                    self.txtAddressLine2.text = stepDetails?.address ?? ""
+                }
+            }else{
+                self.txtAddressLine1.text = stepDetails?.address ?? ""
+                self.txtAddressLine2.text = stepDetails?.address ?? ""
+            }
             self.txtAddressLine2.text = stepDetails?.address ?? ""
             self.txtCity.text = stepDetails?.city ?? ""
             self.txtState.text = stepDetails?.state ?? ""
@@ -272,8 +285,10 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
     //MARK: - textfiled delegate methods
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if(textField == txtState || textField == txtCountry){
-            self.view.endEditing(true)
-            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"selectCityFirst")) ?? "Please Select city first")")
+            if textField.isEmpty(){
+                self.view.endEditing(true)
+                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"selectCityFirst")) ?? "Please Select city first")")
+            }
             return false
         }
         return true
@@ -293,7 +308,7 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
     
     //MARK: - API CALL
     func apiCallAffiliateUserAccountInfo(){
-        let createAffiliateUserAccountInfo = PTProAPI.CreateAffiliateUserAccountInfoMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), payeeName: .some(txtPayeeName.text!), address: .some("\(txtAddressLine1.text!), \(txtAddressLine2.text!)") , city: .some(txtCity.text!), state: .some(txtState.text!), zipcode: .some(Int(txtZipCode.text!) ?? 0), country: .some(txtCountry.text!), phoneNumber: .some(txtPhoneNumber.text))
+        let createAffiliateUserAccountInfo = PTProAPI.CreateAffiliateUserAccountInfoMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), payeeName: .some(txtPayeeName.text!), address: .some("\(txtAddressLine1.text!);;;\(txtAddressLine2.text!)") , city: .some(txtCity.text!), state: .some(txtState.text!), zipcode: .some(Int(txtZipCode.text!) ?? 0), country: .some(txtCountry.text!), phoneNumber: .some(txtPhoneNumber.text))
         Network.shared.apollo_headerClient.perform(mutation: createAffiliateUserAccountInfo){  response in
             switch response {
             case .success(let result):

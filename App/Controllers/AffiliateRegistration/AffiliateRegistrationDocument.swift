@@ -119,6 +119,19 @@ class AffiliateRegistrationDocument: UIViewController,UICollectionViewDelegate,U
         stackviewEmpty2.isHidden = true
     }
     
+    func initializeLocalizations(){
+        lblUploadYour.text =  "\((Utility.shared.getLanguage()?.value(forKey:"UploadYour")) ?? "Upload your")"
+        lblDocument.text =  "\((Utility.shared.getLanguage()?.value(forKey:"Documents")) ?? "Documents")"
+        lblUploadPhotos.text =  "\((Utility.shared.getLanguage()?.value(forKey:"UploadPhotos")) ?? "Upload photos")"
+        lblReadBelowCondition.text =  "\((Utility.shared.getLanguage()?.value(forKey:"ReadBelowConditions")) ?? "Read below conditions to quickly verify.")"
+        lblTerms1.text =  "\((Utility.shared.getLanguage()?.value(forKey:"PassportDriverlicenceOrNationalID")) ?? "Passport, Driver licence, or national ID.")"
+        lblTerms2.text =  "\((Utility.shared.getLanguage()?.value(forKey:"BankStatementMust")) ?? "Bank statement must contain the business address and show customer transactions must be dated within the last 180 days.")"
+        lblTerms3.text =  "\((Utility.shared.getLanguage()?.value(forKey:"BusinessNameAndDetails")) ?? "Business name and details (address, registration number, and entity type) must be visible")"
+        lblTerms4.text =  "\((Utility.shared.getLanguage()?.value(forKey:"WaterElectricityGasInternetTelecomBill")) ?? "Water, electricity, gas, internet, telecom bill issued by the utility company, or a mobile phone bill(your options will display in a drop-down on the page)")"
+        //"\((Utility.shared.getLanguage()?.value(forKey:"IAgreeWithTheTermsAndCondtitions")) ?? "I agree with the terms and condtitions")"
+        btnFinish.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"FINISH")) ?? "FINISH")", for: .normal)
+        btnPrevious.setTitle( "\((Utility.shared.getLanguage()?.value(forKey:"PREVIOUS")) ?? "PREVIOUS")", for: .normal)
+    }
     //MARK: - actions
     @IBAction func retryBtnTapped(_ sender: Any){
         if Utility.shared.isConnectedToNetwork(){
@@ -147,7 +160,13 @@ class AffiliateRegistrationDocument: UIViewController,UICollectionViewDelegate,U
     }
     
     @IBAction func onClickFinish(_ sender: Any) {
-        
+        if arrDocList.count == 0{
+            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"PleaseSelectPhotosToUpload")) ?? "Please Select Photos to Upload")")
+        }else if !isTermsSelected{
+            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"PleaseAgreeWithTheTermsAndConditions")) ?? "Please agree with the terms and conditions")")
+        }else{
+            self.getAffiliateUserStepSuccessAPICall()
+        }
     }
     
     @IBAction func onClickPrevious(_ sender: Any) {
@@ -198,7 +217,7 @@ class AffiliateRegistrationDocument: UIViewController,UICollectionViewDelegate,U
         present(alert, animated: true, completion: nil)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize { 
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: (self.view.frame.size.width - 50)/2, height: ((self.view.frame.size.width - 50)/2)*0.6)
     }
     
@@ -491,6 +510,50 @@ class AffiliateRegistrationDocument: UIViewController,UICollectionViewDelegate,U
             }
         }
     }
+    
+    func getAffiliateUserStepSuccessAPICall(){
+        if Utility.shared.isConnectedToNetwork(){
+            self.lottieAnimation()
+            let getAffiliateUserStepSuccessQuery = PTProAPI.GetAffiliateUserStepSuccessQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""))
+            Network.shared.apollo_headerClient.fetch(query: getAffiliateUserStepSuccessQuery){ response in
+                switch response {
+                case .success(let result):
+                    if let status = result.data?.getAffiliateUserStepSuccess?.status,status == 200 {
+                        if let parent = self.parent as? AffiliateRegistration{
+                            parent.dismiss(animated: true)
+                        }
+                    }else{
+                        self.view.makeToast(result.data?.getAffiliateUserStepSuccess?.errorMessage)
+                    }
+                    self.lottieView.isHidden = true
+                    self.lottieWholeView.isHidden = true
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                    self.lottieView.isHidden = true
+                    self.lottieWholeView.isHidden = true
+                }
+            }
+        }else{
+            self.offlineView.isHidden = false
+            let shadowSize2 : CGFloat = 3.0
+            let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
+                                                        y: -shadowSize2 / 2,
+                                                        width: self.offlineView.frame.size.width + shadowSize2,
+                                                        height: self.offlineView.frame.size.height + shadowSize2))
+            
+            self.offlineView.layer.masksToBounds = false
+            self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
+            self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+            self.offlineView.layer.shadowOpacity = 0.3
+            self.offlineView.layer.shadowPath = shadowPath2.cgPath
+            if IS_IPHONE_X || IS_IPHONE_XR{
+                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-85, width: FULLWIDTH, height: 55)
+            }else{
+                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-55, width: FULLWIDTH, height: 55)
+            }
+        }
+    }
+    
     
     //MARK: - Animation
     func lottieAnimation()
