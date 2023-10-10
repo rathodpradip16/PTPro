@@ -6,9 +6,7 @@
 //
 
 import UIKit
-import AARatingBar
 import Cosmos
-import ISPageControl
 
 
 class AffiliateSearchLinkCVC: UICollectionViewCell {
@@ -26,25 +24,11 @@ class AffiliateSearchLinkCVC: UICollectionViewCell {
 
     @IBOutlet weak var btnLink: UIButton!
     
+    @IBOutlet weak var imgLocation: UIImageView!
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        lblTitle.numberOfLines = 0
-        lblTitle.lineBreakMode = .byWordWrapping
-        lblTitle.textColor = Theme.ENTIRE_COLOR
-        lblCity.textColor = Theme.GRAY_COLOR
-        lblDescription.textColor = Theme.TextLightColor
-
-        lblDescription.numberOfLines = 0
-        lblDescription.lineBreakMode = .byWordWrapping
-        img.contentMode = .scaleAspectFill
-      
-        
-        lblDescription.font = UIFont(name: APP_FONT_MEDIUM, size: 14)
-        lblTitle.font = UIFont(name: APP_FONT_MEDIUM, size: 23)
-        lblPrice.font = UIFont(name: APP_FONT, size: 17)
-        lblCity.font = UIFont(name: APP_FONT, size: 17)
-
-        // Initialization code
+        imgLocation.tintColor = .black
     }
 
     

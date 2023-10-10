@@ -14,6 +14,7 @@ import SwiftMessages
 protocol searchPageProtocol{
     func callSearchAPI()
 }
+
 class SearchPageVC: UIViewController,UITextFieldDelegate,CLLocationManagerDelegate,UITableViewDelegate,UITableViewDataSource {
     
     @IBOutlet weak var retryBtn: UIButton!
@@ -78,7 +79,11 @@ class SearchPageVC: UIViewController,UITextFieldDelegate,CLLocationManagerDelega
         self.resetBtn.setTitle("Reset", for: .normal)
         self.resetBtn.setTitleColor(Theme.PRIMARY_COLOR, for: .normal)
         
-        self.searchTextField.placeholder = "\(Utility.shared.getLanguage()?.value(forKey: "losangeles") ?? "Where do you go?")"
+        if Utility.shared.isFromAffiliateSearchPage {
+            self.searchTextField.text = "\(Utility.shared.getLanguage()?.value(forKey:"TypeCityNameHere") ?? "Type City Name Here")"
+        }else{
+            self.searchTextField.placeholder = "\(Utility.shared.getLanguage()?.value(forKey: "losangeles") ?? "Where do you go?")"
+        }
         self.searchTextField.delegate = self
         self.searchTextField.font = UIFont(name: APP_FONT, size: 14)
         self.searchTextField.textColor =  UIColor(named: "Title_Header")

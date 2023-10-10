@@ -1,5 +1,5 @@
-mutation createAffiliateUserAccountInfo($userId: String, $payeeName: String, $address: String, $city: String, $state: String, $zipcode: Int, $country: String, $phoneNumber: String) {
-createAffiliateUserAccountInfo (userId: $userId, payeeName: $payeeName, address: $address,city: $city, state: $state, zipcode: $zipcode, country: $country,phoneNumber: $phoneNumber) {
+mutation createAffiliateUserAccountInfo($userId: String, $payeeName: String, $address: String,$address2: String, $city: String, $state: String, $zipcode: Int,$countryCode:Int, $country: String, $phoneNumber: String) {
+createAffiliateUserAccountInfo (userId: $userId, payeeName: $payeeName, address: $address,address2: $address2,city: $city, state: $state, zipcode: $zipcode,countryCode:$countryCode, country: $country,phoneNumber: $phoneNumber) {
 status
 errorMessage
 }

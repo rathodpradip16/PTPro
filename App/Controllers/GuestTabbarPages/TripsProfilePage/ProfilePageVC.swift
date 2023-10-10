@@ -11,10 +11,9 @@ import Apollo
 import  Lottie
 import SwiftMessages
 
-class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,UITabBarControllerDelegate,UITabBarDelegate{
-    
-    
-    
+class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,UITabBarControllerDelegate,UITabBarDelegate,userStepInfoUpdate{
+
+
     //***************************************IBOUTLET CONNECTIONS  & GLOBAL DECLARATIONS *********************************************************>
     @IBOutlet weak var profileTable: UITableView!
     
@@ -626,14 +625,19 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
                 }
             }else{
                 if(!Utility.shared.host_message_isfromHost && Utility.shared.GetAffiliateUserStep?.stepInfo == StepInfo.Success.rawValue){
-                    Utility.shared.setAffiliateTab(index: 0) 
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let vc = storyboard.instantiateViewController(withIdentifier: "CustomAffiliateTabbar") as! CustomAffiliateTabbar
-                    vc.modalPresentationStyle = .fullScreen
-                    self.present(vc, animated: true, completion: nil)
+                    if let tabbar = self.tabBarController as? CustomAffiliateTabbar{
+                        tabbar.selectedIndex = 0
+                    }else{
+                        Utility.shared.setAffiliateTab(index: 0)
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let vc = storyboard.instantiateViewController(withIdentifier: "CustomAffiliateTabbar") as! CustomAffiliateTabbar
+                        vc.modalPresentationStyle = .fullScreen
+                        self.present(vc, animated: true, completion: nil)
+                    }
                 }else{
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let vc = storyboard.instantiateViewController(withIdentifier: "AffiliateRegistration") as! AffiliateRegistration
+                    vc.delegate = self
                     vc.modalPresentationStyle = .fullScreen
                     self.present(vc, animated: true, completion: nil)
                 }
@@ -661,6 +665,7 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(!Utility.shared.host_message_isfromHost && Utility.shared.GetAffiliateUserStep?.stepInfo == StepInfo.Success.rawValue){
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "AffiliateRegistration") as! AffiliateRegistration
+            vc.delegate = self
             vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true, completion: nil)
         }else{
@@ -968,6 +973,9 @@ func currencyAPICall()
 }
     
     // MARK: Get API Call
+    func userStepInfoUpdate() {
+        self.getAffiliateUserStepAPICall()
+    }
 
     func getAffiliateUserStepAPICall()
     {
@@ -1016,26 +1024,7 @@ func currencyAPICall()
     }
     
     func intializeAffiliateRegistration(){
-        if let stepInfo = Utility.shared.GetAffiliateUserStep?.stepInfo as? String{
-            switch stepInfo{
-            case StepInfo.None.rawValue:
-
-                break
-            case StepInfo.Account.rawValue:
-                break
-            case StepInfo.Website.rawValue:
-                break
-            case StepInfo.Documents.rawValue:
-                break
-            case StepInfo.Success.rawValue:
-                break
-            default:
-                break
-            }
-            self.profileTable.reloadData()
-        }else{
-            
-        }
+        self.profileTable.reloadData()
     }
 }
 

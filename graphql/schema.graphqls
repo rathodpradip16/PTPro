@@ -28,7 +28,7 @@ type Query {
   getListingDetails(listId: String!, preview: Boolean): AllListing
   getSimilarListing(lat: Float, lng: Float, listId: Int, limit: Int): AllList
   getReviews(listId: Int, currentPage: Int, hostId: String!): AllReview
-  SearchListing(userId: String, personCapacity: Int, dates: String, currentPage: Int, lat: Float, lng: Float, roomType: [Int], bedrooms: Int, bathrooms: Int, beds: Int, amenities: [Int], spaces: [Int], houseRules: [Int], priceRange: [Int], geography: String, bookingType: String, geoType: String, address: String, currency: String, checkIn: String, checkOut: String, city: String): SearchListing
+  SearchListing(userId: String, checkIn: String, checkOut: String, personCapacity: Int, dates: String, currentPage: Int, lat: Float, lng: Float, roomType: [Int], bedrooms: Int, bathrooms: Int, beds: Int, amenities: [Int], spaces: [Int], houseRules: [Int], priceRange: [Int], geography: String, bookingType: String, geoType: String, address: String, city: String, currency: String): SearchListing
   dateAvailability(listId: Int!, startDate: String!, endDate: String!): DateAvailabilityType
   getListingSettingsCommon(step: String): listingSettingCommonTypes
   getAllReservation(userType: String, currentPage: Int, dateFilter: String): AllReservation
@@ -73,7 +73,7 @@ type Query {
   getWhyHostData: WhyHostCommonType
   getPopularLocations: PopularLocationCommonType
   getApplicationVersionInfo(appType: String!, version: String!): SiteSettingsCommon
-  getcouponuse(userId: String, couponCode: String, listId: Int, planId: Int): Couponmanager
+  getcouponuse(userId: String, couponCode: String, listId: Int, planId: Int, isforplan: Boolean): Couponmanager
   getHostSuggested(userId: String, currentPage: Int, lat: Float, lng: Float, priceRange: [Int], review: String): HostSuggested
   getcouponcode(userId: String, couponType: String, listId: Int, subscriptionType: String): Couponmanager
 }
@@ -850,8 +850,10 @@ type AffiliateUserverificationaccountType {
   userId: String
   payeeName: String
   address: String
+  address2: String
   city: String
   state: String
+  countryCode: Int
   zipcode: String
   country: String
   phoneNumber: String
@@ -1585,6 +1587,7 @@ type Couponmanager {
   userType: String
   couponCount: Int
   planId: Int
+  isforplan: Boolean
   deletedDate: String
   deleted: Int
   data: [Getcoupon]
@@ -1634,7 +1637,7 @@ type Mutation {
   CreateEnquiry(listId: Int!, hostId: String!, content: String!, userId: String!, type: String, startDate: String!, endDate: String!, personCapacity: Int): Enquiry
   createAffiliateLink(propertyId: Int, affiliateId: String): AffiliateLinksType
   createAffiliateUser(id: String, email: String!, password: String, findUS: String, phonenumber: String, countryCode: String): AffiliateUserType
-  createAffiliateUserAccountInfo(userId: String, payeeName: String, address: String, city: String, state: String, zipcode: Int, country: String, phoneNumber: String): AffiliateUserverificationType
+  createAffiliateUserAccountInfo(userId: String, payeeName: String, address: String, address2: String, city: String, state: String, zipcode: Int, countryCode: Int, country: String, phoneNumber: String): AffiliateUserverificationType
   createAffiliateUserWebList(userId: String, websiteName: String, websiteUrl: String, websiteAbout: String, typeList: String, websiteDrive: String, typesOfWebsite: String, primryJoining: String, websiteVisitors: String, buildLinks: String, websiteMonitize: String): AffiliateUserverificationwebType
   createDocumentAffiliateUser(userId: String, fileName: String, fileType: String): AffiliateUserDocumentManagementType
   removeAffiliateDocumentList(id: Int, userId: String): AffiliateUserDocumentManagementType
@@ -1731,9 +1734,11 @@ type AffiliateUserType {
 type AffiliateUserverificationType {
   payeeName: String
   address: String
+  address2: String
   city: String
   state: String
   zipcode: Int
+  countryCode: Int
   country: String
   phoneNumber: String
   userId: String

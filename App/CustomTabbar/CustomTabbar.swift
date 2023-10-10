@@ -171,7 +171,7 @@ class CustomTabbar: UITabBarController,UITabBarControllerDelegate {
         self.config(viewController:profileObj,selImg:#imageLiteral(resourceName: "tabprofile_red"),unselectImg:#imageLiteral(resourceName: "tabprofile"), index:4,title:"\((Utility.shared.getLanguage()?.value(forKey:"tabprofile")) ?? "Profile")")
          
         let tabBarList = [exploreObj,saveObj,tripsObj,messgaeObj,profileObj]
-         viewControllers = tabBarList
+          viewControllers = tabBarList
         self.selectedIndex  = Utility.shared.tabIndex()
         
     }

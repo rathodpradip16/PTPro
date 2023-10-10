@@ -1,26 +1,28 @@
 query getAffiliateUserStep($userId:String) {
-getAffiliateUserStep(userId: $userId) {
+getAffiliateUserStep(userId: $userId){
 status
 errorMessage
 stepInfo
-stepDetails {
-userId
-payeeName
-address
-city
-state
-zipcode
-country
-phoneNumber
-websiteName
-websiteUrl
-typeList
-websiteDrive
-typesOfWebsite
-primryJoining
-websiteVisitors
-buildLinks
-websiteMonitize
+stepDetails{
+payeeName,
+address,
+address2,
+city,
+countryCode,
+state,
+zipcode,
+country,
+phoneNumber,
+websiteName,
+websiteUrl,
+websiteAbout,
+typeList,
+websiteDrive,
+typesOfWebsite,
+primryJoining,
+websiteVisitors,
+buildLinks,
+websiteMonitize,
 }
 }
 }

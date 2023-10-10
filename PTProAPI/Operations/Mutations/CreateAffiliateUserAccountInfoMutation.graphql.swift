@@ -8,15 +8,17 @@ extension PTProAPI {
     static let operationName: String = "createAffiliateUserAccountInfo"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"mutation createAffiliateUserAccountInfo($userId: String, $payeeName: String, $address: String, $city: String, $state: String, $zipcode: Int, $country: String, $phoneNumber: String) { createAffiliateUserAccountInfo( userId: $userId payeeName: $payeeName address: $address city: $city state: $state zipcode: $zipcode country: $country phoneNumber: $phoneNumber ) { __typename status errorMessage } }"#
+        #"mutation createAffiliateUserAccountInfo($userId: String, $payeeName: String, $address: String, $address2: String, $city: String, $state: String, $zipcode: Int, $countryCode: Int, $country: String, $phoneNumber: String) { createAffiliateUserAccountInfo( userId: $userId payeeName: $payeeName address: $address address2: $address2 city: $city state: $state zipcode: $zipcode countryCode: $countryCode country: $country phoneNumber: $phoneNumber ) { __typename status errorMessage } }"#
       ))
 
     public var userId: GraphQLNullable<String>
     public var payeeName: GraphQLNullable<String>
     public var address: GraphQLNullable<String>
+    public var address2: GraphQLNullable<String>
     public var city: GraphQLNullable<String>
     public var state: GraphQLNullable<String>
     public var zipcode: GraphQLNullable<Int>
+    public var countryCode: GraphQLNullable<Int>
     public var country: GraphQLNullable<String>
     public var phoneNumber: GraphQLNullable<String>
 
@@ -24,18 +26,22 @@ extension PTProAPI {
       userId: GraphQLNullable<String>,
       payeeName: GraphQLNullable<String>,
       address: GraphQLNullable<String>,
+      address2: GraphQLNullable<String>,
       city: GraphQLNullable<String>,
       state: GraphQLNullable<String>,
       zipcode: GraphQLNullable<Int>,
+      countryCode: GraphQLNullable<Int>,
       country: GraphQLNullable<String>,
       phoneNumber: GraphQLNullable<String>
     ) {
       self.userId = userId
       self.payeeName = payeeName
       self.address = address
+      self.address2 = address2
       self.city = city
       self.state = state
       self.zipcode = zipcode
+      self.countryCode = countryCode
       self.country = country
       self.phoneNumber = phoneNumber
     }
@@ -44,9 +50,11 @@ extension PTProAPI {
       "userId": userId,
       "payeeName": payeeName,
       "address": address,
+      "address2": address2,
       "city": city,
       "state": state,
       "zipcode": zipcode,
+      "countryCode": countryCode,
       "country": country,
       "phoneNumber": phoneNumber
     ] }
@@ -61,9 +69,11 @@ extension PTProAPI {
           "userId": .variable("userId"),
           "payeeName": .variable("payeeName"),
           "address": .variable("address"),
+          "address2": .variable("address2"),
           "city": .variable("city"),
           "state": .variable("state"),
           "zipcode": .variable("zipcode"),
+          "countryCode": .variable("countryCode"),
           "country": .variable("country"),
           "phoneNumber": .variable("phoneNumber")
         ]),

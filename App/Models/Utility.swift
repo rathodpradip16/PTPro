@@ -22,6 +22,12 @@ public class Utility: NSObject {
     var isfromLanguage:Bool = false
     var isfromCurrency:Bool = false
     var ContainsTodayDate = false
+    var isFromAffiliateSearchPage = false
+    var isFromAffiliateLinkManagerPage = false
+    var searchAddressfromAffiliateSearch:String!
+    var searchAddressfromAffiliateLinkManager:String!
+    var searchlocationfromAffiliateSearch:String!
+    var searchlocationfromAffiliateLinkManager:String!
     //var signupArray = NSMutableArray()
     var signupArray = NSMutableArray()
     var signupdataArray = [AnyObject]()

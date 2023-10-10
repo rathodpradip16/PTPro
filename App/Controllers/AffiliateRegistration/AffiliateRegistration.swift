@@ -11,6 +11,10 @@ import StepIndicator
 import Apollo
 import NKVPhonePicker
 
+protocol userStepInfoUpdate{
+  func userStepInfoUpdate()
+}
+
 class AffiliateRegistration: UIViewController {
 
     @IBOutlet weak var viewAccount: UIView!
@@ -28,6 +32,8 @@ class AffiliateRegistration: UIViewController {
     var viewWebsitevc:AffiliateRegistrationWebsite?
     var viewDocumentvc:AffiliateRegistrationDocument?
     
+    var delegate: userStepInfoUpdate?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         if let stepInfo = Utility.shared.GetAffiliateUserStep?.stepInfo{

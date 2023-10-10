@@ -78,7 +78,6 @@
 		2CFE2EA622FAD6440064D9C4 /* BookInstantViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CFE2EA422FAD6440064D9C4 /* BookInstantViewController.xib */; };
 		3976DB5357A9AECECE2DCAF3 /* Pods_App_AppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC71F11DF9133C1B94F0787 /* Pods_App_AppUITests.framework */; };
 		53BF73A9CD1E1E8CC9AB0ED9 /* Pods_AppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FF366B705E844E5B808B82E /* Pods_AppTests.framework */; };
-		7602D0AF2ABCA4FF00635A6D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7602D0AD2ABCA4FF00635A6D /* Main.storyboard */; };
 		7602D0B92ABCA50F00635A6D /* AffiliateRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7602D0B22ABCA50F00635A6D /* AffiliateRegistration.swift */; };
 		7602D0BA2ABCA50F00635A6D /* AffiliateRegistrationWebsite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7602D0B32ABCA50F00635A6D /* AffiliateRegistrationWebsite.swift */; };
 		7602D0BC2ABCA50F00635A6D /* AffiliateRegistrationDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7602D0B52ABCA50F00635A6D /* AffiliateRegistrationDocument.swift */; };
@@ -326,10 +325,13 @@
 		762C878D2ABC744700DAC707 /* SchemaMetadata.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762C869D2ABC744700DAC707 /* SchemaMetadata.graphql.swift */; };
 		763407492AC542E8001DA7CF /* iOSDropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763407482AC542E7001DA7CF /* iOSDropDown.swift */; };
 		7634074B2AC55ABC001DA7CF /* DocCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7634074A2AC55ABC001DA7CF /* DocCVC.swift */; };
+		7644CEEC2AD320FD0086E886 /* AffiliateLinkManagerCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7644CEEB2AD320FD0086E886 /* AffiliateLinkManagerCVC.swift */; };
+		765BB7212AD066B60091E718 /* SearchPlaceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765BB7202AD066B60091E718 /* SearchPlaceVC.swift */; };
 		7669E93E2AB6C32900938861 /* ThreadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669E93D2AB6C32900938861 /* ThreadItem.swift */; };
+		76C1A5232ACFBF790031BE76 /* AffiliateSearchLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2EAD12ACAC473000E73FC /* AffiliateSearchLinkVC.swift */; };
+		76C1A5242ACFBFAE0031BE76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7602D0AD2ABCA4FF00635A6D /* Main.storyboard */; };
 		76C50E182ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */; };
 		76DE9F782AB4BA98003191ED /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE9F772AB4BA98003191ED /* Network.swift */; };
-		76F2EAD22ACAC473000E73FC /* AffiliateSearchLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2EAD12ACAC473000E73FC /* AffiliateSearchLinkVC.swift */; };
 		76F2EAD42ACAC48B000E73FC /* AffiliateOverviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2EAD32ACAC48B000E73FC /* AffiliateOverviewVC.swift */; };
 		76F2EAD62ACAC49B000E73FC /* AffiliateLinkManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2EAD52ACAC49B000E73FC /* AffiliateLinkManagerVC.swift */; };
 		B50087AF22B76E4500DBC9A0 /* WebviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50087AD22B76E4500DBC9A0 /* WebviewVC.swift */; };
@@ -1213,6 +1215,8 @@
 		762C869D2ABC744700DAC707 /* SchemaMetadata.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaMetadata.graphql.swift; sourceTree = "<group>"; };
 		763407482AC542E7001DA7CF /* iOSDropDown.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSDropDown.swift; sourceTree = "<group>"; };
 		7634074A2AC55ABC001DA7CF /* DocCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocCVC.swift; sourceTree = "<group>"; };
+		7644CEEB2AD320FD0086E886 /* AffiliateLinkManagerCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateLinkManagerCVC.swift; sourceTree = "<group>"; };
+		765BB7202AD066B60091E718 /* SearchPlaceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPlaceVC.swift; sourceTree = "<group>"; };
 		7669E93D2AB6C32900938861 /* ThreadItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadItem.swift; sourceTree = "<group>"; };
 		76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateSearchLinkCVC.swift; sourceTree = "<group>"; };
 		76DE9F772AB4BA98003191ED /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
@@ -1775,6 +1779,8 @@
 				76F2EAD32ACAC48B000E73FC /* AffiliateOverviewVC.swift */,
 				76F2EAD52ACAC49B000E73FC /* AffiliateLinkManagerVC.swift */,
 				76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */,
+				765BB7202AD066B60091E718 /* SearchPlaceVC.swift */,
+				7644CEEB2AD320FD0086E886 /* AffiliateLinkManagerCVC.swift */,
 			);
 			path = AffiliateTabbarPages;
 			sourceTree = "<group>";
@@ -3946,7 +3952,7 @@
 				2CB6C076237926ED0017C80F /* EmailGoogleFBTableViewCell.xib in Resources */,
 				B5D26E342600F29F00383B6A /* reviewCollectionCell.xib in Resources */,
 				2C77EB1223BB4AA70014199D /* ReviewUserCell.xib in Resources */,
-				7602D0AF2ABCA4FF00635A6D /* Main.storyboard in Resources */,
+				76C1A5242ACFBFAE0031BE76 /* Main.storyboard in Resources */,
 				B587F790281BB083009D9842 /* BeVietnamPro-SemiBold.ttf in Resources */,
 				B50841B1289908D300D458E4 /* GuestListingNew.xib in Resources */,
 				B51E62AD2245005C00356E3F /* profile.png in Resources */,
@@ -4316,6 +4322,7 @@
 				762C870D2ABC744700DAC707 /* SocialVerification.graphql.swift in Sources */,
 				762C86FD2ABC744700DAC707 /* GetListingSettingQuery.graphql.swift in Sources */,
 				762C874C2ABC744700DAC707 /* EditListing.graphql.swift in Sources */,
+				765BB7212AD066B60091E718 /* SearchPlaceVC.swift in Sources */,
 				762C87742ABC744700DAC707 /* Reviewlist.graphql.swift in Sources */,
 				762C87022ABC744700DAC707 /* GetListingDetailsStep3Query.graphql.swift in Sources */,
 				2C98561622E87645004D960A /* TextFieldCell.swift in Sources */,
@@ -4356,6 +4363,7 @@
 				762C872F2ABC744700DAC707 /* ReservationCancel.graphql.swift in Sources */,
 				762C87572ABC744700DAC707 /* LanguageItemType.graphql.swift in Sources */,
 				762C872D2ABC744700DAC707 /* NewThreadsCommonType.graphql.swift in Sources */,
+				76C1A5232ACFBF790031BE76 /* AffiliateSearchLinkVC.swift in Sources */,
 				B566707C22A7C6C2004D04F6 /* TripsCell.swift in Sources */,
 				762C870A2ABC744700DAC707 /* ContactSupportQuery.graphql.swift in Sources */,
 				B5CFA7802249E87500622D64 /* AirbnbOccupantFilterController.swift in Sources */,
@@ -4397,7 +4405,6 @@
 				762C87152ABC744700DAC707 /* SpecialPricingType.graphql.swift in Sources */,
 				B51F80C62240CBA300E437C1 /* WelcomePageVC.swift in Sources */,
 				76F2EAD62ACAC49B000E73FC /* AffiliateLinkManagerVC.swift in Sources */,
-				76F2EAD22ACAC473000E73FC /* AffiliateSearchLinkVC.swift in Sources */,
 				B5E9E1D622A51B6800B91B5B /* AccommadationCell.swift in Sources */,
 				B5CFA78F224A39D800622D64 /* SearchPageVC.swift in Sources */,
 				B553A3D8224C9B5300138107 /* MoreFilterVC.swift in Sources */,
@@ -4505,6 +4512,7 @@
 				B5CFA7822249E87E00622D64 /* AirbnbSwitch.swift in Sources */,
 				762C87112ABC744700DAC707 /* AllReservation.graphql.swift in Sources */,
 				2CFAA45122FBF181004A2B2E /* BasePriceViewController.swift in Sources */,
+				7644CEEC2AD320FD0086E886 /* AffiliateLinkManagerCVC.swift in Sources */,
 				762C872C2ABC744700DAC707 /* Currency.graphql.swift in Sources */,
 				762C87272ABC744700DAC707 /* AffiliateLinksType.graphql.swift in Sources */,
 				762C87262ABC744700DAC707 /* UserListingData.graphql.swift in Sources */,

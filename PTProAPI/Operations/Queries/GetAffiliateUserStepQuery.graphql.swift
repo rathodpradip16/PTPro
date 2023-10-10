@@ -8,7 +8,7 @@ extension PTProAPI {
     static let operationName: String = "getAffiliateUserStep"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query getAffiliateUserStep($userId: String) { getAffiliateUserStep(userId: $userId) { __typename status errorMessage stepInfo stepDetails { __typename userId payeeName address city state zipcode country phoneNumber websiteName websiteUrl typeList websiteDrive typesOfWebsite primryJoining websiteVisitors buildLinks websiteMonitize } } }"#
+        #"query getAffiliateUserStep($userId: String) { getAffiliateUserStep(userId: $userId) { __typename status errorMessage stepInfo stepDetails { __typename payeeName address address2 city countryCode state zipcode country phoneNumber websiteName websiteUrl websiteAbout typeList websiteDrive typesOfWebsite primryJoining websiteVisitors buildLinks websiteMonitize } } }"#
       ))
 
     public var userId: GraphQLNullable<String>
@@ -61,16 +61,18 @@ extension PTProAPI {
           static var __parentType: Apollo.ParentType { PTProAPI.Objects.AffiliateUserverificationaccountType }
           static var __selections: [Apollo.Selection] { [
             .field("__typename", String.self),
-            .field("userId", String?.self),
             .field("payeeName", String?.self),
             .field("address", String?.self),
+            .field("address2", String?.self),
             .field("city", String?.self),
+            .field("countryCode", Int?.self),
             .field("state", String?.self),
             .field("zipcode", String?.self),
             .field("country", String?.self),
             .field("phoneNumber", String?.self),
             .field("websiteName", String?.self),
             .field("websiteUrl", String?.self),
+            .field("websiteAbout", String?.self),
             .field("typeList", String?.self),
             .field("websiteDrive", String?.self),
             .field("typesOfWebsite", String?.self),
@@ -80,16 +82,18 @@ extension PTProAPI {
             .field("websiteMonitize", String?.self),
           ] }
 
-          var userId: String? { __data["userId"] }
           var payeeName: String? { __data["payeeName"] }
           var address: String? { __data["address"] }
+          var address2: String? { __data["address2"] }
           var city: String? { __data["city"] }
+          var countryCode: Int? { __data["countryCode"] }
           var state: String? { __data["state"] }
           var zipcode: String? { __data["zipcode"] }
           var country: String? { __data["country"] }
           var phoneNumber: String? { __data["phoneNumber"] }
           var websiteName: String? { __data["websiteName"] }
           var websiteUrl: String? { __data["websiteUrl"] }
+          var websiteAbout: String? { __data["websiteAbout"] }
           var typeList: String? { __data["typeList"] }
           var websiteDrive: String? { __data["websiteDrive"] }
           var typesOfWebsite: String? { __data["typesOfWebsite"] }

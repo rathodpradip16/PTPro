@@ -53,26 +53,16 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
     func initializeText(){
         if let stepDetails = Utility.shared.GetAffiliateUserStep?.stepDetails?.first{
             self.txtPayeeName.text = stepDetails?.payeeName ?? ""
-            if let arr = stepDetails?.address?.components(separatedBy: ";;;"),arr.count != 0{
-                if arr.count == 2{
-                    self.txtAddressLine1.text = arr[0]
-                    self.txtAddressLine2.text = arr[1]
-                }else if arr.count == 1{
-                    self.txtAddressLine1.text = arr[0]
-                }else{
-                    self.txtAddressLine1.text = stepDetails?.address ?? ""
-                    self.txtAddressLine2.text = stepDetails?.address ?? ""
-                }
-            }else{
-                self.txtAddressLine1.text = stepDetails?.address ?? ""
-                self.txtAddressLine2.text = stepDetails?.address ?? ""
-            }
-            self.txtAddressLine2.text = stepDetails?.address ?? ""
+            self.txtAddressLine1.text = stepDetails?.address ?? ""
+            self.txtAddressLine2.text = stepDetails?.address2 ?? ""
             self.txtCity.text = stepDetails?.city ?? ""
             self.txtState.text = stepDetails?.state ?? ""
             self.txtZipCode.text = stepDetails?.zipcode ?? ""
             self.txtCountry.text = stepDetails?.country ?? ""
-            self.txtPhoneNumber.text = stepDetails?.phoneNumber ?? ""
+            
+            if let phoneNumber = stepDetails?.phoneNumber {
+                self.txtPhoneNumber.preFillText(source: NKVSource(phoneExtension: String(stepDetails?.countryCode ?? 91)), number: Int(phoneNumber)!)
+            }
         }
     }
     
@@ -227,7 +217,6 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
     }
     
     func countriesViewController(_ sender: NKVPhonePicker.CountriesViewController, didSelectCountry country: NKVPhonePicker.Country) {
-        
     }
     
     //MARK: - actions
@@ -308,7 +297,7 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
     
     //MARK: - API CALL
     func apiCallAffiliateUserAccountInfo(){
-        let createAffiliateUserAccountInfo = PTProAPI.CreateAffiliateUserAccountInfoMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), payeeName: .some(txtPayeeName.text!), address: .some("\(txtAddressLine1.text!);;;\(txtAddressLine2.text!)") , city: .some(txtCity.text!), state: .some(txtState.text!), zipcode: .some(Int(txtZipCode.text!) ?? 0), country: .some(txtCountry.text!), phoneNumber: .some(txtPhoneNumber.text))
+        let createAffiliateUserAccountInfo = PTProAPI.CreateAffiliateUserAccountInfoMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), payeeName: .some(txtPayeeName.text!), address: .some("\(txtAddressLine1.text!)") ,address2: .some("\(txtAddressLine2.text!)") , city: .some(txtCity.text!), state: .some(txtState.text!), zipcode: .some(Int(txtZipCode.text!) ?? 0), countryCode: .some(91) , country: .some(txtCountry.text!), phoneNumber: .some(txtPhoneNumber.text))
         Network.shared.apollo_headerClient.perform(mutation: createAffiliateUserAccountInfo){  response in
             switch response {
             case .success(let result):
