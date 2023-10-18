@@ -8,7 +8,6 @@
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
-        <capability name="UIMenu" message="Requires Xcode 11 or later." minToolsVersion="11.0" requiredIntegratedClassName="UICommandDiff"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -1973,7 +1972,7 @@
                                                                 </subviews>
                                                             </stackView>
                                                         </subviews>
-                                                        <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="trailing" secondItem="l9Z-nb-Xqp" secondAttribute="trailing" constant="8" id="M7d-2F-IM1"/>
                                                             <constraint firstItem="l9Z-nb-Xqp" firstAttribute="leading" secondItem="BM6-vq-WIa" secondAttribute="leading" constant="8" id="jl3-hn-WIw"/>
@@ -2012,7 +2011,7 @@
                                                                 </subviews>
                                                             </stackView>
                                                         </subviews>
-                                                        <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstItem="HrM-wL-XdY" firstAttribute="top" secondItem="FAp-7M-0sc" secondAttribute="top" constant="16" id="ATb-1G-Dr1"/>
                                                             <constraint firstItem="HrM-wL-XdY" firstAttribute="leading" secondItem="FAp-7M-0sc" secondAttribute="leading" constant="8" id="D67-hH-rco"/>
@@ -2051,7 +2050,7 @@
                                                                 </subviews>
                                                             </stackView>
                                                         </subviews>
-                                                        <color key="backgroundColor" red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstItem="1yc-D6-4xb" firstAttribute="leading" secondItem="Kbj-yW-BXQ" secondAttribute="leading" constant="8" id="DLQ-k7-hOn"/>
                                                             <constraint firstAttribute="trailing" secondItem="1yc-D6-4xb" secondAttribute="trailing" constant="8" id="QFl-BZ-3OX"/>
@@ -2219,45 +2218,38 @@
                                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KjO-i1-6n3">
-                                                        <rect key="frame" x="234" y="5.5" width="160" height="40"/>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bmv-mW-c1S" customClass="DropDown" customModule="App" customModuleProvider="target">
+                                                        <rect key="frame" x="234" y="4" width="160" height="42.5"/>
+                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="160" id="V43-f1-3By"/>
-                                                            <constraint firstAttribute="height" constant="40" id="bjf-Ls-3b1"/>
+                                                            <constraint firstAttribute="width" constant="160" id="gAD-RO-XeD"/>
                                                         </constraints>
-                                                        <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="30" maxY="0.0"/>
-                                                        <inset key="imageEdgeInsets" minX="1" minY="0.0" maxX="10" maxY="0.0"/>
-                                                        <menu key="menu" title="Please Select" id="RlC-9m-1IS">
-                                                            <children>
-                                                                <command title="Last 7 Days" id="Nkg-uG-RwY"/>
-                                                                <command title="Week" id="OU3-RG-PIg"/>
-                                                                <command title="Months" id="bEw-QH-9AH"/>
-                                                            </children>
-                                                        </menu>
-                                                        <state key="normal" title="Please select" image="downArrow">
-                                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </state>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="shadow" value="YES"/>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="checkMarkEnabled" value="YES"/>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                                 <real key="value" value="15"/>
                                                             </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="arrowSize">
+                                                                <real key="value" value="4"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="arrowColor">
+                                                                <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
-                                                    </button>
+                                                    </view>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="VUz-22-rMA" firstAttribute="leading" secondItem="bi7-Yz-sxj" secondAttribute="leading" constant="8" id="2Fs-aX-lH7"/>
+                                                    <constraint firstAttribute="bottom" secondItem="bmv-mW-c1S" secondAttribute="bottom" constant="4" id="6Er-9c-dcl"/>
                                                     <constraint firstItem="Wo6-p8-XYT" firstAttribute="leading" secondItem="VUz-22-rMA" secondAttribute="trailing" constant="4" id="6VZ-qr-Uc1"/>
-                                                    <constraint firstItem="KjO-i1-6n3" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="HhM-aF-1hU" secondAttribute="trailing" constant="8" id="AyP-2A-J5d"/>
                                                     <constraint firstItem="HhM-aF-1hU" firstAttribute="top" secondItem="bi7-Yz-sxj" secondAttribute="top" constant="4" id="CXY-y1-zqD"/>
                                                     <constraint firstItem="Wo6-p8-XYT" firstAttribute="top" secondItem="HhM-aF-1hU" secondAttribute="bottom" constant="1.5" id="IFZ-Vi-eyY"/>
-                                                    <constraint firstItem="KjO-i1-6n3" firstAttribute="centerY" secondItem="bi7-Yz-sxj" secondAttribute="centerY" id="M2s-gh-f9l"/>
                                                     <constraint firstItem="VUz-22-rMA" firstAttribute="centerY" secondItem="Wo6-p8-XYT" secondAttribute="centerY" id="PKt-Pm-K9f"/>
                                                     <constraint firstItem="HhM-aF-1hU" firstAttribute="leading" secondItem="bi7-Yz-sxj" secondAttribute="leading" constant="8" id="kMo-75-zgY"/>
-                                                    <constraint firstAttribute="trailing" secondItem="KjO-i1-6n3" secondAttribute="trailing" id="uFv-FI-vXG"/>
+                                                    <constraint firstAttribute="trailing" secondItem="bmv-mW-c1S" secondAttribute="trailing" id="qz2-KS-dxA"/>
                                                     <constraint firstAttribute="bottom" secondItem="Wo6-p8-XYT" secondAttribute="bottom" constant="4" id="v9E-Yg-5t5"/>
+                                                    <constraint firstItem="bmv-mW-c1S" firstAttribute="top" secondItem="bi7-Yz-sxj" secondAttribute="top" constant="4" id="y7R-CX-sXq"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iVU-eR-EnE">
@@ -2443,6 +2435,31 @@
                             <constraint firstItem="WOk-mg-5gg" firstAttribute="leading" secondItem="mG2-7l-dND" secondAttribute="leading" id="wfp-7N-ere"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="dropDownFilter" destination="bmv-mW-c1S" id="KrC-iz-L1r"/>
+                        <outlet property="lblFilterClicksTitle" destination="PLz-Re-I06" id="Xgj-z2-AlY"/>
+                        <outlet property="lblFilterClicksValue" destination="VWn-1U-dxk" id="vJU-b3-GN6"/>
+                        <outlet property="lblFilterConversionsTitle" destination="KVx-FA-El0" id="adj-Vd-0it"/>
+                        <outlet property="lblFilterConversionsValue" destination="Nf7-6H-9Ot" id="vwI-qa-z0w"/>
+                        <outlet property="lblFilterEarningTitle" destination="gkf-f1-7VD" id="x1F-2C-rvu"/>
+                        <outlet property="lblFilterEarningValue" destination="ra1-x9-vE1" id="zHn-Zp-cIK"/>
+                        <outlet property="lblFromDateTitle" destination="VKC-MC-1Uo" id="LsH-jv-CGt"/>
+                        <outlet property="lblFromDateValue" destination="m7S-sL-H8B" id="MyY-1I-QHD"/>
+                        <outlet property="lblStatisticsDesc" destination="Wo6-p8-XYT" id="d9O-Ou-7hS"/>
+                        <outlet property="lblStatisticsTitle" destination="HhM-aF-1hU" id="TBf-Ro-GHp"/>
+                        <outlet property="lblToDateTitle" destination="y9X-HK-4JZ" id="DXT-yw-YFk"/>
+                        <outlet property="lblToDateValue" destination="cLM-Z4-6Dy" id="sMk-52-H5X"/>
+                        <outlet property="lblTotalClicksTitle" destination="bYL-6j-ntG" id="IKe-xv-q9u"/>
+                        <outlet property="lblTotalClicksValue" destination="WJl-wW-czX" id="tv3-SF-Pyz"/>
+                        <outlet property="lblTotalConversionsTitle" destination="iJ8-Cc-6rF" id="6nV-xF-T8j"/>
+                        <outlet property="lblTotalConversionsValue" destination="yCe-O7-nOi" id="tGR-Si-hVx"/>
+                        <outlet property="lblTotalEarningTitle" destination="c3e-B1-rTB" id="eSe-We-38h"/>
+                        <outlet property="lblTotalEarningValue" destination="LFJ-u3-0h4" id="Di2-qo-12F"/>
+                        <outlet property="viewStatisticsDot" destination="VUz-22-rMA" id="bBb-RB-iMA"/>
+                        <outlet property="viewTotalClicks" destination="Kbj-yW-BXQ" id="R2O-dP-10b"/>
+                        <outlet property="viewTotalConversions" destination="BM6-vq-WIa" id="Ove-zI-j48"/>
+                        <outlet property="viewTotalEarning" destination="FAp-7M-0sc" id="frl-59-8z7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O5l-qh-ram" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3097,7 +3114,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ENTIRE PLA CE E NTIRE PLACE ENTIRE PLACEE NTIRE PLACE ENT IRE PLACE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CPX-UO-Jig">
-                                                    <rect key="frame" x="8" y="220" width="299.5" height="20"/>
+                                                    <rect key="frame" x="8" y="220" width="296" height="20"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="6xN-Qk-jCs"/>
@@ -3576,6 +3593,33 @@
         </scene>
     </scenes>
     <designables>
+        <designable name="8il-kR-FQ9">
+            <size key="intrinsicContentSize" width="33" height="34"/>
+        </designable>
+        <designable name="EUp-Je-PeE">
+            <size key="intrinsicContentSize" width="33" height="34"/>
+        </designable>
+        <designable name="Gf5-F0-bH5">
+            <size key="intrinsicContentSize" width="33" height="34"/>
+        </designable>
+        <designable name="RhH-vt-R4Q">
+            <size key="intrinsicContentSize" width="33" height="34"/>
+        </designable>
+        <designable name="biz-3M-HRi">
+            <size key="intrinsicContentSize" width="33" height="34"/>
+        </designable>
+        <designable name="o6z-30-JPM">
+            <size key="intrinsicContentSize" width="33" height="34"/>
+        </designable>
+        <designable name="p48-JE-YZr">
+            <size key="intrinsicContentSize" width="33" height="34"/>
+        </designable>
+        <designable name="pS3-s6-Igl">
+            <size key="intrinsicContentSize" width="33" height="34"/>
+        </designable>
+        <designable name="vB8-lp-F58">
+            <size key="intrinsicContentSize" width="33" height="34"/>
+        </designable>
         <designable name="ynO-uZ-izF">
             <size key="intrinsicContentSize" width="33" height="34"/>
         </designable>
@@ -3586,7 +3630,6 @@
         <image name="bg_image3" width="1280" height="853"/>
         <image name="calendar" catalog="system" width="128" height="107"/>
         <image name="cross" width="30" height="30"/>
-        <image name="downArrow" width="10" height="5.5"/>
         <image name="dropdown" width="30" height="30"/>
         <image name="explore_filter" width="17.5" height="15.5"/>
         <image name="greenPlus" width="24" height="24"/>
@@ -3635,9 +3678,6 @@
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tertiaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29803921568627451" colorSpace="custom" customColorSpace="sRGB"/>
