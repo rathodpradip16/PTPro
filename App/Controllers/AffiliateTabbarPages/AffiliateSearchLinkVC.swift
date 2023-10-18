@@ -50,7 +50,6 @@ class AffiliateSearchLinkVC: UIViewController,UICollectionViewDelegate,UICollect
     }
     
     func setUpdatedView(){
-        
         self.offlineView.isHidden = true
         self.NoresultView.isHidden = true
         
@@ -69,7 +68,6 @@ class AffiliateSearchLinkVC: UIViewController,UICollectionViewDelegate,UICollect
         self.cvLinkSearch.dataSource = self
         
         affiliateSearchLinkListAPICall(address: "", filter: selectedFilter.rawValue)
-        
     }
     
     //MARK: - CUSTOM METHOD
@@ -94,14 +92,11 @@ class AffiliateSearchLinkVC: UIViewController,UICollectionViewDelegate,UICollect
         let latest = UIAlertAction(title: "Latest", style: .default) { action in
             if self.selectedFilter != .latest{
                 self.selectedFilter = .latest
-//                self.cvLinkSearch?.prepareSkeleton(completion: { [self] done in
-//                    self.cvLinkSearch?.isSkeletonable = true
-//                    self.cvLinkSearch?.showAnimatedGradientSkeleton()
-//                })
-                self.cvLinkSearch?.isSkeletonable = true
+                self.cvLinkSearch?.prepareSkeleton(completion: { [self] done in
+                    self.cvLinkSearch?.isSkeletonable = true
+                })
                 self.cvLinkSearch?.showAnimatedGradientSkeleton()
-
-                self.affiliateSearchLinkListAPICall(address: self.isFilterApplied() ? Utility.shared.searchlocationfromAffiliateSearch : "" , filter: FilterType.latest.rawValue)
+                self.affiliateSearchLinkListAPICall(address: Utility.shared.searchlocationfromAffiliateSearch , filter: FilterType.latest.rawValue)
             }
         }
         
@@ -112,7 +107,7 @@ class AffiliateSearchLinkVC: UIViewController,UICollectionViewDelegate,UICollect
                     self.cvLinkSearch?.isSkeletonable = true
                     self.cvLinkSearch?.showAnimatedGradientSkeleton()
                 })
-                self.affiliateSearchLinkListAPICall(address: self.isFilterApplied() ? Utility.shared.searchlocationfromAffiliateSearch : "" , filter: FilterType.LowToHigh.rawValue)
+                self.affiliateSearchLinkListAPICall(address: Utility.shared.searchlocationfromAffiliateSearch , filter: FilterType.LowToHigh.rawValue)
             }
         }
         
@@ -123,7 +118,7 @@ class AffiliateSearchLinkVC: UIViewController,UICollectionViewDelegate,UICollect
                     self.cvLinkSearch?.isSkeletonable = true
                     self.cvLinkSearch?.showAnimatedGradientSkeleton()
                 })
-                self.affiliateSearchLinkListAPICall(address: self.isFilterApplied() ? Utility.shared.searchlocationfromAffiliateSearch : "" , filter: FilterType.HighToLow.rawValue)
+                self.affiliateSearchLinkListAPICall(address: Utility.shared.searchlocationfromAffiliateSearch, filter: FilterType.HighToLow.rawValue)
             }
         }
         
@@ -153,14 +148,6 @@ class AffiliateSearchLinkVC: UIViewController,UICollectionViewDelegate,UICollect
         self.present(alert, animated: true)
     }
     
-    func isFilterApplied() -> Bool{
-        if lblLocation.text == "\(Utility.shared.getLanguage()?.value(forKey:"TypeCityNameHere") ?? "Type City Name Here")"{
-            return false
-        }else{
-            return true
-        }
-    }
-    
     //MARK: - Actions
     @IBAction func onFilter(_ sender: UIButton) {
         selectFilterType()
@@ -176,6 +163,17 @@ class AffiliateSearchLinkVC: UIViewController,UICollectionViewDelegate,UICollect
         self.present(searchPlaceVC, animated: true, completion: nil)
     }
     
+    @IBAction func onClickBack(_ sender: UIButton) {
+        self.dismiss(animated: true)
+    }
+    
+    @IBAction func onClickRetry(_ sender: UIButton) {
+        if Utility.shared.searchlocationfromAffiliateSearch != ""{
+            self.searchLinkAPICall(address: Utility.shared.searchlocationfromAffiliateSearch)
+        }else{
+            self.searchLinkAPICall(address:"" )
+        }
+    }
     @objc func onClickGetLink(sender:UIButton){
         let selectedIndex = sender.tag
         if let generated = arrLinkSearchList[selectedIndex].isGenerated,generated == 1{

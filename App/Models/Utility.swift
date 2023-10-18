@@ -24,10 +24,10 @@ public class Utility: NSObject {
     var ContainsTodayDate = false
     var isFromAffiliateSearchPage = false
     var isFromAffiliateLinkManagerPage = false
-    var searchAddressfromAffiliateSearch:String!
-    var searchAddressfromAffiliateLinkManager:String!
-    var searchlocationfromAffiliateSearch:String!
-    var searchlocationfromAffiliateLinkManager:String!
+    var searchAddressfromAffiliateSearch = ""
+    var searchAddressfromAffiliateLinkManager = ""
+    var searchlocationfromAffiliateSearch = ""
+    var searchlocationfromAffiliateLinkManager = ""
     //var signupArray = NSMutableArray()
     var signupArray = NSMutableArray()
     var signupdataArray = [AnyObject]()

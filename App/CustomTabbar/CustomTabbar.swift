@@ -162,7 +162,7 @@ class CustomTabbar: UITabBarController,UITabBarControllerDelegate {
         self.config(viewController:saveObj, selImg: #imageLiteral(resourceName: "tabsaved_red"),unselectImg:#imageLiteral(resourceName: "tabsaved"), index: 1,title:"\((Utility.shared.getLanguage()?.value(forKey:"tabsaved")) ?? "Saved")")
         
         let tripsObj = TripsMainVC()
-        self.config(viewController:tripsObj,selImg: UIImage(),unselectImg:UIImage(), index: 2,title:"\((Utility.shared.getLanguage()?.value(forKey:"tabtrips")) ?? "Trips")")
+        self.config(viewController:tripsObj,selImg: UIImage.imageWithColor(color: .clear, size: CGSize(width: 1, height: 1)) ,unselectImg: UIImage.imageWithColor(color: .clear, size: CGSize(width: 1, height: 1)), index: 2,title:"\((Utility.shared.getLanguage()?.value(forKey:"tabtrips")) ?? "Trips")")
         
         let messgaeObj = TripsMessageVC()
         self.config(viewController:messgaeObj,selImg:#imageLiteral(resourceName: "tabchat_red"),unselectImg:#imageLiteral(resourceName: "tabchat"), index:3,title:"\((Utility.shared.getLanguage()?.value(forKey:"tabinbox")) ?? "Inbox")")

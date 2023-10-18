@@ -88,14 +88,6 @@ class AffiliateLinkManagerVC: UIViewController,UICollectionViewDelegate,UICollec
         
         retry_button.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"retry"))!)", for:.normal)
     }
-        
-    func isFilterApplied() -> Bool{
-        if lblLocation.text == "\(Utility.shared.getLanguage()?.value(forKey:"TypeCityNameHere") ?? "Type City Name Here")"{
-            return false
-        }else{
-            return true
-        }
-    }
     
     //MARK: - Actions
     @IBAction func onClickPlaceSelection(_ sender: UIButton) {
@@ -124,6 +116,10 @@ class AffiliateLinkManagerVC: UIViewController,UICollectionViewDelegate,UICollec
         }else{
             self.affiliateManagerLinkListAPICall(address: Utility.shared.searchlocationfromAffiliateLinkManager)
         }
+    }
+
+    @IBAction func onClickBack(_ sender: UIButton) {
+        self.dismiss(animated: true)
     }
 
     //MARK: - UICollectionView delegate

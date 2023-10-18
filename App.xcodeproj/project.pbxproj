@@ -1775,12 +1775,12 @@
 		761BE1B72ACA9F3A00AF4985 /* AffiliateTabbarPages */ = {
 			isa = PBXGroup;
 			children = (
+				76F2EAD52ACAC49B000E73FC /* AffiliateLinkManagerVC.swift */,
 				76F2EAD12ACAC473000E73FC /* AffiliateSearchLinkVC.swift */,
 				76F2EAD32ACAC48B000E73FC /* AffiliateOverviewVC.swift */,
-				76F2EAD52ACAC49B000E73FC /* AffiliateLinkManagerVC.swift */,
-				76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */,
 				765BB7202AD066B60091E718 /* SearchPlaceVC.swift */,
 				7644CEEB2AD320FD0086E886 /* AffiliateLinkManagerCVC.swift */,
+				76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */,
 			);
 			path = AffiliateTabbarPages;
 			sourceTree = "<group>";

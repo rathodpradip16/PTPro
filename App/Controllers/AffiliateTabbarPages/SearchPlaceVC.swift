@@ -82,12 +82,12 @@ extension SearchPlaceVC: GMSAutocompleteTableDataSourceDelegate {
     func tableDataSource(_ tableDataSource: GMSAutocompleteTableDataSource, didAutocompleteWith place: GMSPlace) {
         // Do something with the selected place.
         if(Utility.shared.isFromAffiliateSearchPage){
-            Utility.shared.searchAddressfromAffiliateSearch = place.formattedAddress
-            Utility.shared.searchlocationfromAffiliateSearch = place.name
+            Utility.shared.searchAddressfromAffiliateSearch = place.formattedAddress ?? ""
+            Utility.shared.searchlocationfromAffiliateSearch = place.name ?? ""
         }
         if(Utility.shared.isFromAffiliateLinkManagerPage){
-            Utility.shared.searchAddressfromAffiliateLinkManager = place.formattedAddress
-            Utility.shared.searchlocationfromAffiliateLinkManager = place.name
+            Utility.shared.searchAddressfromAffiliateLinkManager = place.formattedAddress ?? ""
+            Utility.shared.searchlocationfromAffiliateLinkManager = place.name ?? ""
         }
         delegate?.searchLinkAPICall(address: place.name ?? "")
         self.dismiss(animated: true)
