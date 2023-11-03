@@ -19,8 +19,6 @@ class SaveGroupPageVC: UIViewController,UICollectionViewDelegate,UICollectionVie
     func updateWhishlistStatus(status: Bool, title: String) {
         self.wishlistTitle.text = title
     }
-    
-
 
 
 

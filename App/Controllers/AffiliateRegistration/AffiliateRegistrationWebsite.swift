@@ -188,24 +188,6 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
             lblHowDoYouUsuallyBuildLinks.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowDoYouUsuallyBuildLinks")) ?? "How do you usually build links")"
             lblHowElseDoYouMonetize.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowElseDoYouMonetize")) ?? "How else do you monetize your Website")"
     }
-
-//    func initializeDropDown(){
-//        dropDownWhatTypeOfSiteIsYourWebsite.optionArray = ["ECommerce Website",
-//                                "Business Website",
-//                                "Blog Website",
-//                                "Portfolio Website",
-//                                "Event Website",
-//                                "Personal Website",
-//                                "Membership Website",
-//                                "Nonprofit Website",
-//                                "Informational Website",
-//                                "Online forum"]
-//        //Its Id Values and its optional
-//        dropDownWhatTypeOfSiteIsYourWebsite.optionIds = [0,1,2,3,4,5,6,7,8,9]
-//        dropDownWhatTypeOfSiteIsYourWebsite.didSelect{(selectedText , index ,id) in
-//            self.dropDownWhatTypeOfSiteIsYourWebsite.text = selectedText
-//        }
-//    }
     
     //MARK: - Action Methods
     @IBAction func onClickAmenities(_ sender: UIButton) {
@@ -279,11 +261,14 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if(textField == dropDownWhatTypeOfSiteIsYourWebsite){
             self.view.endEditing(true)
-            self.dropDownWhatTypeOfSiteIsYourWebsite.showList()
+            DispatchQueue.main.async {
+                self.dropDownWhatTypeOfSiteIsYourWebsite.showList()
+            }
             return false
         }
         return true
     }
+    
     //MARK: - API CALL
     func apiCreateAffiliateUserWebList(){
         let createAffiliateUserWebsite = PTProAPI.CreateAffiliateUserWebListMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), websiteName: .some(txtNameOfYourWebsite.text!), websiteUrl: .some(txtURLYouWillSendTheTraffic.text!), websiteAbout: .some(txtWhatIsYourWebsiteAccount.text!), typeList: .some(convertTypeListToString()), websiteDrive: .some(convertDriveWebsiteListToString()), typesOfWebsite: .some(dropDownWhatTypeOfSiteIsYourWebsite.text ?? ""), primryJoining: .some(txtPrimaryReasonForJoining.text!), websiteVisitors: .some(txtHowManyVisitorsShouldYourWebsiteGet.text!), buildLinks: .some(txtHowDoYouUsuallyBuildLinks.text!), websiteMonitize: .some(txtHowElseDoYouMonetize.text!))

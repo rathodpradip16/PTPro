@@ -29,9 +29,13 @@ class AffiliateLinkManagerVC: UIViewController,UICollectionViewDelegate,UICollec
     @IBOutlet weak var retry_button: UIButton!
     @IBOutlet weak var error_label: UILabel!
     
+    
+    @IBOutlet weak var lblLinkCopied: UILabel!
+    @IBOutlet weak var viewLinkCopied: UIView!
     //MARK: - VIEW LIFE CYCLE
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewLinkCopied.isHidden = true
         initialSetup()
         Utility.shared.searchlocationfromAffiliateLinkManager = ""
         Utility.shared.searchAddressfromAffiliateLinkManager = ""
@@ -101,7 +105,24 @@ class AffiliateLinkManagerVC: UIViewController,UICollectionViewDelegate,UICollec
     }
     
     @objc func onClickGetLink(sender:UIButton){
-        self.shareUrl(selectedIndex: sender.tag)
+        UIPasteboard.general.string = "\(SHARE_URL)\(arrLinkManagerList[sender.tag].id ?? 0)?ref=\(arrLinkManagerList[sender.tag].referralId ?? "")"
+                
+        UIView.animate(withDuration: 0.3, animations: {
+            self.viewLinkCopied.alpha = 1.0
+        }) { (finished) in
+            self.viewLinkCopied.isHidden = !finished
+        }
+  //      self.shareUrl(selectedIndex: sender.tag)
+        self.perform(#selector(hideViewLinkCopied), with: nil, afterDelay: 1.0)
+    }
+    
+    @objc func hideViewLinkCopied(){
+        UIView.animate(withDuration: 0.3, animations: {
+            self.viewLinkCopied.alpha = 0
+        }) { (finished) in
+            self.viewLinkCopied.isHidden = finished
+        }
+     //   self.viewLinkCopied.isHidden = true
     }
     
     func shareUrl(selectedIndex:Int){
@@ -137,28 +158,39 @@ class AffiliateLinkManagerVC: UIViewController,UICollectionViewDelegate,UICollec
             cell.img.sd_setImage(with: URL(string: "\(IMAGE_LISTING_MEDIUM)"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
         }
         
-        cell.lblEarningsValue.text = String(arrLinkManagerList[indexPath.row].earning ?? 0)
         cell.lblClickValue.text = String(arrLinkManagerList[indexPath.row].clickResult ?? 0)
-        cell.lblRevenueSharingValue.text = String(arrLinkManagerList[indexPath.row].clickResult ?? 0)
+
+        cell.lblRevenueSharingValue.text = String(arrLinkManagerList[indexPath.row].listingData?.affiliate_commission ?? 0) + "%"
 
         if(Utility.shared.getPreferredCurrency() != nil &&  Utility.shared.getPreferredCurrency() != "")
         {
-            let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)
-            let from_currency = self.arrLinkManagerList[indexPath.row].listingData?.currency
-            let currency_amount = self.arrLinkManagerList[indexPath.row].listingData?.basePrice != nil ? self.arrLinkManagerList[indexPath.row].listingData?.basePrice : 0
-            let price_value = Utility.shared.getCurrencyRate(basecurrency: Utility.shared.currencyvalue_from_API_base , fromCurrency:from_currency!, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount!)
-            let restricted_price =  Double(String(format: "%.2f",price_value))
-            cell.lblPrice.text =  "\(currencysymbol!)\(restricted_price!.clean)"
+            let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!) ?? ""
+            let from_currency = self.arrLinkManagerList[indexPath.row].listingData?.currency ?? Utility.shared.getPreferredCurrency()!
+                if let currency_amount = self.arrLinkManagerList[indexPath.row].listingData?.basePrice {
+                    let price_value = Utility.shared.getCurrencyRate(basecurrency: Utility.shared.currencyvalue_from_API_base , fromCurrency:from_currency, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount)
+                let restricted_price =  Double(String(format: "%.2f",price_value))
+                    cell.lblPrice.text =  "\(currencysymbol)\(restricted_price!.clean)"
+                }else{
+                    cell.lblPrice.text =  ""
+                }
+            cell.lblEarningsValue.text = currencysymbol + String(arrLinkManagerList[indexPath.row].earning ?? 0)
         }else{
-            let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: self.arrLinkManagerList[indexPath.row].listingData?.currency ?? "")
-            let from_currency = self.arrLinkManagerList[indexPath.row].listingData?.currency
-            let currency_amount = self.arrLinkManagerList[indexPath.row].listingData?.basePrice != nil ? self.arrLinkManagerList[indexPath.row].listingData?.basePrice : 0
-            let price_value = Utility.shared.getCurrencyRate(basecurrency:self.arrLinkManagerList[indexPath.row].listingData?.currency ?? "", fromCurrency:from_currency!, toCurrency:self.arrLinkManagerList[indexPath.row].listingData?.currency ?? "", CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount!)
-            let restricted_price =  Double(String(format: "%.2f",price_value))
-            cell.lblPrice.text = "\(currencysymbol!)\(restricted_price!.clean)"
+            let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: self.arrLinkManagerList[indexPath.row].listingData?.currency ?? "") ?? ""
+            let from_currency = self.arrLinkManagerList[indexPath.row].listingData?.currency ?? ""
+            if let currency_amount = self.arrLinkManagerList[indexPath.row].listingData?.basePrice {
+                let price_value = Utility.shared.getCurrencyRate(basecurrency:self.arrLinkManagerList[indexPath.row].listingData?.currency ?? "", fromCurrency:from_currency, toCurrency:self.arrLinkManagerList[indexPath.row].listingData?.currency ?? "", CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount)
+                let restricted_price =  Double(String(format: "%.2f",price_value))
+                cell.lblPrice.text = "\(currencysymbol)\(restricted_price!.clean)"
+            }else{
+                cell.lblPrice.text =  ""
+            }
+            cell.lblEarningsValue.text = currencysymbol + String(arrLinkManagerList[indexPath.row].earning ?? 0)
         }
         cell.btnCopyLink.tag = indexPath.row
         cell.btnCopyLink.addTarget(self, action: #selector(onClickGetLink(sender:)), for: .touchUpInside)
+        
+        cell.LblLinkCreationDate.text = "Link Creation Date: " + (self.arrLinkManagerList[indexPath.row].createdAt ?? "")
+
         return cell
     }
     

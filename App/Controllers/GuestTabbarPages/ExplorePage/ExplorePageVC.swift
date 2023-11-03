@@ -3063,7 +3063,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
                     
                     
                     self.collectionViewFilterPage.reloadData()
-                    if (result.data?.searchListing?.currentPage == 1){
+                    if (result.data?.searchListing?.currentPage == 1) &&  self.FilterArray.count != 0 {
                         self.collectionViewFilterPage.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
                     }
                     

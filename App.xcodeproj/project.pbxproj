@@ -323,11 +323,24 @@
 		762C878B2ABC744700DAC707 /* UserType.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762C869B2ABC744700DAC707 /* UserType.graphql.swift */; };
 		762C878C2ABC744700DAC707 /* SchemaConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762C869C2ABC744700DAC707 /* SchemaConfiguration.swift */; };
 		762C878D2ABC744700DAC707 /* SchemaMetadata.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762C869D2ABC744700DAC707 /* SchemaMetadata.graphql.swift */; };
+		762E64202AE94B66007D20A3 /* BalloonMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762E641F2AE94B66007D20A3 /* BalloonMarker.swift */; };
 		763407492AC542E8001DA7CF /* iOSDropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763407482AC542E7001DA7CF /* iOSDropDown.swift */; };
 		7634074B2AC55ABC001DA7CF /* DocCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7634074A2AC55ABC001DA7CF /* DocCVC.swift */; };
 		7644CEEC2AD320FD0086E886 /* AffiliateLinkManagerCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7644CEEB2AD320FD0086E886 /* AffiliateLinkManagerCVC.swift */; };
 		765BB7212AD066B60091E718 /* SearchPlaceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765BB7202AD066B60091E718 /* SearchPlaceVC.swift */; };
+		765C67D82AE3BB26000B6AE9 /* IntAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C67D42AE3BB26000B6AE9 /* IntAxisValueFormatter.swift */; };
+		765C67D92AE3BB26000B6AE9 /* DayAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C67D52AE3BB26000B6AE9 /* DayAxisValueFormatter.swift */; };
+		765C67DA2AE3BB26000B6AE9 /* DateValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C67D62AE3BB26000B6AE9 /* DateValueFormatter.swift */; };
+		765C67DB2AE3BB26000B6AE9 /* LargeValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C67D72AE3BB26000B6AE9 /* LargeValueFormatter.swift */; };
+		765C67DF2AE3BB53000B6AE9 /* XYMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C67DD2AE3BB53000B6AE9 /* XYMarkerView.swift */; };
+		765C67E02AE3BB53000B6AE9 /* RadarMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C67DE2AE3BB53000B6AE9 /* RadarMarkerView.swift */; };
+		765DE79B2AF3FD19001FE2D2 /* ViewSubscriptionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765DE79A2AF3FD19001FE2D2 /* ViewSubscriptionsVC.swift */; };
+		765DE79E2AF3FD5D001FE2D2 /* PropertyInsightsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765DE79D2AF3FD5D001FE2D2 /* PropertyInsightsVC.swift */; };
+		765DE7A02AF3FD74001FE2D2 /* OccupancyInsightsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765DE79F2AF3FD74001FE2D2 /* OccupancyInsightsVC.swift */; };
+		765E56CF2AEAC06200615750 /* MonthAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765E56CE2AEAC06200615750 /* MonthAxisValueFormatter.swift */; };
 		7669E93E2AB6C32900938861 /* ThreadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669E93D2AB6C32900938861 /* ThreadItem.swift */; };
+		766E6D462AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766E6D452AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift */; };
+		766E83A32AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766E83A22AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift */; };
 		76C1A5232ACFBF790031BE76 /* AffiliateSearchLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2EAD12ACAC473000E73FC /* AffiliateSearchLinkVC.swift */; };
 		76C1A5242ACFBFAE0031BE76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7602D0AD2ABCA4FF00635A6D /* Main.storyboard */; };
 		76C50E182ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */; };
@@ -1213,11 +1226,24 @@
 		762C869B2ABC744700DAC707 /* UserType.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserType.graphql.swift; sourceTree = "<group>"; };
 		762C869C2ABC744700DAC707 /* SchemaConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaConfiguration.swift; sourceTree = "<group>"; };
 		762C869D2ABC744700DAC707 /* SchemaMetadata.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaMetadata.graphql.swift; sourceTree = "<group>"; };
+		762E641F2AE94B66007D20A3 /* BalloonMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonMarker.swift; sourceTree = "<group>"; };
 		763407482AC542E7001DA7CF /* iOSDropDown.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSDropDown.swift; sourceTree = "<group>"; };
 		7634074A2AC55ABC001DA7CF /* DocCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocCVC.swift; sourceTree = "<group>"; };
 		7644CEEB2AD320FD0086E886 /* AffiliateLinkManagerCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateLinkManagerCVC.swift; sourceTree = "<group>"; };
 		765BB7202AD066B60091E718 /* SearchPlaceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPlaceVC.swift; sourceTree = "<group>"; };
+		765C67D42AE3BB26000B6AE9 /* IntAxisValueFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntAxisValueFormatter.swift; sourceTree = "<group>"; };
+		765C67D52AE3BB26000B6AE9 /* DayAxisValueFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayAxisValueFormatter.swift; sourceTree = "<group>"; };
+		765C67D62AE3BB26000B6AE9 /* DateValueFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateValueFormatter.swift; sourceTree = "<group>"; };
+		765C67D72AE3BB26000B6AE9 /* LargeValueFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LargeValueFormatter.swift; sourceTree = "<group>"; };
+		765C67DD2AE3BB53000B6AE9 /* XYMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XYMarkerView.swift; sourceTree = "<group>"; };
+		765C67DE2AE3BB53000B6AE9 /* RadarMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarMarkerView.swift; sourceTree = "<group>"; };
+		765DE79A2AF3FD19001FE2D2 /* ViewSubscriptionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSubscriptionsVC.swift; sourceTree = "<group>"; };
+		765DE79D2AF3FD5D001FE2D2 /* PropertyInsightsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyInsightsVC.swift; sourceTree = "<group>"; };
+		765DE79F2AF3FD74001FE2D2 /* OccupancyInsightsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OccupancyInsightsVC.swift; sourceTree = "<group>"; };
+		765E56CE2AEAC06200615750 /* MonthAxisValueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthAxisValueFormatter.swift; sourceTree = "<group>"; };
 		7669E93D2AB6C32900938861 /* ThreadItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadItem.swift; sourceTree = "<group>"; };
+		766E6D452AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomXAxisValueFormatter.swift; sourceTree = "<group>"; };
+		766E83A22AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyGraphXAxisValueFormatter.swift; sourceTree = "<group>"; };
 		76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateSearchLinkCVC.swift; sourceTree = "<group>"; };
 		76DE9F772AB4BA98003191ED /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		76F2EAD12ACAC473000E73FC /* AffiliateSearchLinkVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateSearchLinkVC.swift; sourceTree = "<group>"; };
@@ -2154,6 +2180,47 @@
 			path = DropDown;
 			sourceTree = "<group>";
 		};
+		765C67D32AE3BB26000B6AE9 /* Formatters */ = {
+			isa = PBXGroup;
+			children = (
+				765C67D42AE3BB26000B6AE9 /* IntAxisValueFormatter.swift */,
+				765C67D52AE3BB26000B6AE9 /* DayAxisValueFormatter.swift */,
+				765C67D62AE3BB26000B6AE9 /* DateValueFormatter.swift */,
+				765C67D72AE3BB26000B6AE9 /* LargeValueFormatter.swift */,
+				765E56CE2AEAC06200615750 /* MonthAxisValueFormatter.swift */,
+				766E6D452AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift */,
+				766E83A22AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift */,
+			);
+			path = Formatters;
+			sourceTree = "<group>";
+		};
+		765C67DC2AE3BB53000B6AE9 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				762E641F2AE94B66007D20A3 /* BalloonMarker.swift */,
+				765C67DD2AE3BB53000B6AE9 /* XYMarkerView.swift */,
+				765C67DE2AE3BB53000B6AE9 /* RadarMarkerView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		765DE7992AF3FCEC001FE2D2 /* Subscription */ = {
+			isa = PBXGroup;
+			children = (
+				765DE79A2AF3FD19001FE2D2 /* ViewSubscriptionsVC.swift */,
+			);
+			path = Subscription;
+			sourceTree = "<group>";
+		};
+		765DE79C2AF3FD28001FE2D2 /* PropertyManagement */ = {
+			isa = PBXGroup;
+			children = (
+				765DE79D2AF3FD5D001FE2D2 /* PropertyInsightsVC.swift */,
+				765DE79F2AF3FD74001FE2D2 /* OccupancyInsightsVC.swift */,
+			);
+			path = PropertyManagement;
+			sourceTree = "<group>";
+		};
 		ACEBA33ED6FFE46DAD722F10 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -2523,6 +2590,8 @@
 		B54D9131223F996A003A4589 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				765C67DC2AE3BB53000B6AE9 /* Components */,
+				765C67D32AE3BB26000B6AE9 /* Formatters */,
 				761BE1B72ACA9F3A00AF4985 /* AffiliateTabbarPages */,
 				7602D0B02ABCA50F00635A6D /* AffiliateRegistration */,
 				B54E4FF3283E0B5E00643206 /* StaticContent */,
@@ -3526,6 +3595,8 @@
 		B5F492C222E5926A000B3085 /* HostTabbar Pages */ = {
 			isa = PBXGroup;
 			children = (
+				765DE79C2AF3FD28001FE2D2 /* PropertyManagement */,
+				765DE7992AF3FCEC001FE2D2 /* Subscription */,
 				B56602CF22E9679E00A144CE /* HostProgressVC */,
 				B5F492C322E59277000B3085 /* HostListingVC */,
 				B56602CE22E9677600A144CE /* HostCalendarVC */,
@@ -4252,6 +4323,7 @@
 				B51F80CB2240E30000E437C1 /* HSColor+UIColor.swift in Sources */,
 				762C86FC2ABC744700DAC707 /* SiteSettingsQuery.graphql.swift in Sources */,
 				B545163D22AF7FE3006D7009 /* ReceiverMessageCell.swift in Sources */,
+				765C67DA2AE3BB26000B6AE9 /* DateValueFormatter.swift in Sources */,
 				B589DAF7282E25C600950037 /* TripsLocationCell.swift in Sources */,
 				B5CFA796224A404B00622D64 /* GoogleLocationService.swift in Sources */,
 				2CB6C074237926E60017C80F /* EmailGoogleFBTableViewCell.swift in Sources */,
@@ -4309,6 +4381,7 @@
 				762C86B02ABC744700DAC707 /* ConfirmPayPalExecuteMutation.graphql.swift in Sources */,
 				B5E4CEE722A1015100FC9A3D /* ItenaryListCell.swift in Sources */,
 				B556BA9524B4B5FF00147DF5 /* AboutPageVC.swift in Sources */,
+				766E83A32AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift in Sources */,
 				762C86B12ABC744700DAC707 /* ReservationStatusMutation.graphql.swift in Sources */,
 				762C871D2ABC744700DAC707 /* ShowListing.graphql.swift in Sources */,
 				B53AFACA228C128200F781FB /* ReviewCell.swift in Sources */,
@@ -4349,6 +4422,7 @@
 				762C870F2ABC744700DAC707 /* SiteSettings.graphql.swift in Sources */,
 				762C86F92ABC744700DAC707 /* GetPayoutsQuery.graphql.swift in Sources */,
 				762C86AA2ABC744700DAC707 /* ManageListingStepsMutation.graphql.swift in Sources */,
+				766E6D462AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift in Sources */,
 				762C87552ABC744700DAC707 /* Query.graphql.swift in Sources */,
 				B56303CE22B20B4600ABAE78 /* ReceiverMessageonlyCell.swift in Sources */,
 				B535D19A2243B6EB00F691C4 /* PasswordVC.swift in Sources */,
@@ -4359,6 +4433,7 @@
 				762C86FF2ABC744700DAC707 /* GetWishListGroupQuery.graphql.swift in Sources */,
 				B5FC84DA225600E8003C8EAC /* MapCell.swift in Sources */,
 				762C86CD2ABC744700DAC707 /* CreateListingMutation.graphql.swift in Sources */,
+				765DE7A02AF3FD74001FE2D2 /* OccupancyInsightsVC.swift in Sources */,
 				2CFE2EA122FAD2260064D9C4 /* HouseRulesViewController.swift in Sources */,
 				762C872F2ABC744700DAC707 /* ReservationCancel.graphql.swift in Sources */,
 				762C87572ABC744700DAC707 /* LanguageItemType.graphql.swift in Sources */,
@@ -4371,6 +4446,7 @@
 				7634074B2AC55ABC001DA7CF /* DocCVC.swift in Sources */,
 				762C87502ABC744700DAC707 /* SocialLoginsType.graphql.swift in Sources */,
 				B58A4AC727FECFE80040F7F1 /* AppTabBar.swift in Sources */,
+				762E64202AE94B66007D20A3 /* BalloonMarker.swift in Sources */,
 				B556BA9924B5871600147DF5 /* FeedbackVC.swift in Sources */,
 				B5CD19352280322A00A8D83E /* EditProfileVC.swift in Sources */,
 				B5BD575A22AA2E0B005B132D /* tripscancellCell.swift in Sources */,
@@ -4405,6 +4481,7 @@
 				762C87152ABC744700DAC707 /* SpecialPricingType.graphql.swift in Sources */,
 				B51F80C62240CBA300E437C1 /* WelcomePageVC.swift in Sources */,
 				76F2EAD62ACAC49B000E73FC /* AffiliateLinkManagerVC.swift in Sources */,
+				765DE79B2AF3FD19001FE2D2 /* ViewSubscriptionsVC.swift in Sources */,
 				B5E9E1D622A51B6800B91B5B /* AccommadationCell.swift in Sources */,
 				B5CFA78F224A39D800622D64 /* SearchPageVC.swift in Sources */,
 				B553A3D8224C9B5300138107 /* MoreFilterVC.swift in Sources */,
@@ -4526,6 +4603,7 @@
 				762C870C2ABC744700DAC707 /* GetBillingCalculationQuery.graphql.swift in Sources */,
 				7602D0BA2ABCA50F00635A6D /* AffiliateRegistrationWebsite.swift in Sources */,
 				762C86DB2ABC744700DAC707 /* GetListingDetailsQuery.graphql.swift in Sources */,
+				765C67DF2AE3BB53000B6AE9 /* XYMarkerView.swift in Sources */,
 				762C86A42ABC744700DAC707 /* UpdateWishListGroupMutation.graphql.swift in Sources */,
 				762C870B2ABC744700DAC707 /* GetAllThreadsQuery.graphql.swift in Sources */,
 				B54BA46A22730E1900F6035B /* FacilitiesCell.swift in Sources */,
@@ -4545,6 +4623,7 @@
 				762C87072ABC744700DAC707 /* ShowUserProfileQuery.graphql.swift in Sources */,
 				B5771AB12244E0FF0070DD96 /* ProfilePageVC.swift in Sources */,
 				762C87592ABC744700DAC707 /* AllListing.graphql.swift in Sources */,
+				765C67D82AE3BB26000B6AE9 /* IntAxisValueFormatter.swift in Sources */,
 				B570951022AE1BCE000E6A07 /* InboxContentCell.swift in Sources */,
 				B5FC84D12255E58F003C8EAC /* DescriptionCell.swift in Sources */,
 				B5EAE9BD229FAF3A00EFAAC3 /* AgreetermsCell.swift in Sources */,
@@ -4562,6 +4641,7 @@
 				762C87312ABC744700DAC707 /* User.graphql.swift in Sources */,
 				B585ABD622EC0C160051927E /* StepTwoVC.swift in Sources */,
 				762C87332ABC744700DAC707 /* AffiliateUserverificationwebType.graphql.swift in Sources */,
+				765C67E02AE3BB53000B6AE9 /* RadarMarkerView.swift in Sources */,
 				B54D9101223F9316003A4589 /* AppDelegate.swift in Sources */,
 				762C87612ABC744700DAC707 /* ThreadItems.graphql.swift in Sources */,
 				B527528B228D96F600439BD3 /* SavedPageVC.swift in Sources */,
@@ -4704,6 +4784,7 @@
 				B566708222A7ED99004D04F6 /* nolistTripsCell.swift in Sources */,
 				762C86C22ABC744700DAC707 /* DeleteUserMutation.graphql.swift in Sources */,
 				762C87012ABC744700DAC707 /* GetPopularLocationsQuery.graphql.swift in Sources */,
+				765C67DB2AE3BB26000B6AE9 /* LargeValueFormatter.swift in Sources */,
 				B5E9E1CE22A5190F00B91B5B /* customerReceiptCell.swift in Sources */,
 				2C77EB0223BB4A240014199D /* HostprofileviewCell.swift in Sources */,
 				B537ED4C28111FBB00E5434B /* UpdatedViewListing.swift in Sources */,
@@ -4722,6 +4803,7 @@
 				2CFE2E9D22FAA56D0064D9C4 /* ReviewGuestViewController.swift in Sources */,
 				2CFE2EA522FAD6440064D9C4 /* BookInstantViewController.swift in Sources */,
 				B53772E52248AA7500F5976C /* Date.swift in Sources */,
+				765DE79E2AF3FD5D001FE2D2 /* PropertyInsightsVC.swift in Sources */,
 				762C87882ABC744700DAC707 /* AdminListing.graphql.swift in Sources */,
 				B51F80D32240E32300E437C1 /* HSInterval+TimeInterval.swift in Sources */,
 				B5BD575522AA2D69005B132D /* TripsCancelVC.swift in Sources */,
@@ -4763,6 +4845,8 @@
 				762C873E2ABC744700DAC707 /* GetPaymentKey.graphql.swift in Sources */,
 				B5FAF83122522D0600BF8DE6 /* FloatCollectionCell.swift in Sources */,
 				762C86C02ABC744700DAC707 /* CreateReportUserMutation.graphql.swift in Sources */,
+				765C67D92AE3BB26000B6AE9 /* DayAxisValueFormatter.swift in Sources */,
+				765E56CF2AEAC06200615750 /* MonthAxisValueFormatter.swift in Sources */,
 				B567AF7D2851E92000DC88B8 /* DeleteAccountVC.swift in Sources */,
 				2C93338722FAFC7700884A3B /* TripLengthViewController.swift in Sources */,
 				B553A3F5224CD30700138107 /* AmenitiesCell.swift in Sources */,
@@ -4944,11 +5028,13 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 0;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = WX3M78775Y;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = WX3M78775Y;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "\"<Multiple values>\"";
 				"EXCLUDED_ARCHS[sdk=*]" = armv7;
@@ -4967,13 +5053,14 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				NEW_SETTING = "";
 				OTHER_CODE_SIGN_FLAGS = "";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ptpro.solutionvalley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Dev_PTPro;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OBJC_BRIDGING_HEADER = "App/App-Bridging-Header.h";
@@ -4990,10 +5077,12 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 0;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = WX3M78775Y;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = WX3M78775Y;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "\"<Multiple values>\"";
 				"EXCLUDED_ARCHS[sdk=*]" = armv7;
@@ -5012,13 +5101,14 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				NEW_SETTING = "";
 				OTHER_CODE_SIGN_FLAGS = "";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ptpro.solutionvalley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Dev_PTPro;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "App/App-Bridging-Header.h";

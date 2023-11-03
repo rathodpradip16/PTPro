@@ -67,6 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         self.GetDefaultSettingAPICall()
         self.getcurrencyAPICall()
         self.profileAPICall()
+        self.getAffiliateUserStepAPICall()
         
 //       minimalCustomizationPresentationExample()
         // UniversalLink after the app got killed is handled here
@@ -790,9 +791,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
             }
         }
     }
-
-        
     
+    func getAffiliateUserStepAPICall()
+    {
+        if Utility.shared.isConnectedToNetwork() {
+            if (Utility.shared.getCurrentUserID() != nil){
+                let affiliateUserQuery = PTProAPI.GetAffiliateUserStepQuery(userId: .some((Utility.shared.getCurrentUserID() ?? "") as String))
+                Network.shared.apollo_headerClient.fetch(query: affiliateUserQuery){ response in
+                    switch response {
+                    case .success(let result):
+                        if let status = result.data?.getAffiliateUserStep?.status,status == 200{
+                            if let GetAffiliateUserStep = result.data?.getAffiliateUserStep{
+                                Utility.shared.GetAffiliateUserStep = GetAffiliateUserStep
+                            }
+                        }
+                        break
+                    case .failure(_): break
+                    }
+                }
+            }
+        }
+    }
+
     func getcurrencyAPICall()
     {
         if(Utility.shared.getCurrentUserToken() != nil)

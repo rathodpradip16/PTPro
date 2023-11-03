@@ -51,6 +51,8 @@ pod 'FTPopOverMenu'
 pod 'NKVPhonePicker'
 pod 'GrowingTextView'
 pod 'DropDown'
+pod 'DGCharts'
+
   target 'AppTests' do
     inherit! :search_paths
     # Pods for testing

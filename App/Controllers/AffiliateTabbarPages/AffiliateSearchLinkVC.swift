@@ -209,19 +209,25 @@ class AffiliateSearchLinkVC: UIViewController,UICollectionViewDelegate,UICollect
         
         if(Utility.shared.getPreferredCurrency() != nil &&  Utility.shared.getPreferredCurrency() != "")
         {
-            let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!)
-            let from_currency = self.arrLinkSearchList[indexPath.row].listingData?.currency
-            let currency_amount = self.arrLinkSearchList[indexPath.row].listingData?.basePrice != nil ? self.arrLinkSearchList[indexPath.row].listingData?.basePrice : 0
-            let price_value = Utility.shared.getCurrencyRate(basecurrency: Utility.shared.currencyvalue_from_API_base , fromCurrency:from_currency!, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount!)
-            let restricted_price =  Double(String(format: "%.2f",price_value))
-            cell.lblPrice.text =  "\(currencysymbol!)\(restricted_price!.clean)"
+            let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!) ?? ""
+            let from_currency = self.arrLinkSearchList[indexPath.row].listingData?.currency ?? ""
+            if let currency_amount = self.arrLinkSearchList[indexPath.row].listingData?.basePrice {
+                let price_value = Utility.shared.getCurrencyRate(basecurrency: Utility.shared.currencyvalue_from_API_base , fromCurrency:from_currency, toCurrency:Utility.shared.getPreferredCurrency()!, CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount)
+                let restricted_price =  Double(String(format: "%.2f",price_value))
+                cell.lblPrice.text =  "\(currencysymbol)\(restricted_price!.clean)"
+            }else{
+                cell.lblPrice.text =  ""
+            }
         }else{
-            let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: self.arrLinkSearchList[indexPath.row].listingData?.currency ?? "")
-            let from_currency = self.arrLinkSearchList[indexPath.row].listingData?.currency
-            let currency_amount = self.arrLinkSearchList[indexPath.row].listingData?.basePrice != nil ? self.arrLinkSearchList[indexPath.row].listingData?.basePrice : 0
-            let price_value = Utility.shared.getCurrencyRate(basecurrency:self.arrLinkSearchList[indexPath.row].listingData?.currency ?? "", fromCurrency:from_currency!, toCurrency:self.arrLinkSearchList[indexPath.row].listingData?.currency ?? "", CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount!)
-            let restricted_price =  Double(String(format: "%.2f",price_value))
-            cell.lblPrice.text = "\(currencysymbol!)\(restricted_price!.clean)"
+            let currencysymbol = Utility.shared.getSymbol(forCurrencyCode: self.arrLinkSearchList[indexPath.row].listingData?.currency ?? "") ?? ""
+            let from_currency = self.arrLinkSearchList[indexPath.row].listingData?.currency ?? ""
+            if let currency_amount = self.arrLinkSearchList[indexPath.row].listingData?.basePrice {
+                let price_value = Utility.shared.getCurrencyRate(basecurrency:self.arrLinkSearchList[indexPath.row].listingData?.currency ?? "", fromCurrency:from_currency, toCurrency:self.arrLinkSearchList[indexPath.row].listingData?.currency ?? "", CurrencyRate:Utility.shared.currency_Dict, amount:currency_amount)
+                let restricted_price =  Double(String(format: "%.2f",price_value))
+                cell.lblPrice.text = "\(currencysymbol)\(restricted_price!.clean)"
+            }else{
+                cell.lblPrice.text =  ""
+            }
         }
         cell.btnLink.tag = indexPath.row
         if(self.arrLinkSearchList[indexPath.row].isGenerated == 1){

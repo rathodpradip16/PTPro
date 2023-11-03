@@ -180,7 +180,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     var listID = 0
     var viewModel: viewListingModel?
     var reviewTitle = ""
-    @IBOutlet weak var lottieView: LottieAnimationView!
+    @IBOutlet var lottieView: LottieAnimationView!
     
     @IBOutlet weak var amenitiesTableView: UITableView!
     @IBOutlet weak var amenitiesTableHeightConstraint: NSLayoutConstraint!
@@ -213,6 +213,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         offlineView.backgroundColor =  UIColor(named: "Button_Grey_Color")
+        lottieView = LottieAnimationView.init(name:"animation")
         self.configureLottieView()
         self.configureTopView()
         self.configureCollectionViews()
@@ -351,7 +352,6 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
             self.topHeaderStackView.isHidden = true
             self.lottieView.isHidden = false
             viewModel?.viewDetailAPICall(listid: viewModel?.listID ?? 0, completion: { resultValue in
-                resultValue
                 self.viewListValueUpdates(result: resultValue)
                 
                 let fmt = DateFormatter()
@@ -1491,7 +1491,6 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
             self.topHeaderStackView.isHidden = true
             self.lottieView.isHidden = false
         viewModel?.viewDetailAPICall(listid: viewModel?.listID ?? 0, completion: { resultValue in
-            resultValue
             self.viewListValueUpdates(result: resultValue)
         })
         }else{

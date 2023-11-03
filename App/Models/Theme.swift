@@ -138,7 +138,14 @@ class Theme {
     static let SearchShadowColor = UIColor().hexValue(hex:"9F9F9F" )
     
     static let affiliatePurpleColor = UIColor().hexValue(hex:"8c52ff" )
-
+    static let affiliateConversionIconColor = UIColor().hexValue(hex:"ff9800" )
+    static let affiliateClicksColor = UIColor().hexValue(hex:"1877F2" )
+    static let affiliateEarningColor = UIColor().hexValue(hex:"0f9d58" )
+  
+    static let propertyDashGreenColor = UIColor().hexValue(hex:"0f9d58" )
+    static let propertyDashBlueColor = UIColor().hexValue(hex:"1877F2" )
+    static let propertyDashRedColor = UIColor().hexValue(hex:"FF3800" )
+    static let propertyDashOrangeColor = UIColor().hexValue(hex:"ff9800" )
 }
 
 

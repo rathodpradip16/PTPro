@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22129"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -75,7 +75,6 @@
                             <constraint firstItem="lKk-EM-alB" firstAttribute="leading" secondItem="LFj-zr-azm" secondAttribute="leading" id="ANa-J0-f1U"/>
                             <constraint firstAttribute="width" constant="125" id="K1b-1Y-duN"/>
                             <constraint firstItem="lKk-EM-alB" firstAttribute="top" secondItem="LFj-zr-azm" secondAttribute="top" id="OTN-ez-pE6"/>
-                            <constraint firstAttribute="height" constant="150" id="V2A-sw-Mzb"/>
                             <constraint firstAttribute="bottom" secondItem="KhP-V5-qxy" secondAttribute="bottom" id="V72-Dl-jqM"/>
                             <constraint firstAttribute="bottom" secondItem="lKk-EM-alB" secondAttribute="bottom" id="WC7-Cs-PZf"/>
                             <constraint firstAttribute="trailing" secondItem="KhP-V5-qxy" secondAttribute="trailing" id="Z6W-It-w7Y"/>
@@ -108,7 +107,6 @@
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
             <connections>
-                <outlet property="heightConstraint" destination="V2A-sw-Mzb" id="Muc-uW-Tjh"/>
                 <outlet property="popularImage" destination="lKk-EM-alB" id="EHn-IR-EMA"/>
                 <outlet property="popularLabel" destination="UoR-mJ-Kr3" id="8C1-22-tZy"/>
                 <outlet property="shadowView" destination="KhP-V5-qxy" id="C5H-PM-Tch"/>

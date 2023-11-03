@@ -25,11 +25,21 @@ class AffiliateLinkManagerCVC: UICollectionViewCell {
     @IBOutlet var lblEarningsTitle: UILabel!
     @IBOutlet var lblEarningsValue: UILabel!
     @IBOutlet var LblLinkCreationDate: UILabel!
-    
+    @IBOutlet var bottomStack: UIStackView!
+
     override func awakeFromNib() {
         super.awakeFromNib()
-
+        if #available(iOS 11.0, *){
+            bottomStack.clipsToBounds = true
+            bottomStack.layer.cornerRadius = 10
+            bottomStack.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+           }else{
+              let rectShape = CAShapeLayer()
+              rectShape.bounds = bottomStack.frame
+              rectShape.position = bottomStack.center
+              rectShape.path = UIBezierPath(roundedRect: bottomStack.bounds,    byRoundingCorners: [.bottomLeft , .bottomRight], cornerRadii: CGSize(width: 20, height: 20)).cgPath
+               bottomStack.layer.backgroundColor = UIColor.green.cgColor
+               bottomStack.layer.mask = rectShape
+         }
     }
-
-    
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -239,9 +239,6 @@
                         <constraint firstAttribute="height" constant="100" id="49N-QA-U7B"/>
                         <constraint firstAttribute="width" constant="100" id="rrl-EF-uPt"/>
                     </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="animationName" value="animation"/>
-                    </userDefinedRuntimeAttributes>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b3Z-6E-JKn">
                     <rect key="frame" x="64.5" y="816" width="302" height="131.5"/>
@@ -561,7 +558,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cMR-fU-q97">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cMR-fU-q97">
                                             <rect key="frame" x="0.0" y="99" width="391" height="1"/>
                                             <color key="backgroundColor" red="0.94509803920000002" green="0.94509803920000002" blue="0.94509803920000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
@@ -578,9 +575,11 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
+                                        <constraint firstItem="cMR-fU-q97" firstAttribute="leading" secondItem="VLJ-za-HUL" secondAttribute="leading" id="31n-gn-ufi"/>
                                         <constraint firstAttribute="trailing" secondItem="VH8-Va-XRA" secondAttribute="trailing" id="FLu-JE-GmR"/>
                                         <constraint firstItem="8Ed-Ay-8E5" firstAttribute="leading" secondItem="VLJ-za-HUL" secondAttribute="leading" id="IRT-FX-N5C"/>
                                         <constraint firstItem="cMR-fU-q97" firstAttribute="top" secondItem="YEo-IU-2lU" secondAttribute="bottom" constant="20" id="L3q-rv-aBb"/>
+                                        <constraint firstAttribute="trailing" secondItem="cMR-fU-q97" secondAttribute="trailing" id="YBf-i7-048"/>
                                         <constraint firstItem="VH8-Va-XRA" firstAttribute="top" secondItem="VLJ-za-HUL" secondAttribute="top" constant="20" symbolic="YES" id="d0L-VA-DyE"/>
                                         <constraint firstItem="8Ed-Ay-8E5" firstAttribute="centerY" secondItem="YEo-IU-2lU" secondAttribute="centerY" id="eCw-kJ-nJs"/>
                                         <constraint firstItem="YEo-IU-2lU" firstAttribute="leading" secondItem="8Ed-Ay-8E5" secondAttribute="trailing" constant="12" id="g4q-er-2LO"/>

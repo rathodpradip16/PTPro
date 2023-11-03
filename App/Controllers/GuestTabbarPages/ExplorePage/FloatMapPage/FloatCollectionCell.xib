@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -59,7 +59,7 @@
                             <constraint firstAttribute="height" constant="20" id="Fdo-BE-rC4"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="Circular-Book" family="Circular" pointSize="11"/>
-                        <color key="textColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                        <color key="textColor" systemColor="viewFlipsideBackgroundColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stunning House on Pristine Valley edge Valley edge" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q6X-AI-eYK">
@@ -134,6 +134,7 @@
                     </button>
                 </subviews>
             </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="8lZ-bA-WUr" secondAttribute="trailing" constant="-3" id="3OG-qD-Jzb"/>
@@ -157,7 +158,6 @@
                 <constraint firstAttribute="trailing" secondItem="pC8-EZ-5y4" secondAttribute="trailing" constant="2" id="va3-XF-en7"/>
                 <constraint firstItem="8lZ-bA-WUr" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="wQU-ok-zLy"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <size key="customSize" width="324" height="238"/>
             <connections>
                 <outlet property="entireHomeWidthConstraint" destination="5q4-2c-svC" id="uVV-wl-cIx"/>
@@ -173,9 +173,17 @@
             <point key="canvasLocation" x="-211.59420289855075" y="159.375"/>
         </collectionViewCell>
     </objects>
+    <designables>
+        <designable name="Rlo-I8-3wa">
+            <size key="intrinsicContentSize" width="67" height="11"/>
+        </designable>
+    </designables>
     <resources>
-        <image name="Heart" width="25" height="25"/>
+        <image name="Heart" width="38" height="38"/>
         <image name="home-1" width="1429.3333740234375" height="949.33331298828125"/>
         <image name="light" width="64" height="64"/>
+        <systemColor name="viewFlipsideBackgroundColor">
+            <color red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>
