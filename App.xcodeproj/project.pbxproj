@@ -327,6 +327,9 @@
 		763407492AC542E8001DA7CF /* iOSDropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763407482AC542E7001DA7CF /* iOSDropDown.swift */; };
 		7634074B2AC55ABC001DA7CF /* DocCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7634074A2AC55ABC001DA7CF /* DocCVC.swift */; };
 		7644CEEC2AD320FD0086E886 /* AffiliateLinkManagerCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7644CEEB2AD320FD0086E886 /* AffiliateLinkManagerCVC.swift */; };
+		765657982AFB5A1700B31944 /* YZCenterFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765657972AFB5A1700B31944 /* YZCenterFlowLayout.swift */; };
+		765A40BA2AF7BF2E0070BA7C /* SetValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765A40B92AF7BF2E0070BA7C /* SetValueFormatter.swift */; };
+		765ACE542AF961BF00DC2D3F /* SubscriptionPlansCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765ACE532AF961BF00DC2D3F /* SubscriptionPlansCVC.swift */; };
 		765BB7212AD066B60091E718 /* SearchPlaceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765BB7202AD066B60091E718 /* SearchPlaceVC.swift */; };
 		765C67D82AE3BB26000B6AE9 /* IntAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C67D42AE3BB26000B6AE9 /* IntAxisValueFormatter.swift */; };
 		765C67D92AE3BB26000B6AE9 /* DayAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C67D52AE3BB26000B6AE9 /* DayAxisValueFormatter.swift */; };
@@ -1230,6 +1233,9 @@
 		763407482AC542E7001DA7CF /* iOSDropDown.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSDropDown.swift; sourceTree = "<group>"; };
 		7634074A2AC55ABC001DA7CF /* DocCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocCVC.swift; sourceTree = "<group>"; };
 		7644CEEB2AD320FD0086E886 /* AffiliateLinkManagerCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateLinkManagerCVC.swift; sourceTree = "<group>"; };
+		765657972AFB5A1700B31944 /* YZCenterFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YZCenterFlowLayout.swift; sourceTree = "<group>"; };
+		765A40B92AF7BF2E0070BA7C /* SetValueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetValueFormatter.swift; sourceTree = "<group>"; };
+		765ACE532AF961BF00DC2D3F /* SubscriptionPlansCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPlansCVC.swift; sourceTree = "<group>"; };
 		765BB7202AD066B60091E718 /* SearchPlaceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPlaceVC.swift; sourceTree = "<group>"; };
 		765C67D42AE3BB26000B6AE9 /* IntAxisValueFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntAxisValueFormatter.swift; sourceTree = "<group>"; };
 		765C67D52AE3BB26000B6AE9 /* DayAxisValueFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayAxisValueFormatter.swift; sourceTree = "<group>"; };
@@ -2190,6 +2196,7 @@
 				765E56CE2AEAC06200615750 /* MonthAxisValueFormatter.swift */,
 				766E6D452AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift */,
 				766E83A22AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift */,
+				765A40B92AF7BF2E0070BA7C /* SetValueFormatter.swift */,
 			);
 			path = Formatters;
 			sourceTree = "<group>";
@@ -2207,7 +2214,9 @@
 		765DE7992AF3FCEC001FE2D2 /* Subscription */ = {
 			isa = PBXGroup;
 			children = (
+				765657972AFB5A1700B31944 /* YZCenterFlowLayout.swift */,
 				765DE79A2AF3FD19001FE2D2 /* ViewSubscriptionsVC.swift */,
+				765ACE532AF961BF00DC2D3F /* SubscriptionPlansCVC.swift */,
 			);
 			path = Subscription;
 			sourceTree = "<group>";
@@ -4457,6 +4466,7 @@
 				B50841B0289908D300D458E4 /* GuestListingNew.swift in Sources */,
 				B5FC84CA2255CDD4003C8EAC /* GuestDetailVC.swift in Sources */,
 				762C87442ABC744700DAC707 /* AllSearchSettingsType.graphql.swift in Sources */,
+				765ACE542AF961BF00DC2D3F /* SubscriptionPlansCVC.swift in Sources */,
 				B568D98B23618B66000ACF1A /* VerificationSuccessVC.swift in Sources */,
 				B570950C22AE1B5D000E6A07 /* InboxCell.swift in Sources */,
 				B54D9139223F9ED1003A4589 /* ShadowView.swift in Sources */,
@@ -4708,6 +4718,7 @@
 				762C86D72ABC744700DAC707 /* UserLanguageQuery.graphql.swift in Sources */,
 				B5014022230A9CB700C88EED /* PaypalPayoutVC.swift in Sources */,
 				762C86F42ABC744700DAC707 /* GetAllReservationQuery.graphql.swift in Sources */,
+				765A40BA2AF7BF2E0070BA7C /* SetValueFormatter.swift in Sources */,
 				B5EF62CD229BFC8D00FB6A9D /* RequestBookcellTableViewCell.swift in Sources */,
 				762C871F2ABC744700DAC707 /* Cancellation.graphql.swift in Sources */,
 				762C86F32ABC744700DAC707 /* GetCurrenciesListQuery.graphql.swift in Sources */,
@@ -4820,6 +4831,7 @@
 				762C87002ABC744700DAC707 /* GetUnReadThreadCountQuery.graphql.swift in Sources */,
 				B5D4AF41230673DF0066BD3F /* PayoutCell.swift in Sources */,
 				B5F492C022E5924A000B3085 /* BaseHostTableviewController.swift in Sources */,
+				765657982AFB5A1700B31944 /* YZCenterFlowLayout.swift in Sources */,
 				2CB4CB7223C85425002EE107 /* KeychainService.swift in Sources */,
 				B556BA9124B448E400147DF5 /* WhyhostVC.swift in Sources */,
 				761BE1B62ACA9F0C00AF4985 /* CustomAffiliateTabbar.swift in Sources */,

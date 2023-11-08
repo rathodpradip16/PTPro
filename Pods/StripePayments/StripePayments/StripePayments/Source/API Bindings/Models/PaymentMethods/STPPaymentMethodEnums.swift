@@ -83,6 +83,8 @@ import Foundation
     case konbini
     /// A PromptPay payment method
     case promptPay
+    /// A Swish payment method
+    case swish
     /// An unknown type.
     case unknown
 
@@ -147,6 +149,8 @@ import Foundation
             )
         case .cashApp:
             return STPLocalizedString("Cash App Pay", "Payment Method type brand name")
+        case .bacsDebit:
+            return STPLocalizedString("Bacs Direct Debit", "Payment Method type brand name")
         case .paynow:
             return "PayNow"
         case .zip:
@@ -163,8 +167,9 @@ import Foundation
             return STPLocalizedString("Konbini", "Payment Method type brand name")
         case .promptPay:
             return "PromptPay"
-        case .bacsDebit,
-            .cardPresent,
+        case .swish:
+            return STPLocalizedString("Swish", "Payment Method type brand name")
+        case .cardPresent,
             .unknown:
             return STPLocalizedString("Unknown", "Default missing source type label")
         @unknown default:
@@ -249,6 +254,8 @@ import Foundation
             return "konbini"
         case .promptPay:
             return "promptpay"
+        case .swish:
+            return "swish"
         }
     }
 }

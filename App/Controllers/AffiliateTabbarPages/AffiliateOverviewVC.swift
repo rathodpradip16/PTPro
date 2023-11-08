@@ -474,11 +474,11 @@ extension AffiliateOverviewVC: ChartViewDelegate{
                 }
                 let data = BarChartData(dataSet: set1)
                 data.setValueFont(UIFont(name: "HelveticaNeue-Light", size: 10)!)
-                data.barWidth = 0.9
+                data.barWidth = 0.4
                 chartView.data = data
             }
             
-            
+            chartView.setVisibleXRangeMaximum(5)
             chartView.setNeedsDisplay()
         }else{
             chartView.isHidden = true

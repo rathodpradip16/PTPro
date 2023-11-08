@@ -786,6 +786,7 @@ type GetPlanDetailsType {
   yearly: Int
   currency: String
   status: Int
+  expiryDate: String
 }
 
 type WholeAccount {
