@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let Currency = Object(
+  static let Currency = Apollo.Object(
     typename: "Currency",
     implementedInterfaces: []
   )

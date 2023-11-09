@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let Reservationlist = Object(
+  static let Reservationlist = Apollo.Object(
     typename: "Reservationlist",
     implementedInterfaces: []
   )

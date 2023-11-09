@@ -23,4 +23,7 @@ class SubscriptionPlansCVC: UICollectionViewCell {
     @IBOutlet weak var viewListNow: UIView!
     @IBOutlet weak var imgListNow: UIImageView!
     @IBOutlet weak var lblListNow: UILabel!
+    @IBOutlet weak var btnListNow: UIButton!
+
+    @IBOutlet weak var lblCustomPlan: UILabel!
 }

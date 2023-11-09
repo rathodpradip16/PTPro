@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let ImageBannerCommonType = Object(
+  static let ImageBannerCommonType = Apollo.Object(
     typename: "ImageBannerCommonType",
     implementedInterfaces: []
   )

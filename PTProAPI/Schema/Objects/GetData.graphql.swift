@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let GetData = Object(
+  static let GetData = Apollo.Object(
     typename: "getData",
     implementedInterfaces: []
   )

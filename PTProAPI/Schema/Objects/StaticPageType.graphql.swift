@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let StaticPageType = Object(
+  static let StaticPageType = Apollo.Object(
     typename: "StaticPageType",
     implementedInterfaces: []
   )

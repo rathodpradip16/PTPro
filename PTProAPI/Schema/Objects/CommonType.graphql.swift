@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let CommonType = Object(
+  static let CommonType = Apollo.Object(
     typename: "CommonType",
     implementedInterfaces: []
   )

@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let UserVerifiedInfo = Object(
+  static let UserVerifiedInfo = Apollo.Object(
     typename: "UserVerifiedInfo",
     implementedInterfaces: []
   )

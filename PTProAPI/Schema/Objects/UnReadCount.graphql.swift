@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let UnReadCount = Object(
+  static let UnReadCount = Apollo.Object(
     typename: "UnReadCount",
     implementedInterfaces: []
   )

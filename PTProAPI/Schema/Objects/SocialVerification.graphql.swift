@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let SocialVerification = Object(
+  static let SocialVerification = Apollo.Object(
     typename: "SocialVerification",
     implementedInterfaces: []
   )

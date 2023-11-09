@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let WholeAccount = Object(
+  static let WholeAccount = Apollo.Object(
     typename: "WholeAccount",
     implementedInterfaces: []
   )

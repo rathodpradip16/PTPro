@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let BedTypes = Object(
+  static let BedTypes = Apollo.Object(
     typename: "BedTypes",
     implementedInterfaces: []
   )

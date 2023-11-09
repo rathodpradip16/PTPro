@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let ListSettingsTypes = Object(
+  static let ListSettingsTypes = Apollo.Object(
     typename: "listSettingsTypes",
     implementedInterfaces: []
   )

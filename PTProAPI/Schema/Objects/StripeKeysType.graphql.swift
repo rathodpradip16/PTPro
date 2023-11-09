@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let StripeKeysType = Object(
+  static let StripeKeysType = Apollo.Object(
     typename: "StripeKeysType",
     implementedInterfaces: []
   )

@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let CalculateOccupancyRate = Object(
+  static let CalculateOccupancyRate = Apollo.Object(
     typename: "CalculateOccupancyRate",
     implementedInterfaces: []
   )

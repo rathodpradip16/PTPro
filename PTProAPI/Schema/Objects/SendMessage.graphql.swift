@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let SendMessage = Object(
+  static let SendMessage = Apollo.Object(
     typename: "SendMessage",
     implementedInterfaces: []
   )

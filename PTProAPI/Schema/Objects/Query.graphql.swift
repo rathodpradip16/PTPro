@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let Query = Object(
+  static let Query = Apollo.Object(
     typename: "Query",
     implementedInterfaces: []
   )

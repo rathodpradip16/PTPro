@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let CancellationResponse = Object(
+  static let CancellationResponse = Apollo.Object(
     typename: "CancellationResponse",
     implementedInterfaces: []
   )

@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let GetGraphType = Object(
+  static let GetGraphType = Apollo.Object(
     typename: "GetGraphType",
     implementedInterfaces: []
   )

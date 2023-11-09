@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let ListBlockedDates = Object(
+  static let ListBlockedDates = Apollo.Object(
     typename: "listBlockedDates",
     implementedInterfaces: []
   )

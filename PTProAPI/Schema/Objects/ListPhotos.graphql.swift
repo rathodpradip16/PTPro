@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let ListPhotos = Object(
+  static let ListPhotos = Apollo.Object(
     typename: "ListPhotos",
     implementedInterfaces: []
   )

@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let AffiliateLinksType = Object(
+  static let AffiliateLinksType = Apollo.Object(
     typename: "AffiliateLinksType",
     implementedInterfaces: []
   )

@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let ApplicationVersion = Object(
+  static let ApplicationVersion = Apollo.Object(
     typename: "ApplicationVersion",
     implementedInterfaces: []
   )

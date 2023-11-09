@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let Searchlistaffiliate = Object(
+  static let Searchlistaffiliate = Apollo.Object(
     typename: "searchlistaffiliate",
     implementedInterfaces: []
   )

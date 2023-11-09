@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let SiteSettings = Object(
+  static let SiteSettings = Apollo.Object(
     typename: "SiteSettings",
     implementedInterfaces: []
   )

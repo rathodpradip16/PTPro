@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let PopularLocationListing = Object(
+  static let PopularLocationListing = Apollo.Object(
     typename: "PopularLocationListing",
     implementedInterfaces: []
   )

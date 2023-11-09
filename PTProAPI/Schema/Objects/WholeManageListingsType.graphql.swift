@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let WholeManageListingsType = Object(
+  static let WholeManageListingsType = Apollo.Object(
     typename: "WholeManageListingsType",
     implementedInterfaces: []
   )

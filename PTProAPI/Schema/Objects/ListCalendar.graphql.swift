@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let ListCalendar = Object(
+  static let ListCalendar = Apollo.Object(
     typename: "ListCalendar",
     implementedInterfaces: []
   )

@@ -5,7 +5,7 @@ import Apollo
 
 extension PTProAPI.Objects {
   /// Represents listing field values for the frontend
-  static let ListingSettingsCommon = Object(
+  static let ListingSettingsCommon = Apollo.Object(
     typename: "listingSettingsCommon",
     implementedInterfaces: []
   )

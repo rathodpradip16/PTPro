@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let AllThreads = Object(
+  static let AllThreads = Apollo.Object(
     typename: "AllThreads",
     implementedInterfaces: []
   )

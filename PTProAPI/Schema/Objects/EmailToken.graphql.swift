@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let EmailToken = Object(
+  static let EmailToken = Apollo.Object(
     typename: "emailToken",
     implementedInterfaces: []
   )

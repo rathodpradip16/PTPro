@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let CreateListing = Object(
+  static let CreateListing = Apollo.Object(
     typename: "CreateListing",
     implementedInterfaces: []
   )

@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let UnreadThreadsCount = Object(
+  static let UnreadThreadsCount = Apollo.Object(
     typename: "UnreadThreadsCount",
     implementedInterfaces: []
   )

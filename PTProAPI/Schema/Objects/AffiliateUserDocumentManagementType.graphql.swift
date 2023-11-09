@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let AffiliateUserDocumentManagementType = Object(
+  static let AffiliateUserDocumentManagementType = Apollo.Object(
     typename: "AffiliateUserDocumentManagementType",
     implementedInterfaces: []
   )

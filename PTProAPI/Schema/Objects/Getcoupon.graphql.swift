@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let Getcoupon = Object(
+  static let Getcoupon = Apollo.Object(
     typename: "Getcoupon",
     implementedInterfaces: []
   )

@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let Mutation = Object(
+  static let Mutation = Apollo.Object(
     typename: "Mutation",
     implementedInterfaces: []
   )

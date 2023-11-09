@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let WishList = Object(
+  static let WishList = Apollo.Object(
     typename: "WishList",
     implementedInterfaces: []
   )

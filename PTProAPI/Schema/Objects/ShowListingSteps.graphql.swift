@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let ShowListingSteps = Object(
+  static let ShowListingSteps = Apollo.Object(
     typename: "ShowListingSteps",
     implementedInterfaces: []
   )

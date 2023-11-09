@@ -146,6 +146,27 @@ class Theme {
     static let propertyDashBlueColor = UIColor().hexValue(hex:"1877F2" )
     static let propertyDashRedColor = UIColor().hexValue(hex:"FF3800" )
     static let propertyDashOrangeColor = UIColor().hexValue(hex:"ff9800" )
+
+    static let subEconomyColor = UIColor().hexValue(hex:"fb8c00" )
+    static let subRecommendedColor = UIColor().hexValue(hex:"546e7a" )
+    static let subGoldColor = UIColor().hexValue(hex:"005E72" )
+    static let subPlatinumColor = UIColor().hexValue(hex:"1DBE1D" )
+    static let subCustomColor = UIColor().hexValue(hex:"ff5a5f" )
+
+    static let subEconomySegmentColor = UIColor().hexValue(hex:"e65100" )
+    static let subRecommendedSegmentColor = UIColor().hexValue(hex:"78a2b8" )
+    static let subGoldSegmentColor = UIColor().hexValue(hex:"44c0c5" )
+    static let subPlatinumSegmentColor = UIColor().hexValue(hex:"669900" )
+    static let subCustomSegmentColor = UIColor().hexValue(hex:"ff9800" )
+
+    static let subSegmentBgColor = UIColor().hexValue(hex:"c0c0c0" )
+
+    static let subEconomySegmentBorderColor = UIColor().hexValue(hex:"400F76" )
+    static let subRecommendedSegmentBorderColor = UIColor().hexValue(hex:"ff9800" )
+    static let subGoldSegmentBorderColor = UIColor().hexValue(hex:"40778088" )
+    static let subPlatinumSegmentBorderColor = UIColor().hexValue(hex:"40778088" )
+
+    static let subListNowBorderColor = UIColor().hexValue(hex:"686868" )
 }
 
 

@@ -5,7 +5,7 @@ import Apollo
 
 extension PTProAPI.Objects {
   /// Represents listing field types for the frontend
-  static let SettingsType = Object(
+  static let SettingsType = Apollo.Object(
     typename: "settingsType",
     implementedInterfaces: []
   )

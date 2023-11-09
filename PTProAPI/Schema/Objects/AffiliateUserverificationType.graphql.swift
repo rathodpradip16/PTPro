@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let AffiliateUserverificationType = Object(
+  static let AffiliateUserverificationType = Apollo.Object(
     typename: "AffiliateUserverificationType",
     implementedInterfaces: []
   )

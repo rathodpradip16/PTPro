@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let GetPayoutType = Object(
+  static let GetPayoutType = Apollo.Object(
     typename: "GetPayoutType",
     implementedInterfaces: []
   )

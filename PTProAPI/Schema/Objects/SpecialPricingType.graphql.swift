@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let SpecialPricingType = Object(
+  static let SpecialPricingType = Apollo.Object(
     typename: "SpecialPricingType",
     implementedInterfaces: []
   )

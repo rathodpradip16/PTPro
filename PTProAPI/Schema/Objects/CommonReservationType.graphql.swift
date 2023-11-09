@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let CommonReservationType = Object(
+  static let CommonReservationType = Apollo.Object(
     typename: "CommonReservationType",
     implementedInterfaces: []
   )

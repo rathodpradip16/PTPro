@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let Country = Object(
+  static let Country = Apollo.Object(
     typename: "Country",
     implementedInterfaces: []
   )

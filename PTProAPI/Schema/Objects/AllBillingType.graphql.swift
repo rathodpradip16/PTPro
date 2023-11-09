@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let AllBillingType = Object(
+  static let AllBillingType = Apollo.Object(
     typename: "AllBillingType",
     implementedInterfaces: []
   )

@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let GetClicksType = Object(
+  static let GetClicksType = Apollo.Object(
     typename: "GetClicksType",
     implementedInterfaces: []
   )

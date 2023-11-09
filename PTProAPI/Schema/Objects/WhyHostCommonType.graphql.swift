@@ -4,7 +4,7 @@
 import Apollo
 
 extension PTProAPI.Objects {
-  static let WhyHostCommonType = Object(
+  static let WhyHostCommonType = Apollo.Object(
     typename: "WhyHostCommonType",
     implementedInterfaces: []
   )

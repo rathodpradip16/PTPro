@@ -29,7 +29,7 @@ extension PTProAPI {
   enum SchemaMetadata: Apollo.SchemaMetadata {
     static let configuration: Apollo.SchemaConfiguration.Type = SchemaConfiguration.self
 
-    static func objectType(forTypename typename: String) -> Object? {
+    static func objectType(forTypename typename: String) -> Apollo.Object? {
       switch typename {
       case "Query": return PTProAPI.Objects.Query
       case "AffiliateUserDocumentManagementType": return PTProAPI.Objects.AffiliateUserDocumentManagementType
@@ -81,6 +81,8 @@ extension PTProAPI {
       case "searchlistaffiliate": return PTProAPI.Objects.Searchlistaffiliate
       case "listPhotoss": return PTProAPI.Objects.ListPhotoss
       case "listingDataa": return PTProAPI.Objects.ListingDataa
+      case "PlanDetailsType": return PTProAPI.Objects.PlanDetailsType
+      case "GetPlanDetailsType": return PTProAPI.Objects.GetPlanDetailsType
       case "ImageBannerCommonType": return PTProAPI.Objects.ImageBannerCommonType
       case "ImageBanner": return PTProAPI.Objects.ImageBanner
       case "UserCommon": return PTProAPI.Objects.UserCommon
