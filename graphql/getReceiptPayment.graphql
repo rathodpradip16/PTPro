@@ -1,0 +1,16 @@
+query getReceiptPayment($userId: String,){
+getReceiptPayment(userId:$userId){
+errorMessage
+status
+data{
+transactionId
+total
+currency
+createdAt
+expiryDate
+planType
+planId
+paymentType
+}
+}
+}

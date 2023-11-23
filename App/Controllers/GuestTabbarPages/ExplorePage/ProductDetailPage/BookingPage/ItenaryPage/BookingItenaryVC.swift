@@ -215,6 +215,7 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             }
         }
     }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         if(getReservationArray?.listData?.city != nil)
         {

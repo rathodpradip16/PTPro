@@ -1,0 +1,19 @@
+mutation confirmSubscriptionPayPalExecute( $paymentId: String!, $payerId: String!,$userId:String!) {
+confirmSubscriptionPayPalExecute(userId:$userId,paymentId: $paymentId, payerId: $payerId)
+{
+__typename
+results
+{
+__typename
+id
+total
+confirmationCode
+createdAt
+reservationState
+paymentState
+}
+status
+errorMessage
+reservationId
+}
+}

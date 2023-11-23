@@ -52,6 +52,8 @@ pod 'NKVPhonePicker'
 pod 'GrowingTextView'
 pod 'DropDown'
 pod 'DGCharts'
+pod 'ABGaugeViewKit'
+
 
   target 'AppTests' do
     inherit! :search_paths

@@ -10,7 +10,6 @@ import UIKit
 import NKVPhonePicker
 
 class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewControllerDelegate{
-    
     // MARK: Vars
     private var animationsCount = 0
     
@@ -67,8 +66,11 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
     @IBOutlet weak var txtNoOfUnitsList: CustomUITextField!
     @IBOutlet weak var btnSubmitRequest: UIButton!
     
+    @IBOutlet weak var mainViewHeight: NSLayoutConstraint!
+
     var arrPlans = [PTProAPI.GetPlanDetailsQuery.Data.GetPlanDetails.Result]()
     var currencysymbol = ""
+    var isYearlySelected = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,12 +84,13 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
     }
     
     private func configureCollectionView() {
-        
+        mainViewHeight.constant = view.bounds.height * 0.28
         // Configure the required item size (REQURED)
         centerFlowLayout.itemSize = CGSize(
             width: view.bounds.width * 0.9,
-            height:  view.bounds.height * 0.3
+            height:  view.bounds.height * 0.28
         )
+        
         
         centerFlowLayout.animationMode = YZCenterFlowLayoutAnimation.scale(sideItemScale: 0.6, sideItemAlpha: 0.6, sideItemShift: 0.0)
         
@@ -146,9 +149,12 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
             if(txtFullName.isEmpty())
             {
                 self.view.makeToast("Please Enter Full Name")
-            }else if(txtEmail.isEmpty() || !txtEmail.isValidEmail())
+            }else if(txtEmail.isEmpty())
             {
-                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"enterAddress")) ?? "Please Enter Address")")
+                self.view.makeToast("Please Enter Email Address")
+            }else if(!txtEmail.isValidEmail())
+            {
+                self.view.makeToast("Please Enter Valid Email Address")
             }else if(txtPhoneNumber.isEmpty())
             {
                 self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"enterMobileNo")) ?? "Please Enter Mobile")")
@@ -159,6 +165,15 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
                 self.apiCallCreateCustomPlanRequest()
             }
         }
+    }
+    
+    //MARK: - CountriesViewControllerDelegate
+    func countriesViewControllerDidCancel(_ sender: NKVPhonePicker.CountriesViewController) {
+        
+    }
+    
+    func countriesViewController(_ sender: NKVPhonePicker.CountriesViewController, didSelectCountry country: NKVPhonePicker.Country) {
+        
     }
     
     //MARK: - API CALL
@@ -189,22 +204,19 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
     }
     
     func apiCallCreateCustomPlanRequest(){
-        //    let createCustomPlanRequest = PTProAPI.apiCallCreateCustomPlanRequest() (userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), payeeName: .some(txtPayeeName.text!), address: .some("\(txtAddressLine1.text!)") ,address2: .some("\(txtAddressLine2.text!)") , city: .some(txtCity.text!), state: .some(txtState.text!), zipcode: .some(Int(txtZipCode.text!) ?? 0), countryCode: .some(91) , country: .some(txtCountry.text!), phoneNumber: .some(txtPhoneNumber.text))
-        //    Network.shared.apollo_headerClient.perform(mutation: createAffiliateUserAccountInfo){  response in
-        //        switch response {
-        //        case .success(let result):
-        //            if let data = result.data?.createAffiliateUserAccountInfo?.status,data == 200 {
-        //                self.view.makeToast("success")
-        //                if let parent =  self.parent as? AffiliateRegistration{
-        //                    parent.showWebsiteview()
-        //                }
-        //            } else {
-        //                self.view.makeToast(result.data?.createAffiliateUserAccountInfo?.errorMessage)
-        //            }
-        //        case .failure(let error):
-        //            self.view.makeToast(error.localizedDescription)
-        //        }
-        //    }
+        let createCustomPlanRequest = PTProAPI.CreateCustomPlanRequestMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), name: .some(txtFullName.text!), email: .some(txtEmail.text!), country: .some(txtPhoneNumber.country?.countryCode ?? ""), number: .some(txtPhoneNumber.text!) , no_Of_units_list:.some(txtNoOfUnitsList.text!))
+        Network.shared.apollo_headerClient.perform(mutation: createCustomPlanRequest){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createCustomPlanRequest?.status,data == 200 {
+                    self.view.makeToast(result.data?.createCustomPlanRequest?.message)
+                } else {
+                    self.view.makeToast(result.data?.createCustomPlanRequest?.message)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
     }
     
 }
@@ -225,11 +237,16 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         cell.btnSegment.cornerRadius = 0.0
         cell.viewSegment.cornerRadius = 0.0
         cell.btnListNow.setTitle("", for: .normal)
+        cell.btnListNow.tag = indexPath.row
+        cell.btnListNow.addTarget(self, action: #selector(onClickListNow(sender:)), for: .touchUpInside)
         cell.lblCustomPlan.text = ""
         
         cell.btnSegment.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
         cell.btnSegment.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
-        
+        cell.btnSegment.backgroundColor = Theme.subSegmentBgColor
+
+        cell.btnSegment.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
+
         switch arrPlans[indexPath.row].title{
         case "Economy":
             cell.viewSegment.isHidden = false
@@ -309,6 +326,15 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         return cell
     }
     
+    
+    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            isYearlySelected = false
+        }else{
+            isYearlySelected = true
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView.isDragging || collectionView.isDecelerating || collectionView.isTracking {
             return
@@ -319,12 +345,21 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         
     }
     
+    @objc func onClickListNow(sender:UIButton){
+        let paymentSelectionPage = PaymentSelectionPage()
+        paymentSelectionPage.selectedPlanDetail = self.arrPlans[sender.tag]
+        paymentSelectionPage.isFromSubscriptionPage = true
+        paymentSelectionPage.isYearlySelected = isYearlySelected
+        paymentSelectionPage.modalPresentationStyle = .fullScreen
+        self.present(paymentSelectionPage, animated: true, completion: nil)
+    }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let visibleRect = CGRect(origin: cvSubscriptionPlans.contentOffset, size: cvSubscriptionPlans.bounds.size)
         let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
         if  let indexPath = cvSubscriptionPlans.indexPathForItem(at: visiblePoint){
             
-            UIView.animate(withDuration: 1.5) {
+            UIView.animate(withDuration: 2.0) {
                 self.lbl1.alpha = 0.0
                 self.lbl2.alpha = 0.0
                 self.lbl3.alpha = 0.0

@@ -1,0 +1,18 @@
+query getcouponcode($userId: String,$couponType:String,$listId:Int,$subscriptionType:String){
+getcouponcode(userId: $userId, couponType: $couponType,listId:$listId, subscriptionType: $subscriptionType) {
+__typename
+errorMessage
+status
+data {
+id
+couponCode
+couponType
+discount
+activeStatus
+startDate
+endDate
+description
+userType
+}
+}
+}

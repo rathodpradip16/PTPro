@@ -1,5 +1,6 @@
 PODS:
   - AARatingBar (1.2)
+  - ABGaugeViewKit (1.0.1)
   - Alamofire (5.8.1)
   - Apollo (1.7.0):
     - Apollo/Core (= 1.7.0)
@@ -310,6 +311,7 @@ PODS:
 
 DEPENDENCIES:
   - AARatingBar
+  - ABGaugeViewKit
   - Alamofire
   - Apollo
   - AssetsPickerViewController
@@ -360,6 +362,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AARatingBar
+    - ABGaugeViewKit
     - Alamofire
     - Apollo
     - AppAuth
@@ -432,6 +435,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AARatingBar: dc54d24687ae97688ffdb29738332d0bc5c0c09f
+  ABGaugeViewKit: b69c855c2878e5ba49605b0662d409c1577ed198
   Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
   Apollo: ce13b007f55b339493b40b5a8ef063fd2ae5c4f1
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
@@ -502,6 +506,6 @@ SPEC CHECKSUMS:
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   WHTabbar: add14cb164535a8e5db2068c85a6c523345b681f
 
-PODFILE CHECKSUM: a3558495a820afa8e2f1e5c2dd551e94a1dc5ea7
+PODFILE CHECKSUM: 046ee66059f6fe4bb9c700382e98941187d23442
 
 COCOAPODS: 1.13.0

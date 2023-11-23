@@ -1,0 +1,6 @@
+query getcouponuse($userId: String,$couponCode:String,$listId:Int){
+getcouponuse(userId:$userId,couponCode:$couponCode,listId:$listId){
+errorMessage
+status
+}
+}

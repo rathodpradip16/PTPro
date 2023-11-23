@@ -1,0 +1,6 @@
+mutation CreateCustomPlanRequest($userId: String, $name: String, $email: String, $country: String, $number: String, $no_Of_units_list: String) {
+CreateCustomPlanRequest (userId: $userId, name: $name, email: $email,country: $country,number: $number,no_Of_units_list:$no_Of_units_list) {
+status
+message
+}
+}

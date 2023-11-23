@@ -1,0 +1,13 @@
+mutation createSubscriptionPayment($userId:String,$planId:Int,$total: Float!, $paymentType: Int, $paymentCurrency: String,$cardToken: String, $currency: String!,$planType:String!,$totaldiscount:Float,$couponCode:String) {
+createSubscriptionPayment(userId: $userId,total: $total,planId:$planId,paymentType:$paymentType,paymentCurrency: $paymentCurrency,cardToken:$cardToken, currency: $currency,planType:$planType,totaldiscount:$totaldiscount,couponCode:$couponCode) {
+results{
+id
+}
+status
+errorMessage
+requireAdditionalAction
+paymentIntentSecret
+reservationId
+redirectUrl
+}
+}

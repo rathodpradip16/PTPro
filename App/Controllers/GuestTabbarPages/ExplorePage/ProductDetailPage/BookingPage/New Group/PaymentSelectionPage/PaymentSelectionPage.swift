@@ -16,11 +16,39 @@ import SwiftMessages
 
 class PaymentSelectionPage: UIViewController {
 
+
+    @IBOutlet weak var viewPlanDetails: UIView!
+    @IBOutlet weak var lblPlanTypeAndPrice: UILabel!
+    
+    @IBOutlet weak var lblOne: UILabel!
+    @IBOutlet weak var lblTwo: UILabel!
+    @IBOutlet weak var lblThree: UILabel!
+    @IBOutlet weak var lblFour: UILabel!
+    @IBOutlet weak var lblFive: UILabel!
+    @IBOutlet weak var lblSix: UILabel!
+    
+    @IBOutlet weak var viewCouponApplied: UIView!
+    @IBOutlet weak var lblCouponPlanNameApplied: UILabel!
+    @IBOutlet weak var btnDeleteCoupon: UIButton!
+
+    @IBOutlet weak var viewMainCoupon: UIView!
+    @IBOutlet weak var viewCoupon: UIView!
+    @IBOutlet weak var lblCouponCode: UILabel!
+    @IBOutlet weak var btnApplyCoupon: UIButton!
+    @IBOutlet weak var lblCouponDetail: UILabel!
+    @IBOutlet weak var lblCouponExpiryDate: UILabel!
+    
+    
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var proceedToPayBtn: UIButton!
     @IBOutlet weak var tableView: UITableView!
+    
+    @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
+
+    var isFromSubscriptionPage = false
+    
     let availablePaymentTypes = ["Paypal", "Stripe"]
     var selectedPaymentType: Int = 0
     var inputPickerView = UIPickerView()
@@ -30,21 +58,31 @@ class PaymentSelectionPage: UIViewController {
     
     var getpaymentmethodsArray = [PTProAPI.GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
     var getpaymentmethodsArrayFilter = [PTProAPI.GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
-    
+  
+    var selectedPlanDetail:PTProAPI.GetPlanDetailsQuery.Data.GetPlanDetails.Result?
+
+    var couponData:PTProAPI.GetcouponcodeQuery.Data.Getcouponcode.Datum?
+
     @IBOutlet var lblPaymentType: UILabel!
     var braintreeClient: BTAPIClient!
     var lottieWholeView = UIView()
     var lottieView =  LottieAnimationView()
     
-    
-    
     var currencyvalue_from_API_base = ""
     var getbillingArray : PTProAPI.GetBillingCalculationQuery.Data.GetBillingCalculation.Result?
     var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
     var reservID = 0
+    var isYearlySelected = false
+    var currencySymbol = ""
+    var isCouponApplied = false
+    var subscriptionTotal = 0.0
+    var subscriptionDiscount = 0.0
+    var subscriptionCouponCode = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.tableViewHeight.constant = 300
+        self.initializeView()
         self.initialSetup()
         self.payoutAPICall()
         self.view.backgroundColor = UIColor(named: "colorController")
@@ -52,16 +90,72 @@ class PaymentSelectionPage: UIViewController {
         self.bottomView.bringSubviewToFront(self.proceedToPayBtn)
         
         self.configurePaypalCheckOut()
+        self.getCouponCodeAPICall()
+        self.btnDeleteCoupon.setTitle("", for: .normal)
+        self.btnDeleteCoupon.setImage(UIImage(named: "cross")!.withTintColor(.red), for: .normal)
         // Do any additional setup after loading the view.
     }
 
+    func initializeView(){
+        self.viewPlanDetails.isHidden = isFromSubscriptionPage ? false : true
+        if let planDetails = selectedPlanDetail{
+            if let curSymbol = Utility.shared.getSymbol(forCurrencyCode: selectedPlanDetail?.currency ?? "") {
+                currencySymbol = curSymbol
+            }else if(Utility.shared.getPreferredCurrency() != nil &&  Utility.shared.getPreferredCurrency() != "")
+            {
+                currencySymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!) ?? ""
+            }
+            
+            self.lblPlanTypeAndPrice.text = "\(planDetails.title ?? "") \(currencySymbol)\((isYearlySelected ? planDetails.yearly : planDetails.monthly) ?? 0)/\(isYearlySelected ? "yearly" : "monthly")"
+            self.lblOne.text = planDetails.one
+            self.lblTwo.text = planDetails.two
+            self.lblThree.text = planDetails.three
+            self.lblFour.text = planDetails.four
+            self.lblFive.text = planDetails.five
+            self.lblSix.text = planDetails.six
+            subscriptionTotal = Double((isYearlySelected ? planDetails.yearly : planDetails.monthly) ?? 0)
+        }
+    }
     
+    func getCouponUseAPICall()
+    {
+        self.lottieAnimation()
+
+        var listId:Int = 0
+        if isFromSubscriptionPage, let plan = selectedPlanDetail,let planId = plan.id{
+            listId = planId
+        }
+        
+        let getcouponuseQuery = PTProAPI.GetcouponuseQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), couponCode: .some(self.couponData?.couponCode ?? ""), listId: .some(listId))
+        
+        Network.shared.apollo_headerClient.fetch(query: getcouponuseQuery) { response in
+            self.lottieView.isHidden = true
+            self.lottieWholeView.isHidden = true
+            switch response {
+            case .success(let result):
+                if let status = result.data?.getcouponuse?.status ,status == 200 {
+                    self.isCouponApplied = true
+                    self.viewMainCoupon.isHidden = false
+                    self.viewCoupon.isHidden = true
+                    self.viewCouponApplied.isHidden = false
+                    self.updateCouponData()
+                }else{
+                    self.view.makeToast(result.data?.getcouponuse?.errorMessage)
+                }
+                break
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
+    }
+
     func payoutAPICall()
     {
-        
         self.lottieAnimation()
         let getpayoutquery = PTProAPI.GetPaymentMethodsQuery()
         Network.shared.apollo_headerClient.fetch(query: getpayoutquery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
+            self.lottieView.isHidden = true
+            self.lottieWholeView.isHidden = true
             switch response {
             case .success(let result):
                 guard (result.data?.getPaymentMethods?.results) != nil else{
@@ -86,6 +180,90 @@ class PaymentSelectionPage: UIViewController {
         }
     }
     
+    func getCouponCodeAPICall()
+    {
+        self.lottieAnimation()
+        
+        var listId:Int = 0
+        var subscriptionType = ""
+        if isFromSubscriptionPage, let plan = selectedPlanDetail,let planId = plan.id{
+            listId = planId
+        }
+        if isFromSubscriptionPage, let plan = selectedPlanDetail,let type = plan.title{
+            subscriptionType = type
+        }
+        
+        let getCouponcodeQuery = PTProAPI.GetcouponcodeQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), couponType: .some( "subscription"), listId: .some(listId), subscriptionType: .some(subscriptionType))
+        
+            Network.shared.apollo_headerClient.fetch(query: getCouponcodeQuery) { response in
+                self.lottieView.isHidden = true
+                self.lottieWholeView.isHidden = true
+            switch response {
+            case .success(let result):
+                if let status = result.data?.getcouponcode?.status ,status == 200 {
+                    if let data = result.data?.getcouponcode?.data,data.count != 0{
+                        self.viewMainCoupon.isHidden = false
+                        self.viewCoupon.isHidden = false
+                        self.viewCouponApplied.isHidden = true
+                        self.couponData = data[0]!
+                        self.updateCouponData()
+                    }else{
+                        self.viewMainCoupon.isHidden = true
+                    }
+                }else{
+                    self.view.makeToast(result.data?.getcouponcode?.errorMessage)
+                }
+                break
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
+    }
+    
+    func updateCouponData(){
+        if let data = couponData{
+            self.lblCouponCode.text = data.couponCode
+            self.lblCouponDetail.text = "Flat \(data.discount ?? 0.0)% OFF"
+            self.lblCouponPlanNameApplied.text = "Coupon Applied: \(couponData?.couponCode ?? "")"
+            self.lblCouponExpiryDate.text = "Valid till \(data.endDate ?? "")"
+            
+            self.subscriptionCouponCode = data.couponCode ?? ""
+            self.subscriptionDiscount = data.discount ?? 0.0
+            self.updateDiscount()
+        }
+    }
+    
+    func updateDiscount(){
+        if let curSymbol = Utility.shared.getSymbol(forCurrencyCode: selectedPlanDetail?.currency ?? "") {
+            currencySymbol = curSymbol
+        }else if(Utility.shared.getPreferredCurrency() != nil &&  Utility.shared.getPreferredCurrency() != "")
+        {
+            currencySymbol = Utility.shared.getSymbol(forCurrencyCode: Utility.shared.getPreferredCurrency()!) ?? ""
+        }
+        
+        if let planDetails = selectedPlanDetail{
+            let planPrice = Double(((isYearlySelected ? planDetails.yearly : planDetails.monthly) ?? 0))
+            let strPlanDuration = isYearlySelected ? "yearly" : "monthly"
+
+            if isCouponApplied{
+                let selectedPlan = String(format: "%@%.2f%@", currencySymbol,planPrice,strPlanDuration)
+                let discount = ((planPrice * (couponData?.discount ?? 0.0)) / 100)
+                let discountAmount = planPrice - discount
+                let discountLabel = String(format: "%@%.2f%@", currencySymbol,discountAmount,strPlanDuration)
+                let strPlan = "\(planDetails.title ?? "")\(selectedPlan)\n\(discountLabel)"
+                
+                let attributeString: NSMutableAttributedString = NSMutableAttributedString(string: strPlan)
+                let somePartStringRange = (strPlan as NSString).range(of: selectedPlan)
+                attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: somePartStringRange)
+                self.lblPlanTypeAndPrice.attributedText = attributeString
+            }else{
+                viewCouponApplied.isHidden = true
+                let selectedPlan = String(format: "%@%.2f%@", currencySymbol,planPrice,strPlanDuration)
+                self.lblPlanTypeAndPrice.text = "\(planDetails.title ?? "") \(selectedPlan)"
+                subscriptionTotal = planPrice
+            }
+        }
+    }
     
     func lottieAnimation()
     {
@@ -212,7 +390,11 @@ class PaymentSelectionPage: UIViewController {
                 self.stripePayments()
             }else{
                 self.lottieAnimation()
-                self.PaymentAPICall(cardtoken: "")
+                if self.isFromSubscriptionPage{
+                    self.subscriptionPaymentAPICall(cardtoken: "")
+                }else{
+                    self.PaymentAPICall(cardtoken: "")
+                }
             }
         }
         
@@ -389,6 +571,94 @@ func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
         }
     }
     
+    func subscriptionPaymentAPICall(cardtoken:String)
+    {
+        var currency_con = String()
+        if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
+        {
+            currency_con = Utility.shared.getPreferredCurrency()!
+        }
+        else
+        {
+            currency_con = selectedPlanDetail?.currency ?? ""
+        }
+        
+        
+        var planID = 0
+        if let plan = selectedPlanDetail, let planId = plan.id{
+            planID = planId
+        }
+        
+        let createSubscriptionPaymentMutation = PTProAPI.CreateSubscriptionPaymentMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), planId: .some(planID), total: Double(subscriptionTotal), paymentType: .some(self.selectedPaymentType == 1 ? 2 : 1), paymentCurrency: .some(self.selectedCurrency), cardToken: .some(cardtoken), currency: currency_con, planType: (isYearlySelected ? "year" : "month"), totaldiscount: .some(Double(subscriptionDiscount)), couponCode: .some(subscriptionCouponCode))
+                  
+        print("{\"userId\":\"\(Utility.shared.ProfileAPIArray?.userId ?? "")","planId\":\(planID),\"total\":\(subscriptionTotal),\"paymentType\":\(self.selectedPaymentType),\"paymentCurrency\":\"\(self.selectedCurrency)\",\"cardToken\":\"\",\"currency\":\"\(currency_con)","planType\":\"month","couponCode\":\"\(subscriptionCouponCode)\"}")
+
+        print(createSubscriptionPaymentMutation.__variables as Any)
+        Network.shared.apollo_headerClient.perform(mutation: createSubscriptionPaymentMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createSubscriptionPayment?.status,data == 400 {
+                    self.lottieWholeView.isHidden = true
+                    self.lottieView.isHidden = true
+                    print("esult.data?.createSubscriptionPayment?.results?.id  \(result.data?.createSubscriptionPayment?.results?.id ?? 0)")
+                    
+                    print("esult.data?.createSubscriptionPayment?.paymentIntentSecret  \(result.data?.createSubscriptionPayment?.paymentIntentSecret ?? "")")
+
+                    if(result.data?.createSubscriptionPayment?.results?.id != nil && result.data?.createSubscriptionPayment?.paymentIntentSecret != nil)
+                    {
+                        self.handlePayment(reservationId: (result.data?.createSubscriptionPayment?.reservationId!)!, paymentIntentId: (result.data?.createSubscriptionPayment?.paymentIntentSecret!)!)
+                    }
+                    else{
+                        print("Response : \(String(describing: result.data?.createSubscriptionPayment))")
+                        self.view.makeToast(result.data?.createSubscriptionPayment?.errorMessage!)
+                    }
+                    print("Missing Data")
+                    
+                    return
+                }else if result.data?.createSubscriptionPayment?.status == 500{
+                    self.lottieWholeView.isHidden = true
+                    self.lottieView.isHidden = true
+                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.createSubscriptionPayment?.errorMessage, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                        UserDefaults.standard.removeObject(forKey: "user_token")
+                        UserDefaults.standard.removeObject(forKey: "user_id")
+                        UserDefaults.standard.removeObject(forKey: "password")
+                        UserDefaults.standard.removeObject(forKey: "currency_rate")
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        let welcomeObj = WelcomePageVC()
+                        appDelegate.setInitialViewController(initialView: welcomeObj)
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                }else{
+                    Utility.shared.guestCountToBeSend = 1
+                    if self.selectedPaymentType == 0 { //For PayPal
+                        if result.data?.createSubscriptionPayment?.redirectUrl != ""{
+                            let webviewObj = WebviewVC()
+                            self.reservID = result.data?.createSubscriptionPayment?.reservationId ?? 0
+                            webviewObj.isForPayPal = true
+                            webviewObj.delegate = self
+                            webviewObj.webstring = result.data?.createSubscriptionPayment?.redirectUrl ?? ""
+                            webviewObj.pageTitle = ""
+                            webviewObj.modalPresentationStyle = .fullScreen
+                            webviewObj.webviewRedirection(webviewString:result.data?.createSubscriptionPayment?.redirectUrl ?? "")
+                            self.present(webviewObj, animated: true, completion: nil)
+                        }else{
+                            
+                        }
+                    }else{
+                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"paymentsuccess"))!)")
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let orderSummaryVC = storyboard.instantiateViewController(withIdentifier: "OrderSummaryVC") as! OrderSummaryVC
+                        self.present(orderSummaryVC, animated: true, completion: nil)
+                    }
+                }
+            case .failure(_): break
+            }
+        }
+    }
+    
+    
     @objc func dismissgenderPicker(text:Int) {
         view.endEditing(true)
     }
@@ -397,6 +667,19 @@ func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
         let cell = view.viewWithTag(sender.tag + 8000) as! PaymentFooterCell
         cell.txtFiled.becomeFirstResponder()
    }
+    
+    // MARK: - Action
+    @IBAction func onClickDeleteCouponCode(_ sender: Any) {
+        viewCouponApplied.isHidden = true
+        self.viewCoupon.isHidden = false
+        self.isCouponApplied = false
+        self.updateCouponData()
+    }
+    
+    @IBAction func onClickApplyCouponCode(_ sender: Any) {
+        self.getCouponUseAPICall()
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -478,9 +761,16 @@ extension PaymentSelectionPage: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.selectedPaymentType != indexPath.section{
             self.selectedPaymentType = indexPath.section
+            
+            if self.selectedPaymentType == 0{
+                self.tableViewHeight.constant = 300
+            }else{
+                self.tableViewHeight.constant = 250
+            }
             self.tableView.reloadData()
         }
     }
@@ -560,7 +850,11 @@ extension PaymentSelectionPage: UITextFieldDelegate , WebviewVCDelegate{
             let paymentID = arrayOfQuery?.first?.split(separator: "=")
             let payerID = arrayOfQuery?.last?.split(separator: "=")
             
-            self.ConfirmPayPal(paymentID: "\(paymentID?.last ?? "")", PayerID: "\(payerID?.last ?? "")")
+            if isFromSubscriptionPage{
+                self.confirmSubscriptionPayPalExecute(paymentID: "\(paymentID?.last ?? "")", PayerID: "\(payerID?.last ?? "")")
+            }else{
+                self.ConfirmPayPal(paymentID: "\(paymentID?.last ?? "")", PayerID: "\(payerID?.last ?? "")")
+            }
 
         }else{
             self.lottieView.isHidden = true
@@ -568,6 +862,51 @@ extension PaymentSelectionPage: UITextFieldDelegate , WebviewVCDelegate{
         }
         }
     
+    
+
+    func confirmSubscriptionPayPalExecute(paymentID: String, PayerID: String){
+        let confirmPayPal = PTProAPI.ConfirmSubscriptionPayPalExecuteMutation(paymentId: paymentID, payerId: PayerID, userId: Utility.shared.ProfileAPIArray?.userId ?? "")
+        
+        Network.shared.apollo_headerClient.perform(mutation: confirmPayPal){ response in
+            switch response {
+            case .success(let result):
+                if result.data?.confirmSubscriptionPayPalExecute?.status == 200 {
+                    if #available(iOS 11.0, *) {
+                        Utility.shared.PreApprovedID = false
+                        self.lottieView.isHidden = true
+                        self.lottieWholeView.isHidden = true
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let orderSummaryVC = storyboard.instantiateViewController(withIdentifier: "OrderSummaryVC") as! OrderSummaryVC
+                        orderSummaryVC.modalPresentationStyle = .fullScreen
+                        self.present(orderSummaryVC, animated: true, completion: nil)
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                }else if result.data?.confirmSubscriptionPayPalExecute?.status == 500{
+                    self.lottieWholeView.isHidden = true
+                    self.lottieView.isHidden = true
+                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.confirmSubscriptionPayPalExecute?.errorMessage, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                        UserDefaults.standard.removeObject(forKey: "user_token")
+                        UserDefaults.standard.removeObject(forKey: "user_id")
+                        UserDefaults.standard.removeObject(forKey: "password")
+                        UserDefaults.standard.removeObject(forKey: "currency_rate")
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        let welcomeObj = WelcomePageVC()
+                        appDelegate.setInitialViewController(initialView: welcomeObj)
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                }else{
+                    self.view.makeToast(result.data?.confirmSubscriptionPayPalExecute?.errorMessage ?? "")
+                }
+            case .failure(let error):
+                self.lottieView.isHidden = true
+                self.lottieWholeView.isHidden = true
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
+    }
     
     func ConfirmPayPal(paymentID: String, PayerID: String){
         let confirmPayPal = PTProAPI.ConfirmPayPalExecuteMutation(paymentId: paymentID, payerId: PayerID)
@@ -642,18 +981,16 @@ extension PaymentSelectionPage: STPAddCardViewControllerDelegate,STPPaymentCardT
         func addCardViewController(_ addCardViewController: STPAddCardViewController, didCreatePaymentMethod paymentMethod: STPPaymentMethod, completion: @escaping STPErrorBlock) {
             self.lottieAnimation()
             print("paymentmethodid:\(paymentMethod.stripeId)")
-            self.PaymentAPICall(cardtoken: "\(paymentMethod.stripeId)")
+            if isFromSubscriptionPage{
+                self.subscriptionPaymentAPICall(cardtoken: "\(paymentMethod.stripeId)")
+            }else{
+                self.PaymentAPICall(cardtoken: "\(paymentMethod.stripeId)")
+            }
             dismiss(animated: true, completion: nil)
         }
         
-        func addCardViewController(_ addCardViewController: STPAddCardViewController, didCreateToken token: STPToken, completion: @escaping STPErrorBlock) {
-            
-            //self.PaymentAPICall(cardtoken: "\(token)")
-           // dismiss(animated: true, completion: nil)
-        }
     func handlePayment(reservationId:Int,paymentIntentId:String)
     {
-        
         STPPaymentHandler.shared().handleNextAction(
             forPayment: paymentIntentId,
             with:self,
@@ -662,7 +999,11 @@ extension PaymentSelectionPage: STPAddCardViewControllerDelegate,STPPaymentCardT
                 if case .succeeded = status, let paymentIntent = paymentIntent {
                     //completion(.success(paymentIntent))
                     self.lottieAnimation()
-                    self.confirmPaymentCall(reservationId: reservationId, paymentIntentId:"\(paymentIntent.stripeId)")
+                    if self.isFromSubscriptionPage{
+                        self.confirmSubscriptionPayPalExecute(paymentID: "\(reservationId)", PayerID: "\(paymentIntent.stripeId)")
+                    }else{
+                        self.confirmPaymentCall(reservationId: reservationId, paymentIntentId:"\(paymentIntent.stripeId)")
+                    }
                 } else {
                     //completion(.failure(error ?? AppError.invalid))
                     self.lottieView.isHidden = true

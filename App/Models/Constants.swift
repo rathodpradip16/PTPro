@@ -69,6 +69,7 @@ let HELP_URL = "\(BASE_URL)/contact"
 let Banner_URL = "\(BASE_URL)/images/banner/"
 let AffiliateDocument_URL =  "\(BASE_URL)/images/AffiliateDocument/"
 let AffiliateDocument_UPLOAD_PHOTO = "\(BASE_URL)/AffiliateDocument"
+let Download_Receipt_URL = "\(BASE_URL)/pdf"
 let GUEST = "guest"
 let HOST = "host"
 

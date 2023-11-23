@@ -37,6 +37,8 @@ extension PTProAPI {
       case "Reviewlist": return PTProAPI.Objects.Reviewlist
       case "Reviews": return PTProAPI.Objects.Reviews
       case "userProfile": return PTProAPI.Objects.UserProfile
+      case "subscriptionPaymentType": return PTProAPI.Objects.SubscriptionPaymentType
+      case "Reservation": return PTProAPI.Objects.Reservation
       case "SiteSettingsCommon": return PTProAPI.Objects.SiteSettingsCommon
       case "ApplicationVersion": return PTProAPI.Objects.ApplicationVersion
       case "AllEmailToken": return PTProAPI.Objects.AllEmailToken
@@ -46,6 +48,7 @@ extension PTProAPI {
       case "StaticPageType": return PTProAPI.Objects.StaticPageType
       case "EditListingResponse": return PTProAPI.Objects.EditListingResponse
       case "EditListing": return PTProAPI.Objects.EditListing
+      case "TransactionType": return PTProAPI.Objects.TransactionType
       case "AllWishListGroup": return PTProAPI.Objects.AllWishListGroup
       case "WishListGroup": return PTProAPI.Objects.WishListGroup
       case "WishList": return PTProAPI.Objects.WishList
@@ -56,11 +59,11 @@ extension PTProAPI {
       case "singleListSettings": return PTProAPI.Objects.SingleListSettings
       case "GetWishListType": return PTProAPI.Objects.GetWishListType
       case "SiteSettings": return PTProAPI.Objects.SiteSettings
+      case "Couponmanager": return PTProAPI.Objects.Couponmanager
       case "WholeAccount": return PTProAPI.Objects.WholeAccount
       case "UserAccount": return PTProAPI.Objects.UserAccount
       case "UserVerifiedInfo": return PTProAPI.Objects.UserVerifiedInfo
       case "ReservationPayment": return PTProAPI.Objects.ReservationPayment
-      case "Reservation": return PTProAPI.Objects.Reservation
       case "AffiliateUserverificationType": return PTProAPI.Objects.AffiliateUserverificationType
       case "PayoutWholeType": return PTProAPI.Objects.PayoutWholeType
       case "Payout": return PTProAPI.Objects.Payout
@@ -83,6 +86,7 @@ extension PTProAPI {
       case "listingDataa": return PTProAPI.Objects.ListingDataa
       case "PlanDetailsType": return PTProAPI.Objects.PlanDetailsType
       case "GetPlanDetailsType": return PTProAPI.Objects.GetPlanDetailsType
+      case "Getcoupon": return PTProAPI.Objects.Getcoupon
       case "ImageBannerCommonType": return PTProAPI.Objects.ImageBannerCommonType
       case "ImageBanner": return PTProAPI.Objects.ImageBanner
       case "UserCommon": return PTProAPI.Objects.UserCommon
@@ -110,8 +114,7 @@ extension PTProAPI {
       case "ListBlockedDatesResponseType": return PTProAPI.Objects.ListBlockedDatesResponseType
       case "ListBlockedDates": return PTProAPI.Objects.ListBlockedDates
       case "AffiliateUserType": return PTProAPI.Objects.AffiliateUserType
-      case "Couponmanager": return PTProAPI.Objects.Couponmanager
-      case "Getcoupon": return PTProAPI.Objects.Getcoupon
+      case "CreateCustomPlanRequestType": return PTProAPI.Objects.CreateCustomPlanRequestType
       case "CalculateOccupancyRate": return PTProAPI.Objects.CalculateOccupancyRate
       case "AllListing": return PTProAPI.Objects.AllListing
       case "allListSettingTypes": return PTProAPI.Objects.AllListSettingTypes

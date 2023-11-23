@@ -76,6 +76,8 @@ type Query {
   getcouponuse(userId: String, couponCode: String, listId: Int, planId: Int, isforplan: Boolean): Couponmanager
   getHostSuggested(userId: String, currentPage: Int, lat: Float, lng: Float, priceRange: [Int], review: String): HostSuggested
   getcouponcode(userId: String, couponType: String, listId: Int, subscriptionType: String): Couponmanager
+  UpdateListViews(userId: String, listId: Int, searchId: Int): ListViews
+  getTrymelistview(userId: String, listId: Int, searchId: Int): Trymelistviews
 }
 
 type CommonType {
@@ -787,6 +789,7 @@ type GetPlanDetailsType {
   currency: String
   status: Int
   expiryDate: String
+  expiryDateee: String
 }
 
 type WholeAccount {
@@ -1057,6 +1060,7 @@ type SearchListing {
   checkOut: String
   currentPage: Int
   results: [ShowListing]
+  dates: String
   status: Int
   errorMessage: String
 }
@@ -1621,6 +1625,28 @@ type HostSuggested {
   errorMessage: String
 }
 
+type ListViews {
+  id: Int
+  listId: String
+  userId: String
+  count: Int
+  createdAt: String
+  searchId: Int
+  status: String
+  errorMessage: String
+}
+
+type Trymelistviews {
+  id: Int
+  listId: String
+  userId: String
+  count: Int
+  createdAt: String
+  searchId: Int
+  status: String
+  errorMessage: String
+}
+
 type Mutation {
   createUser(firstName: String, lastName: String, email: String!, password: String!, dateOfBirth: String, deviceType: String!, deviceDetail: String, deviceId: String!, registerType: String): UserCommon
   Couponcount(id: Int!, couponCode: String): Couponmanager
@@ -1681,6 +1707,7 @@ type Mutation {
   confirmPayPalExecute(paymentId: String!, payerId: String!): ReservationPayment
   submitForVerification(id: Int!, listApprovalStatus: String): EditListingResponse
   deleteUser: UserCommon
+  CreateSearchlist(userId: String, checkIn: String, checkOut: String, dates: String): SearchListing
   Createcouponcode(userId: String, listId: Int, couponCode: String, couponType: String, discount: Float, startDate: String, endDate: String, description: String, userType: String): Couponmanager
 }
 

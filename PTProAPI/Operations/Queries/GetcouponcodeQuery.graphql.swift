@@ -8,7 +8,7 @@ extension PTProAPI {
     static let operationName: String = "getcouponcode"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query getcouponcode($userId: String, $couponType: String, $listId: Int, $subscriptionType: String) { getcouponcode( userId: $userId couponType: $couponType listId: $listId subscriptionType: $subscriptionType ) { __typename errorMessage status data { __typename id couponCode activeStatus couponType discount startDate endDate description userType } } }"#
+        #"query getcouponcode($userId: String, $couponType: String, $listId: Int, $subscriptionType: String) { getcouponcode( userId: $userId couponType: $couponType listId: $listId subscriptionType: $subscriptionType ) { __typename errorMessage status data { __typename id couponCode couponType discount activeStatus startDate endDate description userType } } }"#
       ))
 
     public var userId: GraphQLNullable<String>
@@ -82,9 +82,9 @@ extension PTProAPI {
             .field("__typename", String.self),
             .field("id", Int?.self),
             .field("couponCode", String?.self),
-            .field("activeStatus", String?.self),
             .field("couponType", String?.self),
             .field("discount", Double?.self),
+            .field("activeStatus", String?.self),
             .field("startDate", String?.self),
             .field("endDate", String?.self),
             .field("description", String?.self),
@@ -93,9 +93,9 @@ extension PTProAPI {
 
           var id: Int? { __data["id"] }
           var couponCode: String? { __data["couponCode"] }
-          var activeStatus: String? { __data["activeStatus"] }
           var couponType: String? { __data["couponType"] }
           var discount: Double? { __data["discount"] }
+          var activeStatus: String? { __data["activeStatus"] }
           var startDate: String? { __data["startDate"] }
           var endDate: String? { __data["endDate"] }
           var description: String? { __data["description"] }
