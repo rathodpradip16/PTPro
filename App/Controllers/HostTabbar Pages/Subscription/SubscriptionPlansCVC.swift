@@ -26,4 +26,7 @@ class SubscriptionPlansCVC: UICollectionViewCell {
     @IBOutlet weak var btnListNow: UIButton!
 
     @IBOutlet weak var lblCustomPlan: UILabel!
+    @IBOutlet weak var lblExpDate: UILabel!
+    @IBOutlet weak var lblActiveSub: UILabel!
+
 }

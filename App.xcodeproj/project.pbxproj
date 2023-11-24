@@ -351,6 +351,7 @@
 		766C081E2AFFE0CB00E68E60 /* UserType.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766C07292AFFE0CA00E68E60 /* UserType.graphql.swift */; };
 		766C081F2AFFE0CB00E68E60 /* SchemaConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766C072A2AFFE0CA00E68E60 /* SchemaConfiguration.swift */; };
 		766C08202AFFE0CB00E68E60 /* SchemaMetadata.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766C072B2AFFE0CA00E68E60 /* SchemaMetadata.graphql.swift */; };
+		766D8F2B2B109BCA007E11E9 /* animation_location.json in Resources */ = {isa = PBXBuildFile; fileRef = 766D8F2A2B109BCA007E11E9 /* animation_location.json */; };
 		766E6D462AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766E6D452AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift */; };
 		766E83A32AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766E83A22AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift */; };
 		7690ECA42B0DBB0000CF4CD9 /* Locator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7690ECA32B0DBB0000CF4CD9 /* Locator.swift */; };
@@ -1275,6 +1276,7 @@
 		766C07292AFFE0CA00E68E60 /* UserType.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserType.graphql.swift; sourceTree = "<group>"; };
 		766C072A2AFFE0CA00E68E60 /* SchemaConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaConfiguration.swift; sourceTree = "<group>"; };
 		766C072B2AFFE0CA00E68E60 /* SchemaMetadata.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaMetadata.graphql.swift; sourceTree = "<group>"; };
+		766D8F2A2B109BCA007E11E9 /* animation_location.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = animation_location.json; path = App/animation_location.json; sourceTree = SOURCE_ROOT; };
 		766E6D452AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomXAxisValueFormatter.swift; sourceTree = "<group>"; };
 		766E83A22AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyGraphXAxisValueFormatter.swift; sourceTree = "<group>"; };
 		767B90C12AFD4AC30089605C /* CreateCustomPlanRequest.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CreateCustomPlanRequest.graphql; sourceTree = "<group>"; };
@@ -3594,6 +3596,7 @@
 		B5EB004529310EAF00E9FC11 /* CurrencyDict */ = {
 			isa = PBXGroup;
 			children = (
+				766D8F2A2B109BCA007E11E9 /* animation_location.json */,
 				B5FB6600297A522200F36A5E /* mapstyle.json */,
 				B5EB004629310ECF00E9FC11 /* currency.json */,
 			);
@@ -4185,6 +4188,7 @@
 				B5F992CE22B267B3005863FA /* NomessageCell.xib in Resources */,
 				B5793DEA25653F480032C20F /* العربية.json in Resources */,
 				B56602D522E9681E00A144CE /* InProgressCell.xib in Resources */,
+				766D8F2B2B109BCA007E11E9 /* animation_location.json in Resources */,
 				B5516F2F22FE9BF0004E672E /* CalendardetailCell.xib in Resources */,
 				B5771AA32244E0800070DD96 /* ExplorePageVC.xib in Resources */,
 				2C77EB0423BB4A2A0014199D /* HostprofileviewCell.xib in Resources */,

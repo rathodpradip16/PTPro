@@ -19,7 +19,8 @@ class PaymentSelectionPage: UIViewController {
 
     @IBOutlet weak var viewPlanDetails: UIView!
     @IBOutlet weak var lblPlanTypeAndPrice: UILabel!
-    
+    @IBOutlet weak var viewSubPlanDetails: UIView!
+
     @IBOutlet weak var lblOne: UILabel!
     @IBOutlet weak var lblTwo: UILabel!
     @IBOutlet weak var lblThree: UILabel!
@@ -81,6 +82,7 @@ class PaymentSelectionPage: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         self.tableViewHeight.constant = 300
         self.initializeView()
         self.initialSetup()
@@ -92,10 +94,16 @@ class PaymentSelectionPage: UIViewController {
         self.configurePaypalCheckOut()
         self.getCouponCodeAPICall()
         self.btnDeleteCoupon.setTitle("", for: .normal)
-        self.btnDeleteCoupon.setImage(UIImage(named: "cross")!.withTintColor(.red), for: .normal)
         // Do any additional setup after loading the view.
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            self.viewSubPlanDetails.dropShadow(color: .lightGray, opacity: 1, offSet: CGSize(width: -1, height: 1), radius: 3, scale: true)
+            self.viewCouponApplied.dropShadow(color: .lightGray, opacity: 1, offSet: CGSize(width: -1, height: 1), radius: 3, scale: true)
+        }
+    }
+    
     func initializeView(){
         self.viewPlanDetails.isHidden = isFromSubscriptionPage ? false : true
         if let planDetails = selectedPlanDetail{
@@ -589,7 +597,7 @@ func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
             planID = planId
         }
         
-        let createSubscriptionPaymentMutation = PTProAPI.CreateSubscriptionPaymentMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), planId: .some(planID), total: Double(subscriptionTotal), paymentType: .some(self.selectedPaymentType == 1 ? 2 : 1), paymentCurrency: .some(self.selectedCurrency), cardToken: .some(cardtoken), currency: currency_con, planType: (isYearlySelected ? "year" : "month"), totaldiscount: .some(Double(subscriptionDiscount)), couponCode: .some(subscriptionCouponCode))
+        let createSubscriptionPaymentMutation = PTProAPI.CreateSubscriptionPaymentMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), planId: .some(planID), total: Double(subscriptionTotal), paymentType: .some(self.selectedPaymentType == 1 ? 2 : 1), paymentCurrency: .some(self.selectedCurrency), cardToken: .some(cardtoken), currency: currency_con, planType: (isYearlySelected ? "year" : "month"), totaldiscount: .some(Double(isCouponApplied ? subscriptionDiscount : 0.0)), couponCode: .some(isCouponApplied ? subscriptionCouponCode : ""))
                   
         print("{\"userId\":\"\(Utility.shared.ProfileAPIArray?.userId ?? "")","planId\":\(planID),\"total\":\(subscriptionTotal),\"paymentType\":\(self.selectedPaymentType),\"paymentCurrency\":\"\(self.selectedCurrency)\",\"cardToken\":\"\",\"currency\":\"\(currency_con)","planType\":\"month","couponCode\":\"\(subscriptionCouponCode)\"}")
 
@@ -650,6 +658,9 @@ func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
                         self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"paymentsuccess"))!)")
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
                         let orderSummaryVC = storyboard.instantiateViewController(withIdentifier: "OrderSummaryVC") as! OrderSummaryVC
+                        orderSummaryVC.selectedPlan = self.selectedPlanDetail?.title ?? ""
+                        orderSummaryVC.selectedPaymentType = self.selectedPaymentType
+                        orderSummaryVC.modalPresentationStyle = .fullScreen
                         self.present(orderSummaryVC, animated: true, completion: nil)
                     }
                 }
@@ -877,6 +888,8 @@ extension PaymentSelectionPage: UITextFieldDelegate , WebviewVCDelegate{
                         self.lottieWholeView.isHidden = true
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
                         let orderSummaryVC = storyboard.instantiateViewController(withIdentifier: "OrderSummaryVC") as! OrderSummaryVC
+                        orderSummaryVC.selectedPlan = self.selectedPlanDetail?.title ?? ""
+                        orderSummaryVC.selectedPaymentType = self.selectedPaymentType
                         orderSummaryVC.modalPresentationStyle = .fullScreen
                         self.present(orderSummaryVC, animated: true, completion: nil)
                     } else {

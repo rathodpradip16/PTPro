@@ -184,8 +184,8 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
             case .success(let result):
                 if let data = result.data?.getPlanDetails?.status,data == 200 {
                     if let list =  result.data?.getPlanDetails, let results = list.results{
-                        let arrSorted = (results as! [PTProAPI.GetPlanDetailsQuery.Data.GetPlanDetails.Result]).sorted { $0.id ?? 0 < $1.id ?? 0 }
-                        self.arrPlans = arrSorted
+//                        let arrSorted = (results as! [PTProAPI.GetPlanDetailsQuery.Data.GetPlanDetails.Result]).sorted { $0.id ?? 0 < $1.id ?? 0 }
+                        self.arrPlans = results as! [PTProAPI.GetPlanDetailsQuery.Data.GetPlanDetails.Result]
                         if self.arrPlans.count > 0{
                             self.updateBenifitData(indexPath: 0)
                         }
@@ -236,6 +236,7 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         cell.btnSegment.layer.cornerRadius = 0.0
         cell.btnSegment.cornerRadius = 0.0
         cell.viewSegment.cornerRadius = 0.0
+        //cell.viewSegment.backgroundColor =
         cell.btnListNow.setTitle("", for: .normal)
         cell.btnListNow.tag = indexPath.row
         cell.btnListNow.addTarget(self, action: #selector(onClickListNow(sender:)), for: .touchUpInside)
@@ -243,10 +244,9 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         
         cell.btnSegment.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
         cell.btnSegment.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
-        cell.btnSegment.backgroundColor = Theme.subSegmentBgColor
+//        cell.btnSegment.backgroundColor = Theme.subSegmentBgColor
 
         cell.btnSegment.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
-
         switch arrPlans[indexPath.row].title{
         case "Economy":
             cell.viewSegment.isHidden = false
@@ -256,7 +256,7 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
             cell.mainView.backgroundColor = Theme.subEconomyColor
             cell.lblTitle.textColor = Theme.subEconomyColor
             cell.btnSegment.borderColor = Theme.subEconomySegmentBorderColor
-            cell.btnSegment.tintColor = Theme.subSegmentBgColor
+         //   cell.btnSegment.tintColor = Theme.subSegmentBgColor
             cell.btnSegment.selectedSegmentTintColor = Theme.subEconomySegmentColor
             
             cell.imgSmallIcon.image = UIImage(named: "crownSmall")!.withTintColor(Theme.subEconomyColor)
@@ -271,7 +271,7 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
             cell.mainView.backgroundColor = Theme.subRecommendedColor
             cell.lblTitle.textColor = Theme.subRecommendedColor
             cell.btnSegment.borderColor = Theme.subRecommendedSegmentBorderColor
-            cell.btnSegment.tintColor = Theme.subSegmentBgColor
+         //   cell.btnSegment.tintColor = Theme.subSegmentBgColor
             cell.btnSegment.selectedSegmentTintColor = Theme.subRecommendedSegmentColor
             
             cell.imgSmallIcon.image = UIImage(named: "subDiamondSmall")!.withTintColor(Theme.subRecommendedColor)
@@ -285,7 +285,7 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
             cell.mainView.backgroundColor = Theme.subGoldColor
             cell.lblTitle.textColor = Theme.subGoldColor
             cell.btnSegment.borderColor = Theme.subGoldSegmentBorderColor
-            cell.btnSegment.tintColor = Theme.subSegmentBgColor
+          //  cell.btnSegment.tintColor = Theme.subSegmentBgColor
             cell.btnSegment.selectedSegmentTintColor = Theme.subGoldSegmentColor
             
             cell.imgSmallIcon.image = UIImage(named: "crownSmall")!.withTintColor(Theme.subGoldColor)
@@ -299,29 +299,51 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
             cell.mainView.backgroundColor = Theme.subPlatinumColor
             cell.lblTitle.textColor = Theme.subPlatinumColor
             cell.btnSegment.borderColor = Theme.subPlatinumSegmentBorderColor
-            cell.btnSegment.tintColor = Theme.subSegmentBgColor
+      //      cell.btnSegment.tintColor = Theme.subSegmentBgColor
             cell.btnSegment.selectedSegmentTintColor = Theme.subPlatinumSegmentColor
             
             cell.imgSmallIcon.image = UIImage(named: "crownSmall")!.withTintColor(Theme.subPlatinumColor)
             cell.imgBigIcon.image = UIImage(named: "crownBig")
             break
         case "CustomPlan":
+            cell.lblActiveSub.text = ""
+            cell.lblExpDate.text = ""
             cell.viewSegment.isHidden = true
             cell.viewListNow.isHidden = true
             cell.lblMemberShipCard.text = ""
             cell.lblCustomPlan.text = "Custom Plan"
+            cell.lblTitle.text = "Custom"
             
             cell.mainView.backgroundColor = Theme.subCustomColor
-            cell.lblTitle.textColor = Theme.subCustomColor
-            cell.imgSmallIcon.tintColor = Theme.subCustomColor
-            
-            cell.imgSmallIcon.image = UIImage(named: "crownSmall")?.withTintColor(Theme.subCustomColor)
+            cell.lblTitle.textColor = Theme.subCustomTitleColor
+            cell.imgSmallIcon.tintColor = Theme.subCustomTitleColor
+            cell.imgBigIcon.tintColor = Theme.subCustomTitleColor
+
+            cell.imgSmallIcon.image = UIImage(named: "crownSmall")?.withTintColor(Theme.subCustomTitleColor)
             cell.imgBigIcon.image = UIImage(named: "crownBig")
             break
         case .none:
             break
         case .some(_):
             break
+        }
+        if arrPlans[indexPath.row].title != "CustomPlan"{
+            if arrPlans[indexPath.row].expiryDate != ""{
+                cell.imgBigIcon.image = UIImage(named: "")
+                cell.viewSegment.isHidden = true
+                cell.viewListNow.isHidden = true
+                cell.lblActiveSub.text = "✓ You're currently our member"
+                if let strDate = arrPlans[indexPath.row].expiryDate?.components(separatedBy: ","),strDate.count != 0{
+                    cell.lblExpDate.text = "Exp:\(strDate[0])"
+                }else{
+                    cell.lblExpDate.text = arrPlans[indexPath.row].expiryDate
+                }
+            }else{
+                cell.viewSegment.isHidden = false
+                cell.viewListNow.isHidden = false
+                cell.lblExpDate.text = ""
+                cell.lblActiveSub.text = ""
+            }
         }
         return cell
     }

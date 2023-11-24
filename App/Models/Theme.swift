@@ -152,6 +152,7 @@ class Theme {
     static let subGoldColor = UIColor().hexValue(hex:"005E72" )
     static let subPlatinumColor = UIColor().hexValue(hex:"1DBE1D" )
     static let subCustomColor = UIColor().hexValue(hex:"ff5a5f" )
+    static let subCustomTitleColor = UIColor().hexValue(hex:"53666f" )
 
     static let subEconomySegmentColor = UIColor().hexValue(hex:"e65100" )
     static let subRecommendedSegmentColor = UIColor().hexValue(hex:"78a2b8" )

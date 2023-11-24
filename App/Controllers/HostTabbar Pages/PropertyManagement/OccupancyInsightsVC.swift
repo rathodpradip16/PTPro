@@ -9,9 +9,17 @@
 import UIKit
 import ABGaugeViewKit
 import CoreLocation
+import Lottie
 
 class OccupancyInsightsVC: UIViewController, CLLocationManagerDelegate{
+    
+    @IBOutlet weak var LocationAnimationView: UIView!
+    var lottieWholeView = UIView()
+    var lottieView =  LottieAnimationView()
+    
 
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var lblFromDateTitle: UILabel!
     @IBOutlet weak var lblToDateTitle: UILabel!
     @IBOutlet weak var txtFromDateValue: UITextField!
@@ -30,9 +38,9 @@ class OccupancyInsightsVC: UIViewController, CLLocationManagerDelegate{
     @IBOutlet weak var meterView: ABGaugeView!
     
     @IBOutlet weak var lblOccupancyRate: UILabel!
-  
+    
     @IBOutlet weak var btnRefreshData: UIButton!
-   
+    
     var datePickerStartDate : UIDatePicker?
     var datePickerEndDate: UIDatePicker?
     var selectedStartDate = ""
@@ -41,12 +49,38 @@ class OccupancyInsightsVC: UIViewController, CLLocationManagerDelegate{
     var userLat = 0.0
     var userLong = 0.0
     
+    let baseUrl = "https://maps.googleapis.com/maps/api/geocode/json?"
     
     var locManager = CLLocationManager()
     var currentLocation: CLLocation!
-
+    var currentNeedleValue = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        lottieView = LottieAnimationView.init(name: "loading_qwe")
+        self.meterView.blinkAnimate = false
+        self.meterView.needleValue = 0.0
+        self.centerMainView.isHidden = true
+        self.scrollView.isHidden = true
+        self.btnRefreshData.isHidden = true
+        self.stackView.isHidden = true
+        
+        let animationView = LottieAnimationView(name: "animation_location")
+        animationView.frame = self.LocationAnimationView.bounds
+        self.LocationAnimationView.addSubview(animationView)
+        self.LocationAnimationView.contentMode = UIView.ContentMode.scaleAspectFill
+        animationView.sizeToFit()
+        // animationView.sizeThatFits(self.LocationAnimationView.frame.size)
+        animationView.play{ (finished) in
+            // Do Something
+            animationView.removeFromSuperview()
+            self.LocationAnimationView.willRemoveSubview(animationView)
+            self.centerMainView.isHidden = false
+            self.scrollView.isHidden = false
+            self.btnRefreshData.isHidden = false
+            self.stackView.isHidden = false
+        }
+        
         self.btnFromDateValue.setTitle("", for: .normal)
         self.btnToDateValue.setTitle("", for: .normal)
         self.segmentGraphFilter.selectedSegmentIndex = 3
@@ -57,7 +91,7 @@ class OccupancyInsightsVC: UIViewController, CLLocationManagerDelegate{
     func updateLocation(){
         locManager.delegate = self
         locManager.requestWhenInUseAuthorization()
-
+        
         if (CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
             CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
             locManager.startUpdatingLocation()
@@ -75,7 +109,7 @@ class OccupancyInsightsVC: UIViewController, CLLocationManagerDelegate{
         if let loc = locations.first{
             self.userLat = loc.coordinate.latitude
             self.userLong = loc.coordinate.longitude
-            self.getAddressFromLatLon(pdblLatitude: loc.coordinate.latitude , withLongitude: loc.coordinate.longitude)
+            self.getAddressForLatLng(latitude: "\(loc.coordinate.latitude)", longitude: "\(loc.coordinate.longitude)")
             self.calculateOccupancyRateAPICall()
         }
         locManager.stopUpdatingLocation()
@@ -155,7 +189,8 @@ class OccupancyInsightsVC: UIViewController, CLLocationManagerDelegate{
         selectedStartDate = formatter.string(from: datePickerStartDate!.date)
         self.updateDateMaxMin()
         self.view.endEditing(true)
-     //   self.propertyDashboardDataAPICall()
+        self.lottieAnimation()
+        self.calculateOccupancyRateAPICall()
     }
     
     @objc func doneEndDatePicker(){
@@ -166,77 +201,44 @@ class OccupancyInsightsVC: UIViewController, CLLocationManagerDelegate{
         selectedEndDate = formatter.string(from: datePickerEndDate!.date)
         self.updateDateMaxMin()
         self.view.endEditing(true)
-     //   self.propertyDashboardDataAPICall()
+        self.lottieAnimation()
+        self.calculateOccupancyRateAPICall()
     }
     
     @objc func cancelDatePicker(){
         self.view.endEditing(true)
     }
     
+    func getAddressForLatLng(latitude: String, longitude: String) {
+        let url = URL(string: "\(baseUrl)latlng=\(latitude),\(longitude)&key=\(GOOGLE_API_KEY)")
+        let data = try! Data(contentsOf: url!)
+        let json = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: Any]
+        if let result = json["results"] as? [[String: Any]] {
+            if let address = result[0]["formatted_address"] as? String {
+                self.lblLocation.text = address
+            }
+        }
+    }
     
-    func getAddressFromLatLon(pdblLatitude: Double, withLongitude pdblLongitude: Double) {
-        var center : CLLocationCoordinate2D = CLLocationCoordinate2D()
-        let lat: Double = pdblLatitude
-        //21.228124
-        let lon: Double = pdblLongitude
-        //72.833770
-        let ceo: CLGeocoder = CLGeocoder()
-        center.latitude = lat
-        center.longitude = lon
-        
-        let loc: CLLocation = CLLocation(latitude:center.latitude, longitude: center.longitude)
-        
-        
-        ceo.reverseGeocodeLocation(loc, completionHandler:
-                                    {(placemarks, error) in
-            if (error != nil)
-            {
-                print("reverse geodcode fail: \(error!.localizedDescription)")
-            }
-            let pm = placemarks! as [CLPlacemark]
-            
-            if pm.count > 0 {
-                let pm = placemarks![0]
-                print(pm.country ?? "")
-                print(pm.locality ?? "")
-                print(pm.subLocality ?? "")
-                print(pm.thoroughfare ?? "")
-                print(pm.postalCode ?? "")
-                print(pm.subThoroughfare ?? "")
-                var addressString : String = ""
-                if pm.name != nil {
-                    addressString = addressString + pm.name! + ", "
-                }
-                if pm.thoroughfare != nil {
-                    addressString = addressString + pm.thoroughfare! + ", "
-                }
-                if pm.subThoroughfare != nil {
-                    addressString = addressString + pm.subThoroughfare! + ", "
-                }
-                if pm.subLocality != nil {
-                    addressString = addressString + pm.subLocality! + ", "
-                }
-                if pm.locality != nil {
-                    addressString = addressString + pm.locality! + ", "
-                }
-                if pm.subAdministrativeArea != nil {
-                    addressString = addressString + pm.subAdministrativeArea! + ", "
-                }
-                if pm.administrativeArea != nil {
-                    addressString = addressString + pm.administrativeArea! + ", "
-                }
-                if pm.country != nil {
-                    addressString = addressString + pm.country! + ", "
-                }
-                if pm.postalCode != nil {
-                    addressString = addressString + pm.postalCode! + " "
-                }
-                
-                self.lblLocation.text = addressString
-                print(addressString)
-            }
-        })
-        
+    func lottieAnimation()
+    {
+        self.lottieView.isHidden = false
+        self.lottieWholeView.isHidden = false
+        self.lottieWholeView.frame = CGRect(x: 0, y: 0, width: FULLWIDTH, height: FULLHEIGHT)
+        self.lottieWholeView.backgroundColor =  UIColor.black.withAlphaComponent(0.5)
+        self.view.addSubview(lottieWholeView)
+        self.lottieView.frame = CGRect(x:FULLWIDTH/2-50, y: FULLHEIGHT/2-50, width: 100, height: 100)
+        self.lottieWholeView.addSubview(self.lottieView)
+        self.lottieView.backgroundColor = UIColor(named: "lottie-bg")
+        self.lottieView.layer.cornerRadius = 6.0
+        self.lottieView.clipsToBounds = true
+        self.lottieView.play()
+        Timer.scheduledTimer(timeInterval:0.3, target: self, selector: #selector(autoscroll), userInfo: nil, repeats: true)
+    }
+    
+    @objc func autoscroll()
+    {
+        self.lottieView.play()
     }
     
     //MARK: - Actions
@@ -260,28 +262,40 @@ class OccupancyInsightsVC: UIViewController, CLLocationManagerDelegate{
                 selectedFilterType = "AllData"
             }
         }
+        self.lottieAnimation()
+        self.calculateOccupancyRateAPICall()
     }
     
     @IBAction func onClickRefreshData(_ sender: Any) {
+        self.lottieAnimation()
         self.calculateOccupancyRateAPICall()
     }
     
     @IBAction func onClickBack(_ sender: Any) {
         self.dismiss(animated: true)
     }
-
-        
+    
+    
     //MARK: - API CALL
     func calculateOccupancyRateAPICall(){
         let calculateOccupancyRateQuery =  PTProAPI.CalculateOccupancyRateQuery(lat: .some(userLat), lng: .some(userLong), filter: .some(selectedFilterType) , startDate: .some(selectedStartDate), endDate: .some(selectedEndDate))
         Network.shared.apollo_headerClient.fetch(query: calculateOccupancyRateQuery, cachePolicy: .fetchIgnoringCacheData) { response in
+            self.lottieWholeView.isHidden = true
+            self.lottieView.isHidden = true
             switch response{
             case .success(let result):
                 if let status = result.data?.calculateOccupancyRate?.status,status == 200,let occupancyRate = result.data?.calculateOccupancyRate?.occupancy_Rate {
-                    self.meterView.needleValue = occupancyRate
-                    self.lblOccupancyRate.text = "\(occupancyRate)%"
-                } else {
-                    self.view.makeToast(result.data?.calculateOccupancyRate?.errorMessage)
+                    if self.currentNeedleValue != occupancyRate{
+                        self.currentNeedleValue = occupancyRate
+                        self.meterView.needleValue = occupancyRate
+                        self.lblOccupancyRate.text = "\(occupancyRate)%"
+                    }
+                }else{
+                    if self.currentNeedleValue != 0.0{
+                        self.currentNeedleValue = 0.0
+                        self.meterView.needleValue = 0
+                        self.lblOccupancyRate.text = "\(0.0)%"
+                    }
                 }
             case .failure(let error):
                 self.view.makeToast(error.localizedDescription)
