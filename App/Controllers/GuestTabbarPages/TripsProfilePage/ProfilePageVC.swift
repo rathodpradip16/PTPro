@@ -213,6 +213,8 @@ class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,
 func numberOfSections(in tableView: UITableView) -> Int {
     if(!Utility.shared.host_message_isfromHost && Utility.shared.GetAffiliateUserStep?.stepInfo == StepInfo.Success.rawValue){
         return 6
+    }else if (!Utility.shared.host_message_isfromHost){
+        return 5
     }
     return 7
 }
@@ -279,18 +281,24 @@ func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) ->
     }else if section == 2{
         if(!Utility.shared.host_message_isfromHost && Utility.shared.GetAffiliateUserStep?.stepInfo == StepInfo.Success.rawValue){
             headerLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"AffiliateRegistrationDetails") ?? "Affiliate Registration Details")"
+        }else if(!Utility.shared.host_message_isfromHost){
+            headerLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"Account") ?? "Account")"
         }else{
             headerLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"MySubscriptionAndPlans") ?? "My Subscription and Plans")"
         }
     }else if section == 3{
         if(!Utility.shared.host_message_isfromHost && Utility.shared.GetAffiliateUserStep?.stepInfo == StepInfo.Success.rawValue){
             headerLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"Account") ?? "Account")"
+        }else if(!Utility.shared.host_message_isfromHost){
+            headerLabel.text =  "\(Utility.shared.getLanguage()?.value(forKey:"Support") ?? "Support")"
         }else{
             headerLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"PropertyManagementDashboard") ?? "Property Management Dashboard")"
         }
     }else if section == 4{
         if(!Utility.shared.host_message_isfromHost && Utility.shared.GetAffiliateUserStep?.stepInfo == StepInfo.Success.rawValue){
             headerLabel.text =  "\(Utility.shared.getLanguage()?.value(forKey:"Support") ?? "Support")"
+        }else if(!Utility.shared.host_message_isfromHost){
+            headerLabel.text = ""
         }else{
             headerLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"Account") ?? "Account")"
         }
@@ -440,6 +448,8 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
             cell.profileSettingLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"AffiliateRegistrationDetails") ?? "Affiliate Registration Details")"
             cell.iconImage.image =  #imageLiteral(resourceName: "switch-to-travelling-25")
             return cell
+        }else if(!Utility.shared.host_message_isfromHost){
+            return self.accountSettingsCell(tableView: tableView, indexPath: indexPath)
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchtohostCell", for: indexPath) as! SwitchtohostCell
             cell.selectionStyle = .none
@@ -450,6 +460,8 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     }else if indexPath.section == 3{
         if(!Utility.shared.host_message_isfromHost && Utility.shared.GetAffiliateUserStep?.stepInfo == StepInfo.Success.rawValue){
             return self.accountSettingsCell(tableView: tableView, indexPath: indexPath)
+        }else if(!Utility.shared.host_message_isfromHost){
+            return self.supportCell(tableView: tableView, indexPath: indexPath)
         }else{
             if indexPath.row == 0{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchtohostCell", for: indexPath) as! SwitchtohostCell
@@ -468,7 +480,12 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     }else if indexPath.section == 4{
         if(!Utility.shared.host_message_isfromHost && Utility.shared.GetAffiliateUserStep?.stepInfo == StepInfo.Success.rawValue){
             return self.supportCell(tableView: tableView, indexPath: indexPath)
-        }else{
+        }else if(!Utility.shared.host_message_isfromHost){
+            let cell = tableView.dequeueReusableCell(withIdentifier: "footerProfileCell", for: indexPath) as! FooterProfileCell
+            cell.selectionStyle = .none
+            cell.LogOutBtn.addTarget(self, action: #selector(onClickLogOutBtn), for: .touchUpInside)
+            return cell
+        }else {
             return self.accountSettingsCell(tableView: tableView, indexPath: indexPath)
         }
     }else if indexPath.section == 5 && Utility.shared.host_message_isfromHost{
@@ -666,6 +683,12 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
                         vc.modalPresentationStyle = .fullScreen
                         self.present(vc, animated: true, completion: nil)
                     }
+                }else if(!Utility.shared.host_message_isfromHost){
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let vc = storyboard.instantiateViewController(withIdentifier: "AffiliateRegistration") as! AffiliateRegistration
+                    vc.delegate = self
+                    vc.modalPresentationStyle = .fullScreen
+                    self.present(vc, animated: true, completion: nil)
                 }else{
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let vc = storyboard.instantiateViewController(withIdentifier: "AffiliateRegistration") as! AffiliateRegistration
@@ -700,6 +723,8 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             vc.delegate = self
             vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true, completion: nil)
+        }else if(!Utility.shared.host_message_isfromHost){
+            self.didSelectAccountSetting(indexPath: indexPath)
         }else{
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "ViewSubscriptionsVC") as! ViewSubscriptionsVC
@@ -709,6 +734,8 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }else if indexPath.section == 3{
         if(!Utility.shared.host_message_isfromHost && Utility.shared.GetAffiliateUserStep?.stepInfo == StepInfo.Success.rawValue){
             self.didSelectAccountSetting(indexPath: indexPath)
+        }else if(!Utility.shared.host_message_isfromHost){
+            self.didSelectSupport(indexPath: indexPath)
         }else{
             if indexPath.row == 0{
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -724,6 +751,8 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         }
     }else if indexPath.section == 4{
         if(!Utility.shared.host_message_isfromHost && Utility.shared.GetAffiliateUserStep?.stepInfo == StepInfo.Success.rawValue){
+            self.didSelectSupport(indexPath: indexPath)
+        }else if(!Utility.shared.host_message_isfromHost){
             self.didSelectSupport(indexPath: indexPath)
         }else{
             self.didSelectAccountSetting(indexPath: indexPath)

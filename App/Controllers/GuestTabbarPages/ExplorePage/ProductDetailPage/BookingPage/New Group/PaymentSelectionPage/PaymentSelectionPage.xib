@@ -488,9 +488,6 @@
                                             </constraints>
                                         </view>
                                     </subviews>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="686" id="w3A-pu-eUC"/>
-                                    </constraints>
                                 </stackView>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>

@@ -170,6 +170,11 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     @IBOutlet weak var contactHostValueLabel: UILabel!
     @IBOutlet weak var contactHostBtn: UIButton!
     
+    @IBOutlet weak var exploreSurroundingsView:UIView!
+    @IBOutlet weak var exploreTitleLabel: UILabel!
+    @IBOutlet weak var exploreValueLabel: UILabel!
+    @IBOutlet weak var exploreBtn: UIButton!
+
     @IBOutlet var lightImage: UIImageView!
     
     @IBOutlet weak var similarListingView: UIView!
@@ -1026,11 +1031,20 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewModel?.viewListingArray?.userId ?? "")"))
         {
             contactHostView.isHidden = true
+        } else {
+            contactHostView.isHidden = false
         }
-        else {
         
-        contactHostView.isHidden = false
-        }
+        self.exploreTitleLabel.text = "Explore Surroundings"
+        self.exploreTitleLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
+        self.exploreTitleLabel.textColor = UIColor(named: "Title_Header")
+        self.exploreTitleLabel.font = UIFont(name: APP_FONT_MEDIUM, size: 16.0)
+        self.exploreValueLabel.text = "Explore"
+        self.exploreValueLabel.textAlignment = Utility.shared.isRTLLanguage() ? .left : .right
+        self.exploreValueLabel.textColor = Theme.PRIMARY_COLOR
+        self.exploreValueLabel.font = UIFont(name: APP_FONT, size: 16.0)
+        self.exploreBtn.setTitle("", for: .normal)
+        
     }
     
     @IBAction func onClickStaticMapBtn(_ sender: UIButton) {
@@ -1468,6 +1482,14 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
         editprofileobj.profilename = viewModel?.viewListingArray?.user?.profile?.firstName ?? ""
         editprofileobj.modalPresentationStyle = .fullScreen
         self.present(editprofileobj, animated: true, completion: nil)
+    }
+    
+    @IBAction func onClickExploreSurroundings(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "ExploreSurroundingsVC") as! ExploreSurroundingsVC
+        vc.strCity = viewModel?.viewListingArray?.city ?? ""
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
     }
     
     func createLocalPhotos() -> [SKPhotoProtocol] {

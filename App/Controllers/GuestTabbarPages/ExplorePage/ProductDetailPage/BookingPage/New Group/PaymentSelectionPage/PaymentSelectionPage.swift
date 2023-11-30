@@ -82,7 +82,7 @@ class PaymentSelectionPage: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.viewMainCoupon.isHidden = true
         self.tableViewHeight.constant = 300
         self.initializeView()
         self.initialSetup()
@@ -132,6 +132,8 @@ class PaymentSelectionPage: UIViewController {
         var listId:Int = 0
         if isFromSubscriptionPage, let plan = selectedPlanDetail,let planId = plan.id{
             listId = planId
+        }else{
+            listId = viewListingArray?.__data._data["id"] as? Int ?? 0
         }
         
         let getcouponuseQuery = PTProAPI.GetcouponuseQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), couponCode: .some(self.couponData?.couponCode ?? ""), listId: .some(listId))
@@ -142,11 +144,13 @@ class PaymentSelectionPage: UIViewController {
             switch response {
             case .success(let result):
                 if let status = result.data?.getcouponuse?.status ,status == 200 {
-                    self.isCouponApplied = true
-                    self.viewMainCoupon.isHidden = false
-                    self.viewCoupon.isHidden = true
-                    self.viewCouponApplied.isHidden = false
-                    self.updateCouponData()
+                    DispatchQueue.main.async {
+                        self.isCouponApplied = true
+                        self.viewMainCoupon.isHidden = false
+                        self.viewCoupon.isHidden = true
+                        self.viewCouponApplied.isHidden = false
+                        self.updateCouponData()
+                    }
                 }else{
                     self.view.makeToast(result.data?.getcouponuse?.errorMessage)
                 }
@@ -194,14 +198,20 @@ class PaymentSelectionPage: UIViewController {
         
         var listId:Int = 0
         var subscriptionType = ""
+        let couponType = isFromSubscriptionPage ? "booking" : "subscription"
         if isFromSubscriptionPage, let plan = selectedPlanDetail,let planId = plan.id{
             listId = planId
-        }
-        if isFromSubscriptionPage, let plan = selectedPlanDetail,let type = plan.title{
-            subscriptionType = type
+        }else{
+            listId = viewListingArray?.__data._data["id"] as? Int ?? 0
         }
         
-        let getCouponcodeQuery = PTProAPI.GetcouponcodeQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), couponType: .some( "subscription"), listId: .some(listId), subscriptionType: .some(subscriptionType))
+        if isFromSubscriptionPage, let plan = selectedPlanDetail,let type = plan.title{
+            subscriptionType = type
+        }else{
+            subscriptionType = ""
+        }
+        
+        let getCouponcodeQuery = PTProAPI.GetcouponcodeQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), couponType: .some( couponType), listId: .some(listId), subscriptionType: .some(subscriptionType))
         
             Network.shared.apollo_headerClient.fetch(query: getCouponcodeQuery) { response in
                 self.lottieView.isHidden = true
@@ -210,11 +220,13 @@ class PaymentSelectionPage: UIViewController {
             case .success(let result):
                 if let status = result.data?.getcouponcode?.status ,status == 200 {
                     if let data = result.data?.getcouponcode?.data,data.count != 0{
-                        self.viewMainCoupon.isHidden = false
-                        self.viewCoupon.isHidden = false
-                        self.viewCouponApplied.isHidden = true
-                        self.couponData = data[0]!
-                        self.updateCouponData()
+                        DispatchQueue.main.async {
+                            self.viewMainCoupon.isHidden = false
+                            self.viewCoupon.isHidden = false
+                            self.viewCouponApplied.isHidden = true
+                            self.couponData = data[0]!
+                            self.updateCouponData()
+                        }
                     }else{
                         self.viewMainCoupon.isHidden = true
                     }

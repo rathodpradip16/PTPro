@@ -354,6 +354,7 @@
 		766D8F2B2B109BCA007E11E9 /* animation_location.json in Resources */ = {isa = PBXBuildFile; fileRef = 766D8F2A2B109BCA007E11E9 /* animation_location.json */; };
 		766E6D462AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766E6D452AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift */; };
 		766E83A32AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766E83A22AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift */; };
+		7682D8002B1396D000967ED9 /* ExploreSurroundingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7682D7FF2B1396D000967ED9 /* ExploreSurroundingsVC.swift */; };
 		7690ECA42B0DBB0000CF4CD9 /* Locator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7690ECA32B0DBB0000CF4CD9 /* Locator.swift */; };
 		76C1A5232ACFBF790031BE76 /* AffiliateSearchLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2EAD12ACAC473000E73FC /* AffiliateSearchLinkVC.swift */; };
 		76C1A5242ACFBFAE0031BE76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7602D0AD2ABCA4FF00635A6D /* Main.storyboard */; };
@@ -1280,6 +1281,7 @@
 		766E6D452AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomXAxisValueFormatter.swift; sourceTree = "<group>"; };
 		766E83A22AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyGraphXAxisValueFormatter.swift; sourceTree = "<group>"; };
 		767B90C12AFD4AC30089605C /* CreateCustomPlanRequest.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CreateCustomPlanRequest.graphql; sourceTree = "<group>"; };
+		7682D7FF2B1396D000967ED9 /* ExploreSurroundingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreSurroundingsVC.swift; sourceTree = "<group>"; };
 		7690ECA32B0DBB0000CF4CD9 /* Locator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locator.swift; sourceTree = "<group>"; };
 		76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateSearchLinkCVC.swift; sourceTree = "<group>"; };
 		76DE9F772AB4BA98003191ED /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
@@ -3104,6 +3106,7 @@
 				B54A4B112245EF050039168B /* ExploreCollectionCell */,
 				B5771AA02244E07F0070DD96 /* ExplorePageVC.swift */,
 				B5771AA12244E07F0070DD96 /* ExplorePageVC.xib */,
+				7682D7FF2B1396D000967ED9 /* ExploreSurroundingsVC.swift */,
 			);
 			path = ExplorePage;
 			sourceTree = "<group>";
@@ -4832,6 +4835,7 @@
 				766C07DE2AFFE0CB00E68E60 /* CreateCustomPlanRequestType.graphql.swift in Sources */,
 				766C08082AFFE0CB00E68E60 /* AffiliateUserDocumentManagementType.graphql.swift in Sources */,
 				2C77EB0C23BB4A950014199D /* ReportuserCell.swift in Sources */,
+				7682D8002B1396D000967ED9 /* ExploreSurroundingsVC.swift in Sources */,
 				B500E179230A83DB0055C1D4 /* paymethodCell.swift in Sources */,
 				B51F80CD2240E30800E437C1 /* HSLabel+UILabel.swift in Sources */,
 				B5A7686D25FB563000563B35 /* PastReviewCells.swift in Sources */,

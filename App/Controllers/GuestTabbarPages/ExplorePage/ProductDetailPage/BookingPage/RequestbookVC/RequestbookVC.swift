@@ -998,24 +998,24 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                     }
                     Utility.shared.bookingdateLabel = "\(self.addDateinLabel) - \(self.addDateoutLabel), \(self.guestLabel_text)"
                     
-                    if(Utility.shared.isprofilepictureVerified)
-                    {
-                        let bookingThreeObj = BookingStepThreeVC()
-                        
-                        bookingThreeObj.viewListingArray = self.viewListingArray
-                        bookingThreeObj.currencyvalue_from_API_base = self.currencyvalue_from_API_base
-                        bookingThreeObj.getbillingArray = self.getbillingArray
-                        bookingThreeObj.viewListingArray = self.viewListingArray
-                        bookingThreeObj.modalPresentationStyle = .fullScreen
-                        self.present(bookingThreeObj, animated: true, completion: nil)
-                    } else {
+//                    if(Utility.shared.isprofilepictureVerified)
+//                    {
+//                        let bookingThreeObj = BookingStepThreeVC()
+//                        
+//                        bookingThreeObj.viewListingArray = self.viewListingArray
+//                        bookingThreeObj.currencyvalue_from_API_base = self.currencyvalue_from_API_base
+//                        bookingThreeObj.getbillingArray = self.getbillingArray
+//                        bookingThreeObj.viewListingArray = self.viewListingArray
+//                        bookingThreeObj.modalPresentationStyle = .fullScreen
+//                        self.present(bookingThreeObj, animated: true, completion: nil)
+//                    } else {
                         let paymentSelectionPage = PaymentSelectionPage()
                         paymentSelectionPage.currencyvalue_from_API_base = self.currencyvalue_from_API_base
                         paymentSelectionPage.getbillingArray = self.getbillingArray
                         paymentSelectionPage.viewListingArray = self.viewListingArray
                         paymentSelectionPage.modalPresentationStyle = .fullScreen
                         self.present(paymentSelectionPage, animated: true, completion: nil)
-                    }
+                  //  }
                     
                     
                     
