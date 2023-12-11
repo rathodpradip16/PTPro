@@ -73,6 +73,8 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     var DatePickerSender: Bool = false
         
     var EditProfileArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
+    var selectedGender = ""
+    var localizeGender = ""
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -82,15 +84,17 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 //             self.editProfileTable.reloadData()
 //        }
         self.view.backgroundColor = UIColor(named: "colorController")
-        if EditProfileArray?.gender == "Male" {
-  //          EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")"
-        }else if EditProfileArray?.gender == "Female" {
-//            EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"
-        }else if EditProfileArray?.gender == "Other" {
-//            EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_other") ?? "Other")"
+        localizeGender = EditProfileArray?.gender ?? ""
+        selectedGender = EditProfileArray?.gender ?? ""
+        if selectedGender == "Male" {
+            localizeGender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")"
+        }else if selectedGender == "Female" {
+            localizeGender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"
+        }else if selectedGender == "Other" {
+            localizeGender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_other") ?? "Other")"
         }
         else {
-//            EditProfileArray?.gender = ""
+            localizeGender = ""
         }
 
         self.backBtn.setImage(UIImage(named: "left_arrow"), for: .normal)
@@ -208,14 +212,11 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 //        if EditProfileArray?.gender != nil && EditProfileArray?.gender == ""
 //
 //        print("Gender Issue  \(EditProfileArray?.gender)")
-        if EditProfileArray?.gender != nil && EditProfileArray?.gender != ""
-
-        {
+        if selectedGender != ""{
             let index = genderArray.firstIndex(where: { (item) -> Bool in
-                item == EditProfileArray?.gender!
+                item == selectedGender || item == localizeGender
             })
             genderPicker.selectRow(index != nil ? index! : 0, inComponent: 0, animated: true)
-            
         }else{
             print("Something wrong")
         }
@@ -269,15 +270,16 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                     Utility.shared.selectedCurrency = self.EditProfileArray?.preferredCurrency! ?? ""
                 }
                 
-                if self.EditProfileArray?.gender == "Male" {
-//                    self.EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")"
-                }else if self.EditProfileArray?.gender == "Female" {
-  //                  self.EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"
-                }else if self.EditProfileArray?.gender == "Other" {
-  //                  self.EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_other") ?? "Other")"
-                }
-                else {
- //                   self.EditProfileArray?.gender = ""
+                self.selectedGender = self.EditProfileArray?.gender ?? ""
+                self.localizeGender = self.EditProfileArray?.gender ?? ""
+                if self.selectedGender == "Male" {
+                    self.localizeGender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")"
+                }else if self.selectedGender == "Female" {
+                    self.localizeGender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"
+                }else if self.selectedGender == "Other" {
+                    self.localizeGender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_other") ?? "Other")"
+                }else {
+                    self.localizeGender = ""
                 }
                 //            {
                 self.lottieView.isHidden = true
@@ -517,7 +519,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 if(Utility.shared.EditProfileArray?.picture != nil)
                 {
                     let profImage = Utility.shared.EditProfileArray?.picture!
-                    cell.editProfileimage.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(profImage)"), completed: nil)
+                    cell.editProfileimage.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(profImage ?? "")"), completed: nil)
                 }
             }
         return cell
@@ -597,7 +599,7 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 cell.EditProfileTF.textColor = Theme.PRIMARY_COLOR
                 cell.EditProfileTF.placeholder = "\((Utility.shared.getLanguage()?.value(forKey:"selectgender"))!)"
                 cell.EditProfileTF.tintColor = .clear
-                    cell.EditProfileTF.text = EditProfileArray?.gender != nil ? EditProfileArray?.gender! : ""
+                    cell.EditProfileTF.text = localizeGender
                 let toolBar = UIToolbar().ToolbarPikerSelect(mySelect: #selector(dismissgenderPicker))
                 toolBar.barTintColor = UIColor(named: "Button_Grey_Color")
                 cell.EditProfileTF.tag = 2
@@ -1135,15 +1137,15 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
    func pickerView( _ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         let titleData = genderNewArray[row]
-    
         let myTitle = NSAttributedString(string: titleData as! String, attributes: [NSAttributedString.Key.font:UIFont(name: APP_FONT_MEDIUM, size: 15.0)!,NSAttributedString.Key.foregroundColor:Theme.PRIMARY_COLOR])
         return myTitle
     }
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent  component: Int) {
-    //    EditProfileArray?.gender = (genderNewArray[row] as! String)
-        
-       //
+        selectedGender = (genderNewArray[row])
+        localizeGender = genderArray[row]
     }
+    
     @objc func dismissdatePicker() {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM-yyyy-dd"
@@ -1160,32 +1162,40 @@ class EditProfileVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         
     }
     @objc func dismissgenderPicker() {
-        if(EditProfileArray?.gender != nil)
+        if(selectedGender != "")
         {
-            //            if EditProfileArray?.gender == "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")" ||  EditProfileArray?.gender == "Male" {
-            //                EditProfileArray?.gender = "Male"
-            //            }else if EditProfileArray?.gender == "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"  ||  EditProfileArray?.gender == "Female"{
-            //                EditProfileArray?.gender = "Female"
-            //            }
-            //            else if EditProfileArray?.gender == ""{
-            //                EditProfileArray?.gender = "Male"
-            //            }
-            //            else{
-            //                EditProfileArray?.gender = "Other"
-            //            }
-            self.EditProfileAPICall(fieldName: "gender", fieldValue: "\(EditProfileArray?.gender != nil ? EditProfileArray?.gender! : "")")
-        }
-        else{
-            //            EditProfileArray?.gender = "\((Utility.shared.getLanguage()?.value(forKey:"gender_male"))!)"
-            //            self.EditProfileAPICall(fieldName: "gender", fieldValue: "Male")
-            //        }
-            //        if self.EditProfileArray?.gender == "Male" {
-            //            self.EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")"
-            //        }else if self.EditProfileArray?.gender == "Female" {
-            //            self.EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"
-            //        }else{
-            //            self.EditProfileArray?.gender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_other") ?? "Other")"
-            //        }
+            if localizeGender == "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")" ||  selectedGender == "Male" {
+                self.localizeGender = "Male"
+                self.selectedGender = "Male"
+                        }else if localizeGender == "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"  ||  selectedGender == "Female"{
+                            self.localizeGender = "Female"
+                            self.selectedGender = "Female"
+                        }
+                        else if localizeGender == ""{
+                            self.localizeGender = "Male"
+                            self.selectedGender = "Male"
+                        }
+                        else{
+                            self.localizeGender = "Other"
+                            self.selectedGender = "Other"
+                        }
+            self.EditProfileAPICall(fieldName: "gender", fieldValue: "\(self.selectedGender)")
+        }else{
+                    if self.selectedGender == "Male" {
+                        self.localizeGender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_male") ?? "Male")"
+                        self.selectedGender = "Male"
+                        self.EditProfileAPICall(fieldName: "gender", fieldValue: "Male")
+
+                    }else if self.selectedGender == "Female" {
+                        self.localizeGender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_female") ?? "Female")"
+                        self.selectedGender = "Female"
+                        self.EditProfileAPICall(fieldName: "gender", fieldValue: "Female")
+
+                    }else{
+                        self.localizeGender = "\(Utility.shared.getLanguage()?.value(forKey:"gender_other") ?? "Female")"
+                        self.selectedGender = "Other"
+                        self.EditProfileAPICall(fieldName: "gender", fieldValue: "Other")
+                    }
             editProfileTable.reloadData()
             view.endEditing(true)
             

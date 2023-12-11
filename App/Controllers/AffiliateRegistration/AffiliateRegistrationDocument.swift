@@ -520,6 +520,7 @@ class AffiliateRegistrationDocument: UIViewController,UICollectionViewDelegate,U
                 case .success(let result):
                     if let status = result.data?.getAffiliateUserStepSuccess?.status,status == 200 {
                         if let parent = self.parent as? AffiliateRegistration{
+                            parent.delegate?.userStepInfoUpdate()
                             parent.dismiss(animated: true)
                         }
                     }else{

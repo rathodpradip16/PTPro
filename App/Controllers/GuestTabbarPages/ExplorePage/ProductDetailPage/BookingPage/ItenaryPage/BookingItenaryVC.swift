@@ -86,8 +86,13 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
                         self.view.makeToast(result.data?.getReservation?.errorMessage)
                         return
                     }
-                    self.getReservationArray = (result.data?.getReservation?.results)!
-                    self.getReservation_currencyArray = (result.data?.getReservation!)!
+                    if let results = result.data?.getReservation?.results{
+                        self.getReservationArray = results
+                    }
+                    
+                    if let getReservation = result.data?.getReservation{
+                        self.getReservation_currencyArray = getReservation
+                    }
                     
                     if self.getReservationArray?.listData != nil{
                         self.iterationTable.isHidden = false
@@ -262,7 +267,12 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
         {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ItenaryListCell", for: indexPath)as! ItenaryListCell
             cell.locationLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"yougoing"))!) \(getReservationArray?.listData?.city != nil ? ((getReservationArray?.listData?.city!)!) : "")!"
-            cell.reservationCodeLAbel.text = " \((Utility.shared.getLanguage()?.value(forKey:"reservationcode"))!)  #\(getReservationArray?.confirmationCode != nil ? getReservationArray?.confirmationCode! : 0 )"
+            if let confirmationCode = getReservationArray?.confirmationCode {
+                cell.reservationCodeLAbel.text = " \((Utility.shared.getLanguage()?.value(forKey:"reservationcode"))!)  #\(confirmationCode)"
+            }else{
+                cell.reservationCodeLAbel.text = ""
+            }
+            
             cell.selectionStyle = .none
             return cell
         }
@@ -459,9 +469,17 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             
             
             if getReservationArray?.nights ?? 0 > 1{
-                cell.stayLabel.text = "\(getReservationArray?.nights!) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                if let nights = getReservationArray?.nights{
+                    cell.stayLabel.text = "\(nights)  \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                }else{
+                    cell.stayLabel.text = ""
+                }
             }else{
-                cell.stayLabel.text = "\(getReservationArray?.nights!) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                if let nights = getReservationArray?.nights{
+                    cell.stayLabel.text = "\(nights)  \((Utility.shared.getLanguage()?.value(forKey:"night")) ?? "night")"
+                }else{
+                    cell.stayLabel.text = ""
+                }
             }
         
             
@@ -621,9 +639,15 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             
             let receiptPageObj = ReceiptVC()
              Utility.shared.host_isfrom_hostRecipt = false
-            receiptPageObj.getReservationArray = getReservationArray
-            receiptPageObj.getReservation_currencyArray = getReservation_currencyArray
-            receiptPageObj.getbillingArray = getbillingArray
+            if let reservationArray = getReservationArray{
+                receiptPageObj.getReservationArray = reservationArray
+            }
+            if let reservation_currencyArray = getReservation_currencyArray{
+                receiptPageObj.getReservation_currencyArray = reservation_currencyArray
+            }
+            if let billingArray = getbillingArray{
+                receiptPageObj.getbillingArray = billingArray
+            }
             receiptPageObj.currencyvalue_from_API_base = currencyvalue_from_API_base
             receiptPageObj.modalPresentationStyle = .overFullScreen
             self.view.window?.rootViewController?.present(receiptPageObj, animated:false, completion: nil)

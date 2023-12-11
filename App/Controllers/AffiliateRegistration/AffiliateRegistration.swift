@@ -97,6 +97,7 @@ class AffiliateRegistration: UIViewController {
     }
     
     @IBAction func onClickBtnBack(_ sender: Any) {
+        delegate?.userStepInfoUpdate()
         self.dismiss(animated: true)
     }
     

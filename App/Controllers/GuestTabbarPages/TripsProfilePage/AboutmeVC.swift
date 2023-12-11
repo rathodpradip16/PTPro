@@ -58,7 +58,7 @@ class AboutmeVC: UIViewController,UITextViewDelegate{
             if(aboutvaluArray?.info != "" && aboutvaluArray?.info != nil)
         {
         let trimToCharacter = 250
-                let shortString = "\(aboutvaluArray?.info!.prefix(trimToCharacter))"
+                let shortString = "\(aboutvaluArray?.info!.prefix(trimToCharacter) ?? "")"
         aboutTxtView.text = shortString
         self.countLabel.text =  "\(aboutTxtView.text.count)/250"
             subTitleLbl.isHidden = true

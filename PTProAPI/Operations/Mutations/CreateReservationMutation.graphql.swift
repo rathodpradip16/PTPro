@@ -8,7 +8,7 @@ extension PTProAPI {
     static let operationName: String = "createReservation"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"mutation createReservation($listId: Int!, $checkIn: String!, $checkOut: String!, $guests: Int!, $message: String!, $basePrice: Float!, $cleaningPrice: Float!, $currency: String!, $discount: Float, $discountType: String, $guestServiceFee: Float, $hostServiceFee: Float, $total: Float!, $bookingType: String, $cardToken: String!, $paymentType: Int, $convCurrency: String!, $averagePrice: Float, $nights: Int, $paymentCurrency: String) { createReservation( listId: $listId checkIn: $checkIn checkOut: $checkOut guests: $guests message: $message basePrice: $basePrice cleaningPrice: $cleaningPrice currency: $currency discount: $discount discountType: $discountType guestServiceFee: $guestServiceFee hostServiceFee: $hostServiceFee total: $total bookingType: $bookingType cardToken: $cardToken paymentType: $paymentType convCurrency: $convCurrency averagePrice: $averagePrice nights: $nights paymentCurrency: $paymentCurrency ) { __typename results { __typename id listId hostId guestId checkIn checkOut guests message basePrice cleaningPrice currency discount discountType guestServiceFee hostServiceFee total confirmationCode createdAt reservationState paymentState } status errorMessage requireAdditionalAction paymentIntentSecret reservationId redirectUrl } }"#
+        #"mutation createReservation($listId: Int!, $checkIn: String!, $checkOut: String!, $guests: Int!, $message: String!, $basePrice: Float!, $cleaningPrice: Float!, $currency: String!, $discount: Float, $discountType: String, $guestServiceFee: Float, $hostServiceFee: Float, $total: Float!, $bookingType: String, $cardToken: String!, $paymentType: Int, $convCurrency: String!, $specialPricing: String!, $averagePrice: Float, $nights: Int, $paymentCurrency: String, $couponCode: String) { createReservation( listId: $listId checkIn: $checkIn checkOut: $checkOut guests: $guests message: $message basePrice: $basePrice cleaningPrice: $cleaningPrice currency: $currency discount: $discount discountType: $discountType guestServiceFee: $guestServiceFee hostServiceFee: $hostServiceFee total: $total bookingType: $bookingType cardToken: $cardToken paymentType: $paymentType convCurrency: $convCurrency specialPricing: $specialPricing averagePrice: $averagePrice nights: $nights paymentCurrency: $paymentCurrency couponCode: $couponCode ) { __typename results { __typename id listId hostId guestId checkIn checkOut guests message basePrice cleaningPrice currency discount discountType guestServiceFee hostServiceFee total confirmationCode createdAt reservationState paymentState } redirectUrl status errorMessage requireAdditionalAction paymentIntentSecret reservationId } }"#
       ))
 
     public var listId: Int
@@ -28,9 +28,11 @@ extension PTProAPI {
     public var cardToken: String
     public var paymentType: GraphQLNullable<Int>
     public var convCurrency: String
+    public var specialPricing: String
     public var averagePrice: GraphQLNullable<Double>
     public var nights: GraphQLNullable<Int>
     public var paymentCurrency: GraphQLNullable<String>
+    public var couponCode: GraphQLNullable<String>
 
     public init(
       listId: Int,
@@ -50,9 +52,11 @@ extension PTProAPI {
       cardToken: String,
       paymentType: GraphQLNullable<Int>,
       convCurrency: String,
+      specialPricing: String,
       averagePrice: GraphQLNullable<Double>,
       nights: GraphQLNullable<Int>,
-      paymentCurrency: GraphQLNullable<String>
+      paymentCurrency: GraphQLNullable<String>,
+      couponCode: GraphQLNullable<String>
     ) {
       self.listId = listId
       self.checkIn = checkIn
@@ -71,9 +75,11 @@ extension PTProAPI {
       self.cardToken = cardToken
       self.paymentType = paymentType
       self.convCurrency = convCurrency
+      self.specialPricing = specialPricing
       self.averagePrice = averagePrice
       self.nights = nights
       self.paymentCurrency = paymentCurrency
+      self.couponCode = couponCode
     }
 
     public var __variables: Variables? { [
@@ -94,9 +100,11 @@ extension PTProAPI {
       "cardToken": cardToken,
       "paymentType": paymentType,
       "convCurrency": convCurrency,
+      "specialPricing": specialPricing,
       "averagePrice": averagePrice,
       "nights": nights,
-      "paymentCurrency": paymentCurrency
+      "paymentCurrency": paymentCurrency,
+      "couponCode": couponCode
     ] }
 
     struct Data: PTProAPI.SelectionSet {
@@ -123,9 +131,11 @@ extension PTProAPI {
           "cardToken": .variable("cardToken"),
           "paymentType": .variable("paymentType"),
           "convCurrency": .variable("convCurrency"),
+          "specialPricing": .variable("specialPricing"),
           "averagePrice": .variable("averagePrice"),
           "nights": .variable("nights"),
-          "paymentCurrency": .variable("paymentCurrency")
+          "paymentCurrency": .variable("paymentCurrency"),
+          "couponCode": .variable("couponCode")
         ]),
       ] }
 
@@ -142,21 +152,21 @@ extension PTProAPI {
         static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
           .field("results", Results?.self),
+          .field("redirectUrl", String?.self),
           .field("status", Int?.self),
           .field("errorMessage", String?.self),
           .field("requireAdditionalAction", Bool?.self),
           .field("paymentIntentSecret", String?.self),
           .field("reservationId", Int?.self),
-          .field("redirectUrl", String?.self),
         ] }
 
         var results: Results? { __data["results"] }
+        var redirectUrl: String? { __data["redirectUrl"] }
         var status: Int? { __data["status"] }
         var errorMessage: String? { __data["errorMessage"] }
         var requireAdditionalAction: Bool? { __data["requireAdditionalAction"] }
         var paymentIntentSecret: String? { __data["paymentIntentSecret"] }
         var reservationId: Int? { __data["reservationId"] }
-        var redirectUrl: String? { __data["redirectUrl"] }
 
         /// CreateReservation.Results
         ///

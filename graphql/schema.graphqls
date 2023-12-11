@@ -1062,6 +1062,7 @@ type SearchListing {
   results: [ShowListing]
   dates: String
   status: Int
+  address: String
   errorMessage: String
 }
 
@@ -1707,7 +1708,7 @@ type Mutation {
   confirmPayPalExecute(paymentId: String!, payerId: String!): ReservationPayment
   submitForVerification(id: Int!, listApprovalStatus: String): EditListingResponse
   deleteUser: UserCommon
-  CreateSearchlist(userId: String, checkIn: String, checkOut: String, dates: String): SearchListing
+  CreateSearchlist(userId: String, checkIn: String, checkOut: String, address: String, dates: String): SearchListing
   Createcouponcode(userId: String, listId: Int, couponCode: String, couponType: String, discount: Float, startDate: String, endDate: String, description: String, userType: String): Couponmanager
 }
 

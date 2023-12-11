@@ -15,12 +15,12 @@ import Apollo
 import SwiftMessages
 
 class PaymentSelectionPage: UIViewController {
-
-
+    
+    
     @IBOutlet weak var viewPlanDetails: UIView!
     @IBOutlet weak var lblPlanTypeAndPrice: UILabel!
     @IBOutlet weak var viewSubPlanDetails: UIView!
-
+    
     @IBOutlet weak var lblOne: UILabel!
     @IBOutlet weak var lblTwo: UILabel!
     @IBOutlet weak var lblThree: UILabel!
@@ -31,7 +31,7 @@ class PaymentSelectionPage: UIViewController {
     @IBOutlet weak var viewCouponApplied: UIView!
     @IBOutlet weak var lblCouponPlanNameApplied: UILabel!
     @IBOutlet weak var btnDeleteCoupon: UIButton!
-
+    
     @IBOutlet weak var viewMainCoupon: UIView!
     @IBOutlet weak var viewCoupon: UIView!
     @IBOutlet weak var lblCouponCode: UILabel!
@@ -47,7 +47,7 @@ class PaymentSelectionPage: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
-
+    
     var isFromSubscriptionPage = false
     
     let availablePaymentTypes = ["Paypal", "Stripe"]
@@ -59,11 +59,11 @@ class PaymentSelectionPage: UIViewController {
     
     var getpaymentmethodsArray = [PTProAPI.GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
     var getpaymentmethodsArrayFilter = [PTProAPI.GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
-  
+    
     var selectedPlanDetail:PTProAPI.GetPlanDetailsQuery.Data.GetPlanDetails.Result?
-
+    
     var couponData:PTProAPI.GetcouponcodeQuery.Data.Getcouponcode.Datum?
-
+    
     @IBOutlet var lblPaymentType: UILabel!
     var braintreeClient: BTAPIClient!
     var lottieWholeView = UIView()
@@ -83,7 +83,7 @@ class PaymentSelectionPage: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewMainCoupon.isHidden = true
-        self.tableViewHeight.constant = 300
+        self.tableViewHeight.constant = isFromSubscriptionPage ? 300 : (self.view.frame.height - 390)
         self.initializeView()
         self.initialSetup()
         self.payoutAPICall()
@@ -96,7 +96,7 @@ class PaymentSelectionPage: UIViewController {
         self.btnDeleteCoupon.setTitle("", for: .normal)
         // Do any additional setup after loading the view.
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         DispatchQueue.main.async {
             self.viewSubPlanDetails.dropShadow(color: .lightGray, opacity: 1, offSet: CGSize(width: -1, height: 1), radius: 3, scale: true)
@@ -128,15 +128,16 @@ class PaymentSelectionPage: UIViewController {
     func getCouponUseAPICall()
     {
         self.lottieAnimation()
-
+        
+        let userId = viewListingArray?.userId
         var listId:Int = 0
         if isFromSubscriptionPage, let plan = selectedPlanDetail,let planId = plan.id{
             listId = planId
         }else{
-            listId = viewListingArray?.__data._data["id"] as? Int ?? 0
+            listId = viewListingArray?.id as? Int ?? 0
         }
         
-        let getcouponuseQuery = PTProAPI.GetcouponuseQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), couponCode: .some(self.couponData?.couponCode ?? ""), listId: .some(listId))
+        let getcouponuseQuery = PTProAPI.GetcouponuseQuery(userId: .some(userId ?? ""), couponCode: .some(self.couponData?.couponCode ?? ""), listId: .some(listId))
         
         Network.shared.apollo_headerClient.fetch(query: getcouponuseQuery) { response in
             self.lottieView.isHidden = true
@@ -160,7 +161,7 @@ class PaymentSelectionPage: UIViewController {
             }
         }
     }
-
+    
     func payoutAPICall()
     {
         self.lottieAnimation()
@@ -174,7 +175,7 @@ class PaymentSelectionPage: UIViewController {
                     print("Missing Data")
                     self.lottieView.isHidden = true
                     self.lottieWholeView.isHidden = true
-                    self.view.makeToast(result.data?.getPaymentMethods?.errorMessage)
+                   // self.view.makeToast(result.data?.getPaymentMethods?.errorMessage)
                     return
                 }
                 
@@ -186,8 +187,8 @@ class PaymentSelectionPage: UIViewController {
                 }
                 
                 self.tableView.reloadData()
-            case .failure(let error):
-                self.view.makeToast(error.localizedDescription)
+            case .failure(_): break
+                //self.view.makeToast(error.localizedDescription)
             }
         }
     }
@@ -196,13 +197,14 @@ class PaymentSelectionPage: UIViewController {
     {
         self.lottieAnimation()
         
+        var userId = viewListingArray?.userId
         var listId:Int = 0
         var subscriptionType = ""
-        let couponType = isFromSubscriptionPage ? "booking" : "subscription"
+        let couponType = isFromSubscriptionPage ? "subscription" : "booking"
         if isFromSubscriptionPage, let plan = selectedPlanDetail,let planId = plan.id{
             listId = planId
         }else{
-            listId = viewListingArray?.__data._data["id"] as? Int ?? 0
+            listId = viewListingArray?.id as? Int ?? 0
         }
         
         if isFromSubscriptionPage, let plan = selectedPlanDetail,let type = plan.title{
@@ -211,11 +213,11 @@ class PaymentSelectionPage: UIViewController {
             subscriptionType = ""
         }
         
-        let getCouponcodeQuery = PTProAPI.GetcouponcodeQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), couponType: .some( couponType), listId: .some(listId), subscriptionType: .some(subscriptionType))
+        let getCouponcodeQuery = PTProAPI.GetcouponcodeQuery(userId: .some(userId ?? ""), couponType: .some(couponType), listId: .some(listId), subscriptionType: .some(subscriptionType))
         
-            Network.shared.apollo_headerClient.fetch(query: getCouponcodeQuery) { response in
-                self.lottieView.isHidden = true
-                self.lottieWholeView.isHidden = true
+        Network.shared.apollo_headerClient.fetch(query: getCouponcodeQuery) { response in
+            self.lottieView.isHidden = true
+            self.lottieWholeView.isHidden = true
             switch response {
             case .success(let result):
                 if let status = result.data?.getcouponcode?.status ,status == 200 {
@@ -231,11 +233,11 @@ class PaymentSelectionPage: UIViewController {
                         self.viewMainCoupon.isHidden = true
                     }
                 }else{
-                    self.view.makeToast(result.data?.getcouponcode?.errorMessage)
+                   // self.view.makeToast(result.data?.getcouponcode?.errorMessage)
                 }
                 break
-            case .failure(let error):
-                self.view.makeToast(error.localizedDescription)
+            case .failure(_): break
+               // self.view.makeToast(error.localizedDescription)
             }
         }
     }
@@ -264,7 +266,7 @@ class PaymentSelectionPage: UIViewController {
         if let planDetails = selectedPlanDetail{
             let planPrice = Double(((isYearlySelected ? planDetails.yearly : planDetails.monthly) ?? 0))
             let strPlanDuration = isYearlySelected ? "yearly" : "monthly"
-
+            
             if isCouponApplied{
                 let selectedPlan = String(format: "%@%.2f%@", currencySymbol,planPrice,strPlanDuration)
                 let discount = ((planPrice * (couponData?.discount ?? 0.0)) / 100)
@@ -298,7 +300,7 @@ class PaymentSelectionPage: UIViewController {
         self.lottieView.layer.cornerRadius = 6.0
         self.lottieView.clipsToBounds = true
         self.lottieView.play()
-         Timer.scheduledTimer(timeInterval:0.3, target: self, selector: #selector(autoscroll), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval:0.3, target: self, selector: #selector(autoscroll), userInfo: nil, repeats: true)
     }
     @objc func autoscroll()
     {
@@ -356,18 +358,18 @@ class PaymentSelectionPage: UIViewController {
         super.viewDidLayoutSubviews()
         
         let shadowSize : CGFloat = 3.0
-      
+        
         
         let shadowPath = UIBezierPath(rect: CGRect(x: -shadowSize / 2,
                                                    y: -shadowSize / 2,
                                                    width: self.bottomView.frame.size.width+40 + shadowSize,
                                                    height: self.bottomView.frame.size.height + shadowSize))
         
-//        self.bottomView.layer.masksToBounds = false
-//        self.bottomView.layer.shadowColor = Theme.TextLightColor.cgColor
-//        self.bottomView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-//        self.bottomView.layer.shadowOpacity = 0.3
-//        self.bottomView.layer.shadowPath = shadowPath.cgPath
+        //        self.bottomView.layer.masksToBounds = false
+        //        self.bottomView.layer.shadowColor = Theme.TextLightColor.cgColor
+        //        self.bottomView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        //        self.bottomView.layer.shadowOpacity = 0.3
+        //        self.bottomView.layer.shadowPath = shadowPath.cgPath
         
     }
     @IBAction func backBtnActionTapped(_ sender: UIButton) {
@@ -375,29 +377,29 @@ class PaymentSelectionPage: UIViewController {
     }
     
     func configurePaypalCheckOut(){}
-//        Checkout.setCreateOrderCallback { (createOrderAction) in
-//            let amount = PurchaseUnit.Amount(currencyCode: .usd, value: "10.00")
-//            let purchaseUnit = PurchaseUnit(amount: amount)
-//            let order = OrderRequest(intent: .capture, purchaseUnits: [purchaseUnit])
-//            
-//            createOrderAction.create(order: order)
-//        }
-//        
-//        Checkout.setOnApproveCallback { (approve) in
-//            approve.actions.capture { (response, error) in
-//                print("Approve Response",response,"----",error)
-//            }
-//        }
-//        
-//        Checkout.setOnCancelCallback {
-//            print("Cancelled")
-//        }
-//        
-//        Checkout.setOnErrorCallback { (error) in
-//            print("Error", error)
-//        }
-//        
-//    }
+    //        Checkout.setCreateOrderCallback { (createOrderAction) in
+    //            let amount = PurchaseUnit.Amount(currencyCode: .usd, value: "10.00")
+    //            let purchaseUnit = PurchaseUnit(amount: amount)
+    //            let order = OrderRequest(intent: .capture, purchaseUnits: [purchaseUnit])
+    //
+    //            createOrderAction.create(order: order)
+    //        }
+    //
+    //        Checkout.setOnApproveCallback { (approve) in
+    //            approve.actions.capture { (response, error) in
+    //                print("Approve Response",response,"----",error)
+    //            }
+    //        }
+    //
+    //        Checkout.setOnCancelCallback {
+    //            print("Cancelled")
+    //        }
+    //
+    //        Checkout.setOnErrorCallback { (error) in
+    //            print("Error", error)
+    //        }
+    //
+    //    }
     
     @IBAction func proceedToPayTapped(_ sender: UIButton) {
         
@@ -422,63 +424,71 @@ class PaymentSelectionPage: UIViewController {
     
     func stripePayments(){
         let addCardViewController = STPAddCardViewController()
-
-         addCardViewController.delegate = self
-
-         // Present add card view controller
-         let navigationController = UINavigationController(rootViewController: addCardViewController)
-
-         navigationController.modalPresentationStyle = .fullScreen
+        
+        addCardViewController.delegate = self
+        
+        // Present add card view controller
+        let navigationController = UINavigationController(rootViewController: addCardViewController)
+        
+        navigationController.modalPresentationStyle = .fullScreen
         self.present(navigationController, animated: true)
     }
     
-func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
-    let confirmpaymentmutation = PTProAPI.ConfirmReservationMutation(reservationId: reservationId, paymentIntentId: paymentIntentId)
-    Network.shared.apollo_headerClient.perform(mutation: confirmpaymentmutation){ response in
-        switch response {
-        case .success(let result):
-            if let data = result.data?.confirmReservation?.status,data == 200 {
-                self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"paymentsuccess"))!)")
-                if #available(iOS 11.0, *) {
-                    Utility.shared.PreApprovedID = false
-                    let itenaryPageObj = BookingItenaryVC()
-                    Utility.shared.isfromTripsPage = false
-                    itenaryPageObj.getbillingArray = self.getbillingArray
-                    itenaryPageObj.currencyvalue_from_API_base = self.currencyvalue_from_API_base
-                    itenaryPageObj.createReservationAPICall(reservationid:reservationId)
+    func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
+        let confirmpaymentmutation = PTProAPI.ConfirmReservationMutation(reservationId: reservationId, paymentIntentId: paymentIntentId)
+        Network.shared.apollo_headerClient.perform(mutation: confirmpaymentmutation){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.confirmReservation?.status,data == 200 {
+                    self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"paymentsuccess"))!)")
+                    if #available(iOS 11.0, *) {
+                        Utility.shared.PreApprovedID = false
+                        let itenaryPageObj = BookingItenaryVC()
+                        Utility.shared.isfromTripsPage = false
+                        itenaryPageObj.getbillingArray = self.getbillingArray
+                        itenaryPageObj.currencyvalue_from_API_base = self.currencyvalue_from_API_base
+                        itenaryPageObj.createReservationAPICall(reservationid:reservationId)
+                        self.lottieWholeView.isHidden = true
+                        self.lottieView.isHidden = true
+                        Utility.shared.guestc = ""
+                        itenaryPageObj.isFromReviewPage = false
+                        itenaryPageObj.modalPresentationStyle = .fullScreen
+                        self.present(itenaryPageObj, animated: true, completion: nil)
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                } else if(result.data?.confirmReservation?.status == 400)
+                {
+                    self.handlePayment(reservationId:reservationId, paymentIntentId: paymentIntentId)
+                }else if result.data?.confirmReservation?.status == 500{
                     self.lottieWholeView.isHidden = true
                     self.lottieView.isHidden = true
-                    Utility.shared.guestc = ""
-                    itenaryPageObj.isFromReviewPage = false
-                    itenaryPageObj.modalPresentationStyle = .fullScreen
-                    self.present(itenaryPageObj, animated: true, completion: nil)
-                } else {
-                    // Fallback on earlier versions
+                    let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.confirmReservation?.errorMessage, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
+                        UserDefaults.standard.removeObject(forKey: "user_token")
+                        UserDefaults.standard.removeObject(forKey: "user_id")
+                        UserDefaults.standard.removeObject(forKey: "password")
+                        UserDefaults.standard.removeObject(forKey: "currency_rate")
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        let welcomeObj = WelcomePageVC()
+                        appDelegate.setInitialViewController(initialView: welcomeObj)
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                    return
                 }
-            } else if(result.data?.confirmReservation?.status == 400)
-            {
-                self.handlePayment(reservationId:reservationId, paymentIntentId: paymentIntentId)
-            }else if result.data?.confirmReservation?.status == 500{
-                self.lottieWholeView.isHidden = true
-                self.lottieView.isHidden = true
-                let alert = UIAlertController(title: "\(Utility.shared.getLanguage()?.value(forKey: "oops") ?? "oops" )", message: result.data?.confirmReservation?.errorMessage, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey: "okay") ?? "Okay")", style: .default, handler: { (action) in
-                    UserDefaults.standard.removeObject(forKey: "user_token")
-                    UserDefaults.standard.removeObject(forKey: "user_id")
-                    UserDefaults.standard.removeObject(forKey: "password")
-                    UserDefaults.standard.removeObject(forKey: "currency_rate")
-                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                    let welcomeObj = WelcomePageVC()
-                    appDelegate.setInitialViewController(initialView: welcomeObj)
-                }))
-                self.present(alert, animated: true, completion: nil)
-                return
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
-        case .failure(let error):
-            self.view.makeToast(error.localizedDescription)
         }
     }
-}
+    
+    func json(from object:Any) -> String? {
+        guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else {
+            return nil
+        }
+        return String(data: data, encoding: String.Encoding.utf8)
+    }
+    
     
     func PaymentAPICall(cardtoken:String)
     {
@@ -498,23 +508,37 @@ func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
         }
         else
         {
-            discountLabel = getbillingArray?.discountLabel! ?? ""
+            discountLabel = couponData?.description ?? ""
         }
         
+        var totalAmount = getbillingArray?.total!
+        if let billingArray = getbillingArray, let total =  billingArray.total{
+            totalAmount = total
+        }
+        var discountAmount = 0.0
+        if isCouponApplied{
+            discountAmount = (((totalAmount ?? 0.0) * (couponData?.discount ?? 0.0)) / 100)
+            totalAmount = (getbillingArray?.total! ?? 0.0) - discountAmount
+        }
         
         var bookedArrayType = String()
         if Utility.shared.PreApprovedID{
-            
             bookedArrayType = "instant"
-            
         }else{
-            
             bookedArrayType = viewListingArray?.bookingType! ?? ""
-            
         }
+            
+        var specialPricing = "["
+        if let arryPricing =  getbillingArray?.specialPricing{
+            for price in arryPricing{
+                specialPricing = specialPricing + (self.json(from: price?.__data._data ?? [:]) ?? "")
+            }
+            specialPricing = specialPricing + "]"
+        }
+      
         
-        let paymentMutation = PTProAPI.CreateReservationMutation(listId: viewListingArray?.__data._data["id"] as? Int ?? 0, checkIn: getbillingArray?.checkIn! ?? "", checkOut: getbillingArray?.checkOut! ?? "", guests: Utility.shared.guestCountToBeSend, message: Utility.shared.booking_message, basePrice: getbillingArray?.averagePrice! ?? 0.0, cleaningPrice: getbillingArray?.cleaningPrice! ?? 0.0, currency: getbillingArray?.currency! ?? "", discount: .some(getbillingArray?.discount! ?? 0.0), discountType: .some(getbillingArray?.discountLabel ?? ""), guestServiceFee: .some(getbillingArray?.guestServiceFee! ?? 0.0), hostServiceFee: .some( getbillingArray?.hostServiceFee! ?? 0.0), total: getbillingArray?.total! ?? 0.0, bookingType: .some(bookedArrayType), cardToken: cardtoken, paymentType: .some(self.selectedPaymentType == 1 ? 2 : self.selectedPaymentType), convCurrency: currency_con, averagePrice: .some(getbillingArray?.averagePrice! ?? 0.0), nights: .some(getbillingArray?.nights! ?? 0), paymentCurrency: .some(self.selectedCurrency))
-                
+        let paymentMutation = PTProAPI.CreateReservationMutation(listId: viewListingArray?.id as? Int ?? 0, checkIn: getbillingArray?.checkIn! ?? "", checkOut: getbillingArray?.checkOut! ?? "", guests: Utility.shared.guestCountToBeSend, message: Utility.shared.booking_message, basePrice: getbillingArray?.averagePrice! ?? 0.0, cleaningPrice:  getbillingArray?.cleaningPrice! ?? 0.0, currency: getbillingArray?.currency! ?? "", discount: .some(Double(isCouponApplied ? discountAmount : 0.0)) , discountType: .some(discountLabel), guestServiceFee: .some(getbillingArray?.guestServiceFee! ?? 0.0), hostServiceFee: .some( getbillingArray?.hostServiceFee! ?? 0.0), total: totalAmount ?? 0.0, bookingType: .some(bookedArrayType), cardToken: cardtoken, paymentType: .some(self.selectedPaymentType == 1 ? 2 : 1), convCurrency: currency_con, specialPricing: specialPricing, averagePrice: .some(getbillingArray?.averagePrice! ?? 0.0), nights: .some(getbillingArray?.nights! ?? 0), paymentCurrency: .some(self.selectedCurrency), couponCode: .some(isCouponApplied ? subscriptionCouponCode : ""))
+        
         Network.shared.apollo_headerClient.perform(mutation: paymentMutation){  response in
             switch response {
             case .success(let result):
@@ -610,9 +634,9 @@ func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
         }
         
         let createSubscriptionPaymentMutation = PTProAPI.CreateSubscriptionPaymentMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), planId: .some(planID), total: Double(subscriptionTotal), paymentType: .some(self.selectedPaymentType == 1 ? 2 : 1), paymentCurrency: .some(self.selectedCurrency), cardToken: .some(cardtoken), currency: currency_con, planType: (isYearlySelected ? "year" : "month"), totaldiscount: .some(Double(isCouponApplied ? subscriptionDiscount : 0.0)), couponCode: .some(isCouponApplied ? subscriptionCouponCode : ""))
-                  
-        print("{\"userId\":\"\(Utility.shared.ProfileAPIArray?.userId ?? "")","planId\":\(planID),\"total\":\(subscriptionTotal),\"paymentType\":\(self.selectedPaymentType),\"paymentCurrency\":\"\(self.selectedCurrency)\",\"cardToken\":\"\",\"currency\":\"\(currency_con)","planType\":\"month","couponCode\":\"\(subscriptionCouponCode)\"}")
-
+        
+//        print("{\"userId\":\"\(Utility.shared.ProfileAPIArray?.userId ?? "")","planId\":\(planID),\"total\":\(subscriptionTotal),\"paymentType\":\(self.selectedPaymentType),\"paymentCurrency\":\"\(self.selectedCurrency)\",\"cardToken\":\"\",\"currency\":\"\(currency_con)","planType\":\"month","couponCode\":\"\(subscriptionCouponCode)\"}")
+        
         print(createSubscriptionPaymentMutation.__variables as Any)
         Network.shared.apollo_headerClient.perform(mutation: createSubscriptionPaymentMutation){  response in
             switch response {
@@ -623,7 +647,7 @@ func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
                     print("esult.data?.createSubscriptionPayment?.results?.id  \(result.data?.createSubscriptionPayment?.results?.id ?? 0)")
                     
                     print("esult.data?.createSubscriptionPayment?.paymentIntentSecret  \(result.data?.createSubscriptionPayment?.paymentIntentSecret ?? "")")
-
+                    
                     if(result.data?.createSubscriptionPayment?.results?.id != nil && result.data?.createSubscriptionPayment?.paymentIntentSecret != nil)
                     {
                         self.handlePayment(reservationId: (result.data?.createSubscriptionPayment?.reservationId!)!, paymentIntentId: (result.data?.createSubscriptionPayment?.paymentIntentSecret!)!)
@@ -689,7 +713,7 @@ func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
     @objc func countryBtnTapped(_ sender: UIButton){
         let cell = view.viewWithTag(sender.tag + 8000) as! PaymentFooterCell
         cell.txtFiled.becomeFirstResponder()
-   }
+    }
     
     // MARK: - Action
     @IBAction func onClickDeleteCouponCode(_ sender: Any) {
@@ -704,15 +728,15 @@ func confirmPaymentCall(reservationId:Int,paymentIntentId:String){
     }
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
 
 // MARK: TableView Delegate & DataSource
@@ -727,12 +751,12 @@ extension PaymentSelectionPage: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell : PaymentCell = tableView.dequeueReusableCell(withIdentifier: "PaymentCell", for: indexPath) as! PaymentCell
         cell.selectionStyle = .none
-       
+        
         if(indexPath.section == 0) {
             if("\((getpaymentmethodsArrayFilter[indexPath.section].name!))" == "Paypal")
             {
-            cell.typeImg.image = #imageLiteral(resourceName: "paypal")
-            cell.lineLbl.isHidden = self.selectedPaymentType == 0
+                cell.typeImg.image = #imageLiteral(resourceName: "paypal")
+                cell.lineLbl.isHidden = self.selectedPaymentType == 0
             }
             else {
                 cell.typeImg.image = #imageLiteral(resourceName: "stripe")
@@ -747,7 +771,7 @@ extension PaymentSelectionPage: UITableViewDelegate, UITableViewDataSource{
         cell.lineLbl.backgroundColor = UIColor(named: "Review_Page_Line_Color")
         if("\((getpaymentmethodsArrayFilter[indexPath.section].name!))" == "Paypal")
         {
-        cell.aboutLabel.text = availablePaymentTypes[0]
+            cell.aboutLabel.text = availablePaymentTypes[0]
         }
         else {
             cell.aboutLabel.text = availablePaymentTypes[1]
@@ -756,19 +780,19 @@ extension PaymentSelectionPage: UITableViewDelegate, UITableViewDataSource{
         cell.tag = indexPath.section + 6000
         if("\((getpaymentmethodsArrayFilter[indexPath.section].name!))" == "Paypal")
         {
-        if self.selectedPaymentType == indexPath.section{
-            cell.rightArrowimg.image = #imageLiteral(resourceName: "verify-round")
-        }else{
-            
-            
-            cell.rightArrowimg.image = #imageLiteral(resourceName: "price_unclick")
-        }
+            if self.selectedPaymentType == indexPath.section{
+                cell.rightArrowimg.image = #imageLiteral(resourceName: "verify-round")
+            }else{
+                
+                
+                cell.rightArrowimg.image = #imageLiteral(resourceName: "price_unclick")
+            }
         }
         else {
             if getpaymentmethodsArrayFilter.count == 1 {
-            if self.selectedPaymentType == 1 {
-                cell.rightArrowimg.image = #imageLiteral(resourceName: "verify-round")
-        }
+                if self.selectedPaymentType == 1 {
+                    cell.rightArrowimg.image = #imageLiteral(resourceName: "verify-round")
+                }
             }
             else {
                 if self.selectedPaymentType == indexPath.section{
@@ -788,11 +812,12 @@ extension PaymentSelectionPage: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.selectedPaymentType != indexPath.section{
             self.selectedPaymentType = indexPath.section
-            
-            if self.selectedPaymentType == 0{
-                self.tableViewHeight.constant = 300
-            }else{
-                self.tableViewHeight.constant = 250
+            if isFromSubscriptionPage {
+                if self.selectedPaymentType == 0{
+                    self.tableViewHeight.constant = 300
+                }else{
+                    self.tableViewHeight.constant = 250
+                }
             }
             self.tableView.reloadData()
         }
@@ -803,13 +828,13 @@ extension PaymentSelectionPage: UITableViewDelegate, UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView : PaymentFooterCell = tableView.dequeueReusableCell(withIdentifier: "PaymentFooterCell") as! PaymentFooterCell
-//        footerView.stepnumberLbl.text = ""
-//        footerView.stepnumberLbl.isHidden = true
-//        footerView.queryTitleLbl.text = "\(Utility.shared.getLanguage()?.value(forKey: "currency") ?? "Currency")"
+        //        footerView.stepnumberLbl.text = ""
+        //        footerView.stepnumberLbl.isHidden = true
+        //        footerView.queryTitleLbl.text = "\(Utility.shared.getLanguage()?.value(forKey: "currency") ?? "Currency")"
         footerView.txtFiled.placeholder = "\(Utility.shared.getLanguage()?.value(forKey: "currency") ?? "Currency")"
         if(section == 0 && self.selectedPaymentType == 0) {
-        let cell = view.viewWithTag(section + 6000) as! PaymentCell
-        cell.lineLbl.isHidden = true
+            let cell = view.viewWithTag(section + 6000) as! PaymentCell
+            cell.lineLbl.isHidden = true
         }
         footerView.lineview.backgroundColor = UIColor(named: "Review_Page_Line_Color")
         footerView.tag = section + 8000
@@ -878,15 +903,14 @@ extension PaymentSelectionPage: UITextFieldDelegate , WebviewVCDelegate{
             }else{
                 self.ConfirmPayPal(paymentID: "\(paymentID?.last ?? "")", PayerID: "\(payerID?.last ?? "")")
             }
-
+            
         }else{
             self.lottieView.isHidden = true
             self.lottieWholeView.isHidden = true
         }
-        }
+    }
     
     
-
     func confirmSubscriptionPayPalExecute(paymentID: String, PayerID: String){
         let confirmPayPal = PTProAPI.ConfirmSubscriptionPayPalExecuteMutation(paymentId: paymentID, payerId: PayerID, userId: Utility.shared.ProfileAPIArray?.userId ?? "")
         
@@ -990,7 +1014,7 @@ extension PaymentSelectionPage: UITextFieldDelegate , WebviewVCDelegate{
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if currencyPaymentTypes?.count != 0{
-        selectedCurrency = (selectedCurrency != "" ? selectedCurrency : currencyPaymentTypes?[0].symbol) ?? ""
+            selectedCurrency = (selectedCurrency != "" ? selectedCurrency : currencyPaymentTypes?[0].symbol) ?? ""
         }
         tableView.reloadData()
     }
@@ -1000,20 +1024,20 @@ extension PaymentSelectionPage: UITextFieldDelegate , WebviewVCDelegate{
 
 extension PaymentSelectionPage: STPAddCardViewControllerDelegate,STPPaymentCardTextFieldDelegate{
     func addCardViewControllerDidCancel(_ addCardViewController: STPAddCardViewController) {
-            dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func addCardViewController(_ addCardViewController: STPAddCardViewController, didCreatePaymentMethod paymentMethod: STPPaymentMethod, completion: @escaping STPErrorBlock) {
+        self.lottieAnimation()
+        print("paymentmethodid:\(paymentMethod.stripeId)")
+        if isFromSubscriptionPage{
+            self.subscriptionPaymentAPICall(cardtoken: "\(paymentMethod.stripeId)")
+        }else{
+            self.PaymentAPICall(cardtoken: "\(paymentMethod.stripeId)")
         }
-
-        func addCardViewController(_ addCardViewController: STPAddCardViewController, didCreatePaymentMethod paymentMethod: STPPaymentMethod, completion: @escaping STPErrorBlock) {
-            self.lottieAnimation()
-            print("paymentmethodid:\(paymentMethod.stripeId)")
-            if isFromSubscriptionPage{
-                self.subscriptionPaymentAPICall(cardtoken: "\(paymentMethod.stripeId)")
-            }else{
-                self.PaymentAPICall(cardtoken: "\(paymentMethod.stripeId)")
-            }
-            dismiss(animated: true, completion: nil)
-        }
-        
+        dismiss(animated: true, completion: nil)
+    }
+    
     func handlePayment(reservationId:Int,paymentIntentId:String)
     {
         STPPaymentHandler.shared().handleNextAction(
@@ -1034,8 +1058,8 @@ extension PaymentSelectionPage: STPAddCardViewControllerDelegate,STPPaymentCardT
                     self.lottieView.isHidden = true
                     self.lottieWholeView.isHidden = true
                 }
-        })
-
+            })
+        
     }
 }
 
