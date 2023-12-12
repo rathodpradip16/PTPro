@@ -583,12 +583,12 @@ class ReceiptVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIDo
                             if Utility.shared.isRTLLanguage()
                             {
                                 cell.priceLabel.text = "-\(currencysymbol!)\(restricted_price!.clean)"
-                                                           cell.priceLeftLabel.text = "\(getReservationArray?.discountType!.capitalized)"
+                                cell.priceLeftLabel.text = "\(getReservationArray?.discountType!.capitalized ?? "")"
                             }
                             else
                             {
                                 cell.priceLeftLabel.text = "-\(currencysymbol!)\(restricted_price!.clean)"
-                                                           cell.priceLabel.text = "\(getReservationArray?.discountType!.capitalized)"
+                                cell.priceLabel.text = "\(getReservationArray?.discountType!.capitalized ?? "")"
                             }
                            
                             

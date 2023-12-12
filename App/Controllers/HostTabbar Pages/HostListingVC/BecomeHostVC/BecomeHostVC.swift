@@ -757,7 +757,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func getListingDetailsStep2()
 {
-    let getlistingStep2query = PTProAPI.GetListingDetailsStep2Query(listId:"\(showListingstepArray?.listId!)", preview: true)
+    let getlistingStep2query = PTProAPI.GetListingDetailsStep2Query(listId:"\(showListingstepArray?.listId ?? 0)", preview: true)
     Network.shared.apollo_headerClient.fetch(query: getlistingStep2query,cachePolicy:.fetchIgnoringCacheData){ response in
         switch response {
         case .success(let result):

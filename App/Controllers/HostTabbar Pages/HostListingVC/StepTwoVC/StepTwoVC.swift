@@ -978,7 +978,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
             let BaseUrl = URL(string: LISTINGIMAGE_UPLOAD)
             print("BASE URL : \(LISTINGIMAGE_UPLOAD)")
             let header = ["auth": "\(Utility.shared.getCurrentUserToken()!)"]
-            let parameters = ["listId": "\(showListingstepArray?.listId!)"]
+            let parameters = ["listId": "\(showListingstepArray?.listId ?? 0)"]
             
             
             AF.upload(multipartFormData: { (multipartFormData) in

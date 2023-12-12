@@ -99,7 +99,7 @@ class MapPageVC: UIViewController,GMSMapViewDelegate {
         cirlce.strokeColor = Theme.PRIMARY_COLOR
         cirlce.strokeWidth = 2.5;
         cirlce.map = mapView
-        HeadlocationLabel.text = "\(mapArray?.title != nil ? mapArray?.title! : "") in \(mapArray?.city != nil ? mapArray?.city! : ""),\(mapArray?.state != nil ? mapArray?.state! : ""),\(mapArray?.country != nil ? mapArray?.country! : "")"
+        HeadlocationLabel.text = "\((mapArray?.title != nil ? mapArray?.title! : "") ?? "") in \((mapArray?.city != nil ? mapArray?.city! : "") ?? ""),\((mapArray?.state != nil ? mapArray?.state! : "") ?? ""),\((mapArray?.country != nil ? mapArray?.country! : "") ?? "")"
         locationTitleLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"location"))!)"
         bookingLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"exactlocation"))!)"
     }

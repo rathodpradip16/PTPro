@@ -136,7 +136,7 @@ class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,
                     ProfileAPIArray = ((result.data?.userAccount?.result)!)
                     
                     
-                    Utility.shared.userName  = "\(ProfileAPIArray?.firstName != nil ? ProfileAPIArray?.firstName! : "User")!"
+                    Utility.shared.userName  = "\((ProfileAPIArray?.firstName != nil ? ProfileAPIArray?.firstName! : "User") ?? "")!"
                     
                     
                     if let profImage = ProfileAPIArray?.picture{

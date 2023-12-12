@@ -164,7 +164,6 @@ class AvailabilityHostVC: UIViewController,UITableViewDelegate,UITableViewDataSo
             switch response {
             case .success(let result):
                 if let data = result.data?.updateSpecialPrice?.status,data == 200 {
-                    print("Result for Block Dates \(result.data?.updateSpecialPrice)")
                     Utility.shared.isfrom_availability_calendar_date = true
                     Utility.shared.isfrom_availability_calendar = true
                     self.delegate?.BlockedlistAPICall(listId: self.listId)

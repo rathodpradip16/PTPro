@@ -130,7 +130,7 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
            if(Utility.shared.unpublish_preview_check)
             {
         return 4
-           } else if((Utility.shared.getCurrentUserID() != nil) && ("\(self.showuserprofileArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))")) {
+           } else if((Utility.shared.getCurrentUserID() != nil) && ("\(self.showuserprofileArray?.userId! ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))")) {
 
             return 5
            } else {

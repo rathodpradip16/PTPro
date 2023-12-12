@@ -558,7 +558,7 @@ func updateListingAPICall(completion: (_ success: Bool) -> Void) {
     {
        
         if(Utility.shared.pickedimageString == "") {
-            overlayUsername.text = "Hi, \(ProfileAPIArray?.firstName != nil ? ProfileAPIArray?.firstName! : "User")!"
+            overlayUsername.text = "Hi, \((ProfileAPIArray?.firstName != nil ? ProfileAPIArray?.firstName! : "User") ?? "")!"
         overlaystep3.text = "\(Utility.shared.getLanguage()?.value(forKey: "ready") ?? "")"
         
             if let profImage = ProfileAPIArray?.picture{

@@ -320,7 +320,7 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
                     
                     
                     Utility.shared.ProfileAPIArray = ((result.data?.userAccount?.result)!)
-                    Utility.shared.userName  = "\(Utility.shared.ProfileAPIArray?.firstName != nil ? Utility.shared.ProfileAPIArray?.firstName! : "User")!"
+                    Utility.shared.userName  = "\((Utility.shared.ProfileAPIArray?.firstName != nil ? Utility.shared.ProfileAPIArray?.firstName! : "User") ?? "")!"
                     
                     
                     if let profImage = Utility.shared.ProfileAPIArray?.picture{

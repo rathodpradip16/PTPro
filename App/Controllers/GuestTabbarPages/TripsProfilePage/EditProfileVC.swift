@@ -1778,7 +1778,7 @@ extension EditProfileVC:UITextFieldDelegate {
             {
                 self.profileAlertView.isHidden = true
                 let arrayOfString = ["\(textField.text ?? "")","\(EditProfileArray?.lastName ?? "")"]
-                print("\(json(from: arrayOfString))")
+                print("\(json(from: arrayOfString) ?? "")")
 
                 if let valueTobeSend = json(from: arrayOfString){
                     isFromFn = true

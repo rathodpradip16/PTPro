@@ -112,7 +112,7 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
         
         if(indexPath.section==1){
             if(indexPath.row == 0){
-                let emailTitle = "\((Utility.shared.getLanguage()?.value(forKey:"checkoutplace"))!) \(viewListingArray?.title!)"
+                let emailTitle = "\((Utility.shared.getLanguage()?.value(forKey:"checkoutplace"))!) \(viewListingArray?.title! ?? "")"
                 let listid = viewListingArray?.id != nil ? viewListingArray?.id! : 0
                 let title = viewListingArray?.title != nil ? viewListingArray?.title! : ""
                 var convertedTitle =  title!.replacingOccurrences(of:", ", with:"--")
@@ -120,9 +120,9 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 convertedTitle = convertedTitle.replacingOccurrences(of:"#", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"/", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"%", with:"-")
-                let profileimage = "\(convertedTitle)" + "-\(listid)"
+                let profileimage = "\(convertedTitle)" + "-\(listid ?? 0)"
                 let urltoShare =  "\(SHARE_URL)\(String(describing: profileimage.lowercased()))"
-                let messageBody = "\((Utility.shared.getLanguage()?.value(forKey:"sharedesc"))!) \(viewListingArray?.title!) \((Utility.shared.getLanguage()?.value(forKey:"sharedesc_next"))!) \(urltoShare)"
+                let messageBody = "\((Utility.shared.getLanguage()?.value(forKey:"sharedesc"))!) \(viewListingArray?.title ?? "") \((Utility.shared.getLanguage()?.value(forKey:"sharedesc_next"))!) \(urltoShare)"
                 // let toRecipents = ["friend@stackoverflow.com"]
                 if MFMailComposeViewController.canSendMail() {
                 let mc: MFMailComposeViewController = MFMailComposeViewController()
@@ -154,10 +154,10 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     convertedTitle = convertedTitle.replacingOccurrences(of:"#", with:"-")
                     convertedTitle = convertedTitle.replacingOccurrences(of:"/", with:"-")
                     convertedTitle = convertedTitle.replacingOccurrences(of:"%", with:"-")
-                    let profileimage = "\(convertedTitle)" + "-\(listid)"
+                    let profileimage = "\(convertedTitle)" + "-\(listid ?? 0)"
                     let urltoShare =  "\(SHARE_URL)\(String(describing: profileimage.lowercased()))"
                     
-                    controller.body = "\((Utility.shared.getLanguage()?.value(forKey:"sharedesc"))!) \(viewListingArray?.title!) \((Utility.shared.getLanguage()?.value(forKey:"sharedesc_next"))!) \(urltoShare)"
+                    controller.body = "\((Utility.shared.getLanguage()?.value(forKey:"sharedesc"))!) \(viewListingArray?.title ?? "") \((Utility.shared.getLanguage()?.value(forKey:"sharedesc_next"))!) \(urltoShare)"
                     
                     controller.messageComposeDelegate = self
                     
@@ -178,7 +178,7 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 convertedTitle = convertedTitle.replacingOccurrences(of:"#", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"/", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"%", with:"-")
-                let profileimage = "\(convertedTitle)" + "-\(listid)"
+                let profileimage = "\(convertedTitle)" + "-\(listid ?? 0)"
                 let urltoShare =  "\(SHARE_URL)\(String(describing: profileimage.lowercased()))"
                 
                 UIPasteboard.general.url = URL(string:urltoShare)
@@ -187,7 +187,7 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             }
             else if(indexPath.row == 3){
                 
-                let someText:String = "\((Utility.shared.getLanguage()?.value(forKey:"checkoutplace"))!) \(viewListingArray?.title!)"
+                let someText:String = "\((Utility.shared.getLanguage()?.value(forKey:"checkoutplace"))!) \(viewListingArray?.title ?? "")"
                 let listid = viewListingArray?.id != nil ? viewListingArray?.id! : 0
                 let title = viewListingArray?.title != nil ? viewListingArray?.title! : ""
                 var convertedTitle =  title!.replacingOccurrences(of:", ", with:"--")
@@ -195,7 +195,7 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 convertedTitle = convertedTitle.replacingOccurrences(of:"#", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"/", with:"-")
                 convertedTitle = convertedTitle.replacingOccurrences(of:"%", with:"-")
-                let profileimage = "\(convertedTitle)" + "-\(listid)"
+                let profileimage = "\(convertedTitle)" + "-\(listid ?? 0)"
                 let urltoShare =  "\(SHARE_URL)\(String(describing: profileimage.lowercased()))"
                 let objectsToShare:URL =  URL(string:urltoShare)!
                 let sharedObjects:[AnyObject] = [objectsToShare as AnyObject,someText as AnyObject]

@@ -147,7 +147,6 @@ class WebviewVC: UIViewController,WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             
-            print("pradee \(navigationAction.request.url)")
             
             guard let url = navigationAction.request.url else {
                 decisionHandler(.allow)

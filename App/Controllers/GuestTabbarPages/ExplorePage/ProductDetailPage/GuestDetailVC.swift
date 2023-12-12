@@ -232,7 +232,7 @@ class GuestDetailVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         let btnsendtag: UIButton = sender as! UIButton
         if(viewListingArray?.userId != nil)
         {
-        if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(viewListingArray?.userId!)"))
+            if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(viewListingArray?.userId ?? "")"))
         {
             self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"ownbookalert"))!)")
         }
@@ -536,11 +536,11 @@ func initialSetup()
                     }
                     
                     self.reviewcountAPICall(profileid: ((self.viewListingArray?.user?.profile?.profileId!)!))
-                self.getreviewAPICall(listId: listid, hostId: "\(self.viewListingArray?.userId!)")
+                self.getreviewAPICall(listId: listid, hostId: "\(self.viewListingArray?.userId ?? "")")
                 self.similarListingAPICall(lat:self.viewListingArray?.lat! ?? 0, lng: self.viewListingArray?.lng! ?? 0, lisId: self.viewListingArray?.id! ?? 0)
                 self.getPropertyReviewsAPICall(lisId: self.viewListingArray?.id ?? 0)
                     self.lottieView.isHidden = true
-                    if((Utility.shared.getCurrentUserID() != nil) && ("\(self.viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                if((Utility.shared.getCurrentUserID() != nil) && ("\(self.viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                     {
                         self.moreBtn.isHidden = true
                         self.moreBtnImage.isHidden = true
@@ -552,7 +552,7 @@ func initialSetup()
                         self.moreBtnImage.isHidden = false
                     }
                     
-                    if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewListingArray?.userId!)"))
+                if(Utility.shared.getCurrentUserID() != nil && ("\(Utility.shared.getCurrentUserID()!)" == "\(self.viewListingArray?.userId ?? "")"))
                     {
                         self.likeBtn.isHidden = true
                         self.heartImg.isHidden = true
@@ -1100,14 +1100,14 @@ func initialSetup()
             {
                 if(viewListingArray?.houseRules?.count == 0)
                 {
-                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                     {
                         return 4
                     }
                     return 5
                 }
                 else {
-                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                     {
                         return 5
                     }
@@ -1118,14 +1118,14 @@ func initialSetup()
             else {
                 if(viewListingArray?.houseRules?.count == 0)
                 {
-                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                     {
                         return 5
                     }
                     return 6
                 }
                 else{
-                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                     {
                         return 6
                     }
@@ -1293,7 +1293,7 @@ func initialSetup()
                 {
                     if(indexPath.row == 4)
                     {
-                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                         {
                             return .leastNormalMagnitude
                         }
@@ -1309,7 +1309,7 @@ func initialSetup()
                 {
                     if(indexPath.row == 5)
                     {
-                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                         {
                             return .leastNormalMagnitude
                         }
@@ -1332,7 +1332,7 @@ func initialSetup()
                 {
                     if(indexPath.row == 5)
                     {
-                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                         {
                             return .leastNormalMagnitude
                         }
@@ -1347,7 +1347,7 @@ func initialSetup()
                 {
                     if(indexPath.row == 6)
                     {
-                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId!)" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                         {
                             return .leastNormalMagnitude
                         }
@@ -1571,7 +1571,7 @@ func initialSetup()
             if let title =  viewListingArray?.title {
                 cell.itemTitleLabel.text = title.condensingWhitespace() }
           
-            cell.customcountryLabel.text = "\(viewListingArray?.city != nil  ? viewListingArray?.city! : ""), \(viewListingArray?.state != nil ? viewListingArray?.state! : ""), \(viewListingArray?.country != nil ? viewListingArray?.country! : "")"
+            cell.customcountryLabel.text = "\((viewListingArray?.city != nil  ? viewListingArray?.city! : "") ?? ""), \((viewListingArray?.state != nil ? viewListingArray?.state! : "") ?? ""), \((viewListingArray?.country != nil ? viewListingArray?.country! : "") ?? "")"
             
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
            if(viewListingArray?.user?.profile?.picture != nil)
@@ -1614,7 +1614,7 @@ func initialSetup()
           //  cell.descriptionLabel.text = viewListingArray?.description!
            if(viewListingArray?.personCapacity == 1)
            {
-           cell.guestLabel.text = "\(viewListingArray?.personCapacity!) \((Utility.shared.getLanguage()?.value(forKey:"guestsmall"))!)"
+               cell.guestLabel.text = "\(viewListingArray?.personCapacity ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"guestsmall"))!)"
             }
            else{
             if let personCapacity = (viewListingArray?.personCapacity) {
@@ -1762,15 +1762,15 @@ func initialSetup()
             cell.mapMarkerView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
             cell.mapMarkerView.layer.shadowOpacity = 0.3
             cell.mapMarkerView.layer.shadowPath = shadowPath.cgPath
-            let lat = "\(viewListingArray?.lat!)"
-            let long = "\(viewListingArray?.lng!)"
+            let lat = "\(viewListingArray?.lat! ?? 0.0)"
+            let long = "\(viewListingArray?.lng! ?? 0.0)"
             cell.mapView .addSubview(cell.centerCircleView)
            
             let staticMapUrl: String = "https://maps.googleapis.com/maps/api/staticmap?key=\(GOOGLE_API_KEY)&center=\(lat),\(long)&\("zoom=15&size=\(2 * Int(cell.mapView.frame.size.width))x\(2 * Int(cell.mapView.frame.size.height))")&sensor=true&language=en"
             cell.centerCircleView.backgroundColor = UIColor(red: 0.0/255.0, green: 132.0/255.0, blue: 135.0/255.0, alpha:0.3)
             let mapUrl: NSURL = NSURL(string: staticMapUrl)!
             cell.mapView.sd_setImage(with: mapUrl as URL, placeholderImage: UIImage(named: "palceholder"))
-            cell.mapLabel.text = "\(viewListingArray?.city != nil ? viewListingArray?.city! : ""), \(viewListingArray?.state != nil ? viewListingArray?.state! : "" ), \(viewListingArray?.country != nil ? viewListingArray?.country! : "") \((Utility.shared.getLanguage()?.value(forKey:"exactlocation"))!)"
+            cell.mapLabel.text = "\(viewListingArray?.city != nil ? viewListingArray?.city! : ""), \((viewListingArray?.state != nil ? viewListingArray?.state! : "") ?? "" ), \((viewListingArray?.country != nil ? viewListingArray?.country! : "") ?? "") \((Utility.shared.getLanguage()?.value(forKey:"exactlocation"))!)"
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
            
             return cell

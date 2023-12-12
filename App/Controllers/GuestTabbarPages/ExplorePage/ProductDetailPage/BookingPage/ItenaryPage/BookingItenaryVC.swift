@@ -693,7 +693,7 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             if(getReservationArray?.messageData?.id != nil)
             {
             let InboxListingObj = InboxListingVC()
-            Utility.shared.ListID = "\(getReservationArray?.listId!)"
+                Utility.shared.ListID = "\(getReservationArray?.listId! ?? 0)"
             InboxListingObj.threadId = (getReservationArray?.messageData?.id!)!
                 InboxListingObj.isFromItinerary = true
             InboxListingObj.getMessageListAPICall(threadId:(getReservationArray?.messageData?.id!)!)

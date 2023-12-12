@@ -221,7 +221,7 @@ class BookingStepThreeVC: UIViewController,UITableViewDelegate,UITableViewDataSo
             if(ProfileAPIArray?.picture != nil)
             {
                 let profImage = ProfileAPIArray?.picture!
-                cell.editProfileimage.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(profImage)"), completed: nil)
+                cell.editProfileimage.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(profImage ?? "")"), completed: nil)
             }
             else
             {

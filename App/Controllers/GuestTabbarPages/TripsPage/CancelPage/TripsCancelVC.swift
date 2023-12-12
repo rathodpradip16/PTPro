@@ -227,9 +227,9 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             
             
             if cancelResrvarionArray?.startedIn ?? 0 > 1{
-                cell.startLabel.text = "\(cancelResrvarionArray?.startedIn!) \((Utility.shared.getLanguage()?.value(forKey:"days")) ?? "days")"
+                cell.startLabel.text = "\(cancelResrvarionArray?.startedIn ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"days")) ?? "days")"
             }else{
-                cell.startLabel.text = "\(cancelResrvarionArray?.startedIn!) \((Utility.shared.getLanguage()?.value(forKey:"day"))!)"
+                cell.startLabel.text = "\(cancelResrvarionArray?.startedIn ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"day"))!)"
             }
             
            let night = Double(cancelResrvarionArray?.stayingFor! ?? 0.0)
@@ -243,9 +243,9 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             
             
             if cancelResrvarionArray?.guests ?? 0 > 1{
-                cell.travellingLabel.text = "\(cancelResrvarionArray?.guests!) \((Utility.shared.getLanguage()?.value(forKey:"CapGuests")) ?? "Guests")"
+                cell.travellingLabel.text = "\(cancelResrvarionArray?.guests ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"CapGuests")) ?? "Guests")"
             }else{
-                cell.travellingLabel.text = "\(cancelResrvarionArray?.guests!) \((Utility.shared.getLanguage()?.value(forKey:"guest"))!)"
+                cell.travellingLabel.text = "\(cancelResrvarionArray?.guests ?? 0) \((Utility.shared.getLanguage()?.value(forKey:"guest"))!)"
             }
             
 //            if(!Utility.shared.host_cancel_isfromCancel)
@@ -436,9 +436,9 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                     
                     
                     if cancelResrvarionArray?.stayingFor ?? 0.0 > 1.0{
-                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean)  x \(cancelResrvarionArray?.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean)  x \(cancelResrvarionArray?.stayingFor!.clean ?? "") \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                     }else{
-                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean)  x \(cancelResrvarionArray?.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean)  x \(cancelResrvarionArray?.stayingFor!.clean ?? "") \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                     }
                 }
                 else
@@ -451,9 +451,9 @@ class TripsCancelVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 //                    cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean) x \(cancelResrvarionArray?.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(cancelResrvarionArray?.stayingFor! > 1 ? "s" : "")"
                     
                     if cancelResrvarionArray?.stayingFor ?? 0.0 > 1.0{
-                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean) x \(cancelResrvarionArray?.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean) x \(cancelResrvarionArray?.stayingFor!.clean ?? "") \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                     }else{
-                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean) x \(cancelResrvarionArray?.stayingFor!.clean) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                        cell.hostnightLabel.text = "\(currencysymbol!)\(restricted_price!.clean) x \(cancelResrvarionArray?.stayingFor!.clean ?? "") \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                     }
                 }
                 cell.totalLabel.isHidden = true

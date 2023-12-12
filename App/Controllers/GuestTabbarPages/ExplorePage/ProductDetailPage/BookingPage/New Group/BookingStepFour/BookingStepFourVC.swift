@@ -292,12 +292,12 @@ class BookingStepFourVC: UIViewController,UITableViewDataSource,UITableViewDeleg
 //                        cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(Utility.shared.numberofnights_Selected > 1 ? "s" : "")"
                         
                         if Utility.shared.numberofnights_Selected > 1{
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean ?? "") x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                         }else{
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean ?? "") x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                         }
                       //  let calculated_Price = Double(String(format: "%.2f",(getbillingArray?.basePrice! * Double(Utility.shared.numberofnights_Selected))))as! Double
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.priceForDays != nil ? getbillingArray?.priceForDays!.clean : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\((getbillingArray?.priceForDays != nil ? getbillingArray?.priceForDays!.clean : "") ?? "")"
                         cell.priceLabel.sizeToFit()
                         if(getbillingArray?.isSpecialPriceAssigned == true)
                         {
@@ -310,12 +310,12 @@ class BookingStepFourVC: UIViewController,UITableViewDataSource,UITableViewDeleg
                     {
                         cell.priceLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"servicefee"))!)"
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.guestServiceFee != nil ? getbillingArray?.guestServiceFee!.clean : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\((getbillingArray?.guestServiceFee != nil ? getbillingArray?.guestServiceFee!.clean : "") ?? "")"
                     }
                     else{
                         cell.priceLabel.text =  getbillingArray?.discountLabel!.capitalized
                         
-                        cell.priceLeftLabel.text = "-\(currencysymbol)\(getbillingArray?.discount != nil ? getbillingArray?.discount!.clean : "")"
+                        cell.priceLeftLabel.text = "-\(currencysymbol)\((getbillingArray?.discount != nil ? getbillingArray?.discount!.clean : "") ?? "")"
                     }
                     cell.priceLabelLeadingConstraint.constant = cell.specialImage.isHidden ? -20 : 5
                     return cell
@@ -327,12 +327,12 @@ class BookingStepFourVC: UIViewController,UITableViewDataSource,UITableViewDeleg
 //                        cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(Utility.shared.numberofnights_Selected > 1 ? "s" : "")"
                         
                         if Utility.shared.numberofnights_Selected > 1 {
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean ?? "") x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                         }else{
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean ?? "") x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                         }
                         
-                        let calculated_Price = Double(String(format: "%.2f",((getbillingArray?.basePrice! ?? 0) * Double(Utility.shared.numberofnights_Selected))))as! Double
+                        let calculated_Price = Double(String(format: "%.2f",((getbillingArray?.basePrice! ?? 0) * Double(Utility.shared.numberofnights_Selected))))!
                         cell.priceLabel.sizeToFit()
                         if(getbillingArray?.isSpecialPriceAssigned == true)
                         {
@@ -340,13 +340,13 @@ class BookingStepFourVC: UIViewController,UITableViewDataSource,UITableViewDeleg
                              cell.specialImage.frame = CGRect(x: cell.priceLabel.frame.size.width+cell.priceLabel.frame.origin.x+5, y:17, width: 20, height: 20)
                         }
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.priceForDays != nil ? getbillingArray?.priceForDays!.clean : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\((getbillingArray?.priceForDays != nil ? getbillingArray?.priceForDays!.clean : "") ?? "")"
                     }
                     else if(indexPath.row == 1)
                     {
                         cell.priceLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"servicefee"))!)"
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.guestServiceFee != nil ? getbillingArray?.guestServiceFee!.clean : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\((getbillingArray?.guestServiceFee != nil ? getbillingArray?.guestServiceFee!.clean : "") ?? "")"
                     }
                     cell.priceLabelLeadingConstraint.constant = cell.specialImage.isHidden ? -20 : 5
                     return cell
@@ -363,12 +363,12 @@ class BookingStepFourVC: UIViewController,UITableViewDataSource,UITableViewDeleg
 //                        cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(Utility.shared.numberofnights_Selected > 1 ? "s" : "")"
                         
                         if Utility.shared.numberofnights_Selected > 1 {
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean ?? "") x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                         }else{
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean ?? "") x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                         }
                         
-                        let calculated_Price = Double(String(format: "%.2f",((getbillingArray?.basePrice! ?? 0) * Double(Utility.shared.numberofnights_Selected))))as! Double
+                        let calculated_Price = Double(String(format: "%.2f",((getbillingArray?.basePrice! ?? 0) * Double(Utility.shared.numberofnights_Selected))))!
                         cell.priceLabel.sizeToFit()
                         if(getbillingArray?.isSpecialPriceAssigned == true)
                         {
@@ -376,24 +376,24 @@ class BookingStepFourVC: UIViewController,UITableViewDataSource,UITableViewDeleg
                              cell.specialImage.frame = CGRect(x: cell.priceLabel.frame.size.width+cell.priceLabel.frame.origin.x+5, y:17, width: 20, height: 20)
                         }
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.priceForDays != nil ? getbillingArray?.priceForDays!.clean : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\((getbillingArray?.priceForDays != nil ? getbillingArray?.priceForDays!.clean : "") ?? "")"
                     }
                     else if(indexPath.row == 1)
                     {
                         cell.priceLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"cleaningfee"))!)"
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.cleaningPrice != nil ? getbillingArray?.cleaningPrice!.clean : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\((getbillingArray?.cleaningPrice != nil ? getbillingArray?.cleaningPrice!.clean : "") ?? "")"
                     }
                     else if(indexPath.row == 2)
                     {
                         cell.priceLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"servicefee"))!)"
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.guestServiceFee != nil ? getbillingArray?.guestServiceFee!.clean : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\((getbillingArray?.guestServiceFee != nil ? getbillingArray?.guestServiceFee!.clean : "") ?? "")"
                     }
                     else{
                         cell.priceLabel.text =  getbillingArray?.discountLabel != nil ? getbillingArray?.discountLabel!.capitalized : ""
                         
-                        cell.priceLeftLabel.text = "-\(currencysymbol)\((getbillingArray?.discount != nil ? getbillingArray?.discount!.clean : ""))"
+                        cell.priceLeftLabel.text = "-\(currencysymbol)\((getbillingArray?.discount != nil ? getbillingArray?.discount!.clean : "") ?? "")"
                     }
                     cell.priceLabelLeadingConstraint.constant = cell.specialImage.isHidden ? -20 : 5
                     return cell
@@ -406,12 +406,12 @@ class BookingStepFourVC: UIViewController,UITableViewDataSource,UITableViewDeleg
 //                        cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)\(Utility.shared.numberofnights_Selected > 1 ? "s" : "")"
                         
                         if Utility.shared.numberofnights_Selected > 1 {
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean ?? "") x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"nights")) ?? "nights")"
                         }else{
-                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean) x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
+                            cell.priceLabel.text =  "\(currencysymbol)\(getbillingArray?.averagePrice!.clean ?? "") x \(Utility.shared.numberofnights_Selected) \((Utility.shared.getLanguage()?.value(forKey:"night"))!)"
                         }
                         
-                        let calculated_Price = Double(String(format: "%.2f",((getbillingArray?.basePrice! ?? 0) * Double(Utility.shared.numberofnights_Selected))))as! Double
+                        let calculated_Price = Double(String(format: "%.2f",((getbillingArray?.basePrice! ?? 0) * Double(Utility.shared.numberofnights_Selected))))!
                         cell.priceLabel.sizeToFit()
                         if(getbillingArray?.isSpecialPriceAssigned == true)
                         {
@@ -419,19 +419,19 @@ class BookingStepFourVC: UIViewController,UITableViewDataSource,UITableViewDeleg
                              cell.specialImage.frame = CGRect(x: cell.priceLabel.frame.size.width+cell.priceLabel.frame.origin.x+5, y:17, width: 20, height: 20)
                         }
                        
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.priceForDays != nil ? getbillingArray?.priceForDays!.clean : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\((getbillingArray?.priceForDays != nil ? getbillingArray?.priceForDays!.clean : "") ?? "")"
                     }
                     else if(indexPath.row == 1)
                     {
                         cell.priceLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"cleaningfee"))!)"
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.cleaningPrice != nil ? getbillingArray?.cleaningPrice!.clean : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\((getbillingArray?.cleaningPrice != nil ? getbillingArray?.cleaningPrice!.clean : "") ?? "")"
                     }
                     else if(indexPath.row == 2)
                     {
                         cell.priceLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"servicefee"))!)"
                         
-                        cell.priceLeftLabel.text = "\(currencysymbol)\(getbillingArray?.guestServiceFee != nil ? getbillingArray?.guestServiceFee!.clean : "")"
+                        cell.priceLeftLabel.text = "\(currencysymbol)\((getbillingArray?.guestServiceFee != nil ? getbillingArray?.guestServiceFee!.clean : "") ?? "")"
                     }
                     cell.priceLabelLeadingConstraint.constant = cell.specialImage.isHidden ? -20 : 5
                     return cell
@@ -455,9 +455,9 @@ class BookingStepFourVC: UIViewController,UITableViewDataSource,UITableViewDeleg
             {
                 currencysymbol = Utility.shared.getSymbol(forCurrencyCode:self.currencyvalue_from_API_base)!
             }
-            cell.totalPriceLabel.text = "\(currencysymbol)\(getbillingArray?.total != nil ? getbillingArray?.total!.clean : "")"
-            totalPriceLabel = "\(currencysymbol)\(getbillingArray?.total != nil ? getbillingArray?.total!.clean : "")"
-            totalAmount = "\(getbillingArray?.total != nil ? getbillingArray?.total!.clean : "")"
+           cell.totalPriceLabel.text = "\(currencysymbol)\((getbillingArray?.total != nil ? getbillingArray?.total!.clean : "") ?? "")"
+           totalPriceLabel = "\(currencysymbol)\((getbillingArray?.total != nil ? getbillingArray?.total!.clean : "") ?? "")"
+           totalAmount = "\((getbillingArray?.total != nil ? getbillingArray?.total!.clean : "") ?? "")"
             if Utility.shared.isRTLLanguage(){
                 cell.totalPriceLabel.textAlignment = .left
             }else{
