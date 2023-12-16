@@ -10,6 +10,7 @@ import UIKit
 import Apollo
 import  Lottie
 import SwiftMessages
+import FirebaseMessaging
 
 class ProfilePageVC: UIViewController,UITableViewDataSource,UITableViewDelegate,UITabBarControllerDelegate,UITabBarDelegate,userStepInfoUpdate{
 
@@ -962,6 +963,7 @@ func logoutCall()
     UserDefaults.standard.removeObject(forKey: "user_id")
     UserDefaults.standard.removeObject(forKey: "password")
     UserDefaults.standard.removeObject(forKey: "currency_rate")
+    Utility.shared.setUserToken(userID: "")
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let welcomeObj = WelcomePageVC()
     appDelegate.setInitialViewController(initialView: welcomeObj)
