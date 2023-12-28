@@ -56,14 +56,17 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
     @IBOutlet weak var txtFullName: CustomUITextField!
     
     @IBOutlet weak var lblEmail: UILabel!
-    
-    @IBOutlet weak var lblPhoneNumber: UILabel!
     @IBOutlet weak var txtEmail: CustomUITextField!
+
+    @IBOutlet weak var lblCountry: UILabel!
+    @IBOutlet weak var txtCountry: CustomUITextField!
+
+    @IBOutlet weak var lblPhoneNumber: UILabel!
     @IBOutlet weak var txtPhoneNumber: NKVPhonePickerTextField!
-    
+
     @IBOutlet weak var lblNoOfUnitsList: UILabel!
-    
     @IBOutlet weak var txtNoOfUnitsList: CustomUITextField!
+    
     @IBOutlet weak var btnSubmitRequest: UIButton!
     
     @IBOutlet weak var mainViewHeight: NSLayoutConstraint!
@@ -155,6 +158,9 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
             }else if(!txtEmail.isValidEmail())
             {
                 self.view.makeToast("Please Enter Valid Email Address")
+            }else if(txtCountry.isEmpty())
+            {
+                self.view.makeToast("Please Enter country")
             }else if(txtPhoneNumber.isEmpty())
             {
                 self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"enterMobileNo")) ?? "Please Enter Mobile")")
@@ -204,7 +210,7 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
     }
     
     func apiCallCreateCustomPlanRequest(){
-        let createCustomPlanRequest = PTProAPI.CreateCustomPlanRequestMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), name: .some(txtFullName.text!), email: .some(txtEmail.text!), country: .some(txtPhoneNumber.country?.countryCode ?? ""), number: .some(txtPhoneNumber.text!) , no_Of_units_list:.some(txtNoOfUnitsList.text!))
+        let createCustomPlanRequest = PTProAPI.CreateCustomPlanRequestMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), name: .some(txtFullName.text!), email: .some(txtEmail.text!), country: .some(txtCountry.text ?? txtPhoneNumber.country?.countryCode ?? ""), number: .some(txtPhoneNumber.text!) , no_Of_units_list:.some(txtNoOfUnitsList.text!))
         Network.shared.apollo_headerClient.perform(mutation: createCustomPlanRequest){  response in
             switch response {
             case .success(let result):

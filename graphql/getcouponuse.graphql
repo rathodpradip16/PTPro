@@ -1,5 +1,5 @@
-query getcouponuse($userId: String,$couponCode:String,$listId:Int){
-getcouponuse(userId:$userId,couponCode:$couponCode,listId:$listId){
+query getcouponuse($userId: String,$couponCode:String,$listId:Int,$planId:Int,$isforplan:Boolean){
+getcouponuse(userId:$userId,couponCode:$couponCode,listId:$listId,isforplan:$isforplan,planId:$planId){
 errorMessage
 status
 }

@@ -8,27 +8,35 @@ extension PTProAPI {
     static let operationName: String = "getcouponuse"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query getcouponuse($userId: String, $couponCode: String, $listId: Int) { getcouponuse(userId: $userId, couponCode: $couponCode, listId: $listId) { __typename errorMessage status } }"#
+        #"query getcouponuse($userId: String, $couponCode: String, $listId: Int, $planId: Int, $isforplan: Boolean) { getcouponuse( userId: $userId couponCode: $couponCode listId: $listId isforplan: $isforplan planId: $planId ) { __typename errorMessage status } }"#
       ))
 
     public var userId: GraphQLNullable<String>
     public var couponCode: GraphQLNullable<String>
     public var listId: GraphQLNullable<Int>
+    public var planId: GraphQLNullable<Int>
+    public var isforplan: GraphQLNullable<Bool>
 
     public init(
       userId: GraphQLNullable<String>,
       couponCode: GraphQLNullable<String>,
-      listId: GraphQLNullable<Int>
+      listId: GraphQLNullable<Int>,
+      planId: GraphQLNullable<Int>,
+      isforplan: GraphQLNullable<Bool>
     ) {
       self.userId = userId
       self.couponCode = couponCode
       self.listId = listId
+      self.planId = planId
+      self.isforplan = isforplan
     }
 
     public var __variables: Variables? { [
       "userId": userId,
       "couponCode": couponCode,
-      "listId": listId
+      "listId": listId,
+      "planId": planId,
+      "isforplan": isforplan
     ] }
 
     struct Data: PTProAPI.SelectionSet {
@@ -40,7 +48,9 @@ extension PTProAPI {
         .field("getcouponuse", Getcouponuse?.self, arguments: [
           "userId": .variable("userId"),
           "couponCode": .variable("couponCode"),
-          "listId": .variable("listId")
+          "listId": .variable("listId"),
+          "isforplan": .variable("isforplan"),
+          "planId": .variable("planId")
         ]),
       ] }
 

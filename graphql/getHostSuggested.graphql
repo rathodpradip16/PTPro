@@ -1,0 +1,40 @@
+query getHostSuggested($userId: String!,$currentPage: Int!,$priceRange: [Int]!,$review:String!){
+getHostSuggested(userId:$userId,currentPage: $currentPage,, priceRange: $priceRange,review:$review){
+count
+aaddress
+results {
+id
+title
+personCapacity
+lat
+lng
+beds
+bookingType
+coverPhoto
+reviewsCount
+listPhotoName
+roomType
+reviewsStarRating
+listPhotos {
+id
+name
+type
+status
+}
+listingData {
+basePrice
+currency
+}
+settingsData {
+listsettings {
+id
+itemName
+}
+}
+wishListStatus
+isListOwner
+}
+errorMessage
+status
+}
+}

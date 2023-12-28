@@ -131,13 +131,15 @@ class PaymentSelectionPage: UIViewController {
         
         let userId = viewListingArray?.userId
         var listId:Int = 0
+        var intPlanId:Int = 0
+
         if isFromSubscriptionPage, let plan = selectedPlanDetail,let planId = plan.id{
-            listId = planId
+            intPlanId = planId
         }else{
             listId = viewListingArray?.id as? Int ?? 0
         }
         
-        let getcouponuseQuery = PTProAPI.GetcouponuseQuery(userId: .some(userId ?? ""), couponCode: .some(self.couponData?.couponCode ?? ""), listId: .some(listId))
+        let getcouponuseQuery = PTProAPI.GetcouponuseQuery(userId: .some(userId ?? ""), couponCode: .some(self.couponData?.couponCode ?? ""), listId: .some(listId), planId: .some(intPlanId), isforplan: .some(true))
         
         Network.shared.apollo_headerClient.fetch(query: getcouponuseQuery) { response in
             self.lottieView.isHidden = true

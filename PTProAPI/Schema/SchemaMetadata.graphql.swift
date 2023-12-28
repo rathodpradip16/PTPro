@@ -120,6 +120,7 @@ extension PTProAPI {
       case "allListSettingTypes": return PTProAPI.Objects.AllListSettingTypes
       case "listBlockedDates": return PTProAPI.Objects.ListBlockedDates
       case "ListCalendar": return PTProAPI.Objects.ListCalendar
+      case "HostSuggested": return PTProAPI.Objects.HostSuggested
       case "AllBillingType": return PTProAPI.Objects.AllBillingType
       case "BillingType": return PTProAPI.Objects.BillingType
       case "SpecialPricingType": return PTProAPI.Objects.SpecialPricingType
