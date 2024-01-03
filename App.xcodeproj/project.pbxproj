@@ -356,6 +356,7 @@
 		766E83A32AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766E83A22AF4A79A001EBB84 /* PropertyGraphXAxisValueFormatter.swift */; };
 		7670CA362B3D4186005D9CE1 /* YouMayLikeCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7670CA352B3D4186005D9CE1 /* YouMayLikeCVC.swift */; };
 		7670CA392B3D6ABF005D9CE1 /* GetHostSuggestedQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7670CA382B3D6ABF005D9CE1 /* GetHostSuggestedQuery.graphql.swift */; };
+		7677F4372B3E8733001C1161 /* ManageCouponVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7677F4362B3E8733001C1161 /* ManageCouponVC.swift */; };
 		7682D8002B1396D000967ED9 /* ExploreSurroundingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7682D7FF2B1396D000967ED9 /* ExploreSurroundingsVC.swift */; };
 		7690ECA42B0DBB0000CF4CD9 /* Locator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7690ECA32B0DBB0000CF4CD9 /* Locator.swift */; };
 		76C1A5232ACFBF790031BE76 /* AffiliateSearchLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2EAD12ACAC473000E73FC /* AffiliateSearchLinkVC.swift */; };
@@ -1287,6 +1288,7 @@
 		7670CA352B3D4186005D9CE1 /* YouMayLikeCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouMayLikeCVC.swift; sourceTree = "<group>"; };
 		7670CA372B3D5FE4005D9CE1 /* getHostSuggested.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = getHostSuggested.graphql; sourceTree = "<group>"; };
 		7670CA382B3D6ABF005D9CE1 /* GetHostSuggestedQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetHostSuggestedQuery.graphql.swift; sourceTree = "<group>"; };
+		7677F4362B3E8733001C1161 /* ManageCouponVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageCouponVC.swift; sourceTree = "<group>"; };
 		767B90C12AFD4AC30089605C /* CreateCustomPlanRequest.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CreateCustomPlanRequest.graphql; sourceTree = "<group>"; };
 		7682D7FF2B1396D000967ED9 /* ExploreSurroundingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreSurroundingsVC.swift; sourceTree = "<group>"; };
 		7690ECA32B0DBB0000CF4CD9 /* Locator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locator.swift; sourceTree = "<group>"; };
@@ -2300,6 +2302,14 @@
 			path = Objects;
 			sourceTree = "<group>";
 		};
+		7677F4352B3E86FA001C1161 /* ManageCoupon */ = {
+			isa = PBXGroup;
+			children = (
+				7677F4362B3E8733001C1161 /* ManageCouponVC.swift */,
+			);
+			path = ManageCoupon;
+			sourceTree = "<group>";
+		};
 		76CEB1E32B36A5B000C057AC /* TryMe */ = {
 			isa = PBXGroup;
 			children = (
@@ -2686,6 +2696,7 @@
 		B54D9131223F996A003A4589 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7677F4352B3E86FA001C1161 /* ManageCoupon */,
 				76CEB1E32B36A5B000C057AC /* TryMe */,
 				765C67DC2AE3BB53000B6AE9 /* Components */,
 				765C67D32AE3BB26000B6AE9 /* Formatters */,
@@ -4444,6 +4455,7 @@
 				B56F3ACC22411A1E006AFEB7 /* LoginPageVC.swift in Sources */,
 				76CEB1E52B36A5DB00C057AC /* YouMayLikeVC.swift in Sources */,
 				B5390912229E6A0200FD6CF5 /* BookingsteptwoVC.swift in Sources */,
+				7677F4372B3E8733001C1161 /* ManageCouponVC.swift in Sources */,
 				766C07422AFFE0CB00E68E60 /* ConfirmReservationMutation.graphql.swift in Sources */,
 				B5EE96312257879A004E4A2D /* ShareListCell.swift in Sources */,
 				766C07A52AFFE0CB00E68E60 /* SpecialPricingType.graphql.swift in Sources */,

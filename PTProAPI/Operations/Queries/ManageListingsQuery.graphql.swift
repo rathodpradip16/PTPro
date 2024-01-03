@@ -8,7 +8,7 @@ extension PTProAPI {
     static let operationName: String = "ManageListings"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query ManageListings { ManageListings { __typename results { __typename id title city updatedAt coverPhoto isPublished isReady listApprovalStatus listPhotoName listPhotos { __typename id name } listingData { __typename basePrice currency } settingsData { __typename listsettings { __typename id itemName } } listingSteps { __typename id step1 step2 step3 } user { __typename userBanStatus } } status errorMessage } }"#
+        #"query ManageListings { ManageListings { __typename results { __typename id title city updatedAt coverPhoto isPublished isReady listPhotoName couponCode listApprovalStatus listPhotos { __typename id name } settingsData { __typename listsettings { __typename id itemName } } listingData { __typename currency } listingSteps { __typename id step1 step2 step3 } user { __typename userBanStatus } } status errorMessage } }"#
       ))
 
     public init() {}
@@ -60,11 +60,12 @@ extension PTProAPI {
             .field("coverPhoto", Int?.self),
             .field("isPublished", Bool?.self),
             .field("isReady", Bool?.self),
-            .field("listApprovalStatus", String?.self),
             .field("listPhotoName", String?.self),
+            .field("couponCode", Bool?.self),
+            .field("listApprovalStatus", String?.self),
             .field("listPhotos", [ListPhoto?]?.self),
-            .field("listingData", ListingData?.self),
             .field("settingsData", [SettingsDatum?]?.self),
+            .field("listingData", ListingData?.self),
             .field("listingSteps", ListingSteps?.self),
             .field("user", User?.self),
           ] }
@@ -76,11 +77,12 @@ extension PTProAPI {
           var coverPhoto: Int? { __data["coverPhoto"] }
           var isPublished: Bool? { __data["isPublished"] }
           var isReady: Bool? { __data["isReady"] }
-          var listApprovalStatus: String? { __data["listApprovalStatus"] }
           var listPhotoName: String? { __data["listPhotoName"] }
+          var couponCode: Bool? { __data["couponCode"] }
+          var listApprovalStatus: String? { __data["listApprovalStatus"] }
           var listPhotos: [ListPhoto?]? { __data["listPhotos"] }
-          var listingData: ListingData? { __data["listingData"] }
           var settingsData: [SettingsDatum?]? { __data["settingsData"] }
+          var listingData: ListingData? { __data["listingData"] }
           var listingSteps: ListingSteps? { __data["listingSteps"] }
           var user: User? { __data["user"] }
 
@@ -100,24 +102,6 @@ extension PTProAPI {
 
             var id: Int? { __data["id"] }
             var name: String? { __data["name"] }
-          }
-
-          /// ManageListings.Result.ListingData
-          ///
-          /// Parent Type: `ListingData`
-          struct ListingData: PTProAPI.SelectionSet {
-            let __data: DataDict
-            init(_dataDict: DataDict) { __data = _dataDict }
-
-            static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListingData }
-            static var __selections: [Apollo.Selection] { [
-              .field("__typename", String.self),
-              .field("basePrice", Double?.self),
-              .field("currency", String?.self),
-            ] }
-
-            var basePrice: Double? { __data["basePrice"] }
-            var currency: String? { __data["currency"] }
           }
 
           /// ManageListings.Result.SettingsDatum
@@ -152,6 +136,22 @@ extension PTProAPI {
               var id: Int? { __data["id"] }
               var itemName: String? { __data["itemName"] }
             }
+          }
+
+          /// ManageListings.Result.ListingData
+          ///
+          /// Parent Type: `ListingData`
+          struct ListingData: PTProAPI.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
+
+            static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListingData }
+            static var __selections: [Apollo.Selection] { [
+              .field("__typename", String.self),
+              .field("currency", String?.self),
+            ] }
+
+            var currency: String? { __data["currency"] }
           }
 
           /// ManageListings.Result.ListingSteps

@@ -97,10 +97,10 @@ class YouMayLikeVC: UIViewController,UICollectionViewDelegate,UICollectionViewDa
             self.sliderView.maxValue = CGFloat(price_value1)
             self.minvalue = Int(restricted_price!)
             self.maxValue = Int(price_value1)
-            
-            self.sliderView.selectedMinValue = Utility.shared.priceRangeArray[0] as! CGFloat
-            self.sliderView.selectedMaxValue = Utility.shared.priceRangeArray[1] as! CGFloat
-            self.priceRangeLabel.text = "\(currencysymbol!)\(Utility.shared.priceRangeArray[0] as! Int) - \(currencysymbol!)\(Utility.shared.priceRangeArray[1] as! Int)"
+
+            self.sliderView.selectedMinValue = CGFloat(self.minvalue)
+            self.sliderView.selectedMaxValue = CGFloat(self.maxValue)
+            self.priceRangeLabel.text = "\(currencysymbol!)\(self.minvalue) - \(currencysymbol!)\(self.maxValue)"
             
         }else{
             let currencysymbol = Utility.shared.getSymbol(forCurrencyCode:Utility.shared.currencyvalue_from_API_base)
@@ -178,8 +178,8 @@ class YouMayLikeVC: UIViewController,UICollectionViewDelegate,UICollectionViewDa
         NoViewNoresult.textColor = UIColor(named: "Title_Header")
        // NoListingFoundTitle.text = "\((Utility.shared.getLanguage()?.value(forKey:"NoListingFound")) ?? "No listing found")"
         noViewFirstText.text = "\((Utility.shared.getLanguage()?.value(forKey:"tryadjustingsearch"))!)"
-         noViewSecondText.text = "\((Utility.shared.getLanguage()?.value(forKey:"changefiltersdates"))!)"
-         NoViewthirdText.text = "\((Utility.shared.getLanguage()?.value(forKey:"specificaddresscity"))!)"
+         noViewSecondText.text = "Change your filters."
+         NoViewthirdText.text = "Search for a specific range, ratings."
         error_label.textColor =  UIColor(named: "Title_Header")
         retry_button.setTitleColor(Theme.PRIMARY_COLOR, for: .normal)
         
@@ -223,11 +223,13 @@ class YouMayLikeVC: UIViewController,UICollectionViewDelegate,UICollectionViewDa
     }
     
     @IBAction func onClickCancel(_ sender: UIButton) {
-        self.viewFilter.isHidden = false
-        self.viewFilterBG.isHidden = false
+        self.viewFilter.isHidden = true
+        self.viewFilterBG.isHidden = true
     }
     
     @IBAction func onClickApply(_ sender: UIButton) {
+        self.viewFilter.isHidden = true
+        self.viewFilterBG.isHidden = true
         var priceRange:[Int] = []
         if minvalue == 0 && maxValue == 10000{
             priceRange = []
@@ -238,7 +240,8 @@ class YouMayLikeVC: UIViewController,UICollectionViewDelegate,UICollectionViewDa
     }
 
     @IBAction func onFilter(_ sender: UIButton) {
-
+        self.viewFilter.isHidden = false
+        self.viewFilterBG.isHidden = false
     }
     
     @IBAction func onClickPlaceSelection(_ sender: UIButton) {
@@ -504,9 +507,10 @@ class YouMayLikeVC: UIViewController,UICollectionViewDelegate,UICollectionViewDa
                         self.arrGetHosted = results as! [PTProAPI.GetHostSuggestedQuery.Data.GetHostSuggested.Result]
                         self.NoresultView.isHidden = true
                         self.lblLocation.text = list.aaddress
-                    }else{
-                        self.arrGetHosted.removeAll()
-                        self.NoresultView.isHidden = false
+                        if results.count == 0{
+                            self.arrGetHosted.removeAll()
+                            self.NoresultView.isHidden = false
+                        }
                     }
                     self.cvLinkSearch.setContentOffset(.zero, animated: true)
                     self.cvLinkSearch.reloadData()

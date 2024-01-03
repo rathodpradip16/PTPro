@@ -69,6 +69,8 @@ class Theme {
     
     static let Listing_Show_Review_Btn = UIColor().hexValue(hex: "F0F0F0")
     
+    static let ThemePurpleColor = UIColor().hexValue(hex:"8c52ff")
+
     //releasev3.3_colors
     
     static let Title_Header = UIColor().hexValue(hex: "131313")

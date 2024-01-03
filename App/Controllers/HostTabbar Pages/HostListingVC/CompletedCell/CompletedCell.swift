@@ -30,6 +30,11 @@ class CompletedCell: UITableViewCell {
     @IBOutlet var verificationLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var previewBtn: UIButton!
+    @IBOutlet var btnManageCoupon: UIButton!
+
+    @IBOutlet var couponBottomConstant: NSLayoutConstraint!
+    @IBOutlet var couponHeightConstant: NSLayoutConstraint!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -72,14 +77,14 @@ class CompletedCell: UITableViewCell {
         
 //        self.listImage.layer.cornerRadius = 4.0
         self.listImage.layer.masksToBounds = true
-        self.publishBtn.layer.cornerRadius = 16
+        self.publishBtn.layer.cornerRadius = 18
         self.publishBtn.layer.masksToBounds = true
 //        self.previewBtn.layer.borderWidth = 1.0
 //        self.previewBtn.layer.borderColor = Theme.Button_BG.cgColor
         self.previewBtn.layer.cornerRadius = 4.0
         self.previewBtn.layer.masksToBounds = true
         
-        self.editBtn.layer.cornerRadius =  self.editBtn.frame.size.height/2
+        self.editBtn.layer.cornerRadius =  18
         self.editBtn.layer.masksToBounds = true
         self.editBtn.layer.borderColor = UIColor.clear.cgColor
         self.editBtn.layer.borderWidth = 1
@@ -90,8 +95,8 @@ class CompletedCell: UITableViewCell {
         self.nextimage.tintColor =  UIColor(named: "Title_Header")
          previewBtn.setTitle(" \((Utility.shared.getLanguage()?.value(forKey:"more"))!) ", for:.normal)
         progressBarView.progressTintColor = Theme.PRIMARY_COLOR
-        publishBtn.backgroundColor = Theme.Button_BG
-       // editBtn.backgroundColor = Theme.Button_BG
+        publishBtn.backgroundColor = Theme.ThemePurpleColor
+        editBtn.backgroundColor = Theme.ThemePurpleColor
         previewBtn.setTitleColor(Theme.PRIMARY_COLOR, for: .normal)
         publishBtn.titleLabel?.font = UIFont(name: APP_FONT_MEDIUM, size: 14)
         
@@ -99,7 +104,7 @@ class CompletedCell: UITableViewCell {
         submitLabel.font = UIFont(name: APP_FONT_MEDIUM, size: 14)
         verificationLabel.font = UIFont(name: APP_FONT_MEDIUM, size: 13)
         submitLabel.textColor = UIColor.clear
-        editBtn.setTitleColor(Theme.Button_BG, for: .normal)
+        editBtn.setTitleColor(Theme.ThemePurpleColor, for: .normal)
          previewBtn.titleLabel?.font = UIFont(name: APP_FONT, size: 13)
         titleLabel.font = UIFont(name: APP_FONT_MEDIUM, size: 16)
          updateDateLabel.font = UIFont(name: APP_FONT, size: 13)
@@ -121,7 +126,7 @@ class CompletedCell: UITableViewCell {
         self.submitLabel.layer.borderColor = UIColor.clear.cgColor
         self.submitLabel.layer.borderWidth = 1
         
-        self.editBtn.layer.cornerRadius =  self.editBtn.frame.size.height/2
+        self.editBtn.layer.cornerRadius =  18
         self.editBtn.layer.masksToBounds = true
         self.editBtn.layer.borderColor = Theme.Button_BG.cgColor
         self.editBtn.layer.borderWidth = 1

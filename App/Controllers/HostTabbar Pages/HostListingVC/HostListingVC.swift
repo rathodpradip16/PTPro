@@ -779,21 +779,21 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 if let status = completed_List_Array[indexPath.row].listApprovalStatus {
         if(Utility.shared.listingApproval == "required" && completed_List_Array[indexPath.row].listApprovalStatus! == "pending")
        {
-            return 300
+            return 376
         }
                     else {
-                        return 275
+                        return 351
                     }
                 }
                 else {
-                    return 275
+                    return 351
                 }
             }
             else {
-                return 275
+                return 351
             }
         }
-        return 275
+        return 283
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -879,8 +879,9 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 //            longPressGesture.delegate = self
 //            cell.addGestureRecognizer(longPressGesture)
             //becomeListingTable.addGestureRecognizer(longPressGesture)
-            
-
+            cell.couponBottomConstant.constant = 0
+            cell.couponHeightConstant.constant = 0
+            cell.btnManageCoupon.setTitle("", for: .normal)
             return cell
         }
         else{
@@ -1029,17 +1030,29 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 //                cell.heightConstant.constant = 20
 //                cell.bottomConstant.constant = 10
                 cell.editBtn.removeTarget(self, action: nil, for: .touchUpInside)
-               // cell.editBtn.backgroundColor = Theme.Button_BG.withAlphaComponent(0.3)
+                cell.editBtn.backgroundColor = Theme.ThemePurpleColor
 //                cell.editBtn.isUserInteractionEnabled = false
             } else {
                // cell.editBtn.isHidden = false
                 cell.editBtn.addTarget(self, action: #selector(PublishBtnTapped),for:.touchUpInside)
-               // cell.editBtn.backgroundColor = Theme.Button_BG.withAlphaComponent(1.0)
+                cell.editBtn.backgroundColor = Theme.ThemePurpleColor
                 cell.editBtn.isUserInteractionEnabled = true
             }
            
             cell.previewBtn.addTarget(self, action: #selector(previewBtnTapped),for:.touchUpInside)
             cell.deleteBtn.addTarget(self, action: #selector(deleteBtnTapped),for:.touchUpInside)
+            
+            cell.btnManageCoupon.addTarget(self, action: #selector(manageCouponTapped),for:.touchUpInside)
+            cell.btnManageCoupon.tag = indexPath.row
+           
+            if let status = completed_List_Array[indexPath.row].couponCode,status{
+                cell.btnManageCoupon.setTitle("Manage Coupon", for: .normal)
+            }else{
+                cell.btnManageCoupon.setTitle("Add Coupon", for: .normal)
+            }
+
+            cell.couponBottomConstant.constant = 16
+            cell.couponHeightConstant.constant = 40
             return cell
         }
     }
@@ -1154,6 +1167,26 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             }
         }
     }
+    
+    @objc func manageCouponTapped(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "ManageCouponVC") as! ManageCouponVC
+        if(!inprogressTapped) {
+            if(completed_List_Array.count > 0)
+            {
+                if let couponcode = completed_List_Array[sender.tag].couponCode,couponcode{
+                    vc.isAddCoupon = false
+                }else{
+                    vc.isAddCoupon = true
+                }
+                vc.listID = "\(completed_List_Array[sender.tag].id != nil ? completed_List_Array[sender.tag].id! : 0)"
+                vc.modalPresentationStyle = .fullScreen
+                self.view.window?.rootViewController?.present(vc, animated: false, completion: nil)
+            }
+        }
+    }
+
+    
     
      @objc func PublishBtnTapped(_ sender: UIButton)
     {

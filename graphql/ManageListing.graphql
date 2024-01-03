@@ -1,3 +1,4 @@
+#ManageListings
 query ManageListings{
 ManageListings {
 results {
@@ -8,22 +9,21 @@ updatedAt
 coverPhoto
 isPublished
 isReady
-listApprovalStatus
-
 listPhotoName
+couponCode
+listApprovalStatus
 listPhotos{
 id
 name
-}
-listingData {
-basePrice
-currency
 }
 settingsData {
 listsettings {
 id
 itemName
 }
+}
+listingData{
+currency
 }
 listingSteps {
 id
@@ -37,8 +37,10 @@ userBanStatus
 }
 status
 errorMessage
+
 }
 }
+
 
 
 mutation managePublishStatus($listId: Int!, $action: String!) {
