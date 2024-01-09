@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ReceiptVC" customModule="App" customModuleProvider="target">
             <connections>
+                <outlet property="btnPrint" destination="IDq-O6-nfR" id="zRw-K8-ImG"/>
+                <outlet property="lblCustomerReceipt" destination="t9N-FS-zZp" id="COt-yV-XNs"/>
                 <outlet property="receiptTable" destination="Cwe-Kh-VCl" id="mzA-lo-Bfj"/>
                 <outlet property="topView" destination="AVb-Yb-MqX" id="Qgg-2S-MCj"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -19,25 +21,57 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AVb-Yb-MqX">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AVb-Yb-MqX">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="70x-zM-SdJ">
-                            <rect key="frame" x="15" y="30" width="45" height="45"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="70x-zM-SdJ">
+                            <rect key="frame" x="-8" y="10" width="60" height="60"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="60" id="dYz-BT-wfF"/>
+                                <constraint firstAttribute="width" constant="60" id="eTF-Sw-lMi"/>
+                            </constraints>
                             <inset key="imageEdgeInsets" minX="14" minY="14" maxX="14" maxY="14"/>
                             <state key="normal" image="back_black"/>
                             <connections>
                                 <action selector="backbtnTapped:" destination="-1" eventType="touchUpInside" id="GVI-dp-4Sh"/>
                             </connections>
                         </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Customer Receipt" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t9N-FS-zZp">
+                            <rect key="frame" x="52" y="28" width="227" height="24"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IDq-O6-nfR">
+                            <rect key="frame" x="287" y="22" width="80" height="36"/>
+                            <color key="backgroundColor" red="0.0" green="0.53333333333333333" blue="0.51764705882352935" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="80" id="2Ab-aa-Bc2"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="PRINT">
+                                <color key="titleColor" red="0.96862745100000003" green="0.97647058819999999" blue="0.99607843139999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </state>
+                            <connections>
+                                <action selector="onClickPrint:" destination="-1" eventType="touchUpInside" id="dTJ-2Y-NlI"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="IDq-O6-nfR" firstAttribute="centerY" secondItem="AVb-Yb-MqX" secondAttribute="centerY" id="GSZ-yw-uGp"/>
+                        <constraint firstItem="70x-zM-SdJ" firstAttribute="centerY" secondItem="AVb-Yb-MqX" secondAttribute="centerY" id="NJP-2H-JJp"/>
+                        <constraint firstItem="t9N-FS-zZp" firstAttribute="leading" secondItem="70x-zM-SdJ" secondAttribute="trailing" id="cUT-eI-rdE"/>
+                        <constraint firstItem="IDq-O6-nfR" firstAttribute="leading" secondItem="t9N-FS-zZp" secondAttribute="trailing" constant="8" id="hv8-Z0-zAk"/>
+                        <constraint firstItem="t9N-FS-zZp" firstAttribute="centerY" secondItem="70x-zM-SdJ" secondAttribute="centerY" id="hvH-zq-nEb"/>
+                        <constraint firstAttribute="trailing" secondItem="IDq-O6-nfR" secondAttribute="trailing" constant="8" id="kPN-Bf-aAZ"/>
+                        <constraint firstItem="70x-zM-SdJ" firstAttribute="leading" secondItem="AVb-Yb-MqX" secondAttribute="leading" constant="-8" id="rCu-pT-5Zh"/>
+                        <constraint firstAttribute="height" constant="80" id="sPY-Xu-GC6"/>
+                    </constraints>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Cwe-Kh-VCl">
-                    <rect key="frame" x="0.0" y="85" width="375" height="582"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Cwe-Kh-VCl">
+                    <rect key="frame" x="0.0" y="80" width="375" height="587"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Pfq-DM-0u7"/>
@@ -46,6 +80,15 @@
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="AVb-Yb-MqX" secondAttribute="trailing" id="0hY-Pq-wLt"/>
+                <constraint firstAttribute="trailing" secondItem="Cwe-Kh-VCl" secondAttribute="trailing" id="363-IB-6YD"/>
+                <constraint firstItem="Cwe-Kh-VCl" firstAttribute="top" secondItem="AVb-Yb-MqX" secondAttribute="bottom" id="AjZ-rS-odQ"/>
+                <constraint firstAttribute="bottom" secondItem="Cwe-Kh-VCl" secondAttribute="bottom" id="P8N-CG-ujx"/>
+                <constraint firstItem="AVb-Yb-MqX" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="T71-Qd-Ecx"/>
+                <constraint firstItem="AVb-Yb-MqX" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="topMargin" id="ZDT-al-sf9"/>
+                <constraint firstItem="Cwe-Kh-VCl" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="sd6-w0-AjS"/>
+            </constraints>
             <point key="canvasLocation" x="138" y="119"/>
         </view>
     </objects>

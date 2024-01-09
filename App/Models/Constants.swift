@@ -39,14 +39,27 @@ var BASE_URL : String {
     get {
         switch environment {
         case .development:
-            return "http://ptpro.paperbirdtech.com:3000"
+            return "https://ptbeta.xyz"
         case .production:
-            return "http://ptpro.paperbirdtech.com:3000"
+            return "https://ptbeta.xyz"
         case .localhost:
-            return "http://ptpro.paperbirdtech.com:3000"
+            return "https://ptbeta.xyz"
         }
     }
 }
+
+//var BASE_URL : String {
+//    get {
+//        switch environment {
+//        case .development:
+//            return "http://ptpro.paperbirdtech.com:3000"
+//        case .production:
+//            return "http://ptpro.paperbirdtech.com:3000"
+//        case .localhost:
+//            return "http://ptpro.paperbirdtech.com:3000"
+//        }
+//    }
+//}
 
 
 
@@ -139,14 +152,29 @@ var graphQLEndpoint : String {
     get {
         switch environment {
         case .development:
-            return "http://ptpro.paperbirdtech.com:4000/graphql"
+            return "https://ptbeta.xyz/api/graphql"
         case .production:
-            return "http://ptpro.paperbirdtech.com:4000/graphql"
+            return "https://ptbeta.xyz/api/graphql"
         case .localhost:
-            return "http://ptpro.paperbirdtech.com:4000/graphql"
+            return "https://ptbeta.xyz/api/graphql"
         }
     }
 }
+
+//var graphQLEndpoint : String {
+//    get {
+//        switch environment {
+//        case .development:
+//            return "http://ptpro.paperbirdtech.com:4000/graphql"
+//        case .production:
+//            return "http://ptpro.paperbirdtech.com:4000/graphql"
+//        case .localhost:
+//            return "http://ptpro.paperbirdtech.com:4000/graphql"
+//        }
+//    }
+//}
+
+
 
 let GOOGLE_CLIENT_ID = "1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at.apps.googleusercontent.com"
 

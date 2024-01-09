@@ -119,11 +119,12 @@ class OrderSummaryVC: UIViewController {
                                 let url = URL(string: "\(BASE_URL)\(path)")
                                 let pdfData = try? Data.init(contentsOf: url!)
                                 let resourceDocPath = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)).last! as URL
-                                let pdfNameFromUrl = "subscription.pdf"
+                                let strDate = Date().stringFromFormat("ddMMyyyhhmmss")
+                                let pdfNameFromUrl = "subscription\(strDate).pdf"
                                 let actualPath = resourceDocPath.appendingPathComponent(pdfNameFromUrl)
                                 do {
                                     try pdfData?.write(to: actualPath, options: .atomic)
-                                    print("pdf successfully saved!")
+                                    self.view.makeToast("Pdf successfully saved! to Files")
                                 } catch {
                                     print("Pdf could not be saved")
                                 }

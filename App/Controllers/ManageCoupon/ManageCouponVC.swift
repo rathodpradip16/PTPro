@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QuartzCore
 
 class ManageCouponVC: UIViewController {
     
@@ -14,6 +15,7 @@ class ManageCouponVC: UIViewController {
     @IBOutlet weak var viewSubTitle: UIView!
     @IBOutlet weak var viewTab: UIView!
     @IBOutlet weak var viewDelete: UIView!
+    @IBOutlet weak var viewDeleteCoupon: UIView!
 
     @IBOutlet weak var viewSlider: UIView!
     @IBOutlet weak var viewSliderWidth: NSLayoutConstraint!
@@ -70,11 +72,27 @@ class ManageCouponVC: UIViewController {
             viewTopHeader.isHidden = false
             self.lblAddCoupon.text = "Add Coupon"
         }else{
+            self.viewSliderWidth.constant = 110
+            self.viewSliderLeading.constant =  20
+            self.viewCoupon.isHidden = false
+            self.viewSubTitle.isHidden = false
+            self.viewDelete.isHidden = true
+
             viewMainTitle.isHidden = false
             btnBackSub.isHidden = true
             viewTopHeader.isHidden = true
             self.lblAddCoupon.text = "Manage Coupon"
+            self.getCouponCodeAPI()
         }
+        
+        var yourViewBorder = CAShapeLayer()
+        yourViewBorder.strokeColor = UIColor.black.cgColor
+        yourViewBorder.lineDashPattern = [2, 2]
+        yourViewBorder.frame = viewDeleteCoupon.bounds
+        yourViewBorder.fillColor = nil
+        yourViewBorder.path = UIBezierPath(rect: viewDeleteCoupon.bounds).cgPath
+        viewDeleteCoupon.layer.addSublayer(yourViewBorder)
+        btnDelete.tintColor = .red
     }
     
     func initialiseDatePicker(){
@@ -167,17 +185,26 @@ class ManageCouponVC: UIViewController {
     }
     
     @IBAction func onClickDeleteTab(_ sender: Any) {
-        
+        UIView.animate(withDuration: 0.5) {
+            self.viewSliderWidth.constant = 60
+            self.viewSliderLeading.constant = 138
+            self.viewCoupon.isHidden = true
+            self.viewSubTitle.isHidden = true
+            self.viewDelete.isHidden = false
+        }
     }
     
     @IBAction func onClickAddCoupon(_ sender: Any) {
-        viewSliderWidth.constant = 20
-        viewSliderLeading.constant = 110
+        self.viewSubTitle.isHidden = false
+        UIView.animate(withDuration: 0.5) {
+            self.viewSliderWidth.constant = 110
+            self.viewSliderLeading.constant =  20
+            self.viewCoupon.isHidden = false
+            self.viewDelete.isHidden = true
+        }
     }
     
     @IBAction func onClickDeleteCoupon(_ sender: Any) {
-        viewSliderWidth.constant = 60
-        viewSliderLeading.constant = 138
     }
     
     @IBAction func onClickBack(_ sender: Any) {
@@ -193,7 +220,7 @@ class ManageCouponVC: UIViewController {
             self.view.makeToast("Please Enter Start Date")
         }else if(txtCodeEndDate.isEmpty()){
             self.view.makeToast("Please Enter End Date")
-        }else if(validate(textView: txtPromoCodeDesc)){
+        }else if(!validate(textView: txtPromoCodeDesc)){
             self.view.makeToast("Please Enter Description")
         }else{
             self.createCouponCode()
@@ -202,16 +229,16 @@ class ManageCouponVC: UIViewController {
     
     func createCouponCode(){
         let createcouponcodeMutation = PTProAPI.CreatecouponcodeMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), listId: .some(Int(listID) ?? 0), couponCode: .some(txtPromoCodeName.text ?? ""), couponType: .some("subscription"), discount: .some(Double(txtPromoCodeDiscount.text ?? "0") ?? 0), startDate: .some(selectedStartDate), endDate: .some(selectedEndDate), description: .some(txtPromoCodeDesc.text), userType: .some("admin"))
-            Network.shared.apollo_headerClient.perform(mutation: createcouponcodeMutation){  response in
-                switch response {
-                case .success(let result):
-                    if let data = result.data?.createcouponcode?.status,data == 200 {
-                        self.dismiss(animated: true)
-                    }
-                case .failure(let error):
-                    self.view.makeToast(error.localizedDescription)
+        Network.shared.apollo_headerClient.perform(mutation: createcouponcodeMutation){  response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.createcouponcode?.status,data == 200 {
+                    self.dismiss(animated: true)
                 }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
             }
+        }
     }
     
     func getCouponCodeAPI(){
@@ -222,20 +249,22 @@ class ManageCouponVC: UIViewController {
                     if let status = result.data?.getcouponcode?.status,status == 200 {
                         if let data = result.data,let getcouponcodeData = data.getcouponcode,let arrCouponData = getcouponcodeData.data,arrCouponData.count != 0,let cData = arrCouponData.first{
                             if let couponData = cData{
-                                self.txtPromoCodeName.text = couponData.couponCode ?? ""
-                                self.txtPromoCodeDiscount.text = "\(couponData.discount ?? 0.0)"
-                                
-                                let formatter = DateFormatter()
-                                formatter.dateFormat = "yyyy-MM-dd"
-                                self.selectedStartDate = couponData.startDate ?? ""
-                                self.txtCodeStartDate.text = couponData.startDate
-                                self.datePickerStartDate?.date = formatter.date(from:  self.selectedStartDate) ?? Date()
-                                
-                                self.selectedEndDate = couponData.endDate ?? ""
-                                self.txtCodeEndDate.text = couponData.endDate
-                                self.datePickerEndDate?.date = formatter.date(from:  self.selectedEndDate)  ?? Date()
-
-                                self.txtPromoCodeDesc.text = couponData.description
+                                DispatchQueue.main.async{
+                                    self.txtPromoCodeName.text = couponData.couponCode ?? ""
+                                    self.txtPromoCodeDiscount.text = "\(couponData.discount ?? 0.0)"
+                                    
+                                    let formatter = DateFormatter()
+                                    formatter.dateFormat = "yyyy-MM-dd"
+                                    self.selectedStartDate = couponData.startDate ?? ""
+                                    self.txtCodeStartDate.text = couponData.startDate
+                                    self.datePickerStartDate?.date = formatter.date(from:  self.selectedStartDate) ?? Date()
+                                    
+                                    self.selectedEndDate = couponData.endDate ?? ""
+                                    self.txtCodeEndDate.text = couponData.endDate
+                                    self.datePickerEndDate?.date = formatter.date(from:  self.selectedEndDate)  ?? Date()
+                                    
+                                    self.txtPromoCodeDesc.text = couponData.description
+                                }
                             }
                         }
                     } else {

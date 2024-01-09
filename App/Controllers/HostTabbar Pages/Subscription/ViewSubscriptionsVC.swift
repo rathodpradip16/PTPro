@@ -87,23 +87,49 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
     }
     
     private func configureCollectionView() {
-        mainViewHeight.constant = view.bounds.height * 0.28
+        mainViewHeight.constant = 250  //* 0.35
         // Configure the required item size (REQURED)
         centerFlowLayout.itemSize = CGSize(
             width: view.bounds.width * 0.9,
-            height:  view.bounds.height * 0.28
-        )
-        
+            height: 250)
         
         centerFlowLayout.animationMode = YZCenterFlowLayoutAnimation.scale(sideItemScale: 0.6, sideItemAlpha: 0.6, sideItemShift: 0.0)
+                
+        view1.layer.masksToBounds = false
+        view1.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
+        view1.layer.shadowOpacity = 0.5
+        view1.layer.shadowOffset = CGSize(width: 0, height: 0)
+        view1.layer.shadowRadius = 2.0
         
-        view1.dropShadow(color: .lightGray, opacity: 1, offSet: CGSize(width: -1, height: 1), radius: 3, scale: true)
-        view2.dropShadow(color: .lightGray, opacity: 1, offSet: CGSize(width: -1, height: 1), radius: 3, scale: true)
-        view3.dropShadow(color: .lightGray, opacity: 1, offSet: CGSize(width: -1, height: 1), radius: 3, scale: true)
-        view4.dropShadow(color: .lightGray, opacity: 1, offSet: CGSize(width: -1, height: 1), radius: 3, scale: true)
-        view5.dropShadow(color: .lightGray, opacity: 1, offSet: CGSize(width: -1, height: 1), radius: 3, scale: true)
-        view6.dropShadow(color: .lightGray, opacity: 1, offSet: CGSize(width: -1, height: 1), radius: 3, scale: true)
+        view2.layer.masksToBounds = false
+        view2.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
+        view2.layer.shadowOpacity = 0.5
+        view2.layer.shadowOffset = CGSize(width: 0, height: 0)
+        view2.layer.shadowRadius = 2.0
+
+        view3.layer.masksToBounds = false
+        view3.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
+        view3.layer.shadowOpacity = 0.5
+        view3.layer.shadowOffset = CGSize(width: 0, height: 0)
+        view3.layer.shadowRadius = 2.0
+
+        view4.layer.masksToBounds = false
+        view4.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
+        view4.layer.shadowOpacity = 0.5
+        view4.layer.shadowOffset = CGSize(width: 0, height: 0)
+        view4.layer.shadowRadius = 2.0
+
+        view5.layer.masksToBounds = false
+        view5.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
+        view5.layer.shadowOpacity = 0.5
+        view5.layer.shadowOffset = CGSize(width: 0, height: 0)
+        view5.layer.shadowRadius = 2.0
         
+        view6.layer.masksToBounds = false
+        view6.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
+        view6.layer.shadowOpacity = 0.5
+        view6.layer.shadowOffset = CGSize(width: 0, height: 0)
+        view6.layer.shadowRadius = 2.0
     }
     
     func updateBenifitData(indexPath:Int){
@@ -216,6 +242,11 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
             case .success(let result):
                 if let data = result.data?.createCustomPlanRequest?.status,data == 200 {
                     self.view.makeToast(result.data?.createCustomPlanRequest?.message)
+                    self.txtFullName.text = ""
+                    self.txtEmail.text = ""
+                    self.txtCountry.text = ""
+                    self.txtPhoneNumber.text = ""
+                    self.txtNoOfUnitsList.text = ""
                 } else {
                     self.view.makeToast(result.data?.createCustomPlanRequest?.message)
                 }
@@ -253,10 +284,8 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
 //        cell.btnSegment.backgroundColor = Theme.subSegmentBgColor
 
         cell.btnSegment.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
-        switch arrPlans[indexPath.row].title{
+        switch arrPlans[indexPath.row].title ?? ""{
         case "Economy":
-            cell.viewSegment.isHidden = false
-            cell.viewListNow.isHidden = false
             cell.lblMemberShipCard.text = "MEMBERSHIP CARD"
             
             cell.mainView.backgroundColor = Theme.subEconomyColor
@@ -270,8 +299,6 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
             cell.imgSmallIcon.tintColor = Theme.subEconomyColor
             break
         case "Recommended":
-            cell.viewSegment.isHidden = false
-            cell.viewListNow.isHidden = false
             cell.lblMemberShipCard.text = "MEMBERSHIP CARD"
             
             cell.mainView.backgroundColor = Theme.subRecommendedColor
@@ -284,8 +311,6 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
             cell.imgBigIcon.image = UIImage(named: "subDiamondBig")
             break
         case "Gold":
-            cell.viewSegment.isHidden = false
-            cell.viewListNow.isHidden = false
             cell.lblMemberShipCard.text = "MEMBERSHIP CARD"
             
             cell.mainView.backgroundColor = Theme.subGoldColor
@@ -298,8 +323,6 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
             cell.imgBigIcon.image = UIImage(named: "")
             break
         case "Platinum":
-            cell.viewSegment.isHidden = false
-            cell.viewListNow.isHidden = false
             cell.lblMemberShipCard.text = "MEMBERSHIP CARD"
             
             cell.mainView.backgroundColor = Theme.subPlatinumColor
@@ -328,29 +351,34 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
             cell.imgSmallIcon.image = UIImage(named: "crownSmall")?.withTintColor(Theme.subCustomTitleColor)
             cell.imgBigIcon.image = UIImage(named: "crownBig")
             break
-        case .none:
-            break
-        case .some(_):
+        default:
             break
         }
-        if arrPlans[indexPath.row].title != "CustomPlan"{
-            if arrPlans[indexPath.row].expiryDate != ""{
-                cell.imgBigIcon.image = UIImage(named: "")
-                cell.viewSegment.isHidden = true
-                cell.viewListNow.isHidden = true
-                cell.lblActiveSub.text = "✓ You're currently our member"
-                if let strDate = arrPlans[indexPath.row].expiryDate?.components(separatedBy: ","),strDate.count != 0{
-                    cell.lblExpDate.text = "Exp:\(strDate[0])"
-                }else{
-                    cell.lblExpDate.text = arrPlans[indexPath.row].expiryDate
-                }
+        print("arrPlans[indexPath.row].title = \(arrPlans[indexPath.row].title ?? "")")
+        print("arrPlans[indexPath.row].expiryDate = \(arrPlans[indexPath.row].expiryDate ?? "")")
+
+        if let strTitle = arrPlans[indexPath.row].title,strTitle == "CustomPlan"{
+            cell.viewSegment.isHidden = true
+            cell.viewListNow.isHidden = true
+            cell.lblExpDate.text = ""
+            cell.lblActiveSub.text = ""
+        }else if let intStatus = arrPlans[indexPath.row].status,intStatus == 1{
+            cell.imgBigIcon.image = UIImage(named: "")
+            cell.viewSegment.isHidden = true
+            cell.viewListNow.isHidden = true
+            cell.lblActiveSub.text = "✓ You're currently our member"
+            if let strDate = arrPlans[indexPath.row].expiryDate?.components(separatedBy: ","),strDate.count != 0{
+                cell.lblExpDate.text = "Exp:\(strDate[0])"
             }else{
-                cell.viewSegment.isHidden = false
-                cell.viewListNow.isHidden = false
-                cell.lblExpDate.text = ""
-                cell.lblActiveSub.text = ""
+                cell.lblExpDate.text = arrPlans[indexPath.row].expiryDate
             }
+        }else{
+            cell.viewSegment.isHidden = false
+            cell.viewListNow.isHidden = false
+            cell.lblExpDate.text = ""
+            cell.lblActiveSub.text = ""
         }
+        
         return cell
     }
     
@@ -436,22 +464,5 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
                 self.lbl6.alpha = 1.0
             }
         }
-    }
-}
-
-
-extension UIView {
-    
-    // OUTPUT 2
-    func dropShadow(color: UIColor, opacity: Float = 0.5, offSet: CGSize, radius: CGFloat = 1, scale: Bool = true) {
-        layer.masksToBounds = false
-        layer.shadowColor = color.cgColor
-        layer.shadowOpacity = opacity
-        layer.shadowOffset = offSet
-        layer.shadowRadius = radius
-        
-        layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
-        layer.shouldRasterize = true
-        layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }
 }

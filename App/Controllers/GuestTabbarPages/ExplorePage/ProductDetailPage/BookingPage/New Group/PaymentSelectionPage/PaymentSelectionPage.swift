@@ -99,8 +99,17 @@ class PaymentSelectionPage: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         DispatchQueue.main.async {
-            self.viewSubPlanDetails.dropShadow(color: .lightGray, opacity: 1, offSet: CGSize(width: -1, height: 1), radius: 3, scale: true)
-            self.viewCouponApplied.dropShadow(color: .lightGray, opacity: 1, offSet: CGSize(width: -1, height: 1), radius: 3, scale: true)
+            self.viewSubPlanDetails.layer.masksToBounds = false
+            self.viewSubPlanDetails.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
+            self.viewSubPlanDetails.layer.shadowOpacity = 1.0
+            self.viewSubPlanDetails.layer.shadowOffset = CGSize(width: 0, height: 0)
+            self.viewSubPlanDetails.layer.shadowRadius = 3.0
+            
+            self.viewCouponApplied.layer.masksToBounds = false
+            self.viewCouponApplied.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
+            self.viewCouponApplied.layer.shadowOpacity = 1.0
+            self.viewCouponApplied.layer.shadowOffset = CGSize(width: 0, height: 0)
+            self.viewCouponApplied.layer.shadowRadius = 3.0
         }
     }
     
@@ -139,7 +148,7 @@ class PaymentSelectionPage: UIViewController {
             listId = viewListingArray?.id as? Int ?? 0
         }
         
-        let getcouponuseQuery = PTProAPI.GetcouponuseQuery(userId: .some(userId ?? ""), couponCode: .some(self.couponData?.couponCode ?? ""), listId: .some(listId), planId: .some(intPlanId), isforplan: .some(true))
+        let getcouponuseQuery = PTProAPI.GetcouponuseQuery(userId: .some(userId ?? ""), couponCode: .some(self.couponData?.couponCode ?? ""), listId: .some(listId), planId: .some(intPlanId), isforplan: isFromSubscriptionPage ? .some(true): .some(false))
         
         Network.shared.apollo_headerClient.fetch(query: getcouponuseQuery) { response in
             self.lottieView.isHidden = true

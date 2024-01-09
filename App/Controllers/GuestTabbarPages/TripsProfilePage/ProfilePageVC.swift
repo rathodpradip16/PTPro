@@ -334,7 +334,7 @@ func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> 
         if let stepInfo = Utility.shared.GetAffiliateUserStep?.stepInfo as? String,stepInfo == StepInfo.Success.rawValue{
             return 1
         }
-        return 4
+        return 1
     case 3:
         if(Utility.shared.host_message_isfromHost){
             return 2

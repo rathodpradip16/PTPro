@@ -14,7 +14,8 @@ import MKToolTip
 @available(iOS 11.0, *)
 class ReceiptVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIDocumentInteractionControllerDelegate,UIPrintInteractionControllerDelegate{
     
-    
+    @IBOutlet weak var btnPrint: UIButton!
+    @IBOutlet weak var lblCustomerReceipt: UILabel!
 
     @IBOutlet weak var receiptTable: UITableView!
     @IBOutlet weak var topView: UIView!
@@ -32,23 +33,20 @@ class ReceiptVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIDo
         self.view.backgroundColor = UIColor(named: "colorController")
         receiptTable.backgroundColor =  UIColor(named: "colorController")
         receiptTable.reloadData()
-        let pdfFilePath = self.receiptTable.exportAsPdfFromTable()
-        let url = URL(fileURLWithPath:pdfFilePath)
-        self.documentInteractionController = UIDocumentInteractionController.init(url: url)
-        self.documentInteractionController?.delegate = self
-        //self.documentInteractionController?.presentPreview(animated: true)
-        if UIPrintInteractionController.canPrint(url) {
-            let printInfo = UIPrintInfo(dictionary: nil)
-            printInfo.jobName = url.lastPathComponent
-            printInfo.outputType = .photo
-            let printController = UIPrintInteractionController.shared
-            printController.printInfo = printInfo
-            printController.showsNumberOfCopies = false
-            printController.delegate = self
-            printController.printingItem = url
-            printController.present(animated:true, completionHandler: nil)
-        }
-        self.receiptTable.isHidden = true
+ //       self.documentInteractionController?.presentPreview(animated: true)
+      
+//        if UIPrintInteractionController.canPrint(url) {
+//            let printInfo = UIPrintInfo(dictionary: nil)
+//            printInfo.jobName = url.lastPathComponent
+//            printInfo.outputType = .photo
+//            let printController = UIPrintInteractionController.shared
+//            printController.printInfo = printInfo
+//            printController.showsNumberOfCopies = false
+//            printController.delegate = self
+//            printController.printingItem = url
+//            printController.present(animated:true, completionHandler: nil)
+//        }
+//        self.receiptTable.isHidden = true
 //
 //        let state = UIApplication.shared.applicationState
 //        if state == .background || state == .inactive {
@@ -78,6 +76,27 @@ class ReceiptVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIDo
        // self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
         self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
+    
+    @IBAction func onClickPrint(_ sender: Any) {
+        let pdfFilePath = self.receiptTable.exportAsPdfFromTable()
+        let url = URL(fileURLWithPath:pdfFilePath)
+        self.documentInteractionController = UIDocumentInteractionController.init(url: url)
+        self.documentInteractionController?.delegate = self
+
+        if UIPrintInteractionController.canPrint(url) {
+            let printInfo = UIPrintInfo(dictionary: nil)
+            printInfo.jobName = url.lastPathComponent
+            printInfo.outputType = .photo
+            let printController = UIPrintInteractionController.shared
+            printController.printInfo = printInfo
+            printController.showsNumberOfCopies = false
+            printController.delegate = self
+            printController.printingItem = url
+            printController.present(animated:true, completionHandler: nil)
+        }
+      //  self.receiptTable.isHidden = true
+    }
+
     @IBAction func backbtnTapped(_ sender: Any) {
     self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
@@ -101,12 +120,12 @@ class ReceiptVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIDo
     
     func initialsetup()
     {
-        if IS_IPHONE_XR || IS_IPHONE_X
-        {
-            self.topView.frame = CGRect(x: 0, y: 0, width: FULLWIDTH-40, height: 80)
-            receiptTable.frame = CGRect(x: 0, y: 85, width: FULLWIDTH-40, height: FULLHEIGHT-300)
-            
-        }
+//        if IS_IPHONE_XR || IS_IPHONE_X
+//        {
+//            self.topView.frame = CGRect(x: 0, y: 0, width: FULLWIDTH-40, height: 80)
+//            receiptTable.frame = CGRect(x: 0, y: 85, width: FULLWIDTH-40, height: FULLHEIGHT-300)
+//            
+//        }
         
         let shadowSize : CGFloat = 3.0
         
@@ -115,11 +134,11 @@ class ReceiptVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIDo
                                                     width: self.topView.frame.size.width+40 + shadowSize,
                                                     height: self.topView.frame.size.height + shadowSize))
         
-        self.topView.layer.masksToBounds = false
-        self.topView.layer.shadowColor = Theme.TextLightColor.cgColor
-        self.topView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        self.topView.layer.shadowOpacity = 0.3
-        self.topView.layer.shadowPath = shadowPath1.cgPath
+//        self.topView.layer.masksToBounds = false
+//        self.topView.layer.shadowColor = Theme.TextLightColor.cgColor
+//        self.topView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+//        self.topView.layer.shadowOpacity = 0.3
+//        self.topView.layer.shadowPath = shadowPath1.cgPath
         receiptTable.register(UINib(nibName: "customerReceiptCell", bundle: nil), forCellReuseIdentifier: "customerReceiptCell")
         receiptTable.register(UINib(nibName: "NameReceiptCell", bundle: nil), forCellReuseIdentifier: "NameReceiptCell")
          receiptTable.register(UINib(nibName: "AccommadationCell", bundle: nil), forCellReuseIdentifier: "AccommadationCell")
@@ -159,6 +178,7 @@ class ReceiptVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIDo
             
         return 1
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
