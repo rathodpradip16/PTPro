@@ -175,109 +175,107 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
         }
     }
     
-    
-    
-    
     func getStep3ListingDetails()
     {
-        let step3ListingDetailsquery = PTProAPI.GetListingDetailsStep3Query(listId: listID, preview: .none)
-//        Network.shared.apollo_headerClient.fetch(query: step3ListingDetailsquery, cachePolicy: .fetchIgnoringCacheData) { response in
-//            switch response {
-//            case .success(let result):
-//                guard (result.data?.getListingDetails?.results) != nil else{
-//                    print("Missing Data")
-//                    if(result.data?.getListingDetails?.status == 400)
-//                    {
-//                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"nolist"))!)")
-//                        self.UHOhLbl.isHidden = false
-//                        self.CantSeeLbl.isHidden = false
-//                        self.errorCode404Lbl.isHidden = false
-//                        self.becomeStepsTable.isHidden = true
-//                    }
-//                    return
-//                }
-//                self.step3ListingDetails = (result.data?.getListingDetails?.results)!
-//                Utility.shared.selectedRules.removeAllObjects()
-//                
-//                if(self.step3ListingDetails?.listingData != nil)
-//                {
-//                    Utility.shared.step3_Edit = true
-//                    if let id = self.step3ListingDetails?.__data["id"] as? Int {
-//                        Utility.shared.step3ValuesInfo.updateValue(id, forKey: "id")
-//                        Utility.shared.createId = id
-//                    }
-//                    if let houserules = self.step3ListingDetails.houseRules {
-//                        Utility.shared.step3ValuesInfo.updateValue(houserules, forKey: "houseRules")
-//                    }
-//                    if(self.step3ListingDetails.listingData?.bookingNoticeTime != nil)
-//                    {
-//                        Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.bookingNoticeTime!)!, forKey: "bookingNoticeTime")
-//                    }
-//                    if let checkinStart = self.step3ListingDetails.listingData?.checkInStart { Utility.shared.step3ValuesInfo.updateValue(checkinStart, forKey: "checkInStart") }
-//                    if let checkInEnd = self.step3ListingDetails.listingData?.checkInEnd { Utility.shared.step3ValuesInfo.updateValue(checkInEnd, forKey: "checkInEnd")
-//                    }
-//                    if let maxDaysNotice = self.step3ListingDetails.listingData?.maxDaysNotice { Utility.shared.step3ValuesInfo.updateValue(maxDaysNotice, forKey: "maxDaysNotice")
-//                    }
-//                    if let minNight = self.step3ListingDetails.listingData?.minNight {
-//                        
-//                        Utility.shared.step3ValuesInfo.updateValue(minNight, forKey: "minNight")
-//                    }
-//                    if let maxNight = self.step3ListingDetails.listingData?.maxNight {
-//                        
-//                        Utility.shared.step3ValuesInfo.updateValue(maxNight, forKey: "maxNight")
-//                    }
-//                    if(self.step3ListingDetails.listingData?.basePrice != nil)
-//                    { Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.basePrice!)!, forKey: "basePrice")
-//                        Utility.shared.host_basePrice = (self.step3ListingDetails.listingData?.basePrice!)!
-//                    }
-//                    if(self.step3ListingDetails.listingData?.cleaningPrice != nil)
-//                    {
-//                        Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.cleaningPrice!)!, forKey: "cleaningPrice")
-//                        Utility.shared.host_cleanPrice = (self.step3ListingDetails.listingData?.cleaningPrice!)!
-//                    }
-//                    if let currency = (self.step3ListingDetails.listingData?.currency) { Utility.shared.step3ValuesInfo.updateValue(currency, forKey: "currency")
-//                    }
-//                    if(self.step3ListingDetails.listingData?.weeklyDiscount != nil)
-//                    {
-//                        Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.weeklyDiscount!)!, forKey: "weeklyDiscount")
-//                    }
-//                    if(self.step3ListingDetails.listingData?.monthlyDiscount != nil)
-//                    {
-//                        Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.monthlyDiscount!)!, forKey: "monthlyDiscount")
-//                    }
-//                    if(self.step3ListingDetails.bookingType != nil)
-//                    {
-//                        Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.bookingType!), forKey: "bookingType")
-//                    }
-//                    if(self.step3ListingDetails.listingData?.cancellationPolicy != nil)
-//                    {
-//                        Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails.listingData?.cancellationPolicy!)!, forKey: "cancellationPolicy")
-//                    }
-//                    
-//                    let StepTwoObj = HouseRulesViewController()
-//                    self.view.window?.backgroundColor = UIColor.white
-//                    //  self.view?.layer.add(presentrightAnimation()!, forKey: kCATransition)
-//                    StepTwoObj.modalPresentationStyle = .fullScreen
-//                    self.present(StepTwoObj, animated:false, completion: nil)
-//                }
-//                else
-//                {
-//                    
-//                    let StepTwoObj = HouseRulesViewController()
-//                    Utility.shared.createId = self.step3ListingDetails.id!
-//                    Utility.shared.step3ValuesInfo.removeAll()
-//                    Utility.shared.step3ValuesInfo.updateValue(self.step3ListingDetails.id!, forKey: "id")
-//                    Utility.shared.selectedRules.removeAllObjects()
-//                    Utility.shared.host_basePrice = 0
-//                    Utility.shared.host_cleanPrice = 0
-//                    self.view.window?.backgroundColor = UIColor.white
-//                    StepTwoObj.modalPresentationStyle = .fullScreen
-//                    self.present(StepTwoObj, animated:false, completion: nil)
-//                }
-//            case .failure(let error):
-//                self.view.makeToast(error.localizedDescription)
-//            }
-//        }
+        let step3ListingDetailsquery = PTProAPI.GetListingDetailsStep3Query(listId: listID, preview: .some(false))
+        Network.shared.apollo_headerClient.fetch(query: step3ListingDetailsquery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                if let data = result.data?.getListingDetails?.results{
+                    self.step3ListingDetails = data
+                    Utility.shared.selectedRules.removeAllObjects()
+                    Utility.shared.step3_Edit = true
+                    if let listingData = data.listingData{
+                        
+                        if let id = data.id {
+                            Utility.shared.step3ValuesInfo.updateValue(id, forKey: "id")
+                            Utility.shared.createId = id
+                        }
+                        if let houserules = data.houseRules {
+                            Utility.shared.step3ValuesInfo.updateValue(houserules, forKey: "houseRules")
+                        }
+                        if(listingData.bookingNoticeTime != nil)
+                        {
+                            Utility.shared.step3ValuesInfo.updateValue((listingData.bookingNoticeTime!), forKey: "bookingNoticeTime")
+                        }
+                        if let checkinStart = listingData.checkInStart { Utility.shared.step3ValuesInfo.updateValue(checkinStart, forKey: "checkInStart") }
+                        if let checkInEnd = listingData.checkInEnd { Utility.shared.step3ValuesInfo.updateValue(checkInEnd, forKey: "checkInEnd")
+                        }
+                        if let maxDaysNotice = listingData.maxDaysNotice { Utility.shared.step3ValuesInfo.updateValue(maxDaysNotice, forKey: "maxDaysNotice")
+                        }
+                        if let minNight = listingData.minNight {
+                            
+                            Utility.shared.step3ValuesInfo.updateValue(minNight, forKey: "minNight")
+                        }
+                        if let maxNight = listingData.maxNight {
+                            
+                            Utility.shared.step3ValuesInfo.updateValue(maxNight, forKey: "maxNight")
+                        }
+                        if(listingData.basePrice != nil)
+                        { Utility.shared.step3ValuesInfo.updateValue((listingData.basePrice!), forKey: "basePrice")
+                            Utility.shared.host_basePrice = (listingData.basePrice!)
+                        }
+                        if(listingData.cleaningPrice != nil)
+                        {
+                            Utility.shared.step3ValuesInfo.updateValue((listingData.cleaningPrice!), forKey: "cleaningPrice")
+                            Utility.shared.host_cleanPrice = (listingData.cleaningPrice!)
+                        }
+                        if let currency = (listingData.currency) { Utility.shared.step3ValuesInfo.updateValue(currency, forKey: "currency")
+                        }
+                        if(listingData.weeklyDiscount != nil)
+                        {
+                            Utility.shared.step3ValuesInfo.updateValue((listingData.weeklyDiscount!), forKey: "weeklyDiscount")
+                        }
+                        if(listingData.monthlyDiscount != nil)
+                        {
+                            Utility.shared.step3ValuesInfo.updateValue((listingData.monthlyDiscount!), forKey: "monthlyDiscount")
+                        }
+                        if(self.step3ListingDetails?.bookingType != nil)
+                        {
+                            Utility.shared.step3ValuesInfo.updateValue((self.step3ListingDetails?.bookingType!) ?? "", forKey: "bookingType")
+                        }
+                        if(listingData.cancellationPolicy != nil)
+                        {
+                            Utility.shared.step3ValuesInfo.updateValue((listingData.cancellationPolicy!), forKey: "cancellationPolicy")
+                        }
+                        
+                        let StepTwoObj = HouseRulesViewController()
+                        self.view.window?.backgroundColor = UIColor.white
+                        //  self.view?.layer.add(presentrightAnimation()!, forKey: kCATransition)
+                        StepTwoObj.modalPresentationStyle = .fullScreen
+                        self.present(StepTwoObj, animated:false, completion: nil)
+                    }
+                    else
+                    {
+                        
+                        let StepTwoObj = HouseRulesViewController()
+                        Utility.shared.createId = self.step3ListingDetails?.id ?? 0
+                        Utility.shared.step3ValuesInfo.removeAll()
+                        Utility.shared.step3ValuesInfo.updateValue(self.step3ListingDetails?.id ?? 0, forKey: "id")
+                        Utility.shared.selectedRules.removeAllObjects()
+                        Utility.shared.host_basePrice = 0
+                        Utility.shared.host_cleanPrice = 0
+                        self.view.window?.backgroundColor = UIColor.white
+                        StepTwoObj.modalPresentationStyle = .fullScreen
+                        self.present(StepTwoObj, animated:false, completion: nil)
+                    }
+                }else{
+                    if(result.data?.getListingDetails?.status == 400)
+                    {
+                        self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"nolist"))!)")
+                        self.UHOhLbl.isHidden = false
+                        self.CantSeeLbl.isHidden = false
+                        self.errorCode404Lbl.isHidden = false
+                        self.becomeStepsTable.isHidden = true
+                    }
+                    return
+                }
+                
+              
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
     }
     
     

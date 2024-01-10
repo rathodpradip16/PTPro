@@ -176,9 +176,15 @@ class OccupancyInsightsVC: UIViewController, CLLocationManagerDelegate{
     }
     
     func updateDateMaxMin(){
-        datePickerStartDate!.maximumDate =  datePickerEndDate!.date
-        datePickerEndDate!.maximumDate = Date()
+       // datePickerStartDate!.maximumDate =  datePickerEndDate!.date
         datePickerEndDate!.minimumDate = datePickerStartDate!.date
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        if ((formatter.date(from: selectedStartDate) ?? Date()).compare((formatter.date(from: selectedEndDate) ?? Date())) == .orderedDescending){
+            selectedEndDate = ""
+            txtToDateValue.text = ""
+        }
     }
     
     @objc func doneStartDatePicker(){

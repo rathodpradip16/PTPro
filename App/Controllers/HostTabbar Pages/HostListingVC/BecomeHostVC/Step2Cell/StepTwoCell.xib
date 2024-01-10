@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -58,24 +58,14 @@
                                             <constraint firstAttribute="height" constant="14" id="wg2-eU-8SV"/>
                                         </constraints>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H51-G2-Ok5">
-                                        <rect key="frame" x="0.0" y="0.0" width="53.5" height="34"/>
-                                        <inset key="imageEdgeInsets" minX="20" minY="10" maxX="10" maxY="10"/>
-                                        <state key="normal">
-                                            <color key="titleColor" red="0.0" green="0.51764705879999995" blue="0.53725490200000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="H51-G2-Ok5" secondAttribute="trailing" id="3YG-ko-uMH"/>
                                     <constraint firstItem="vji-Gw-1nb" firstAttribute="leading" secondItem="3LC-VC-5MR" secondAttribute="leading" id="Kgh-5c-xSg"/>
-                                    <constraint firstItem="H51-G2-Ok5" firstAttribute="leading" secondItem="3LC-VC-5MR" secondAttribute="leading" id="LAq-iS-LAe"/>
                                     <constraint firstAttribute="trailing" secondItem="LEb-Ew-0F1" secondAttribute="trailing" id="NUo-Wu-id7"/>
                                     <constraint firstItem="LEb-Ew-0F1" firstAttribute="top" secondItem="3LC-VC-5MR" secondAttribute="top" constant="3.5" id="V5M-7a-w6r"/>
                                     <constraint firstItem="LEb-Ew-0F1" firstAttribute="leading" secondItem="vji-Gw-1nb" secondAttribute="trailing" constant="6" id="YJK-7b-fL0"/>
                                     <constraint firstAttribute="height" constant="20" id="Z81-iE-Deh"/>
-                                    <constraint firstItem="H51-G2-Ok5" firstAttribute="top" secondItem="3LC-VC-5MR" secondAttribute="top" id="ty3-kw-J6s"/>
                                     <constraint firstItem="vji-Gw-1nb" firstAttribute="top" secondItem="3LC-VC-5MR" secondAttribute="top" id="wrd-NN-HFp"/>
                                 </constraints>
                             </view>
@@ -95,6 +85,17 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H51-G2-Ok5">
+                                <rect key="frame" x="185" y="105.5" width="100" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="SNI-nY-lyK"/>
+                                    <constraint firstAttribute="width" constant="100" id="U0c-tz-Cbn"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="20" minY="10" maxX="10" maxY="10"/>
+                                <state key="normal">
+                                    <color key="titleColor" red="0.0" green="0.51764705879999995" blue="0.53725490200000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -113,6 +114,8 @@
                             <constraint firstItem="fk5-iJ-gOa" firstAttribute="leading" secondItem="ldU-jD-HPe" secondAttribute="leading" constant="16" id="dIg-gO-BE7"/>
                             <constraint firstItem="3LC-VC-5MR" firstAttribute="top" secondItem="srI-zE-eAX" secondAttribute="bottom" constant="15" id="dty-JG-zTa"/>
                             <constraint firstItem="WZP-tN-5u1" firstAttribute="leading" secondItem="ldU-jD-HPe" secondAttribute="leading" constant="13" id="fGT-f8-188"/>
+                            <constraint firstAttribute="bottom" secondItem="H51-G2-Ok5" secondAttribute="bottom" constant="8" id="psV-ie-Tvr"/>
+                            <constraint firstAttribute="trailing" secondItem="H51-G2-Ok5" secondAttribute="trailing" constant="4" id="xba-4u-8OY"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">

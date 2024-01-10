@@ -8,7 +8,7 @@ extension PTProAPI {
     static let operationName: String = "GetListingDetailsStep3"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query GetListingDetailsStep3($listId: String!, $preview: Boolean) { getListingDetails(listId: $listId, preview: $preview) { __typename results { __typename id userId bookingType isPublished houseRules { __typename id } listingData { __typename bookingNoticeTime checkInStart checkInEnd maxDaysNotice minNight maxNight basePrice cleaningPrice currency weeklyDiscount monthlyDiscount cancellationPolicy } blockedDates { __typename blockedDates reservationId } calendars { __typename id name url listId status } } status errorMessage } }"#
+        #"query GetListingDetailsStep3($listId: String!, $preview: Boolean) { getListingDetails(listId: $listId, preview: $preview) { __typename status errorMessage results { __typename id userId bookingType isPublished houseRules { __typename id } listingData { __typename bookingNoticeTime checkInStart checkInEnd maxDaysNotice minNight maxNight basePrice cleaningPrice currency weeklyDiscount monthlyDiscount cancellationPolicy } blockedDates { __typename blockedDates reservationId } calendars { __typename id name url listId status } } } }"#
       ))
 
     public var listId: String
@@ -51,14 +51,14 @@ extension PTProAPI {
         static var __parentType: Apollo.ParentType { PTProAPI.Objects.AllListing }
         static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("results", Results?.self),
           .field("status", Int?.self),
           .field("errorMessage", String?.self),
+          .field("results", Results?.self),
         ] }
 
-        var results: Results? { __data["results"] }
         var status: Int? { __data["status"] }
         var errorMessage: String? { __data["errorMessage"] }
+        var results: Results? { __data["results"] }
 
         /// GetListingDetails.Results
         ///

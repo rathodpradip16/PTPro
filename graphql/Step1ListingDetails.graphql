@@ -64,20 +64,23 @@ bedType
 }
 }
 
-
-
-
 query GetListingDetailsStep3($listId:String!, $preview: Boolean) {
 getListingDetails (listId:$listId, preview: $preview) {
+__typename
+status
+errorMessage
 results{
+__typename
 id
 userId
 bookingType
 isPublished
 houseRules {
+__typename
 id
 }
 listingData {
+__typename
 bookingNoticeTime,
 checkInStart,
 checkInEnd,
@@ -92,10 +95,12 @@ monthlyDiscount,
 cancellationPolicy
 }
 blockedDates {
+__typename
 blockedDates
 reservationId
 }
 calendars {
+__typename
 id
 name
 url
@@ -103,7 +108,5 @@ listId
 status
 }
 }
-status
-errorMessage
 }
 }

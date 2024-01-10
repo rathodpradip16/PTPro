@@ -179,6 +179,7 @@ class ManageCouponVC: UIViewController {
         formatter.dateFormat = "yyyy-MM-dd"
         if ((formatter.date(from: selectedStartDate) ?? Date()).compare((formatter.date(from: selectedEndDate) ?? Date())) == .orderedDescending){
             txtCodeEndDate.text = ""
+            selectedEndDate = ""
         }
     }
     
