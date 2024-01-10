@@ -8,9 +8,16 @@
 
 import UIKit
 import QuartzCore
+import Lottie
 
 class ManageCouponVC: UIViewController {
     
+    @IBOutlet weak var offlineView: UIView!
+    var lottieWholeView = UIView()
+    var lottieView: LottieAnimationView!
+    @IBOutlet weak var retryBtn: UIButton!
+    @IBOutlet weak var errorLabel: UILabel!
+
     @IBOutlet weak var viewMainTitle: UIView!
     @IBOutlet weak var viewSubTitle: UIView!
     @IBOutlet weak var viewTab: UIView!
@@ -57,11 +64,25 @@ class ManageCouponVC: UIViewController {
     var datePickerEndDate: UIDatePicker?
     var selectedStartDate = ""
     var selectedEndDate = ""
-
+    var couponDetail:PTProAPI.GetCouponEditQuery.Data.GetCouponEdit.Datum?
     override func viewDidLoad() {
         super.viewDidLoad()
+        initialSetup()
+        lottieView = LottieAnimationView.init(name: "loading_qwe")
         self.initializeView()
         self.initialiseDatePicker()
+    }
+    
+    func initialSetup()
+    {
+        offlineView.backgroundColor =  UIColor(named: "Button_Grey_Color")
+        self.offlineView.isHidden = true
+        errorLabel.textColor =  UIColor(named: "Title_Header")
+        retryBtn.setTitleColor(Theme.PRIMARY_COLOR, for: .normal)
+        errorLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"error_field"))!)"
+        retryBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"retry"))!)", for:.normal)
+        errorLabel.font = UIFont(name: APP_FONT_MEDIUM, size: 15)
+        retryBtn.titleLabel?.font = UIFont(name: APP_FONT, size: 15)
     }
 
     func initializeView(){
@@ -81,18 +102,17 @@ class ManageCouponVC: UIViewController {
             viewMainTitle.isHidden = false
             btnBackSub.isHidden = true
             viewTopHeader.isHidden = true
-            self.lblAddCoupon.text = "Manage Coupon"
-            self.getCouponCodeAPI()
+            self.lblAddCoupon.text = "Update Coupon"
+            self.getCouponEditAPI()
         }
         
-        var yourViewBorder = CAShapeLayer()
+        let yourViewBorder = CAShapeLayer()
         yourViewBorder.strokeColor = UIColor.black.cgColor
         yourViewBorder.lineDashPattern = [2, 2]
         yourViewBorder.frame = viewDeleteCoupon.bounds
         yourViewBorder.fillColor = nil
         yourViewBorder.path = UIBezierPath(rect: viewDeleteCoupon.bounds).cgPath
         viewDeleteCoupon.layer.addSublayer(yourViewBorder)
-        btnDelete.tintColor = .red
     }
     
     func initialiseDatePicker(){
@@ -184,8 +204,16 @@ class ManageCouponVC: UIViewController {
         self.view.endEditing(true)
     }
     
+    @IBAction func retryBtnTapped(_ sender: Any){
+        if Utility.shared.isConnectedToNetwork(){
+            self.offlineView.isHidden = true
+        }
+    }
+    
     @IBAction func onClickDeleteTab(_ sender: Any) {
-        UIView.animate(withDuration: 0.5) {
+        UIView.animate(withDuration: 1.0) {
+            
+        } completion: { sucess in
             self.viewSliderWidth.constant = 60
             self.viewSliderLeading.constant = 138
             self.viewCoupon.isHidden = true
@@ -196,7 +224,9 @@ class ManageCouponVC: UIViewController {
     
     @IBAction func onClickAddCoupon(_ sender: Any) {
         self.viewSubTitle.isHidden = false
-        UIView.animate(withDuration: 0.5) {
+        UIView.animate(withDuration: 1.0) {
+            
+        } completion: { sucess in
             self.viewSliderWidth.constant = 110
             self.viewSliderLeading.constant =  20
             self.viewCoupon.isHidden = false
@@ -205,6 +235,13 @@ class ManageCouponVC: UIViewController {
     }
     
     @IBAction func onClickDeleteCoupon(_ sender: Any) {
+        let alert = UIAlertController(title: "Delete Confirmation", message: String(format: "\n Are you sure want to delete this item? \n") , preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
+        }))
+        alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { action in
+            self.deleteCouponCode()
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func onClickBack(_ sender: Any) {
@@ -228,30 +265,106 @@ class ManageCouponVC: UIViewController {
     }
     
     func createCouponCode(){
-        let createcouponcodeMutation = PTProAPI.CreatecouponcodeMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), listId: .some(Int(listID) ?? 0), couponCode: .some(txtPromoCodeName.text ?? ""), couponType: .some("subscription"), discount: .some(Double(txtPromoCodeDiscount.text ?? "0") ?? 0), startDate: .some(selectedStartDate), endDate: .some(selectedEndDate), description: .some(txtPromoCodeDesc.text), userType: .some("admin"))
-        Network.shared.apollo_headerClient.perform(mutation: createcouponcodeMutation){  response in
-            switch response {
-            case .success(let result):
-                if let data = result.data?.createcouponcode?.status,data == 200 {
-                    self.dismiss(animated: true)
+        if Utility.shared.isConnectedToNetwork(){
+            self.lottieAnimation()
+            let createcouponcodeMutation = PTProAPI.CreatecouponcodeMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), listId: .some(Int(listID) ?? 0), couponCode: .some(txtPromoCodeName.text ?? ""), couponType: .some("booking"), discount: .some(Double(txtPromoCodeDiscount.text ?? "0") ?? 0), startDate: .some(selectedStartDate), endDate: .some(selectedEndDate), description: .some(txtPromoCodeDesc.text), userType: .some("admin"))
+            Network.shared.apollo_headerClient.perform(mutation: createcouponcodeMutation){  response in
+                self.lottieView.isHidden = true
+                self.lottieWholeView.isHidden = true
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.createcouponcode?.status,data == 200 {
+                        self.dismiss(animated: true) {
+                            AppDelegate().window?.rootViewController?.view.makeToast("Coupon Added")
+                        }
+                    }else if let data = result.data?.createcouponcode?.status,data == 201 {
+                        self.dismiss(animated: true) {
+                            AppDelegate().window?.rootViewController?.view.makeToast("Coupon Updated")
+                        }
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
                 }
-            case .failure(let error):
-                self.view.makeToast(error.localizedDescription)
+            }
+        }else{
+            self.offlineView.isHidden = false
+            let shadowSize2 : CGFloat = 3.0
+            let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
+                                                        y: -shadowSize2 / 2,
+                                                        width: self.offlineView.frame.size.width + shadowSize2,
+                                                        height: self.offlineView.frame.size.height + shadowSize2))
+            
+            self.offlineView.layer.masksToBounds = false
+            self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
+            self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+            self.offlineView.layer.shadowOpacity = 0.3
+            self.offlineView.layer.shadowPath = shadowPath2.cgPath
+            if IS_IPHONE_X || IS_IPHONE_XR{
+                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-130, width: FULLWIDTH, height: 55)
+            }else{
+                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: FULLWIDTH, height: 55)
             }
         }
     }
     
-    func getCouponCodeAPI(){
-        let getcouponcodeQuery = PTProAPI.GetcouponcodeQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), couponType: .some("subscription"), listId: .some(Int(listID) ?? 0), subscriptionType: .some(""))
+    func deleteCouponCode(){
+        if Utility.shared.isConnectedToNetwork(){
+            self.lottieAnimation()
+            if let couponData = couponDetail{
+                let deleteCouponMutation = PTProAPI.DeleteCouponMutation(id:  couponData.id ?? 0 , couponCode: .some(couponData.couponCode ?? ""))
+                Network.shared.apollo_headerClient.perform(mutation: deleteCouponMutation){  response in
+                    self.lottieView.isHidden = true
+                    self.lottieWholeView.isHidden = true
+                    switch response {
+                    case .success(let result):
+                        if let data = result.data?.deleteCoupon?.status,data == 200 {
+                            self.dismiss(animated: true) {
+                                AppDelegate().window?.rootViewController?.view.makeToast("Deleted Successfully")
+                            }
+                        }
+                    case .failure(let error):
+                        self.view.makeToast(error.localizedDescription)
+                    }
+                }
+            }
+        }else{
+            self.offlineView.isHidden = false
+            let shadowSize2 : CGFloat = 3.0
+            let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
+                                                        y: -shadowSize2 / 2,
+                                                        width: self.offlineView.frame.size.width + shadowSize2,
+                                                        height: self.offlineView.frame.size.height + shadowSize2))
+            
+            self.offlineView.layer.masksToBounds = false
+            self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
+            self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+            self.offlineView.layer.shadowOpacity = 0.3
+            self.offlineView.layer.shadowPath = shadowPath2.cgPath
+            if IS_IPHONE_X || IS_IPHONE_XR{
+                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-130, width: FULLWIDTH, height: 55)
+            }else{
+                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: FULLWIDTH, height: 55)
+            }
+        }
+    }
+    
+    func getCouponEditAPI(){
+        if Utility.shared.isConnectedToNetwork(){
+            self.lottieAnimation()
+            let getcouponcodeQuery = PTProAPI.GetCouponEditQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), couponType: .some("booking"), listId: .some(Int(listID) ?? 0), subscriptionType: .some(""))
             Network.shared.apollo_headerClient.fetch(query: getcouponcodeQuery, cachePolicy: .fetchIgnoringCacheData) { response in
+                self.lottieView.isHidden = true
+                self.lottieWholeView.isHidden = true
                 switch response{
                 case .success(let result):
-                    if let status = result.data?.getcouponcode?.status,status == 200 {
-                        if let data = result.data,let getcouponcodeData = data.getcouponcode,let arrCouponData = getcouponcodeData.data,arrCouponData.count != 0,let cData = arrCouponData.first{
+                    if let status = result.data?.getCouponEdit?.status,status == 200 {
+                        if let data = result.data,let getcouponcodeData = data.getCouponEdit,let arrCouponData = getcouponcodeData.data,arrCouponData.count != 0,let cData = arrCouponData.first{
                             if let couponData = cData{
+                                self.couponDetail = couponData
                                 DispatchQueue.main.async{
                                     self.txtPromoCodeName.text = couponData.couponCode ?? ""
                                     self.txtPromoCodeDiscount.text = "\(couponData.discount ?? 0.0)"
+                                    self.lblCouponName.text = couponData.couponCode ?? ""
                                     
                                     let formatter = DateFormatter()
                                     formatter.dateFormat = "yyyy-MM-dd"
@@ -268,13 +381,33 @@ class ManageCouponVC: UIViewController {
                             }
                         }
                     } else {
-                        self.view.makeToast(result.data?.getcouponcode?.errorMessage)
+                        self.view.makeToast(result.data?.getCouponEdit?.errorMessage)
                     }
                 case .failure(let error):
                     self.view.makeToast(error.localizedDescription)
                     break
                 }
             }
+        }else{
+            self.lottieView.isHidden = true
+            self.offlineView.isHidden = false
+            let shadowSize2 : CGFloat = 3.0
+            let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
+                                                        y: -shadowSize2 / 2,
+                                                        width: self.offlineView.frame.size.width + shadowSize2,
+                                                        height: self.offlineView.frame.size.height + shadowSize2))
+            
+            self.offlineView.layer.masksToBounds = false
+            self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
+            self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+            self.offlineView.layer.shadowOpacity = 0.3
+            self.offlineView.layer.shadowPath = shadowPath2.cgPath
+            if IS_IPHONE_X || IS_IPHONE_XR{
+                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-130, width: FULLWIDTH, height: 55)
+            }else{
+                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-100, width: FULLWIDTH, height: 55)
+            }
+        }
     }
     
     
@@ -303,5 +436,26 @@ class ManageCouponVC: UIViewController {
         txtPromoCodeDiscount.becomeFirstResponder()
     }
     
+    //MARK: - Animation
+    func lottieAnimation()
+    {
+        self.lottieView.isHidden = false
+        self.lottieWholeView.isHidden = false
+        self.lottieWholeView.frame = CGRect(x: 0, y: 0, width: FULLWIDTH, height: FULLHEIGHT)
+        self.lottieWholeView.backgroundColor =  UIColor.black.withAlphaComponent(0.5)
+        self.view.addSubview(lottieWholeView)
+        self.lottieView.frame = CGRect(x:FULLWIDTH/2-50, y: FULLHEIGHT/2-180, width: 100, height: 100)
+        self.lottieWholeView.addSubview(self.lottieView)
+        self.lottieView.backgroundColor = UIColor(named: "lottie-bg")
+      
+        self.lottieView.layer.cornerRadius = 6.0
+        self.lottieView.clipsToBounds = true
+        self.lottieView.play()
+        Timer.scheduledTimer(timeInterval:0.3, target: self, selector: #selector(autoscroll), userInfo: nil, repeats: true)
+    }
     
+    @objc func autoscroll()
+    {
+        self.lottieView.play()
+    }
 }

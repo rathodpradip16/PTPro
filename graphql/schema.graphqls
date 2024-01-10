@@ -5,6 +5,7 @@ directive @apollo_client_ios_localCacheMutation on QUERY | MUTATION | SUBSCRIPTI
 
 type Query {
   validateEmailExist(email: String!): CommonType
+  getCouponEdit(userId: String, couponType: String, listId: Int, subscriptionType: String): Couponmanager
   getPropertieCount(userId: String): subscriptionPaymentType
   getDashboardData(userId: String, clickCount: Int, fromDate: String, toDate: String, filter: String, graphType: String): GetClicksType
   calculateOccupancyRate(lat: Float, lng: Float, startDate: String, endDate: String, filter: String): CalculateOccupancyRate
@@ -83,6 +84,40 @@ type Query {
 type CommonType {
   errorMessage: String
   status: Int
+}
+
+type Couponmanager {
+  id: Int
+  userId: String
+  listId: Int
+  couponCode: String
+  couponType: String
+  discount: Float
+  activeStatus: String
+  startDate: String
+  endDate: String
+  description: String
+  status: Int
+  errorMessage: String
+  userType: String
+  couponCount: Int
+  planId: Int
+  isforplan: Boolean
+  deletedDate: String
+  deleted: Int
+  data: [Getcoupon]
+}
+
+type Getcoupon {
+  id: Int
+  couponCode: String
+  couponType: String
+  discount: Float
+  activeStatus: String
+  startDate: String
+  endDate: String
+  description: String
+  userType: String
 }
 
 type subscriptionPaymentType {
@@ -1575,40 +1610,6 @@ type PopularLocationCommonType {
   errorMessage: String
   result: PopularLocationListing
   results: [PopularLocationListing]
-}
-
-type Couponmanager {
-  id: Int
-  userId: String
-  listId: Int
-  couponCode: String
-  couponType: String
-  discount: Float
-  activeStatus: String
-  startDate: String
-  endDate: String
-  description: String
-  status: Int
-  errorMessage: String
-  userType: String
-  couponCount: Int
-  planId: Int
-  isforplan: Boolean
-  deletedDate: String
-  deleted: Int
-  data: [Getcoupon]
-}
-
-type Getcoupon {
-  id: Int
-  couponCode: String
-  couponType: String
-  discount: Float
-  activeStatus: String
-  startDate: String
-  endDate: String
-  description: String
-  userType: String
 }
 
 type HostSuggested {

@@ -174,8 +174,6 @@ var graphQLEndpoint : String {
 //    }
 //}
 
-
-
 let GOOGLE_CLIENT_ID = "1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at.apps.googleusercontent.com"
 
 func convertToDictionary(text: String) -> [[String: Any]]? {

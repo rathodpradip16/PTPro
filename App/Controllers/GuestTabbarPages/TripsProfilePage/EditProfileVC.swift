@@ -1385,6 +1385,7 @@ func googleAPICall(){
         }
         
     }
+    
     func faceBookLogin(viewC: UIViewController)
     {
         URLCache.shared.removeAllCachedResponses()
@@ -1398,13 +1399,9 @@ func googleAPICall(){
         fbLoginManager.logIn(permissions: ["public_profile", "email"], from: viewC) { (result, error) in
             if (error == nil){
                 let fbloginresult : LoginManagerLoginResult = result!
-                if fbloginresult.grantedPermissions != nil {
-                    if(fbloginresult.grantedPermissions.contains("email"))
-                    {
-                        
-                        self.facebookVerifyAPICall()
-                        LoginManager().logOut()
-                    }
+                if fbloginresult.grantedPermissions.count != 0,fbloginresult.grantedPermissions.contains("email") {
+                    self.facebookVerifyAPICall()
+                    LoginManager().logOut()
                 }
             }
         }

@@ -172,10 +172,10 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aqu-XS-qZp">
-                                <rect key="frame" x="143" y="212" width="123" height="32"/>
+                                <rect key="frame" x="143" y="210" width="123" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="123" id="Qjx-HM-DBo"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="32" id="rvc-t1-Ytl"/>
+                                    <constraint firstAttribute="height" constant="36" id="rvc-t1-Ytl"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -186,8 +186,9 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aMz-zd-YtG">
-                                <rect key="frame" x="143" y="211" width="123" height="34"/>
+                                <rect key="frame" x="143" y="210" width="123" height="36"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="7rV-ld-xBI"/>
                                     <constraint firstAttribute="width" constant="123" id="Q64-oI-MHv"/>
                                 </constraints>
                                 <inset key="titleEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>

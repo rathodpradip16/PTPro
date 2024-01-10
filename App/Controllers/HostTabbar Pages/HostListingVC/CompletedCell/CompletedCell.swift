@@ -86,7 +86,7 @@ class CompletedCell: UITableViewCell {
         
         self.editBtn.layer.cornerRadius =  18
         self.editBtn.layer.masksToBounds = true
-        self.editBtn.layer.borderColor = UIColor.clear.cgColor
+        self.editBtn.layer.borderColor = Theme.ThemePurpleColor.cgColor
         self.editBtn.layer.borderWidth = 1
         
        
@@ -96,7 +96,7 @@ class CompletedCell: UITableViewCell {
          previewBtn.setTitle(" \((Utility.shared.getLanguage()?.value(forKey:"more"))!) ", for:.normal)
         progressBarView.progressTintColor = Theme.PRIMARY_COLOR
         publishBtn.backgroundColor = Theme.ThemePurpleColor
-        editBtn.backgroundColor = Theme.ThemePurpleColor
+        editBtn.backgroundColor = .clear
         previewBtn.setTitleColor(Theme.PRIMARY_COLOR, for: .normal)
         publishBtn.titleLabel?.font = UIFont(name: APP_FONT_MEDIUM, size: 14)
         
@@ -121,14 +121,14 @@ class CompletedCell: UITableViewCell {
     }
 
     override func layoutSubviews() {
-        self.submitLabel.layer.cornerRadius =  self.submitLabel.frame.size.height/2
+        self.submitLabel.layer.cornerRadius =  18
         self.submitLabel.layer.masksToBounds = true
         self.submitLabel.layer.borderColor = UIColor.clear.cgColor
         self.submitLabel.layer.borderWidth = 1
         
         self.editBtn.layer.cornerRadius =  18
         self.editBtn.layer.masksToBounds = true
-        self.editBtn.layer.borderColor = Theme.Button_BG.cgColor
+        self.editBtn.layer.borderColor = Theme.ThemePurpleColor.cgColor
         self.editBtn.layer.borderWidth = 1
         
         

@@ -18,6 +18,17 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
+    <key>GIDClientID</key>
+    <string>1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at.apps.googleusercontent.com</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at</string>
+        </array>
+      </dict>
+    </array>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -25,7 +36,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fbFB_ID</string>
+				<string>fb1941512669534476</string>
 			</array>
 		</dict>
 		<dict>
@@ -35,7 +46,7 @@
 			<string>google_client_id</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>google_client_id</string>
+				<string>com.googleusercontent.apps.1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at</string>
 			</array>
 		</dict>
 		<dict>
@@ -60,9 +71,11 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
-	<string>YOUR_FACEBOOK_ID</string>
-	<key>FacebookDisplayName</key>
-	<string>YOUR_FACEBOOK_DISPLAY_NAME</string>
+	<string>1941512669534476</string>
+    <key>FacebookClientToken</key>
+    <string>1b21ce3f6ae9ed0508c859933242edee</string>
+    <key>FacebookDisplayName</key>
+	<string>PTP</string>
 	<key>FirebaseAppDelegateProxyEnabled = YES</key>
 	<string>YES</string>
 	<key>FirebaseMessagingAutoInitEnabled</key>

@@ -705,7 +705,8 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
             } else {
             
             cell.publishBtn.addTarget(self, action: #selector(PublishBtnTapped),for:.touchUpInside)
-                cell.publishBtn.backgroundColor = Theme.Button_BG.withAlphaComponent(1.0)
+                cell.publishBtn.cornerRadius = 18
+                cell.publishBtn.backgroundColor = Theme.ThemePurpleColor.withAlphaComponent(1.0) 
                 cell.publishBtn.isUserInteractionEnabled = true
             }
             cell.previewBtn.addTarget(self, action: #selector(previewBtnTapped),for:.touchUpInside)

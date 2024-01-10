@@ -1035,7 +1035,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             } else {
                // cell.editBtn.isHidden = false
                 cell.editBtn.addTarget(self, action: #selector(PublishBtnTapped),for:.touchUpInside)
-                cell.editBtn.backgroundColor = Theme.ThemePurpleColor
+                cell.editBtn.backgroundColor = .clear
                 cell.editBtn.isUserInteractionEnabled = true
             }
            

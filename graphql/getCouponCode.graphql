@@ -15,3 +15,22 @@ userType,
 }
 }
 }
+
+
+query getCouponEdit($userId: String,$couponType:String,$listId:Int,$subscriptionType:String){
+getCouponEdit(userId:$userId,couponType:$couponType,listId:$listId,subscriptionType:$subscriptionType){
+errorMessage
+status
+data{
+id,
+couponCode,
+activeStatus,
+couponType,
+discount,
+startDate,
+endDate,
+description,
+userType,
+}
+}
+}

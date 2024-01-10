@@ -33,6 +33,8 @@ class ReceiptVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIDo
         self.view.backgroundColor = UIColor(named: "colorController")
         receiptTable.backgroundColor =  UIColor(named: "colorController")
         receiptTable.reloadData()
+        topView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+
  //       self.documentInteractionController?.presentPreview(animated: true)
       
 //        if UIPrintInteractionController.canPrint(url) {

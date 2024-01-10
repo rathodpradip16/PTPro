@@ -358,6 +358,7 @@
 		7670CA392B3D6ABF005D9CE1 /* GetHostSuggestedQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7670CA382B3D6ABF005D9CE1 /* GetHostSuggestedQuery.graphql.swift */; };
 		7677F4372B3E8733001C1161 /* ManageCouponVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7677F4362B3E8733001C1161 /* ManageCouponVC.swift */; };
 		7682D8002B1396D000967ED9 /* ExploreSurroundingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7682D7FF2B1396D000967ED9 /* ExploreSurroundingsVC.swift */; };
+		768525F92B4D6E99000BE547 /* GetCouponEditQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768525F82B4D6E99000BE547 /* GetCouponEditQuery.graphql.swift */; };
 		7690ECA42B0DBB0000CF4CD9 /* Locator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7690ECA32B0DBB0000CF4CD9 /* Locator.swift */; };
 		76C1A5232ACFBF790031BE76 /* AffiliateSearchLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2EAD12ACAC473000E73FC /* AffiliateSearchLinkVC.swift */; };
 		76C1A5242ACFBFAE0031BE76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7602D0AD2ABCA4FF00635A6D /* Main.storyboard */; };
@@ -1291,6 +1292,7 @@
 		7677F4362B3E8733001C1161 /* ManageCouponVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageCouponVC.swift; sourceTree = "<group>"; };
 		767B90C12AFD4AC30089605C /* CreateCustomPlanRequest.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CreateCustomPlanRequest.graphql; sourceTree = "<group>"; };
 		7682D7FF2B1396D000967ED9 /* ExploreSurroundingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreSurroundingsVC.swift; sourceTree = "<group>"; };
+		768525F82B4D6E99000BE547 /* GetCouponEditQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetCouponEditQuery.graphql.swift; sourceTree = "<group>"; };
 		7690ECA32B0DBB0000CF4CD9 /* Locator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locator.swift; sourceTree = "<group>"; };
 		76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateSearchLinkCVC.swift; sourceTree = "<group>"; };
 		76CEB1E42B36A5DB00C057AC /* YouMayLikeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouMayLikeVC.swift; sourceTree = "<group>"; };
@@ -2085,6 +2087,7 @@
 		766C06682AFFE0CA00E68E60 /* Queries */ = {
 			isa = PBXGroup;
 			children = (
+				768525F82B4D6E99000BE547 /* GetCouponEditQuery.graphql.swift */,
 				7670CA382B3D6ABF005D9CE1 /* GetHostSuggestedQuery.graphql.swift */,
 				761FD1A62B0FB2190082D2C6 /* GetReceiptPaymentQuery.graphql.swift */,
 				766C06692AFFE0CA00E68E60 /* GetReservationQuery.graphql.swift */,
@@ -4642,6 +4645,7 @@
 				766C07652AFFE0CB00E68E60 /* GetUserReviewsQuery.graphql.swift in Sources */,
 				766C07BE2AFFE0CB00E68E60 /* NewThreadsCommonType.graphql.swift in Sources */,
 				B535D19022438C7000F691C4 /* EmailPageVC.swift in Sources */,
+				768525F92B4D6E99000BE547 /* GetCouponEditQuery.graphql.swift in Sources */,
 				B58DBF5325FF5B4400EF09E1 /* UpcomingReviewCells.swift in Sources */,
 				B528EF07228E8CF800C99BFC /* contactcheckCell.swift in Sources */,
 				766C07E92AFFE0CB00E68E60 /* AffiliatestepType.graphql.swift in Sources */,
