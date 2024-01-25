@@ -8,7 +8,7 @@ extension PTProAPI {
     static let operationName: String = "GetListingDetailsStep3"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query GetListingDetailsStep3($listId: String!, $preview: Boolean) { getListingDetails(listId: $listId, preview: $preview) { __typename status errorMessage results { __typename id userId bookingType isPublished houseRules { __typename id } listingData { __typename bookingNoticeTime checkInStart checkInEnd maxDaysNotice minNight maxNight basePrice cleaningPrice currency weeklyDiscount monthlyDiscount cancellationPolicy } blockedDates { __typename blockedDates reservationId } calendars { __typename id name url listId status } } } }"#
+        #"query GetListingDetailsStep3($listId: String!, $preview: Boolean) { getListingDetails(listId: $listId, preview: $preview) { __typename status errorMessage results { __typename id userId bookingType isPublished houseRules { __typename id } listingData { __typename bookingNoticeTime checkInStart checkInEnd maxDaysNotice minNight maxNight basePrice cleaningPrice currency is_affiliate affiliate_commission weeklyDiscount monthlyDiscount cancellationPolicy } blockedDates { __typename blockedDates reservationId } calendars { __typename id name url listId status } } } }"#
       ))
 
     public var listId: String
@@ -124,6 +124,8 @@ extension PTProAPI {
               .field("basePrice", Double?.self),
               .field("cleaningPrice", Double?.self),
               .field("currency", String?.self),
+              .field("is_affiliate", Int?.self),
+              .field("affiliate_commission", Double?.self),
               .field("weeklyDiscount", Int?.self),
               .field("monthlyDiscount", Int?.self),
               .field("cancellationPolicy", Int?.self),
@@ -138,6 +140,8 @@ extension PTProAPI {
             var basePrice: Double? { __data["basePrice"] }
             var cleaningPrice: Double? { __data["cleaningPrice"] }
             var currency: String? { __data["currency"] }
+            var is_affiliate: Int? { __data["is_affiliate"] }
+            var affiliate_commission: Double? { __data["affiliate_commission"] }
             var weeklyDiscount: Int? { __data["weeklyDiscount"] }
             var monthlyDiscount: Int? { __data["monthlyDiscount"] }
             var cancellationPolicy: Int? { __data["cancellationPolicy"] }

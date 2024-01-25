@@ -133,7 +133,7 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
     func initDates() {
         let month = calendar.component(.month, from: today)
         let year = calendar.component(.year, from: today)
-        var dateComp = DateComponents(year: year, month: month, day: 1)
+        let dateComp = DateComponents(year: year, month: month, day: 1)
         var curMonth = calendar.date(from: dateComp)
         
         months = [Date]()
@@ -144,7 +144,7 @@ public class AirbnbDatePickerViewController: UICollectionViewController {
             
             let numOfDays = calendar.range(of: .day, in: .month, for: curMonth!)!.count
             let firstWeekDay = calendar.component(.weekday, from: curMonth!.startOfMonth())
-            let lastWeekDay = calendar.component(.weekday, from: curMonth!.endOfmonth())
+            _ = calendar.component(.weekday, from: curMonth!.endOfmonth())
             print("weekday",firstWeekDay)
             days.append((days: numOfDays, prepend: firstWeekDay-1, append: 7 ))
             

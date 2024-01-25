@@ -38,3 +38,19 @@ errorMessage
 status
 }
 }
+
+#CreateSearchlist
+mutation CreateSearchlist($userId:String,$dates: String ) {
+CreateSearchlist(userId:$userId, dates: $dates) {
+status
+errorMessage
+}
+}
+
+#getTrymelistview
+query getTrymelistview($userId: String,$listId:Int){
+getTrymelistview(userId:$userId,listId:$listId){
+errorMessage
+status
+}
+}

@@ -45,7 +45,8 @@ extension STPAnalyticsClient {
 
     func logPaymentMethodCreationAttempt(
         with configuration: NSObject?,
-        paymentMethodType: String?
+        paymentMethodType: String?,
+        apiClient: STPAPIClient
     ) {
         log(
             analytic: GenericPaymentAnalytic(
@@ -55,6 +56,20 @@ extension STPAnalyticsClient {
                 additionalParams: [
                     "source_type": paymentMethodType ?? "unknown",
                 ]
+            ),
+            apiClient: apiClient
+        )
+    }
+
+    func logPaymentMethodUpdateAttempt(
+        with configuration: NSObject?
+    ) {
+        log(
+            analytic: GenericPaymentAnalytic(
+                event: .paymentMethodUpdate,
+                paymentConfiguration: configuration,
+                productUsage: productUsage,
+                additionalParams: [:]
             )
         )
     }
@@ -64,7 +79,8 @@ extension STPAnalyticsClient {
 extension STPAnalyticsClient {
     func logPaymentIntentConfirmationAttempt(
         with configuration: NSObject?,
-        paymentMethodType: String?
+        paymentMethodType: String?,
+        apiClient: STPAPIClient
     ) {
         log(
             analytic: GenericPaymentAnalytic(
@@ -74,13 +90,15 @@ extension STPAnalyticsClient {
                 additionalParams: [
                     "source_type": paymentMethodType ?? "unknown",
                 ]
-            )
+            ),
+            apiClient: apiClient
         )
     }
 
     func logSetupIntentConfirmationAttempt(
         with configuration: NSObject?,
-        paymentMethodType: String?
+        paymentMethodType: String?,
+        apiClient: STPAPIClient
     ) {
         log(
             analytic: GenericPaymentAnalytic(
@@ -90,7 +108,8 @@ extension STPAnalyticsClient {
                 additionalParams: [
                     "source_type": paymentMethodType ?? "unknown",
                 ]
-            )
+            ),
+            apiClient: apiClient
         )
     }
 }

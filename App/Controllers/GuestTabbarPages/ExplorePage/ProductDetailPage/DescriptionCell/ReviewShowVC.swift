@@ -199,7 +199,7 @@ class ReviewShowVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                                    NSAttributedString.Key.foregroundColor:  UIColor(named: "Title_Header")
                                ]
                                    
-                    let attributedString = NSMutableAttributedString(string: "\(Utility.shared.getLanguage()?.value(forKey: "Verifiedby") ?? "Verified by") \(Utility.shared.getLanguage()?.value(forKey: "appname") ?? "RentALL")" , attributes: attributes as [NSAttributedString.Key : Any])
+                    let attributedString = NSMutableAttributedString(string: "\(Utility.shared.getLanguage()?.value(forKey: "Verifiedby") ?? "Verified by") \(Utility.shared.getLanguage()?.value(forKey: "appname") ?? "PTPRO")" , attributes: attributes as [NSAttributedString.Key : Any])
                     
                     cell.titleLabel.attributedText = attributedString
                     
@@ -329,7 +329,7 @@ class ReviewShowVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                                NSAttributedString.Key.foregroundColor:  UIColor(named: "Title_Header")
                            ]
                                
-                let attributedString = NSMutableAttributedString(string: "\(Utility.shared.getLanguage()?.value(forKey: "Verifiedby") ?? "Verified by") \(Utility.shared.getLanguage()?.value(forKey: "appname") ?? "RentALL")" , attributes: attributes as [NSAttributedString.Key : Any])
+                let attributedString = NSMutableAttributedString(string: "\(Utility.shared.getLanguage()?.value(forKey: "Verifiedby") ?? "Verified by") \(Utility.shared.getLanguage()?.value(forKey: "appname") ?? "PTPRO")" , attributes: attributes as [NSAttributedString.Key : Any])
                 
                 cell.titleLabel.attributedText = attributedString
                 

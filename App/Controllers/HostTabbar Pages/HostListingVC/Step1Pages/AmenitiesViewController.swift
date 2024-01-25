@@ -132,10 +132,16 @@ class AmenitiesViewController: BaseHostTableviewController,UICollectionViewDeleg
             for i in 0..<amenitiesList.count
             {
                 var amenityInfo = [String : Any]()
-                amenityInfo.updateValue(amenitiesList[i]!.itemName!, forKey: "itemName")
-                amenityInfo.updateValue(amenitiesList[i]!.id!, forKey: "id")
-                if let image = amenitiesList[i]!.image {
-                    amenityInfo.updateValue(image, forKey: "image")
+                if let list = amenitiesList[i]{
+                    if let itemName = list.itemName{
+                        amenityInfo.updateValue(itemName, forKey: "itemName")
+                    }
+                    if let id = list.id{
+                        amenityInfo.updateValue(id, forKey: "id")
+                    }
+                    if let image = list.image {
+                        amenityInfo.updateValue(image, forKey: "image")
+                    }
                 }
                 else {
                     
@@ -165,10 +171,12 @@ class AmenitiesViewController: BaseHostTableviewController,UICollectionViewDeleg
 
         }
         else{
-
-            amenity = (amenityList.first! is [String : Any]) ? amenityList.first!["itemName"] as! String : ""
+            if let amenityList = amenityList.first,let itemName = amenityList["itemName"] as? String{
+                amenity = itemName
+            }else{
+                amenity = ""
+            }
             Utility.shared.selectedAmenityIdList.removeAllObjects()
-
         }
         Utility.shared.step1ValuesInfo.updateValue(Utility.shared.selectedAmenityIdList, forKey: "amenities")
         amenitiesCollection.reloadData()

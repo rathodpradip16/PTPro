@@ -34,11 +34,11 @@ extension PTProAPI {
       case "Query": return PTProAPI.Objects.Query
       case "AffiliateUserDocumentManagementType": return PTProAPI.Objects.AffiliateUserDocumentManagementType
       case "Mutation": return PTProAPI.Objects.Mutation
+      case "subscriptionPaymentType": return PTProAPI.Objects.SubscriptionPaymentType
+      case "Reservation": return PTProAPI.Objects.Reservation
       case "Reviewlist": return PTProAPI.Objects.Reviewlist
       case "Reviews": return PTProAPI.Objects.Reviews
       case "userProfile": return PTProAPI.Objects.UserProfile
-      case "subscriptionPaymentType": return PTProAPI.Objects.SubscriptionPaymentType
-      case "Reservation": return PTProAPI.Objects.Reservation
       case "SiteSettingsCommon": return PTProAPI.Objects.SiteSettingsCommon
       case "ApplicationVersion": return PTProAPI.Objects.ApplicationVersion
       case "AllEmailToken": return PTProAPI.Objects.AllEmailToken
@@ -121,10 +121,11 @@ extension PTProAPI {
       case "listBlockedDates": return PTProAPI.Objects.ListBlockedDates
       case "ListCalendar": return PTProAPI.Objects.ListCalendar
       case "HostSuggested": return PTProAPI.Objects.HostSuggested
+      case "SearchListing": return PTProAPI.Objects.SearchListing
+      case "Trymelistviews": return PTProAPI.Objects.Trymelistviews
       case "AllBillingType": return PTProAPI.Objects.AllBillingType
       case "BillingType": return PTProAPI.Objects.BillingType
       case "SpecialPricingType": return PTProAPI.Objects.SpecialPricingType
-      case "SearchListing": return PTProAPI.Objects.SearchListing
       case "SocialVerification": return PTProAPI.Objects.SocialVerification
       case "emailToken": return PTProAPI.Objects.EmailToken
       case "AllCountry": return PTProAPI.Objects.AllCountry

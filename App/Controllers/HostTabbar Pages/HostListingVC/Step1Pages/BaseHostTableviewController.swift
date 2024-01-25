@@ -45,7 +45,7 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func guestroom_detail(roomdetail: String) {
-//      self.setRoomType()
+//          self.setRoomType()
 //        hostTable.reloadData()
     }
     
@@ -273,7 +273,7 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
         
         
         let updatelist = PTProAPI.UpdateListingStep3Mutation(id: .some(Utility.shared.step3ValuesInfo["id"] as! Int),
-                                                    houseRules: .some(Utility.shared.step3ValuesInfo["houseRules"] as! [Int?]), bookingNoticeTime: .some("\(Utility.shared.step3ValuesInfo["bookingNoticeTime"] ?? "")"), checkInStart: .some("\(Utility.shared.step3ValuesInfo["checkInStart"] ?? "")"), checkInEnd: .some("\(Utility.shared.step3ValuesInfo["checkInEnd"] ?? "")"), maxDaysNotice:  .some("\(Utility.shared.step3ValuesInfo["maxDaysNotice"] ?? "")"), minNight: Utility.shared.step3ValuesInfo["minNight"] as! GraphQLNullable<Int>, maxNight: Utility.shared.step3ValuesInfo["maxNight"] as! GraphQLNullable<Int>, basePrice: .some(Utility.shared.host_basePrice), cleaningPrice: .some(Utility.shared.host_cleanPrice), currency: .some("\(Utility.shared.step3ValuesInfo["currency"] ?? "")"), weeklyDiscount: .some(Int(weekprice) ?? 0), monthlyDiscount: .some(Int(monthprice) ?? 0), blockedDates: .some([]), bookingType: Utility.shared.step3ValuesInfo["bookingType"] as! String, cancellationPolicy: .some(Utility.shared.step3ValuesInfo["cancellationPolicy"] as! Int))
+                                                    houseRules: .some(Utility.shared.step3ValuesInfo["houseRules"] as! [Int?]), bookingNoticeTime: .some("\(Utility.shared.step3ValuesInfo["bookingNoticeTime"] ?? "")"), checkInStart: .some("\(Utility.shared.step3ValuesInfo["checkInStart"] ?? "")"), checkInEnd: .some("\(Utility.shared.step3ValuesInfo["checkInEnd"] ?? "")"), maxDaysNotice:  .some("\(Utility.shared.step3ValuesInfo["maxDaysNotice"] ?? "")"), minNight: Utility.shared.step3ValuesInfo["minNight"] as? Int ?? 0, maxNight: Utility.shared.step3ValuesInfo["maxNight"] as? Int ?? 0, basePrice: .some(Utility.shared.host_basePrice), cleaningPrice: .some(Utility.shared.host_cleanPrice), currency: .some("\(Utility.shared.step3ValuesInfo["currency"] ?? "")"), weeklyDiscount: .some(Int(weekprice) ?? 0), monthlyDiscount: .some(Int(monthprice) ?? 0), blockedDates: .some([]), bookingType: Utility.shared.step3ValuesInfo["bookingType"] as! String, cancellationPolicy: .some(Utility.shared.step3ValuesInfo["cancellationPolicy"] as! Int))
         
         Network.shared.apollo_headerClient.perform(mutation: updatelist){  response in
             switch response {
@@ -392,51 +392,155 @@ func updateListingAPICall(completion: (_ success: Bool) -> Void) {
             Utility.shared.step1ValuesInfo.updateValue(bedTypeString.trimmingCharacters(in: .whitespaces), forKey: "bedTypes")
         }
         
+        var roomType =  ""
+        var houseType =  ""
+        var residenceType =  ""
+        var bedrooms =  ""
+        var buildingSize =  ""
+        var bedType =  ""
+        var beds = 1
+        var personCapacity = 1
+        var bathrooms = 1.0
+        var bathroomType =  ""
+        var country =  ""
+        var street =  ""
+        var buildingName =  ""
+        var city =  ""
+        var state =  ""
+        var zipcode =  ""
+        var lat = 0.0
+        var lng =  0.0
+        var bedTypes =  ""
+        var isMapTouched = false
         
+        if let strroomType = Utility.shared.step1ValuesInfo["roomType"]{
+            roomType = "\(strroomType)"
+        }
+        if let strhouseType = Utility.shared.step1ValuesInfo["houseType"]{
+            houseType = "\(strhouseType)"
+        }
+        if let strresidenceType = Utility.shared.step1ValuesInfo["residenceType"]{
+            residenceType = "\(strresidenceType)"
+        }
+        if let strbedrooms = Utility.shared.step1ValuesInfo["bedrooms"]{
+            bedrooms = "\(strbedrooms)"
+        }
+        if let strbuildingSize = Utility.shared.step1ValuesInfo["buildingSize"]{
+            buildingSize = "\(strbuildingSize)"
+        }
+        if let strbedType = Utility.shared.step1ValuesInfo["bedType"]{
+            bedType = "\(strbedType)"
+        }
+        if let intBeds = Utility.shared.step1ValuesInfo["beds"]{
+            beds = intBeds as! Int
+        }
+        if let IntPersonCapacity = Utility.shared.step1ValuesInfo["personCapacity"]{
+            personCapacity = IntPersonCapacity as! Int
+        }
+        if let DBathrooms = Utility.shared.step1ValuesInfo["bathrooms"]{
+            bathrooms = DBathrooms as! Double
+        }
+        if let strbathroomType = Utility.shared.step1ValuesInfo["bathroomType"]{
+            bathroomType = "\(strbathroomType)"
+        }
+        if let strcountry = Utility.shared.step1ValuesInfo["country"]{
+            country = "\(strcountry)"
+        }
+        if let strstreet = Utility.shared.step1ValuesInfo["street"]{
+            street = "\(strstreet)"
+        }
+        if let strbuildingName = Utility.shared.step1ValuesInfo["buildingName"]{
+            buildingName = "\(strbuildingName)"
+        }
+        if let strcity = Utility.shared.step1ValuesInfo["city"]{
+            city = "\(strcity)"
+        }
+        if let strstate = Utility.shared.step1ValuesInfo["state"]{
+            state = "\(strstate)"
+        }
+        if let strzipcode = Utility.shared.step1ValuesInfo["zipcode"]{
+            zipcode = "\(strzipcode)"
+        }
+        if let Dlat = Utility.shared.step1ValuesInfo["lat"]{
+            lat = Dlat as! Double
+        }
+        if let Dlng = Utility.shared.step1ValuesInfo["lng"]{
+            lng = Dlng as! Double
+        }
+        if let strbedTypes = Utility.shared.step1ValuesInfo["bedTypes"]{
+            bedTypes = "\(strbedTypes)"
+        }
+        if let strisMapTouched = Utility.shared.step1ValuesInfo["isMapTouched"]{
+            isMapTouched = strisMapTouched as! Bool
+        }
+        
+        var amenities:[Int] = []
+        var safetyAmenities:[Int] = []
+        var spaces:[Int] = []
+
+        if let step1ValuesInfo = Utility.shared.step1ValuesInfo as? [String : Any]{
+            if let arramenities = step1ValuesInfo["amenities"] as? [Int]{
+                amenities = arramenities
+            }
+            
+            if let arrsafetyAmenities = step1ValuesInfo["safetyAmenities"] as? [Int]{
+                safetyAmenities = arrsafetyAmenities
+            }
+            
+            if let arrspaces = step1ValuesInfo["spaces"] as? [Int]{
+                spaces = arrspaces
+            }
+        }
         
         let createlist = PTProAPI.CreateListingMutation(listId: .some(Utility.shared.createId),
-                                               roomType: .some("\(Utility.shared.step1ValuesInfo["roomType"] ?? "")"),
-                                               houseType: .some("\(Utility.shared.step1ValuesInfo["houseType"] ?? "")"),
-                                               residenceType: .some("\(Utility.shared.step1ValuesInfo["residenceType"] ?? "")"),
-                                               bedrooms: .some("\(Utility.shared.step1ValuesInfo["bedrooms"] ?? "")") ,
-                                               buildingSize: .some("\(Utility.shared.step1ValuesInfo["buildingSize"] ?? "")"),
-                                               bedType: .some("\(Utility.shared.step1ValuesInfo["bedType"] ?? "")") ,
-                                               beds: Utility.shared.step1ValuesInfo["beds"] as! GraphQLNullable<Int> ,
-                                               personCapacity: Utility.shared.step1ValuesInfo["personCapacity"] as! GraphQLNullable<Int> ,
-                                               bathrooms: Utility.shared.step1ValuesInfo["bathrooms"] as! GraphQLNullable<Double> ,
-                                               bathroomType: .some("\(Utility.shared.step1ValuesInfo["bathroomType"] ?? "")"),
-                                               country: .some("\(Utility.shared.step1ValuesInfo["country"] ?? "")"),
-                                               street: .some("\(Utility.shared.step1ValuesInfo["street"] ?? "")"),
-                                               buildingName: .some("\(Utility.shared.step1ValuesInfo["buildingName"] ?? "")"),
-                                               city: .some("\(Utility.shared.step1ValuesInfo["city"] ?? "")"),
-                                               state: .some("\(Utility.shared.step1ValuesInfo["state"] ?? "")"),
-                                               zipcode: .some("\(Utility.shared.step1ValuesInfo["zipcode"] ?? "")"),
-                                               lat: .some(Utility.shared.step1ValuesInfo["lat"] as! Double) ,
-                                               lng: .some(Utility.shared.step1ValuesInfo["lng"] as! Double) ,
-                                               bedTypes: .some("\(Utility.shared.step1ValuesInfo["bedTypes"] ?? "")") ,
-                                               isMapTouched: .some((Utility.shared.step1ValuesInfo["isMapTouched"] != nil)) ,
-                                               amenities: .some(Utility.shared.step1ValuesInfo["amenities"] as? [Int?] ?? []),
-                                               safetyAmenities: .some(Utility.shared.step1ValuesInfo["safetyAmenities"] as? [Int?] ?? []),
-                                               spaces: .some(Utility.shared.step1ValuesInfo["spaces"] as? [Int?] ?? []))
+                                               roomType: .some(roomType),
+                                               houseType: .some(houseType),
+                                               residenceType: .some(residenceType),
+                                               bedrooms: .some(bedrooms) ,
+                                               buildingSize: .some(buildingSize),
+                                               bedType: .some(bedType) ,
+                                                        beds: .some(beds),
+                                                        personCapacity: .some(personCapacity),
+                                                        bathrooms:.some(bathrooms) ,
+                                               bathroomType: .some(bathroomType),
+                                               country: .some(country),
+                                               street: .some(street),
+                                               buildingName: .some(buildingName),
+                                               city: .some(city),
+                                               state: .some(state),
+                                               zipcode: .some(zipcode),
+                                               lat: .some(lat) ,
+                                               lng: .some(lng) ,
+                                               bedTypes: .some(bedTypes) ,
+                                               isMapTouched: .some(isMapTouched) ,
+                                               amenities: .some(amenities),
+                                               safetyAmenities: .some(safetyAmenities),
+                                               spaces: .some(spaces))
+//        print("==================================")
+//        print(createlist.__variables?._jsonEncodableValue ?? "")
+//        print("==================================")
+
         Network.shared.apollo_headerClient.perform(mutation: createlist){ response in
             switch response {
             case .success(let result):
+//                print("status \(result.data?.createListing?.status ?? 50000)")
+//                print("errorMessage \(result.data?.createListing?.errorMessage ?? "errorMessage")")
                 if let data = result.data?.createListing?.status,data == 200 {
-                    
-                    Utility.shared.createId = (result.data?.createListing?.id)!
-                    
-                    if(Utility.shared.isfromshowmap) {
-                        return
-                    }  else {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            let becomeHost = BecomeHostVC()
-                            becomeHost.listID = "\(Utility.shared.createId)"
-                            becomeHost.showListingStepsAPICall(listID:"\(Utility.shared.createId)")
-                            becomeHost.modalPresentationStyle = .fullScreen
-                            self.present(becomeHost, animated:false, completion: nil)
+
+                    if let createListing = result.data?.createListing,let createId = createListing.id{
+                        Utility.shared.createId = createId
+                        if(Utility.shared.isfromshowmap) {
+                            return
+                        }  else {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                let becomeHost = BecomeHostVC()
+                                becomeHost.listID = "\(createId)"
+                                becomeHost.showListingStepsAPICall(listID:"\(createId)")
+                                becomeHost.modalPresentationStyle = .fullScreen
+                                self.present(becomeHost, animated:false, completion: nil)
+                            }
                         }
                     }
-                    
                 } else {
                     self.view.makeToast(result.data?.createListing?.errorMessage!)
                 }
@@ -468,6 +572,7 @@ func updateListingAPICall(completion: (_ success: Bool) -> Void) {
         else {
             completion(false)
             let UpdateListingStep2mutation = PTProAPI.UpdateListingStep2Mutation(id:Utility.shared.step2ValuesInfo["id"] != nil ? .some(Utility.shared.step2ValuesInfo["id"] as! Int) : .some(0), description:.some("\(Utility.shared.step2ValuesInfo["description"] ?? "")"), title:.some("\(Utility.shared.step2ValuesInfo["title"] ?? "")"), coverPhoto:Utility.shared.step2ValuesInfo["coverPhoto"] != nil ? .some(Utility.shared.step2ValuesInfo["coverPhoto"] as! Int) : .some(0))
+            print(UpdateListingStep2mutation.__variables?._jsonEncodableValue ?? "")
             Network.shared.apollo_headerClient.perform(mutation: UpdateListingStep2mutation){  response in
                 switch response {
                 case .success(let result):
@@ -524,7 +629,11 @@ func updateListingAPICall(completion: (_ success: Bool) -> Void) {
                         }
                         self.ProfileAPIArray = ((result.data?.userAccount?.result)!)
                         
-                        Utility.shared.userName  = "\(String(describing: self.ProfileAPIArray?.firstName != nil ? self.ProfileAPIArray?.firstName! : "User"))!"
+                        if let userName = Utility.shared.ProfileAPIArray?.firstName{
+                            Utility.shared.userName  = "\(userName)"
+                        }else{
+                            Utility.shared.userName  = "User"
+                        }
                         
                         if let profImage = self.ProfileAPIArray?.picture{
                             Utility.shared.pickedimageString = "\(IMAGE_AVATAR_MEDIUM)\(profImage)"
@@ -558,9 +667,13 @@ func updateListingAPICall(completion: (_ success: Bool) -> Void) {
     {
        
         if(Utility.shared.pickedimageString == "") {
-            overlayUsername.text = "Hi, \(ProfileAPIArray?.firstName ?? "User")"
-        overlaystep3.text = "\(Utility.shared.getLanguage()?.value(forKey: "ready") ?? "")"
-        
+            if let firstName = ProfileAPIArray?.firstName{
+                overlayUsername.text = "Hi, \(firstName)"
+            }else{
+                overlayUsername.text = "Hi, \("User")"
+            }
+            overlaystep3.text = "\(Utility.shared.getLanguage()?.value(forKey: "ready") ?? "")"
+
             if let profImage = ProfileAPIArray?.picture{
      overlayUserImage.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(profImage)"), placeholderImage: #imageLiteral(resourceName: "unknown"))
             overlayUserImage.contentMode = .scaleAspectFill
@@ -671,37 +784,37 @@ func updateListingAPICall(completion: (_ success: Bool) -> Void) {
     
     func setRoomType()
     {
-        if(Utility.shared.getListSettingsArray?.roomType != nil)
-        {
-            let listSettings = (Utility.shared.getListSettingsArray?.roomType?.listSettings!)!
-        for item in listSettings
-        {
-            itemNameArray.append((item?.itemName)!)
-        }
-            if !Utility.shared.step1ValuesInfo.keys.contains("roomType") && itemNameArray.count > 0
-        {
-            placeLabel = itemNameArray.first!
-            listValuePicker.selectRow(0, inComponent: 0, animated: true)
-            
-            Utility.shared.step1ValuesInfo.updateValue((listSettings[0]?.id!)!, forKey: "roomType")
-        }else{
-            _ = listSettings.filter({ (item) -> Bool in
-                if (Utility.shared.step1ValuesInfo["roomType"]! as? Int) == item?.id
-                {
-                    placeLabel = (item?.itemName!)!
-                    return true
-                }else{
-                    return false
-                }
-            })
-            if !placeLabel.isEmpty
+        if let roomType = Utility.shared.getListSettingsArray?.roomType, let listSettings = roomType.listSettings {
+            for item in listSettings
             {
-                let index = itemNameArray.firstIndex(where: { (item) -> Bool in
-                    item == placeLabel
-                })
-                listValuePicker.selectRow(index != nil ? index! : 0, inComponent: 0, animated: true)
+                itemNameArray.append((item?.itemName)!)
             }
-        }
+            
+            if !Utility.shared.step1ValuesInfo.keys.contains("roomType") && itemNameArray.count > 0
+            {
+                placeLabel = itemNameArray.first!
+                listValuePicker.selectRow(0, inComponent: 0, animated: true)
+                if let item = listSettings[0], let roomTypeId = item.id{
+                    Utility.shared.step1ValuesInfo.updateValue(roomTypeId, forKey: "roomType")
+                }
+            }else{
+                _ = listSettings.filter({ (item) -> Bool in
+                    if (Utility.shared.step1ValuesInfo["roomType"]! as? Int) == item?.id
+                    {
+                        placeLabel = (item?.itemName!)!
+                        return true
+                    }else{
+                        return false
+                    }
+                })
+                if !placeLabel.isEmpty
+                {
+                    let index = itemNameArray.firstIndex(where: { (item) -> Bool in
+                        item == placeLabel
+                    })
+                    listValuePicker.selectRow(index != nil ? index! : 0, inComponent: 0, animated: true)
+                }
+            }
         }
     }
     
@@ -998,7 +1111,11 @@ func updateListingAPICall(completion: (_ success: Bool) -> Void) {
         {
             placeLabel = itemNameArray[row]
             listValuePicker.selectRow(row, inComponent: component, animated: true)
-            Utility.shared.step1ValuesInfo.updateValue((Utility.shared.getListSettingsArray?.roomType?.listSettings![row]?.id!)!, forKey: "roomType")
+            if let roomType = Utility.shared.getListSettingsArray?.roomType?.listSettings![row],let roomTypeId = roomType.id{
+                Utility.shared.step1ValuesInfo.updateValue(roomTypeId, forKey: "roomType")
+            }else{
+                Utility.shared.step1ValuesInfo.updateValue(0, forKey: "roomType")
+            }
         }else{
             guestLabel = guestsDropdownArray[row]
             listValuePicker.selectRow(row, inComponent: component, animated: true)

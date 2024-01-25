@@ -318,10 +318,13 @@ class ExplorePageVC: UIViewController,UICollectionViewDelegate,UICollectionViewD
                         return
                     }
                     
-                    
                     Utility.shared.ProfileAPIArray = ((result.data?.userAccount?.result)!)
-                    Utility.shared.userName  = "\((Utility.shared.ProfileAPIArray?.firstName != nil ? Utility.shared.ProfileAPIArray?.firstName! : "User") ?? "")!"
                     
+                    if let userName = Utility.shared.ProfileAPIArray?.firstName{
+                        Utility.shared.userName  = "\(userName)"
+                    }else{
+                        Utility.shared.userName  = "User"
+                    }
                     
                     if let profImage = Utility.shared.ProfileAPIArray?.picture{
                         Utility.shared.pickedimageString = "\(IMAGE_AVATAR_MEDIUM)\(profImage)"
@@ -603,7 +606,7 @@ func checkForUpdate(){
                     deleteObj.modalPresentationStyle = .overFullScreen
                     self.present(deleteObj, animated: false, completion: nil)
                     
-                    //                    let alertController = UIAlertController(title: "RentALL", message: result.data?.getApplicationVersionInfo?.errorMessage, preferredStyle: .alert)
+                    //                    let alertController = UIAlertController(title: "PTPRO", message: result.data?.getApplicationVersionInfo?.errorMessage, preferredStyle: .alert)
                     //                    alertController.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey:"Update") ?? "Update")", style: .default, handler: { action in
                     //
                     
@@ -1465,8 +1468,12 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
 //                imageCell.contentView.backgroundColor = UIColor.white
                 viewListing.cc_setZoomTransition(originalView:imageCell.contentView)
             }
-
-            self.present(viewListing, animated: true, completion: nil)
+            
+            self.present(viewListing, animated: true, completion: {
+                if(Utility.shared.selectedstartDate_filter != "" && Utility.shared.selectedEndDate_filter != ""){
+                    self.GetTrymelistviewAPI(listId: self.FilterArray[indexPath.row].id ?? 0)
+                }
+            })
         }else if (collectionView == self.popularCollectionView){
             
             Utility.shared.locationfromSearch = populardestinationArray[indexPath.row].locationAddress!
@@ -2979,7 +2986,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
         }
         
         self.collectionViewFilterPage.isHidden = PageIndex == 1 ? false : false
-        var searchListingquery = PTProAPI.SearchListingQuery(personCapacity: .some(guest_filter), currentPage: .some(PageIndex), dates:  .some("'\( Utility.shared.selectedstartDate_filter)' AND '\(Utility.shared.selectedEndDate_filter)'"), lat: 0, lng: 0, amenities: .some(Utility.shared.amenitiesArray as! [Int]), beds: .some(Utility.shared.beds_count as Int), bedrooms:.some(Utility.shared.bedrooms_count as Int), bathrooms:.some(Utility.shared.bathroom_count as Int), roomType: .some((Utility.shared.roomtypeArray as? [Int] ?? [])), spaces:.some(Utility.shared.facilitiesArray as! [Int]), houseRules: .some(Utility.shared.houseRulesArray as! [Int]), priceRange: .some(Utility.shared.priceRangeArray as! [Int]), geoType: .none, geography:.none , bookingType: .some(bookingtype), address: .some(Utility.shared.locationfromSearch),currency: .some(currency))
+        let searchListingquery = PTProAPI.SearchListingQuery(personCapacity: .some(guest_filter), currentPage: .some(PageIndex), dates:  .some("'\( Utility.shared.selectedstartDate_filter)' AND '\(Utility.shared.selectedEndDate_filter)'"), lat: 0, lng: 0, amenities: .some(Utility.shared.amenitiesArray as! [Int]), beds: .some(Utility.shared.beds_count as Int), bedrooms:.some(Utility.shared.bedrooms_count as Int), bathrooms:.some(Utility.shared.bathroom_count as Int), roomType: .some((Utility.shared.roomtypeArray as? [Int] ?? [])), spaces:.some(Utility.shared.facilitiesArray as! [Int]), houseRules: .some(Utility.shared.houseRulesArray as! [Int]), priceRange: .some(Utility.shared.priceRangeArray as! [Int]), geoType: .none, geography:.none , bookingType: .some(bookingtype), address: .some(Utility.shared.locationfromSearch),currency: .some(currency))
         self.scrollView.isHidden = true
         Network.shared.apollo_headerClient.fetch(query: searchListingquery,cachePolicy:.fetchIgnoringCacheData){ response in
             self.scrollView.isHidden = false
@@ -3071,6 +3078,9 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
                         self.viewDidLayoutSubviews()
                     }
                     
+                    if(Utility.shared.selectedstartDate_filter != "" && Utility.shared.selectedEndDate_filter != ""){
+                        self.createSearchListAPI()
+                    }
                 }
                 else {
                     self.collectionViewFilterPage?.isSkeletonable = false
@@ -3132,6 +3142,48 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     }
     
 }
+    
+    //MARK: - createSearchListAPI
+    func createSearchListAPI(){
+        if Utility.shared.isConnectedToNetwork(){
+            let createSearchlistMutation = PTProAPI.CreateSearchlistMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), dates: .some("'\( Utility.shared.selectedstartDate_filter)' AND '\(Utility.shared.selectedEndDate_filter)'"))
+            Network.shared.apollo_headerClient.perform(mutation: createSearchlistMutation){ [self] response in
+                switch response {
+                case .success(let result):
+                    if let data = result.data?.createSearchlist?.status,data == 200 {
+                        
+                    } else {
+                        self.view.makeToast(result.data?.createSearchlist?.errorMessage)
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
+                
+            }
+        }
+    }
+    
+    //MARK: - GetTrymelistviewAPI
+    func GetTrymelistviewAPI(listId:Int){
+        if Utility.shared.isConnectedToNetwork(){
+            let getTrymelistviewQuery = PTProAPI.GetTrymelistviewQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), listId: .some(listId))
+                    
+            Network.shared.apollo_headerClient.fetch(query: getTrymelistviewQuery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
+                switch response {
+                case .success(let result):
+                    if let status = result.data?.getTrymelistview?.status,status == "200"{
+                        
+                    } else {
+                        self.view.makeToast(result.data?.getTrymelistview?.errorMessage)
+                    }
+                case .failure(let error):
+                    self.view.makeToast(error.localizedDescription)
+                }
+                
+            }
+        }
+    }
+    
     //MARK ******************************************* IMAGESCROLLER DELEGATE METHODS **************************************************************>
     
 
@@ -3238,7 +3290,7 @@ extension ExplorePageVC: searchPageProtocol{
         
     }
     
-    
+
     
 }
 

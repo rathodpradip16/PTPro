@@ -383,6 +383,7 @@ class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
             switch response {
             case .success(let result):
                 if let data = result.data?.manageListingSteps?.status,data == 200 {
+                    
                 } else {
                     self.view.makeToast(result.data?.manageListingSteps?.errorMessage!)
                 }

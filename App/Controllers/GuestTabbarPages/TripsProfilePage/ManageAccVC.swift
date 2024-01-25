@@ -42,7 +42,7 @@ class ManageAccVC: UIViewController {
               NSAttributedString.Key.font: UIFont(name:APP_FONT, size: 14.0)!
            ]
            let boldText = NSAttributedString(string: "\(Utility.shared.getLanguage()?.value(forKey:"caution") ?? "Caution:") ", attributes: boldAttribute)
-           let regularText = NSAttributedString(string: "\(Utility.shared.getLanguage()?.value(forKey:"deleteCaution") ?? "All of your data and current reservations and bookings will be lost if you delete your RentALL account.")", attributes: regularAttribute)
+           let regularText = NSAttributedString(string: "\(Utility.shared.getLanguage()?.value(forKey:"deleteCaution") ?? "All of your data and current reservations and bookings will be lost if you delete your PTPRO account.")", attributes: regularAttribute)
            let newString = NSMutableAttributedString()
            newString.append(boldText)
            newString.append(regularText)

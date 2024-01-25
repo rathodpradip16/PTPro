@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -71,7 +70,7 @@
                                 <constraint firstAttribute="width" constant="85" id="Q8N-W7-WdH"/>
                             </constraints>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to RentALL" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dfM-7l-PLQ">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to PTPRO" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dfM-7l-PLQ">
                             <rect key="frame" x="28" y="125" width="319" height="38"/>
                             <fontDescription key="fontDescription" name="Circular-Bold" family="Circular" pointSize="30"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -317,6 +316,7 @@
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="S6G-Pn-0Dm" secondAttribute="bottom" constant="7" id="8Zc-4P-VjK"/>
                         <constraint firstItem="D3Y-Ie-31f" firstAttribute="leading" secondItem="S6G-Pn-0Dm" secondAttribute="trailing" constant="93" id="BJ1-FI-l67"/>
+                        <constraint firstAttribute="width" secondItem="mAf-kl-6MN" secondAttribute="height" multiplier="414:55" id="Y6E-Eh-tJq"/>
                         <constraint firstItem="S6G-Pn-0Dm" firstAttribute="top" secondItem="mAf-kl-6MN" secondAttribute="top" constant="8" id="Y99-3H-vEd"/>
                         <constraint firstItem="D3Y-Ie-31f" firstAttribute="top" secondItem="mAf-kl-6MN" secondAttribute="top" constant="8" id="d28-tP-Ew8"/>
                         <constraint firstItem="S6G-Pn-0Dm" firstAttribute="leading" secondItem="mAf-kl-6MN" secondAttribute="leading" constant="16" id="saN-Zl-yQg"/>
@@ -337,7 +337,6 @@
                 <constraint firstItem="dfM-7l-PLQ" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" multiplier="0.85" id="NH8-j2-Hd9"/>
                 <constraint firstItem="MAa-Wq-5gl" firstAttribute="leading" secondItem="qrP-qR-hFM" secondAttribute="leading" id="SiQ-Y9-nao"/>
                 <constraint firstItem="qrP-qR-hFM" firstAttribute="bottom" secondItem="MAa-Wq-5gl" secondAttribute="bottom" id="XLd-lq-thh"/>
-                <constraint firstItem="mAf-kl-6MN" firstAttribute="width" secondItem="mAf-kl-6MN" secondAttribute="height" multiplier="414:55" id="Y6E-Eh-tJq"/>
                 <constraint firstItem="Yye-5K-kep" firstAttribute="centerX" secondItem="qrP-qR-hFM" secondAttribute="centerX" id="j1Z-kL-JJC"/>
                 <constraint firstItem="MAa-Wq-5gl" firstAttribute="trailing" secondItem="qrP-qR-hFM" secondAttribute="trailing" id="mb3-AY-kQ6"/>
                 <constraint firstAttribute="trailing" secondItem="mAf-kl-6MN" secondAttribute="trailing" id="pqe-Bg-3Q3"/>

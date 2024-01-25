@@ -131,7 +131,7 @@ coverPhoto
 status
 errorMessage
 }
-} 
+}
 
 
 mutation RemoveListPhotos(

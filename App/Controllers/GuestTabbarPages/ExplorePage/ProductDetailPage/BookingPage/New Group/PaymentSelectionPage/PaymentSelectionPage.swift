@@ -707,6 +707,7 @@ class PaymentSelectionPage: UIViewController {
                         let orderSummaryVC = storyboard.instantiateViewController(withIdentifier: "OrderSummaryVC") as! OrderSummaryVC
                         orderSummaryVC.selectedPlan = self.selectedPlanDetail?.title ?? ""
                         orderSummaryVC.selectedPaymentType = self.selectedPaymentType
+                        orderSummaryVC.isFromPayment = true
                         orderSummaryVC.modalPresentationStyle = .fullScreen
                         self.present(orderSummaryVC, animated: true, completion: nil)
                     }
@@ -937,6 +938,7 @@ extension PaymentSelectionPage: UITextFieldDelegate , WebviewVCDelegate{
                         let orderSummaryVC = storyboard.instantiateViewController(withIdentifier: "OrderSummaryVC") as! OrderSummaryVC
                         orderSummaryVC.selectedPlan = self.selectedPlanDetail?.title ?? ""
                         orderSummaryVC.selectedPaymentType = self.selectedPaymentType
+                        orderSummaryVC.isFromPayment = true
                         orderSummaryVC.modalPresentationStyle = .fullScreen
                         self.present(orderSummaryVC, animated: true, completion: nil)
                     } else {

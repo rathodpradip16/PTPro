@@ -140,34 +140,30 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func showListingStepsAPICall(listID:String)
     {
+        
         let showListingStepsquery = PTProAPI.ShowListingStepsQuery(listId: listID)
         Network.shared.apollo_headerClient.fetch(query: showListingStepsquery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
-                guard (result.data?.showListingSteps?.results) != nil else{
-                    if let errorMsg = result.data?.showListingSteps?.errorMessage, let status = result.data?.showListingSteps?.status, status == 400 || errorMsg  == "Something went wrong"
+                if let results = result.data?.showListingSteps?.results{
+                    //self.becomeStepsTable.isHidden = false
+                    self.lottieView.isHidden = true
+                    self.showListingstepArray = results
+                    if(!self.ispublishenable)
                     {
-                        self.UHOhLbl.isHidden = false
-                        self.CantSeeLbl.isHidden = false
-                        self.errorCode404Lbl.isHidden = false
-                        self.becomeStepsTable.isHidden = true
-                        
-                        print("Missing Data")
+                        self.becomeStepsTable.reloadData()
                     }
-                    return
+                    else
+                    {
+                        self.ispublishenable = false
+                    }
+                }else if let errorMsg = result.data?.showListingSteps?.errorMessage, let status = result.data?.showListingSteps?.status, status == 400 || errorMsg  == "Something went wrong"{
+                    self.UHOhLbl.isHidden = false
+                    self.CantSeeLbl.isHidden = false
+                    self.errorCode404Lbl.isHidden = false
+                    self.becomeStepsTable.isHidden = true
                     
-                }
-                
-                //self.becomeStepsTable.isHidden = false
-                self.lottieView.isHidden = true
-                self.showListingstepArray = (result.data?.showListingSteps?.results)!
-                if(!self.ispublishenable)
-                {
-                    self.becomeStepsTable.reloadData()
-                }
-                else
-                {
-                    self.ispublishenable = false
+                    print("Missing Data")
                 }
             case .failure(let error):
                 self.view.makeToast(error.localizedDescription)
@@ -177,7 +173,9 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func getStep3ListingDetails()
     {
-        let step3ListingDetailsquery = PTProAPI.GetListingDetailsStep3Query(listId: listID, preview: .some(false))
+        print("\(showListingstepArray?.listId ?? 0)")
+        let step3ListingDetailsquery = PTProAPI.GetListingDetailsStep3Query(listId: "\(showListingstepArray?.listId ?? 0)", preview: .some(true))
+        
         Network.shared.apollo_headerClient.fetch(query: step3ListingDetailsquery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -310,7 +308,8 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
    
     func getStep1ListingDetails()
     {
-        let step1ListingDetailsquery = PTProAPI.GetStep1ListingDetailsQuery(listId: listID, preview: true)
+        print("\(showListingstepArray?.listId ?? 0)")
+        let step1ListingDetailsquery = PTProAPI.GetStep1ListingDetailsQuery(listId: "\(showListingstepArray?.listId ?? 0)", preview: true)
         Network.shared.apollo_headerClient.fetch(query: step1ListingDetailsquery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -756,6 +755,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     func getListingDetailsStep2()
 {
+    print("\(showListingstepArray?.listId ?? 0)")
     let getlistingStep2query = PTProAPI.GetListingDetailsStep2Query(listId:"\(showListingstepArray?.listId ?? 0)", preview: true)
     Network.shared.apollo_headerClient.fetch(query: getlistingStep2query,cachePolicy:.fetchIgnoringCacheData){ response in
         switch response {

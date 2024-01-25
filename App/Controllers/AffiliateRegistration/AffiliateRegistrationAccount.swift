@@ -93,31 +93,31 @@ class AffiliateRegistrationAccount: UIViewController, UITextFieldDelegate ,Count
         txtAddressLine1.returnKeyType = .default
         txtAddressLine2.returnKeyType = .default
 
-        txtPayeeName.keyboardToolbar.nextBarButton.tag = 0
-        txtAddressLine1.keyboardToolbar.nextBarButton.tag = 1
-        txtAddressLine2.keyboardToolbar.nextBarButton.tag = 2
-        txtCity.keyboardToolbar.nextBarButton.tag = 3
-        txtZipCode.keyboardToolbar.nextBarButton.tag = 4
-        txtPhoneNumber.keyboardToolbar.nextBarButton.tag = 5
+        txtPayeeName.iq.toolbar.nextBarButton.tag = 0
+        txtAddressLine1.iq.toolbar.nextBarButton.tag = 1
+        txtAddressLine2.iq.toolbar.nextBarButton.tag = 2
+        txtCity.iq.toolbar.nextBarButton.tag = 3
+        txtZipCode.iq.toolbar.nextBarButton.tag = 4
+        txtPhoneNumber.iq.toolbar.nextBarButton.tag = 5
         
-        txtPayeeName.keyboardToolbar.previousBarButton.tag = 0
-        txtAddressLine1.keyboardToolbar.previousBarButton.tag = 1
-        txtAddressLine2.keyboardToolbar.previousBarButton.tag = 2
-        txtCity.keyboardToolbar.previousBarButton.tag = 3
-        txtZipCode.keyboardToolbar.previousBarButton.tag = 4
-        txtPhoneNumber.keyboardToolbar.previousBarButton.tag = 5
+        txtPayeeName.iq.toolbar.previousBarButton.tag = 0
+        txtAddressLine1.iq.toolbar.previousBarButton.tag = 1
+        txtAddressLine2.iq.toolbar.previousBarButton.tag = 2
+        txtCity.iq.toolbar.previousBarButton.tag = 3
+        txtZipCode.iq.toolbar.previousBarButton.tag = 4
+        txtPhoneNumber.iq.toolbar.previousBarButton.tag = 5
         
-        txtPayeeName.addPreviousNextDoneOnKeyboardWithTarget(self, previousAction: #selector(previousAction(btn:)), nextAction: #selector(nextAction(btn:)), doneAction: #selector(doneAction(btn:)))
+        txtPayeeName.iq.addPreviousNextDone(target: self, previousAction: #selector(previousAction(btn:)), nextAction: #selector(nextAction(btn:)), doneAction: #selector(doneAction(btn:)))
 
-        txtAddressLine1.addPreviousNextDoneOnKeyboardWithTarget(self, previousAction: #selector(previousAction(btn:)), nextAction: #selector(nextAction(btn:)), doneAction: #selector(doneAction(btn:)))
+        txtAddressLine1.iq.addPreviousNextDone(target: self, previousAction: #selector(previousAction(btn:)), nextAction: #selector(nextAction(btn:)), doneAction: #selector(doneAction(btn:)))
 
-        txtAddressLine2.addPreviousNextDoneOnKeyboardWithTarget(self, previousAction: #selector(previousAction(btn:)), nextAction: #selector(nextAction(btn:)), doneAction: #selector(doneAction(btn:)))
+        txtAddressLine2.iq.addPreviousNextDone(target: self, previousAction: #selector(previousAction(btn:)), nextAction: #selector(nextAction(btn:)), doneAction: #selector(doneAction(btn:)))
 
-        txtCity.addPreviousNextDoneOnKeyboardWithTarget(self, previousAction: #selector(previousAction(btn:)), nextAction: #selector(nextAction(btn:)), doneAction: #selector(doneAction(btn:)))
+        txtCity.iq.addPreviousNextDone(target: self, previousAction: #selector(previousAction(btn:)), nextAction: #selector(nextAction(btn:)), doneAction: #selector(doneAction(btn:)))
 
-        txtZipCode.addPreviousNextDoneOnKeyboardWithTarget(self, previousAction: #selector(previousAction(btn:)), nextAction: #selector(nextAction(btn:)), doneAction: #selector(doneAction(btn:)))
+        txtZipCode.iq.addPreviousNextDone(target: self, previousAction: #selector(previousAction(btn:)), nextAction: #selector(nextAction(btn:)), doneAction: #selector(doneAction(btn:)))
         
-        txtPhoneNumber.addDoneOnKeyboardWithTarget(self, action: #selector(doneAction(btn:)))
+        txtPhoneNumber.iq.addDone(target:self, action: #selector(doneAction(btn:)))
     }
 
     @objc func previousAction(btn:Any){

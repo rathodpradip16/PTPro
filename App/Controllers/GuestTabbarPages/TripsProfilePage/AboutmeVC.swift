@@ -152,7 +152,7 @@ class AboutmeVC: UIViewController,UITextViewDelegate{
         if(!subTitleLbl.isHidden) {
         subTitleLbl.isHidden = true
         }
-            let descriptionCount = (textView.text.count + (text.count - range.length))
+        _ = (textView.text.count + (text.count - range.length))
         
             return textView.text.count + (text.count - range.length) <= 250
     }
@@ -165,7 +165,7 @@ class AboutmeVC: UIViewController,UITextViewDelegate{
         subTitleLbl.isHidden = true
         }
            let info = sender.userInfo!
-           let keyboardFrame: CGRect = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let _: CGRect = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
        
        // self.aboutTxtView.frame.size.height = (keyboardFrame.origin.y - self.aboutTxtView.frame.origin.y)-20
         

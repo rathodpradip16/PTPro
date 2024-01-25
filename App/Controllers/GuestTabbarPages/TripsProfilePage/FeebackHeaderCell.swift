@@ -19,7 +19,7 @@ class FeebackHeaderCell: UITableViewCell {
         titleLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         titleLabel.font = UIFont(name: APP_FONT_SEMIBOLD, size: 16)
         
-        descLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"feedDesc") ?? "We're always working to improve the RentALL experience, so we'd love to hear what's working and how we can do better.")"
+        descLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"feedDesc") ?? "We're always working to improve the PTPRO experience, so we'd love to hear what's working and how we can do better.")"
         descLabel.textColor = UIColor(named: "searchPlaces_TextColor")
         descLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         descLabel.font = UIFont(name: APP_FONT, size: 14)

@@ -154,7 +154,7 @@ class DateofBirthVC: UIViewController {
         }
         IQKeyboardManager.shared.enable = false
         IQKeyboardManager.shared.enableAutoToolbar = true
-        IQKeyboardManager.shared.toolbarDoneBarButtonItemText = "\((Utility.shared.getLanguage()?.value(forKey:"done"))!)"
+        //IQKeyboardManager.shared.toolbarConfiguration.doneBarButtonConfiguration?.title = "\((Utility.shared.getLanguage()?.value(forKey:"done"))!)" ?? ""
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         lottieView = LottieAnimationView.init(name: "loading_qwe")

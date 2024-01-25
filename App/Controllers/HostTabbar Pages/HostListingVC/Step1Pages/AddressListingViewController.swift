@@ -226,40 +226,130 @@ class AddressListingViewController: BaseHostTableviewController, CountryDelegate
         
         if Utility.shared.isConnectedToNetwork()
         {
+            var roomType =  ""
+            var houseType =  ""
+            var residenceType =  ""
+            var bedrooms =  ""
+            var buildingSize =  ""
+            var bedType =  "16"
+            var beds = 1
+            var personCapacity = 1
+            var bathrooms = 1.0
+            var bathroomType =  ""
+            var country =  ""
+            var street =  ""
+            var buildingName =  ""
+            var city =  ""
+            var state =  ""
+            var zipcode =  ""
+            var lat = 0.0
+            var lng =  0.0
+            var bedTypes =  ""
+            var isMapTouched = false
+            
+            if let strroomType = Utility.shared.step1ValuesInfo["roomType"]{
+                roomType = "\(strroomType)"
+            }
+            if let strhouseType = Utility.shared.step1ValuesInfo["houseType"]{
+                houseType = "\(strhouseType)"
+            }
+            if let strresidenceType = Utility.shared.step1ValuesInfo["residenceType"]{
+                residenceType = "\(strresidenceType)"                   
+            }
+            if let strbedrooms = Utility.shared.step1ValuesInfo["bedrooms"]{
+                bedrooms = "\(strbedrooms)"                   
+            }
+            if let strbuildingSize = Utility.shared.step1ValuesInfo["buildingSize"]{
+                buildingSize = "\(strbuildingSize)"                   
+            }
+            if let strbedType = Utility.shared.step1ValuesInfo["bedType"]{
+                bedType = "\(strbedType)"                   
+            }
+            if let intBeds = Utility.shared.step1ValuesInfo["beds"]{
+                beds = intBeds as! Int
+            }
+            if let IntPersonCapacity = Utility.shared.step1ValuesInfo["personCapacity"]{
+                personCapacity = IntPersonCapacity as! Int
+            }
+            if let DBathrooms = Utility.shared.step1ValuesInfo["bathrooms"]{
+                bathrooms = DBathrooms as! Double
+            }
+            if let strbathroomType = Utility.shared.step1ValuesInfo["bathroomType"]{
+                bathroomType = "\(strbathroomType)"                   
+            }
+            if let strcountry = Utility.shared.step1ValuesInfo["country"]{
+                country = "\(strcountry)"                   
+            }
+            if let strstreet = Utility.shared.step1ValuesInfo["street"]{
+                street = "\(strstreet)"                   
+            }
+            if let strbuildingName = Utility.shared.step1ValuesInfo["buildingName"]{
+                buildingName = "\(strbuildingName)"                   
+            }
+            if let strcity = Utility.shared.step1ValuesInfo["city"]{
+                city = "\(strcity)"                   
+            }
+            if let strstate = Utility.shared.step1ValuesInfo["state"]{
+                state = "\(strstate)"                   
+            }
+            if let strzipcode = Utility.shared.step1ValuesInfo["zipcode"]{
+                zipcode = "\(strzipcode)"                   
+            }
+            if let Dlat = Utility.shared.step1ValuesInfo["lat"]{
+                lat = Dlat as! Double
+            }
+            if let Dlng = Utility.shared.step1ValuesInfo["lng"]{
+                lng = Dlng as! Double
+            }
+            if let strbedTypes = Utility.shared.step1ValuesInfo["bedTypes"]{
+                bedTypes = "\(strbedTypes)"                   
+            }
+            if let strisMapTouched = Utility.shared.step1ValuesInfo["isMapTouched"]{
+                isMapTouched = strisMapTouched as! Bool
+            }
+            
             let createlist = PTProAPI.CreateListingMutation(listId: nil,
-                                                   roomType: Utility.shared.step1ValuesInfo["roomType"] as? GraphQLNullable<String> ?? "",
-                                                   houseType: Utility.shared.step1ValuesInfo["houseType"] as? GraphQLNullable<String> ?? "",
-                                                   residenceType: Utility.shared.step1ValuesInfo["residenceType"] as? GraphQLNullable<String> ?? "",
-                                                   bedrooms: Utility.shared.step1ValuesInfo["bedrooms"] as? GraphQLNullable<String> ?? "" ,
-                                                   buildingSize: Utility.shared.step1ValuesInfo["buildingSize"] as? GraphQLNullable<String> ?? "",
-                                                   bedType: Utility.shared.step1ValuesInfo["bedType"] as? GraphQLNullable<String> ?? "" ,
-                                                   beds: Utility.shared.step1ValuesInfo["beds"] as? GraphQLNullable<Int> ?? 0,
-                                                   personCapacity: Utility.shared.step1ValuesInfo["personCapacity"] as? GraphQLNullable<Int> ?? 0 ,
-                                                   bathrooms:Utility.shared.step1ValuesInfo["bathrooms"] as? GraphQLNullable<Double> ?? 0 ,
-                                                   bathroomType: Utility.shared.step1ValuesInfo["bathroomType"] as? GraphQLNullable<String> ?? "",
-                                                   country: Utility.shared.step1ValuesInfo["country"] as? GraphQLNullable<String> ?? "",
-                                                   street: Utility.shared.step1ValuesInfo["street"] as? GraphQLNullable<String> ?? "",
-                                                   buildingName: Utility.shared.step1ValuesInfo["buildingName"] as? GraphQLNullable<String> ?? "",
-                                                   city: Utility.shared.step1ValuesInfo["city"] as? GraphQLNullable<String> ?? "",
-                                                   state: Utility.shared.step1ValuesInfo["state"] as? GraphQLNullable<String> ?? "",
-                                                   zipcode: Utility.shared.step1ValuesInfo["zipcode"] as? GraphQLNullable<String> ?? "",
-                                                            lat: Utility.shared.step1ValuesInfo["lat"] as? GraphQLNullable<Double> ?? 0.0,
-                                                            lng: Utility.shared.step1ValuesInfo["lng"] as? GraphQLNullable<Double> ?? 0.0,
-                                                   bedTypes: Utility.shared.step1ValuesInfo["bedTypes"] as? GraphQLNullable<String> ?? "" ,
-                                                   isMapTouched: Utility.shared.step1ValuesInfo["isMapTouched"] as? GraphQLNullable<Bool> ?? false,
-                                                   amenities: [] ,
-                                                   safetyAmenities: [] ,
-                                                   spaces: [])
+                                                            roomType: .some(roomType),
+                                                            houseType: .some(houseType),
+                                                            residenceType: .some(residenceType),
+                                                            bedrooms: .some(bedrooms),
+                                                            buildingSize: .some(buildingSize),
+                                                            bedType: .some(bedType),
+                                                            beds: .some(beds),
+                                                            personCapacity: .some(personCapacity), bathrooms: .some(bathrooms) ,
+                                                            bathroomType: .some(bathroomType),
+                                                            country: .some(country),
+                                                            street: .some(street),
+                                                            buildingName: .some(buildingName),
+                                                            city: .some(city),
+                                                            state: .some(state),
+                                                            zipcode: .some(zipcode),
+                                                            lat: .some(lat),
+                                                            lng: .some(lng),
+                                                            bedTypes: .some(bedTypes) ,
+                                                            isMapTouched: .some(isMapTouched),
+                                                            amenities: [] ,
+                                                            safetyAmenities: [] ,
+                                                            spaces: [])
+//            print("==================================")
+//            print(createlist.__variables?._jsonEncodableValue ?? "")
+//            print("==================================")
             Network.shared.apollo_headerClient.perform(mutation: createlist){  response in
                 switch response {
                 case .success(let result):
-                    if let data = result.data?.createListing?.status,data == 200 {
-                        
+//                    print("status \(result.data?.createListing?.status ?? 5000)")
+//                    print("errorMessage \(result.data?.createListing?.errorMessage ?? "errorMessage")")
+                    if let createListing = result.data?.createListing, let data = createListing.status,data == 200 {
                         self.lottieView1.isHidden = true
                         self.nextBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey: "next"))!)", for:.normal)
-                        self.createResults = (result.data?.createListing?.results)!
-                        Utility.shared.createId = (result.data?.createListing?.id)!
-                        self.manageListingSteps(listId: "\((result.data?.createListing?.id)!)", currentStep: 1)
+
+                        if let results = createListing.results{
+                            self.createResults = results
+                        }
+                        if let id = createListing.id{
+                            Utility.shared.createId = id
+                            self.manageListingSteps(listId: "\(id)", currentStep: 1)
+                        }
                     } else {
                         self.lottieView1.isHidden = true
                         self.nextBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey: "next"))!)", for:.normal)
@@ -297,9 +387,15 @@ class AddressListingViewController: BaseHostTableviewController, CountryDelegate
     func manageListingSteps(listId:String,currentStep:Int)
     {
         let manageListingStepsMutation = PTProAPI.ManageListingStepsMutation(listId:listId, currentStep:currentStep)
+//        print("==================================")
+//        print(manageListingStepsMutation.__variables?._jsonEncodableValue ?? "")
+//        print("==================================")
+
         Network.shared.apollo_headerClient.perform(mutation: manageListingStepsMutation){  response in
             switch response {
             case .success(let result):
+//                print("status \(result.data?.manageListingSteps?.status ?? 5000)")
+//                print("errorMessage \(result.data?.manageListingSteps?.errorMessage ?? "errorMessage")")
                 if let data = result.data?.manageListingSteps?.status,data == 200 {
                     print("steps updated")
                     self.lottieView1.isHidden = true

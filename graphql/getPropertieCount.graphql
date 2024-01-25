@@ -1,0 +1,11 @@
+query getPropertieCount($userId: String,){
+getPropertieCount(userId:$userId){
+errorMessage
+status
+results{
+planId
+propertieCount
+}
+}
+}
+

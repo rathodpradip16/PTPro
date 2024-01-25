@@ -18,6 +18,8 @@
 
 "Cancel" = "Atšaukti";
 
+"Card brand" = "Kortelės prekės ženklas";
+
 "City" = "Miestas";
 
 "Code field" = "Kodo laukas";
@@ -94,6 +96,8 @@
 
 "Remove bank account ending in %@" = "Pašalinti banko sąskaitą, kurios paskutiniai skaičiai %@";
 
+"Remove card" = "Pašalinti kortelę";
+
 "Search" = "Paieška";
 
 "Select card brand (optional)" = "Pasirinkite kortelės prekės ženklą (neprivaloma)";
@@ -109,6 +113,8 @@
 "The ID number you entered is incomplete." = "Įvedėte ne visą identifikacinį numerį.";
 
 "The account number you entered is incomplete." = "Įvedėte ne visą sąskaitos numerį.";
+
+"The sort code you entered is invalid." = "Jūsų įvestas identifikacinis kodas negalioja.";
 
 "Town or city" = "Miestelis arba miestas";
 

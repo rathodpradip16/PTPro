@@ -164,32 +164,33 @@ class WhyhostVC: UIViewController,UIScrollViewDelegate {
                     guard (result.data?.getListingSettings?.results) != nil else{
                         return
                     }
-                    Utility.shared.getListSettingsArray = (result.data?.getListingSettings?.results)!
-                    if Utility.shared.getListSettingsArray?.personCapacity != nil{
-                        let baseHost = BaseHostTableviewController()
-                        baseHost.getListSettingsArray = Utility.shared.getListSettingsArray
-                        Utility.shared.createId = Int()
-                        baseHost.showOverlay = true
-                        Utility.shared.createId = 0
-                        Utility.shared.host_basePrice = 0
-                        Utility.shared.step1_inactivestatus  = ""
-                        Utility.shared.isfrombecomehoststep1Edit = false
-                        Utility.shared.selectedAmenityIdList.removeAllObjects()
-                        Utility.shared.selectedspaceAmenityIdList.removeAllObjects()
-                        Utility.shared.selectedsafetyAmenityIdList.removeAllObjects()
-                        Utility.shared.selectedRules.removeAllObjects()
-                        Utility.shared.step2_Description = ""
-                        Utility.shared.step2_Title = ""
-                        Utility.shared.currencyvalue = ""
-                        Utility.shared.step1ValuesInfo = [String : Any]()
-                        self.view.window?.backgroundColor = UIColor.white
-                        baseHost.modalPresentationStyle = .fullScreen
-                        self.present(baseHost, animated:false, completion: nil)
+                    if let listingData = result.data,let getListingSettings = listingData.getListingSettings,let arrayListingSettings =  getListingSettings.results{
+                        Utility.shared.getListSettingsArray = arrayListingSettings
+                        if Utility.shared.getListSettingsArray?.personCapacity != nil{
+                            let baseHost = BaseHostTableviewController()
+                            baseHost.getListSettingsArray = Utility.shared.getListSettingsArray
+                            Utility.shared.createId = Int()
+                            baseHost.showOverlay = true
+                            Utility.shared.createId = 0
+                            Utility.shared.host_basePrice = 0
+                            Utility.shared.step1_inactivestatus  = ""
+                            Utility.shared.isfrombecomehoststep1Edit = false
+                            Utility.shared.selectedAmenityIdList.removeAllObjects()
+                            Utility.shared.selectedspaceAmenityIdList.removeAllObjects()
+                            Utility.shared.selectedsafetyAmenityIdList.removeAllObjects()
+                            Utility.shared.selectedRules.removeAllObjects()
+                            Utility.shared.step2_Description = ""
+                            Utility.shared.step2_Title = ""
+                            Utility.shared.currencyvalue = ""
+                            Utility.shared.step1ValuesInfo = [String : Any]()
+                            self.view.window?.backgroundColor = UIColor.white
+                            baseHost.modalPresentationStyle = .fullScreen
+                            self.present(baseHost, animated:false, completion: nil)
+                        }
                     }
-                    
-                case .failure(let error):
-                    self.view.makeToast(error.localizedDescription)
-                }
+                    case .failure(let error):
+                        self.view.makeToast(error.localizedDescription)
+                    }
                 
             }
             

@@ -118,7 +118,7 @@ class AirbnbCounter: UIView {
         button.setImage(UIImage(named: "add", in: Bundle(for: AirbnbOccupantFilter.self), compatibleWith: nil)?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = Theme.PRIMARY_COLOR
         button.imageEdgeInsets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
-        button.addTarget(self, action: #selector(AirbnbCounter.handleIncrement), for: .touchUpInside)
+        button.addTarget(AirbnbCounter.self, action: #selector(AirbnbCounter.handleIncrement), for: .touchUpInside)
         button.adjustsImageWhenHighlighted = false
 
      //   button.layer.borderColor = UIColor.white.cgColor

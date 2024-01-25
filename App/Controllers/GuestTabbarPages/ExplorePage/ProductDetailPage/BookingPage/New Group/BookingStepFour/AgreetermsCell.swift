@@ -20,7 +20,7 @@ class AgreetermsCell: UITableViewCell {
         let coloredString = "\((Utility.shared.getLanguage()?.value(forKey:"houseRules"))!)"
 
         // Get the range of the colored string.
-       let rangeOfColoredString = (fullString as! NSString).range(of: coloredString)
+        let rangeOfColoredString = (fullString as NSString).range(of: coloredString)
 
         // Create the attributedString.
         let attributedString = NSMutableAttributedString(string:fullString)

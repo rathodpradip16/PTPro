@@ -3285,7 +3285,7 @@ SOFTWARE.
    limitations under the License.
 </string>
 			<key>License</key>
-			<string>Apache</string>
+			<string>Apache-2.0</string>
 			<key>Title</key>
 			<string>GoogleDataTransport</string>
 			<key>Type</key>
@@ -3790,7 +3790,7 @@ THE SOFTWARE.
 			<key>FooterText</key>
 			<string>MIT License
 
-Copyright (c) 2013-2017 Iftekhar Qurashi
+Copyright (c) 2013-2023 Iftekhar Qurashi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5643,7 +5643,7 @@ THE SOFTWARE.
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Copyright (c) 2015-2017 Charles Scalesse.
+			<string>Copyright (c) 2015-2024 Charles Scalesse.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the

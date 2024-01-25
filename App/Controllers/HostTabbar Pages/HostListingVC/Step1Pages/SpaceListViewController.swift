@@ -152,7 +152,11 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
             }
         }
         else{
-        spaces = (spacesList.first! is [String : Any]) ? spacesList.first!["itemName"] as! String : ""
+            if let list = spacesList.first,let itemName = list["itemName"] as? String{
+                spaces = itemName
+            }else {
+                spaces = ""
+            }
             Utility.shared.selectedspaceAmenityIdList.removeAllObjects()
         }
         Utility.shared.step1ValuesInfo.updateValue(Utility.shared.selectedspaceAmenityIdList, forKey: "spaces")
@@ -169,38 +173,157 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
     //MARK: - Update Listing Step 1
     func updateListingAPICallAfterCreate()
     {
+        var roomType =  ""
+        var houseType =  ""
+        var residenceType =  ""
+        var bedrooms =  ""
+        var buildingSize =  ""
+        var bedType =  ""
+        var beds = 1
+        var personCapacity = 1
+        var bathrooms = 1.0
+        var bathroomType =  ""
+        var country =  ""
+        var street =  ""
+        var buildingName =  ""
+        var city =  ""
+        var state =  ""
+        var zipcode =  ""
+        var lat = 0.0
+        var lng =  0.0
+        var bedTypes =  ""
+        var isMapTouched = false
+        
+        if let strroomType = Utility.shared.step1ValuesInfo["roomType"]{
+            roomType = "\(strroomType)"
+        }
+        if let strhouseType = Utility.shared.step1ValuesInfo["houseType"]{
+            houseType = "\(strhouseType)"
+        }
+        if let strresidenceType = Utility.shared.step1ValuesInfo["residenceType"]{
+            residenceType = "\(strresidenceType)"
+        }
+        if let strbedrooms = Utility.shared.step1ValuesInfo["bedrooms"]{
+            bedrooms = "\(strbedrooms)"
+        }
+        if let strbuildingSize = Utility.shared.step1ValuesInfo["buildingSize"]{
+            buildingSize = "\(strbuildingSize)"
+        }
+        if let strbedType = Utility.shared.step1ValuesInfo["bedType"]{
+            bedType = "\(strbedType)"
+        }
+        if let intBeds = Utility.shared.step1ValuesInfo["beds"]{
+            beds = intBeds as! Int
+        }
+        if let IntPersonCapacity = Utility.shared.step1ValuesInfo["personCapacity"]{
+            personCapacity = IntPersonCapacity as! Int
+        }
+        if let DBathrooms = Utility.shared.step1ValuesInfo["bathrooms"]{
+            bathrooms = DBathrooms as! Double
+        }
+        if let strbathroomType = Utility.shared.step1ValuesInfo["bathroomType"]{
+            bathroomType = "\(strbathroomType)"
+        }
+        if let strcountry = Utility.shared.step1ValuesInfo["country"]{
+            country = "\(strcountry)"
+        }
+        if let strstreet = Utility.shared.step1ValuesInfo["street"]{
+            street = "\(strstreet)"
+        }
+        if let strbuildingName = Utility.shared.step1ValuesInfo["buildingName"]{
+            buildingName = "\(strbuildingName)"
+        }
+        if let strcity = Utility.shared.step1ValuesInfo["city"]{
+            city = "\(strcity)"
+        }
+        if let strstate = Utility.shared.step1ValuesInfo["state"]{
+            state = "\(strstate)"
+        }
+        if let strzipcode = Utility.shared.step1ValuesInfo["zipcode"]{
+            zipcode = "\(strzipcode)"
+        }
+        if let Dlat = Utility.shared.step1ValuesInfo["lat"]{
+            lat = Dlat as! Double
+        }
+        if let Dlng = Utility.shared.step1ValuesInfo["lng"]{
+            lng = Dlng as! Double
+        }
+        if let strbedTypes = Utility.shared.step1ValuesInfo["bedTypes"]{
+            bedTypes = "\(strbedTypes)"
+        }
+        if let strisMapTouched = Utility.shared.step1ValuesInfo["isMapTouched"]{
+            isMapTouched = strisMapTouched as! Bool
+        }
+        
+        var amenities:[Int] = []
+        var safetyAmenities:[Int] = []
+        var spaces:[Int] = []
+
+        if let arramenities = Utility.shared.step1ValuesInfo["amenities"] as? [Any]{
+            for intValue in arramenities {
+                if let value = intValue as? Int{
+                    amenities.append(value)
+                }
+            }
+        }
+        
+        if let arrsafetyAmenities = Utility.shared.step1ValuesInfo["safetyAmenities"] as? [Any]{
+            for intValue in arrsafetyAmenities {
+                if let value = intValue as? Int{
+                    safetyAmenities.append(value)
+                }
+            }
+        }
+
+        if let arrspaces = Utility.shared.step1ValuesInfo["spaces"] as? [Any]{
+            for intValue in arrspaces {
+                if let value = intValue as? Int{
+                    spaces.append(value)
+                }
+            }
+        }
+        
         let createlist = PTProAPI.CreateListingMutation(listId: .some(Utility.shared.createId),
-                                               roomType: .some("\(Utility.shared.step1ValuesInfo["roomType"] ?? "")"),
-                                               houseType: .some("\(Utility.shared.step1ValuesInfo["houseType"] ?? "")") ,
-                                               residenceType: .some("\(Utility.shared.step1ValuesInfo["residenceType"] ?? "")"),
-                                               bedrooms: .some("\(Utility.shared.step1ValuesInfo["bedrooms"] ?? "")") ,
-                                               buildingSize: .some("\(Utility.shared.step1ValuesInfo["buildingSize"] ?? "")"),
-                                               bedType: .some("\(Utility.shared.step1ValuesInfo["bedType"] ?? "")") ,
-                                               beds: .some(Utility.shared.step1ValuesInfo["beds"] as! Int),
-                                               personCapacity: .some(Utility.shared.step1ValuesInfo["personCapacity"] as! Int),
-                                               bathrooms:.some(Utility.shared.step1ValuesInfo["bathrooms"] as! Double),
-                                               bathroomType: .some("\(Utility.shared.step1ValuesInfo["bathroomType"] ?? "")"),
-                                               country: .some("\(Utility.shared.step1ValuesInfo["country"] ?? "")"),
-                                               street: .some("\(Utility.shared.step1ValuesInfo["street"] ?? "")"),
-                                               buildingName: .some("\(Utility.shared.step1ValuesInfo["buildingName"] ?? "")"),
-                                               city: .some("\(Utility.shared.step1ValuesInfo["city"] ?? "")"),
-                                               state: .some("\(Utility.shared.step1ValuesInfo["state"] ?? "")"),
-                                               zipcode: .some("\(Utility.shared.step1ValuesInfo["zipcode"] ?? "")"),
-                                               lat: .some(Utility.shared.step1ValuesInfo["lat"] as! Double),
-                                               lng: .some(Utility.shared.step1ValuesInfo["lng"] as! Double),
-                                               bedTypes: .some("\(Utility.shared.step1ValuesInfo["bedTypes"] ?? "")") ,
-                                               isMapTouched: .some(Utility.shared.step1ValuesInfo["isMapTouched"] as! Bool),
-                                               amenities: .some(Utility.shared.step1ValuesInfo["amenities"] as? [Int?] ?? []),
-                                               safetyAmenities: .some(Utility.shared.step1ValuesInfo["safetyAmenities"] as? [Int?] ?? []),
-                                               spaces:.some( Utility.shared.step1ValuesInfo["spaces"] as? [Int?] ?? []))
+                                               roomType: .some(roomType),
+                                               houseType: .some(houseType) ,
+                                               residenceType: .some(residenceType),
+                                               bedrooms: .some(bedrooms) ,
+                                               buildingSize: .some(buildingSize),
+                                               bedType: .some(bedType) ,
+                                               beds: .some(beds),
+                                               personCapacity: .some(personCapacity),
+                                               bathrooms:.some(bathrooms),
+                                               bathroomType: .some(bathroomType),
+                                               country: .some(country),
+                                               street: .some(street),
+                                               buildingName: .some(buildingName),
+                                               city: .some(city),
+                                               state: .some(state),
+                                               zipcode: .some(zipcode),
+                                               lat: .some(lat),
+                                               lng: .some(lng),
+                                               bedTypes: .some(bedTypes) ,
+                                               isMapTouched: .some(isMapTouched),
+                                               amenities: .some(amenities),
+                                               safetyAmenities: .some(safetyAmenities),
+                                               spaces:.some(spaces))
+//        print("==================================")
+//        print(createlist.__variables?._jsonEncodableValue ?? "")
+//        print("==================================")
+
         Network.shared.apollo_headerClient.perform(mutation: createlist){  response in
             switch response {
             case .success(let result):
-                if let data = result.data?.createListing?.status,data == 200 {
-                    
-                    self.updateResultsStep1 = (result.data?.createListing?.results)!
-                    Utility.shared.createId = (result.data?.createListing?.id)!
-                    self.manageListingSteps(listId: "\((result.data?.createListing?.id)!)", currentStep: 1)
+//                print("status \(result.data?.createListing?.status ?? 50000)")
+//                print("errorMessage \(result.data?.createListing?.errorMessage ?? "errorMessage")")
+                if let createListing = result.data?.createListing, let data = createListing.status,data == 200 {
+                    if let results = createListing.results{
+                        self.updateResultsStep1 = results
+                    }
+                    if let id = createListing.id{
+                        Utility.shared.createId = id
+                        self.manageListingSteps(listId: "\(id)", currentStep: 1)
+                    }
                 } else {
                     self.lottieView1.isHidden = true
                     self.nextBtn.setTitle("Next", for:.normal)
@@ -215,9 +338,14 @@ class SpaceListViewController: BaseHostTableviewController ,UICollectionViewDele
     func manageListingSteps(listId:String,currentStep:Int)
     {
         let manageListingStepsMutation = PTProAPI.ManageListingStepsMutation(listId:listId, currentStep:currentStep)
+//        print("==================================")
+//        print(manageListingStepsMutation.__variables?._jsonEncodableValue ?? "")
+//        print("==================================")
         Network.shared.apollo_headerClient.perform(mutation: manageListingStepsMutation){  response in
             switch response {
             case .success(let result):
+//                print("status \(result.data?.manageListingSteps?.status ?? 50000)")
+//                print("errorMessage \(result.data?.manageListingSteps?.errorMessage ?? "errorMessage")")
                 if let data = result.data?.manageListingSteps?.status,data == 200 {
                     let becomeHost = BecomeHostVC()
                     becomeHost.listID = "\(Utility.shared.createId)"

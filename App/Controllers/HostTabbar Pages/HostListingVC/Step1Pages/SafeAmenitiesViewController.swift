@@ -130,12 +130,17 @@ class SafeAmenitiesViewController: BaseHostTableviewController,UICollectionViewD
         for i in 0..<amenitiesList.count
         {
             var amenityInfo = [String : Any]()
-            amenityInfo.updateValue(amenitiesList[i]!.itemName!, forKey: "itemName")
-            amenityInfo.updateValue(amenitiesList[i]!.id!, forKey: "id")
-            if let image = amenitiesList[i]!.image {
-                amenityInfo.updateValue(amenitiesList[i]!.image!, forKey: "image")
-            }
-            else {
+            if let list = amenitiesList[i]{
+                if let itemName = list.itemName{
+                    amenityInfo.updateValue(itemName, forKey: "itemName")
+                }
+                if let id = list.id{
+                    amenityInfo.updateValue(id, forKey: "id")
+                }
+                if let image = list.image{
+                    amenityInfo.updateValue(image, forKey: "image")
+                }
+            }else {
                 
             }
            
@@ -151,14 +156,19 @@ class SafeAmenitiesViewController: BaseHostTableviewController,UICollectionViewD
                     if amenityList.contains(where: { (item) -> Bool in
                         (item["itemName"] as? String == (userAmenityTypes.itemName!))
                     }){
-                        Utility.shared.selectedsafetyAmenityIdList.add(userAmenityTypes.id!)
-                        
+                        if let id = userAmenityTypes.id{
+                            Utility.shared.selectedsafetyAmenityIdList.add(id)
+                        }
                     }
                 }
             }
         }
         else{
-        amenity = (amenityList.first! is [String : Any]) ? amenityList.first!["itemName"] as! String : ""
+            if let list = amenityList.first,let itemName = list["itemName"] as? String{
+                amenity = itemName
+            }else{
+                amenity = ""
+            }
             Utility.shared.selectedsafetyAmenityIdList.removeAllObjects()
         }
         Utility.shared.step1ValuesInfo.updateValue(Utility.shared.selectedsafetyAmenityIdList, forKey: "safetyAmenities")

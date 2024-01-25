@@ -759,8 +759,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
                         
                         
                         Utility.shared.ProfileAPIArray = ((result.data?.userAccount?.result)!)
-                        Utility.shared.userName  = "\(String(describing: Utility.shared.ProfileAPIArray?.firstName != nil ? Utility.shared.ProfileAPIArray?.firstName! : "User"))!"
-                        
+                        if let userName = Utility.shared.ProfileAPIArray?.firstName{
+                            Utility.shared.userName  = "\(userName)"
+                        }else{
+                            Utility.shared.userName  = "User"
+                        }
                         
                         
                         if let theme = result.data?.userAccount?.result?.appTheme {
@@ -1644,7 +1647,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
 //
 //    //        siren.rulesManager = RulesManager(globalRules: .annoying, revisionUpdateRules: Rules(promptFrequency: .immediately, forAlertType: .force))
 //        siren.presentationManager = PresentationManager(alertTintColor:Theme.PRIMARY_COLOR,
-//                                                            appName: "RentALL")
+//                                                            appName: "PTPRO")
 //            siren.wail { results in
 //                switch results {
 //                case .success(let updateResults):

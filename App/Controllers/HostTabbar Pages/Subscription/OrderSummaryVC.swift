@@ -10,7 +10,6 @@ import UIKit
 import Alamofire
 
 class OrderSummaryVC: UIViewController {
-
     @IBOutlet weak var lblPlanName: UILabel!
     @IBOutlet weak var viewOrderSummary: UIView!
     
@@ -25,13 +24,16 @@ class OrderSummaryVC: UIViewController {
     @IBOutlet weak var lblPlanPurchaseDateValue: UILabel!
     @IBOutlet weak var lblPlanExpiryTitle: UILabel!
     @IBOutlet weak var lblPlanExpiryValue: UILabel!
-
+    
     @IBOutlet weak var btnDownloadReceipt: UIButton!
     
     @IBOutlet weak var imgPlanIcon: UIImageView!
     @IBOutlet weak var imgPaymentMethod: UIImageView!
+    
     var selectedPlan = ""
     var selectedPaymentType = 0
+    var isFromPayment = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.GetReceiptPaymentQueryAPICall()
@@ -56,16 +58,6 @@ class OrderSummaryVC: UIViewController {
             imgPlanIcon.image = UIImage(named: "crownSmall")!.withTintColor(.black)
         }
         
-        switch selectedPaymentType{
-        case 0:
-            imgPaymentMethod.image = #imageLiteral(resourceName: "paypal")
-            break
-        case 1:
-            imgPaymentMethod.image = #imageLiteral(resourceName: "stripe")
-            break
-        default:
-            break
-        }
     }
     
     func GetReceiptPaymentQueryAPICall(){
@@ -77,12 +69,14 @@ class OrderSummaryVC: UIViewController {
                 if let status = result.data?.getReceiptPayment?.status,status == 200{
                     if let data = result.data?.getReceiptPayment?.data{
                         DispatchQueue.main.async {
-                            self.lblPlanName.text = "\(self.selectedPlan) Plan: \(data.planType ?? "")"
+                            self.lblPlanName.text = "\(self.selectedPlan): \((data.planType) == "month" ? "Monthly Plan" : "Yearly Plan")"
                             self.lblPlanAmountValue.text = "\(data.total ?? 0.0)"
                             self.lblPlanTotalPaidValue.text = "\(data.total ?? 0.0)"
                             self.lblPlanTransactionIdValue.text = data.transactionId
                             self.lblPlanPurchaseDateValue.text = data.createdAt
                             self.lblPlanExpiryValue.text = data.expiryDate
+                            self.selectedPaymentType = Int(data.paymentType ?? "") ?? 0
+                            self.updatePaymentType()
                         }
                     }
                 } else {
@@ -95,8 +89,25 @@ class OrderSummaryVC: UIViewController {
         }
     }
     
+    func updatePaymentType(){
+        switch selectedPaymentType{
+        case 1:
+            imgPaymentMethod.image = #imageLiteral(resourceName: "paypal")
+            break
+        case 2:
+            imgPaymentMethod.image = #imageLiteral(resourceName: "stripe")
+            break
+        default:
+            break
+        }
+    }
+    
     @IBAction func onClickBack(_ sender: Any) {
-        self.view.window!.rootViewController?.dismiss(animated: false, completion: nil)
+        if isFromPayment{
+            self.view.window!.rootViewController?.dismiss(animated: false, completion: nil)
+        }else{
+            self.dismiss(animated: true)
+        }
     }
     
     
@@ -106,14 +117,14 @@ class OrderSummaryVC: UIViewController {
             let parameters: Parameters = [
                 "userId": "\(Utility.shared.ProfileAPIArray?.userId ?? "")"
             ]
-           
+            
             self.view.makeToast("Downloading...", duration: 1.0)
-
+            
             AF.request(GetBaseUrl,method: .post,parameters:parameters,encoding: URLEncoding.default) .response { response in
                 switch response.result {
                 case .success(let data):
                     do {
-                         let asJSON = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        let asJSON = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
                         if let jsonData = asJSON , let path = jsonData["path"] {
                             DispatchQueue.main.async {
                                 let url = URL(string: "\(BASE_URL)\(path)")
@@ -139,7 +150,4 @@ class OrderSummaryVC: UIViewController {
             }
         }
     }
-
-       
-
 }

@@ -90,6 +90,8 @@ maxNight,
 basePrice,
 cleaningPrice,
 currency,
+is_affiliate,
+affiliate_commission,
 weeklyDiscount,
 monthlyDiscount,
 cancellationPolicy

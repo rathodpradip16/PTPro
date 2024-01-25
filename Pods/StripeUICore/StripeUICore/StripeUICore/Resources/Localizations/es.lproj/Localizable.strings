@@ -18,6 +18,8 @@
 
 "Cancel" = "Cancelar";
 
+"Card brand" = "Marca de la tarjeta";
+
 "City" = "Ciudad";
 
 "Code field" = "Campo del código";
@@ -94,6 +96,8 @@
 
 "Remove bank account ending in %@" = "Eliminar la cuenta bancaria que termina en %@";
 
+"Remove card" = "Eliminar tarjeta";
+
 "Search" = "Buscar";
 
 "Select card brand (optional)" = "Seleccionar marca de tarjeta (opcional)";
@@ -109,6 +113,8 @@
 "The ID number you entered is incomplete." = "El número de ID que has introducido está incompleto.";
 
 "The account number you entered is incomplete." = "El número de cuenta que has introducido está incompleto.";
+
+"The sort code you entered is invalid." = "El código Sort introducido no es válido.";
 
 "Town or city" = "Pueblo o ciudad";
 

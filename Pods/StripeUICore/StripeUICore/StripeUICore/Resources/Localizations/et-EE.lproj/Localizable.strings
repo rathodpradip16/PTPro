@@ -18,6 +18,8 @@
 
 "Cancel" = "Tühista";
 
+"Card brand" = "Kaardi bränd";
+
 "City" = "Linn";
 
 "Code field" = "Koodi väli";
@@ -94,6 +96,8 @@
 
 "Remove bank account ending in %@" = "Eemaldage pangakonto lõpuga %@";
 
+"Remove card" = "Eemalda kaart";
+
 "Search" = "Otsing";
 
 "Select card brand (optional)" = "Valige kaardi kaubamärk (valikuline)";
@@ -109,6 +113,8 @@
 "The ID number you entered is incomplete." = "Sisestatud isikukood on puudulik.";
 
 "The account number you entered is incomplete." = "Sisestatud kontonumber on puudulik.";
+
+"The sort code you entered is invalid." = "Sisestatud sorteerimiskood ei ole kehtiv.";
 
 "Town or city" = "Linn";
 

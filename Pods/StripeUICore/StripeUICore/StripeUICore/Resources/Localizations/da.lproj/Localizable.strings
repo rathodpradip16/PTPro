@@ -18,6 +18,8 @@
 
 "Cancel" = "Annuller";
 
+"Card brand" = "Kortbrand";
+
 "City" = "By";
 
 "Code field" = "Kodefelt";
@@ -94,6 +96,8 @@
 
 "Remove bank account ending in %@" = "Fjern bankkonto, der ender på %@";
 
+"Remove card" = "Fjern kort";
+
 "Search" = "Søg";
 
 "Select card brand (optional)" = "Vælg kortbrand (valgfrit)";
@@ -109,6 +113,8 @@
 "The ID number you entered is incomplete." = "Det indtastede ID-nummer er ikke komplet.";
 
 "The account number you entered is incomplete." = "Det indtastede kontonummer er ikke komplet.";
+
+"The sort code you entered is invalid." = "Den sorteringskode, du angav, er ugyldig.";
 
 "Town or city" = "Landsby eller by";
 

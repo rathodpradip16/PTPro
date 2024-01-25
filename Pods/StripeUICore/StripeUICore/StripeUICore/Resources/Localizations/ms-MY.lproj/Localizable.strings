@@ -18,6 +18,8 @@
 
 "Cancel" = "Batalkan";
 
+"Card brand" = "Jenama kad";
+
 "City" = "Bandar";
 
 "Code field" = "Medan kod";
@@ -94,6 +96,8 @@
 
 "Remove bank account ending in %@" = "Alih keluar akaun bank yang berakhir dengan %@";
 
+"Remove card" = "Alih keluar kad";
+
 "Search" = "Cari";
 
 "Select card brand (optional)" = "Pilih jenama kad (opsyenal)";
@@ -109,6 +113,8 @@
 "The ID number you entered is incomplete." = "Nombor ID yang anda masukkan tidak lengkap.";
 
 "The account number you entered is incomplete." = "Nombor akaun yang anda masukkan tidak lengkap.";
+
+"The sort code you entered is invalid." = "Kod isihan yang anda masukkan tidak sah.";
 
 "Town or city" = "Pekan atau bandar";
 

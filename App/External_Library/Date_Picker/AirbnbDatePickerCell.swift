@@ -75,14 +75,14 @@ class AirbnbDatePickerCell: BaseCell {
             if type.contains(.SelectedStartDate) {
                 let side = frame.size.width / 2
                 let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: Utility.shared.isRTLLanguage() ? [.topRight, .bottomRight] : [.topLeft, .bottomLeft], cornerRadii: CGSize(width: side, height: side))
-                let circlePath = UIBezierPath(arcCenter: CGPoint(x: frame.size.height, y: frame.size.width), radius: 52, startAngle: 40, endAngle: 0, clockwise: false)
+                _ = UIBezierPath(arcCenter: CGPoint(x: frame.size.height, y: frame.size.width), radius: 52, startAngle: 40, endAngle: 0, clockwise: false)
                 let shape = CAShapeLayer()
                 shape.path = maskPath.cgPath
                 dateLabel.layer.mask = shape
             }else if type.contains(.SelectedEndDate) {
                 let side = frame.size.width / 2
                 let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: Utility.shared.isRTLLanguage() ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight], cornerRadii: CGSize(width: side, height: side))
-                let circlePath = UIBezierPath(arcCenter: CGPoint(x: 0, y: frame.size.width), radius: 52, startAngle: 40, endAngle: 0, clockwise: false)
+                _ = UIBezierPath(arcCenter: CGPoint(x: 0, y: frame.size.width), radius: 52, startAngle: 40, endAngle: 0, clockwise: false)
                 let shape = CAShapeLayer()
                 shape.path = maskPath.cgPath
                 dateLabel.layer.mask = shape

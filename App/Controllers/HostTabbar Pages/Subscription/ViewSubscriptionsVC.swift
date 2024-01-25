@@ -8,6 +8,8 @@
 
 import UIKit
 import NKVPhonePicker
+import IQKeyboardManagerSwift
+
 
 class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewControllerDelegate{
     // MARK: Vars
@@ -84,6 +86,9 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
         self.getPlanDetailsAPICall()
         txtPhoneNumber.phonePickerDelegate = self
         txtPhoneNumber.countryPickerDelegate = self
+        
+        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.enableAutoToolbar = true
     }
     
     private func configureCollectionView() {
@@ -395,6 +400,15 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         if collectionView.isDragging || collectionView.isDecelerating || collectionView.isTracking {
             return
         }
+        if let strTitle = arrPlans[indexPath.row].title,strTitle != "CustomPlan",let intStatus = arrPlans[indexPath.row].status,intStatus == 1{
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let orderSummaryVC = storyboard.instantiateViewController(withIdentifier: "OrderSummaryVC") as! OrderSummaryVC
+            orderSummaryVC.selectedPlan =  arrPlans[indexPath.row].title ?? ""
+            orderSummaryVC.selectedPaymentType = 0
+            orderSummaryVC.isFromPayment = false
+            orderSummaryVC.modalPresentationStyle = .fullScreen
+            self.present(orderSummaryVC, animated: true, completion: nil)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -412,6 +426,7 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let visibleRect = CGRect(origin: cvSubscriptionPlans.contentOffset, size: cvSubscriptionPlans.bounds.size)
+        self.view.endEditing(true)
         let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
         if  let indexPath = cvSubscriptionPlans.indexPathForItem(at: visiblePoint){
             
