@@ -1,21 +1,21 @@
-query getPlanDetails($userId: String){
-  getPlanDetails(userId: $userId) {
-    status
-    errorMessage
-    results {
-      id
-      title
-      one
-      two
-      three
-      four
-      five
-      six
-      monthly
-      yearly
-      currency
-      status
-      expiryDate
-    }
-  }
+query getPlanDetails($userId: String,){
+getPlanDetails(userId:$userId){
+errorMessage
+status
+results{
+id
+title
+one
+two
+three
+four
+five
+six
+monthly
+yearly
+currency
+status
+expiryDate
+}
+}
 }

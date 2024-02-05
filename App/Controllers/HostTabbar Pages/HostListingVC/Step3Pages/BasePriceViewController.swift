@@ -31,7 +31,8 @@ class BasePriceViewController: BaseHostTableviewController {
     
     var basePriceValue = ""
     var cleaningPriceValue = ""
-    
+    var affiliateCommission = ""
+    var isAffiliate = 0
     var inputPickerView = UIPickerView()
     var inputUIView = UIView()
     var lottieView1: LottieAnimationView!
@@ -167,6 +168,7 @@ class BasePriceViewController: BaseHostTableviewController {
         tableView.register(UINib(nibName: "TextFieldCell", bundle: nil), forCellReuseIdentifier: "textfieldcell")
         
         tableView.register(UINib(nibName: "TipCell", bundle: nil), forCellReuseIdentifier: "TipCell")
+        tableView.register(UINib(nibName: "AffiliateCell", bundle: nil), forCellReuseIdentifier: "AffiliateCell")
     }
     
     //MARK: - Progress Indicator
@@ -249,6 +251,12 @@ class BasePriceViewController: BaseHostTableviewController {
            self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"invalidcleaning"))!)")
             return
         }
+            
+            if((isAffiliate != 0) && affiliateCommission == "0")
+            {
+               self.view.makeToast("Invalid Affiliate Commission, only numbers(eg:25) are allowed")
+                return
+            }
         
             Utility.shared.step3ValuesInfo.updateValue(Utility.shared.currencyvalue, forKey: "currency")
             let amenities = DiscountViewController()
@@ -351,8 +359,9 @@ class BasePriceViewController: BaseHostTableviewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 5
     }
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let headerLabel = UILabel(frame: CGRect(x:15, y: 8, width:FULLWIDTH-40, height: 100))
@@ -381,6 +390,70 @@ class BasePriceViewController: BaseHostTableviewController {
             
             cells?.selectionStyle = .none
             return cells!
+        }else if indexPath.row == 4{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "AffiliateCell", for: indexPath) as? AffiliateCell
+            cell?.affiliateListTile.text = "Get more Bbookings by Affiliates"
+            cell?.tag = ((indexPath.row)+500)
+                        
+            if let isAffiliate = Utility.shared.step3ValuesInfo["is_affiliate"] as? Int,isAffiliate == 1{
+                self.isAffiliate = isAffiliate
+                cell?.checkBtn.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
+                cell?.checkBtn.tintColor = Theme.PRIMARY_COLOR
+                cell?.affiliateStackview.isHidden = false
+            }else{
+                self.isAffiliate = 0
+                cell?.checkBtn.setImage(#imageLiteral(resourceName: "unchecked"), for: .normal)
+                cell?.affiliateStackview.isHidden = true
+            }
+                        
+            cell?.checkBtn.tag = indexPath.row
+            cell?.checkBtn.addTarget(self, action: #selector(affiliateCheckBtnTapped(_:)), for: .touchUpInside)
+            cell?.selectionStyle = .none
+            
+            
+            cell?.revenueTitleLbl.text = "What % of revenue you want to share if you get Confirmed booking"
+            cell?.txtField.attributedPlaceholder = NSAttributedString(string: "0",
+                                                                      attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            cell?.txtField.tag = 5
+            cell?.txtField.addTarget(self, action: #selector(affiliateCommissionText(field:)), for: .editingChanged)
+            if(Utility.shared.step3ValuesInfo["affiliate_commission"] != nil && ((Utility.shared.step3ValuesInfo["affiliate_commission"]as? Double) != 0.0))
+            {
+                affiliateCommission =  "\(Utility.shared.step3ValuesInfo["affiliate_commission"]!)"
+                cell?.txtField.text = "\(affiliateCommission)"
+            }else {
+                cell?.txtField.text = ""
+            }
+
+            cell?.revenueTitleLbl.font = UIFont(name: APP_FONT_MEDIUM, size:16)
+            cell?.revenueTitleLbl.textColor =  UIColor(named: "Title_Header")
+            cell?.txtField.font = UIFont(name: APP_FONT_MEDIUM, size:14)
+            cell?.txtField.keyboardType = .decimalPad
+            let toolBar = UIToolbar().ToolbarPikerSelect(mySelect: #selector(dismisskeyborad))
+            cell?.txtField.inputAccessoryView = toolBar
+            toolBar.barTintColor = UIColor(named: "Button_Grey_Color")
+            cell?.txtField.inputView = nil
+            cell?.txtField.tintColor =  UIColor(named: "Title_Header")
+            
+            if Utility.shared.isRTLLanguage(){
+                cell?.txtField.leftView = nil
+                cell?.txtField.leftViewMode = .always
+                cell?.txtField.clearButtonMode = .whileEditing
+                cell?.txtField.textAlignment = .right
+            }else{
+                cell?.txtField.rightView = nil
+                cell?.txtField.rightViewMode = .always
+                cell?.txtField.clearButtonMode = .whileEditing
+                cell?.txtField.textAlignment = .left
+            }
+            
+            cell?.txtField.textColor = UIColor(named: "Title_Header")
+            let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 20))
+            cell?.txtField.leftView = paddingView
+            cell?.txtField.leftViewMode = .always
+            cell?.selectionStyle = .none
+            cell?.txtField.delegate = self
+
+            return cell!
         }else{
             let cell = tableView
                 .dequeueReusableCell(withIdentifier: "textfieldcell", for: indexPath) as? TextFieldCell
@@ -576,6 +649,24 @@ class BasePriceViewController: BaseHostTableviewController {
         inputPickerView.reloadAllComponents()
     }
     
+    @objc func affiliateCheckBtnTapped(_ sender: UIButton)
+    {
+        let cell = view.viewWithTag((sender.tag) + 500) as? AffiliateCell
+        if let isAffiliate = Utility.shared.step3ValuesInfo["is_affiliate"] as? Int,isAffiliate == 1{
+            self.isAffiliate = 0
+            Utility.shared.step3ValuesInfo.updateValue(0, forKey: "is_affiliate")
+            cell?.checkBtn.setImage(#imageLiteral(resourceName: "unchecked"), for: .normal)
+            cell?.affiliateStackview.isHidden = true
+        }else{
+            self.isAffiliate = 1
+            Utility.shared.step3ValuesInfo.updateValue(1, forKey: "is_affiliate")
+            cell?.checkBtn.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
+            cell?.checkBtn.tintColor = Theme.PRIMARY_COLOR
+            cell?.affiliateStackview.isHidden = false
+        }
+    }
+
+    
     //MARK: - UIPickerViewDelegate and Datasource
     
     override func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -617,6 +708,26 @@ class BasePriceViewController: BaseHostTableviewController {
         }
     }
     
+    @objc func CleaningText(field: UITextField){
+        
+        if ((field.text?.containsNonEnglishNumbersChecking) != nil) {
+            field.text = field.text?.english
+            cleaningPriceValue = field.text!
+            print(field.text as Any)
+        }
+    }
+    
+    @objc func affiliateCommissionText(field: UITextField){
+        
+        if ((field.text?.containsNonEnglishNumbersChecking) != nil) {
+            field.text = field.text?.english
+            affiliateCommission = field.text!
+            print(field.text as Any)
+        }
+    }
+
+    
+    
     //MARK: - UITextFieldDelegates
     
     override func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -645,14 +756,7 @@ class BasePriceViewController: BaseHostTableviewController {
             print(field.text as Any)
         }
     }
-    @objc func CleaningText(field: UITextField){
-        
-        if ((field.text?.containsNonEnglishNumbersChecking) != nil) {
-            field.text = field.text?.english
-            cleaningPriceValue = field.text!
-            print(field.text as Any)
-        }
-    }
+
     override func textFieldDidEndEditing(_ textField: UITextField) {
         
 
@@ -671,6 +775,11 @@ class BasePriceViewController: BaseHostTableviewController {
           cleaningPriceValue = textField.text!
         self.view.makeToast("\((Utility.shared.getLanguage()?.value(forKey:"invalidcleaning"))!)")
         }
+         else if textField.tag == 5
+         {
+           affiliateCommission = textField.text!
+             self.view.makeToast("Invalid Affiliate Commission, only numbers(eg:25) are allowed")
+         }
      }
         else
      {
@@ -704,6 +813,20 @@ class BasePriceViewController: BaseHostTableviewController {
             }
         }
 
+            if textField.tag == 5
+            {
+                affiliateCommission = textField.text!
+                if(affiliateCommission == "")
+                {
+                    Utility.shared.affiliate_commission = 0.0
+                    Utility.shared.step3ValuesInfo.updateValue(0.0, forKey: "affiliate_commission")
+                }
+                else
+                {
+                   Utility.shared.affiliate_commission = (Double(affiliateCommission))!
+                   Utility.shared.step3ValuesInfo.updateValue(Double(affiliateCommission)!, forKey: "affiliate_commission")
+                }
+            }
        // tableView.reloadData()
         }
         

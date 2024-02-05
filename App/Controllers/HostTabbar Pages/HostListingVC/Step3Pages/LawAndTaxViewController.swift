@@ -151,7 +151,7 @@ class LawAndTaxViewController: BaseHostTableviewController {
                                                     maxNight: .some(Utility.shared.step3ValuesInfo["maxNight"] as! Int),
                                                     basePrice: .some(Utility.shared.step3ValuesInfo["basePrice"] as! Double),
                                                     cleaningPrice: .some(Utility.shared.step3ValuesInfo["cleaningPrice"] as! Double),
-                                                    currency: .some("\(Utility.shared.step3ValuesInfo["currency"] ?? "")"),
+                                                    currency: .some("\(Utility.shared.step3ValuesInfo["currency"] ?? "")"),is_affiliate: .some(Utility.shared.step3ValuesInfo["is_affiliate"] as? Int ?? 0 ), affiliate_commission: .some(Utility.shared.step3ValuesInfo["affiliate_commission"] as? Double ?? 0.0),
                                                     weeklyDiscount: .some(Utility.shared.step3ValuesInfo["weeklyDiscount"] as! Int),
                                                     monthlyDiscount: .some(Utility.shared.step3ValuesInfo["monthlyDiscount"] as! Int), blockedDates: .some([]) ,
                                                     bookingType: "\(Utility.shared.step3ValuesInfo["bookingType"] ?? "")",

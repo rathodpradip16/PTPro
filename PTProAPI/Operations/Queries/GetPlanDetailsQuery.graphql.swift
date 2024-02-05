@@ -8,7 +8,7 @@ extension PTProAPI {
     static let operationName: String = "getPlanDetails"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query getPlanDetails($userId: String) { getPlanDetails(userId: $userId) { __typename status errorMessage results { __typename id title one two three four five six monthly yearly currency status expiryDate } } }"#
+        #"query getPlanDetails($userId: String) { getPlanDetails(userId: $userId) { __typename errorMessage status results { __typename id title one two three four five six monthly yearly currency status expiryDate } } }"#
       ))
 
     public var userId: GraphQLNullable<String>
@@ -40,13 +40,13 @@ extension PTProAPI {
         static var __parentType: Apollo.ParentType { PTProAPI.Objects.PlanDetailsType }
         static var __selections: [Apollo.Selection] { [
           .field("__typename", String.self),
-          .field("status", Int?.self),
           .field("errorMessage", String?.self),
+          .field("status", Int?.self),
           .field("results", [Result?]?.self),
         ] }
 
-        var status: Int? { __data["status"] }
         var errorMessage: String? { __data["errorMessage"] }
+        var status: Int? { __data["status"] }
         var results: [Result?]? { __data["results"] }
 
         /// GetPlanDetails.Result

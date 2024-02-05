@@ -360,6 +360,8 @@
 		767A84BB2B4ED40A0038D2D1 /* GetListingDetailsStep3Query.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767A84BA2B4ED40A0038D2D1 /* GetListingDetailsStep3Query.graphql.swift */; };
 		7682D8002B1396D000967ED9 /* ExploreSurroundingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7682D7FF2B1396D000967ED9 /* ExploreSurroundingsVC.swift */; };
 		768525F92B4D6E99000BE547 /* GetCouponEditQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768525F82B4D6E99000BE547 /* GetCouponEditQuery.graphql.swift */; };
+		768CAE582B6AA9E2004CD8EC /* AffiliateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768CAE562B6AA9E2004CD8EC /* AffiliateCell.swift */; };
+		768CAE592B6AA9E2004CD8EC /* AffiliateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 768CAE572B6AA9E2004CD8EC /* AffiliateCell.xib */; };
 		7690ECA42B0DBB0000CF4CD9 /* Locator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7690ECA32B0DBB0000CF4CD9 /* Locator.swift */; };
 		76C1A5232ACFBF790031BE76 /* AffiliateSearchLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2EAD12ACAC473000E73FC /* AffiliateSearchLinkVC.swift */; };
 		76C1A5242ACFBFAE0031BE76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7602D0AD2ABCA4FF00635A6D /* Main.storyboard */; };
@@ -1298,6 +1300,8 @@
 		767B90C12AFD4AC30089605C /* CreateCustomPlanRequest.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CreateCustomPlanRequest.graphql; sourceTree = "<group>"; };
 		7682D7FF2B1396D000967ED9 /* ExploreSurroundingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreSurroundingsVC.swift; sourceTree = "<group>"; };
 		768525F82B4D6E99000BE547 /* GetCouponEditQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetCouponEditQuery.graphql.swift; sourceTree = "<group>"; };
+		768CAE562B6AA9E2004CD8EC /* AffiliateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateCell.swift; sourceTree = "<group>"; };
+		768CAE572B6AA9E2004CD8EC /* AffiliateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AffiliateCell.xib; sourceTree = "<group>"; };
 		7690ECA32B0DBB0000CF4CD9 /* Locator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locator.swift; sourceTree = "<group>"; };
 		76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateSearchLinkCVC.swift; sourceTree = "<group>"; };
 		76CEB1E42B36A5DB00C057AC /* YouMayLikeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouMayLikeVC.swift; sourceTree = "<group>"; };
@@ -2330,6 +2334,15 @@
 			path = ManageCoupon;
 			sourceTree = "<group>";
 		};
+		768CAE532B6AA98D004CD8EC /* AffiliateCell */ = {
+			isa = PBXGroup;
+			children = (
+				768CAE562B6AA9E2004CD8EC /* AffiliateCell.swift */,
+				768CAE572B6AA9E2004CD8EC /* AffiliateCell.xib */,
+			);
+			path = AffiliateCell;
+			sourceTree = "<group>";
+		};
 		76CEB1E32B36A5B000C057AC /* TryMe */ = {
 			isa = PBXGroup;
 			children = (
@@ -2845,6 +2858,7 @@
 		B553A3D1224C9A6000138107 /* MoreFilterPage */ = {
 			isa = PBXGroup;
 			children = (
+				768CAE532B6AA98D004CD8EC /* AffiliateCell */,
 				B5D8D93B282CD2D9005BF181 /* DateCell */,
 				B553A3EE224CA70800138107 /* AmenitiesCell */,
 				B553A3E9224CA4CA00138107 /* Rooms&BedsCell */,
@@ -4096,6 +4110,7 @@
 				B545164222AFB2EE006D7009 /* InboxDateLabel.xib in Resources */,
 				2C93338022FAE8F900884A3B /* NoticeArrivalViewController.xib in Resources */,
 				2CAE13C8236018E300962576 /* Português.json in Resources */,
+				768CAE592B6AA9E2004CD8EC /* AffiliateCell.xib in Resources */,
 				B568D98C23618B66000ACF1A /* VerificationSuccessVC.xib in Resources */,
 				B51207C028E493D4001BA260 /* ForceUpdateViewController.xib in Resources */,
 				B587F78F281BB083009D9842 /* BeVietnamPro-Medium.ttf in Resources */,
@@ -5008,6 +5023,7 @@
 				765C67D92AE3BB26000B6AE9 /* DayAxisValueFormatter.swift in Sources */,
 				766C07FE2AFFE0CB00E68E60 /* PopularLocationCommonType.graphql.swift in Sources */,
 				765E56CF2AEAC06200615750 /* MonthAxisValueFormatter.swift in Sources */,
+				768CAE582B6AA9E2004CD8EC /* AffiliateCell.swift in Sources */,
 				B567AF7D2851E92000DC88B8 /* DeleteAccountVC.swift in Sources */,
 				766C07382AFFE0CB00E68E60 /* ManageListingStepsMutation.graphql.swift in Sources */,
 				2C93338722FAFC7700884A3B /* TripLengthViewController.swift in Sources */,

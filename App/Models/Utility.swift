@@ -204,12 +204,13 @@ public class Utility: NSObject {
     var isfromBackroundBooking: Bool = false
     var isfromOfflineBooking: Bool = false
     
-    
     var isfromAppDelegateMessageBackground: Bool = false
     var isfromAppdelegateMessageOffline: Bool = false
     
     var host_basePrice:Double!
     var host_cleanPrice: Double!
+    var affiliate_commission:Double!
+    var is_affiliate: Bool!
     
     var isfrom_availability_calendar:Bool = false
     var isfrom_availability_calendar_date:Bool = false

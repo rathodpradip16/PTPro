@@ -8,7 +8,7 @@ extension PTProAPI {
     static let operationName: String = "UpdateListingStep3"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"mutation UpdateListingStep3($id: Int, $houseRules: [Int], $bookingNoticeTime: String, $checkInStart: String, $checkInEnd: String, $maxDaysNotice: String, $minNight: Int, $maxNight: Int, $basePrice: Float, $cleaningPrice: Float, $currency: String, $weeklyDiscount: Int, $monthlyDiscount: Int, $blockedDates: [String], $bookingType: String!, $cancellationPolicy: Int) { updateListingStep3( id: $id houseRules: $houseRules bookingNoticeTime: $bookingNoticeTime checkInStart: $checkInStart checkInEnd: $checkInEnd maxDaysNotice: $maxDaysNotice minNight: $minNight maxNight: $maxNight basePrice: $basePrice cleaningPrice: $cleaningPrice currency: $currency weeklyDiscount: $weeklyDiscount monthlyDiscount: $monthlyDiscount blockedDates: $blockedDates bookingType: $bookingType cancellationPolicy: $cancellationPolicy ) { __typename results { __typename id houseRules bookingNoticeTime checkInStart checkInEnd maxDaysNotice minNight maxNight basePrice cleaningPrice currency weeklyDiscount monthlyDiscount blockedDates } status errorMessage actionType } }"#
+        #"mutation UpdateListingStep3($id: Int, $houseRules: [Int], $bookingNoticeTime: String, $checkInStart: String, $checkInEnd: String, $maxDaysNotice: String, $minNight: Int, $maxNight: Int, $basePrice: Float, $cleaningPrice: Float, $currency: String, $is_affiliate: Int, $affiliate_commission: Float, $weeklyDiscount: Int, $monthlyDiscount: Int, $blockedDates: [String], $bookingType: String!, $cancellationPolicy: Int) { updateListingStep3( id: $id houseRules: $houseRules bookingNoticeTime: $bookingNoticeTime checkInStart: $checkInStart checkInEnd: $checkInEnd maxDaysNotice: $maxDaysNotice minNight: $minNight maxNight: $maxNight basePrice: $basePrice cleaningPrice: $cleaningPrice currency: $currency is_affiliate: $is_affiliate affiliate_commission: $affiliate_commission weeklyDiscount: $weeklyDiscount monthlyDiscount: $monthlyDiscount blockedDates: $blockedDates bookingType: $bookingType cancellationPolicy: $cancellationPolicy ) { __typename results { __typename id houseRules bookingNoticeTime checkInStart checkInEnd maxDaysNotice minNight maxNight basePrice cleaningPrice currency is_affiliate affiliate_commission weeklyDiscount monthlyDiscount blockedDates } status errorMessage actionType } }"#
       ))
 
     public var id: GraphQLNullable<Int>
@@ -22,6 +22,8 @@ extension PTProAPI {
     public var basePrice: GraphQLNullable<Double>
     public var cleaningPrice: GraphQLNullable<Double>
     public var currency: GraphQLNullable<String>
+    public var is_affiliate: GraphQLNullable<Int>
+    public var affiliate_commission: GraphQLNullable<Double>
     public var weeklyDiscount: GraphQLNullable<Int>
     public var monthlyDiscount: GraphQLNullable<Int>
     public var blockedDates: GraphQLNullable<[String?]>
@@ -40,6 +42,8 @@ extension PTProAPI {
       basePrice: GraphQLNullable<Double>,
       cleaningPrice: GraphQLNullable<Double>,
       currency: GraphQLNullable<String>,
+      is_affiliate: GraphQLNullable<Int>,
+      affiliate_commission: GraphQLNullable<Double>,
       weeklyDiscount: GraphQLNullable<Int>,
       monthlyDiscount: GraphQLNullable<Int>,
       blockedDates: GraphQLNullable<[String?]>,
@@ -57,6 +61,8 @@ extension PTProAPI {
       self.basePrice = basePrice
       self.cleaningPrice = cleaningPrice
       self.currency = currency
+      self.is_affiliate = is_affiliate
+      self.affiliate_commission = affiliate_commission
       self.weeklyDiscount = weeklyDiscount
       self.monthlyDiscount = monthlyDiscount
       self.blockedDates = blockedDates
@@ -76,6 +82,8 @@ extension PTProAPI {
       "basePrice": basePrice,
       "cleaningPrice": cleaningPrice,
       "currency": currency,
+      "is_affiliate": is_affiliate,
+      "affiliate_commission": affiliate_commission,
       "weeklyDiscount": weeklyDiscount,
       "monthlyDiscount": monthlyDiscount,
       "blockedDates": blockedDates,
@@ -101,6 +109,8 @@ extension PTProAPI {
           "basePrice": .variable("basePrice"),
           "cleaningPrice": .variable("cleaningPrice"),
           "currency": .variable("currency"),
+          "is_affiliate": .variable("is_affiliate"),
+          "affiliate_commission": .variable("affiliate_commission"),
           "weeklyDiscount": .variable("weeklyDiscount"),
           "monthlyDiscount": .variable("monthlyDiscount"),
           "blockedDates": .variable("blockedDates"),
@@ -153,6 +163,8 @@ extension PTProAPI {
             .field("basePrice", Double?.self),
             .field("cleaningPrice", Double?.self),
             .field("currency", String?.self),
+            .field("is_affiliate", Int?.self),
+            .field("affiliate_commission", Double?.self),
             .field("weeklyDiscount", Int?.self),
             .field("monthlyDiscount", Int?.self),
             .field("blockedDates", [String?]?.self),
@@ -169,6 +181,8 @@ extension PTProAPI {
           var basePrice: Double? { __data["basePrice"] }
           var cleaningPrice: Double? { __data["cleaningPrice"] }
           var currency: String? { __data["currency"] }
+          var is_affiliate: Int? { __data["is_affiliate"] }
+          var affiliate_commission: Double? { __data["affiliate_commission"] }
           var weeklyDiscount: Int? { __data["weeklyDiscount"] }
           var monthlyDiscount: Int? { __data["monthlyDiscount"] }
           var blockedDates: [String?]? { __data["blockedDates"] }

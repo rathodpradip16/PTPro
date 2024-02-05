@@ -35,18 +35,18 @@ let environment = Environment.development
 let environment = Environment.production
 #endif
 
-var BASE_URL : String {
-    get {
-        switch environment {
-        case .development:
-            return "https://ptbeta.xyz"
-        case .production:
-            return "https://ptbeta.xyz"
-        case .localhost:
-            return "https://ptbeta.xyz"
-        }
-    }
-}
+//var BASE_URL : String {
+//    get {
+//        switch environment {
+//        case .development:
+//            return "https://ptbeta.xyz"
+//        case .production:
+//            return "https://ptbeta.xyz"
+//        case .localhost:
+//            return "https://ptbeta.xyz"
+//        }
+//    }
+//}
 
 //var BASE_URL : String {
 //    get {
@@ -60,6 +60,22 @@ var BASE_URL : String {
 //        }
 //    }
 //}
+
+var BASE_URL : String {
+    get {
+        switch environment {
+        case .development:
+            return "http://product.boosturrental.com"
+        case .production:
+            return "http://product.boosturrental.com"
+        case .localhost:
+            return "http://product.boosturrental.com"
+        }
+    }
+}
+
+
+//return "http://www.boosturrental.com/api/graphql"
 
 
 
@@ -148,18 +164,18 @@ var PayPal_Client_ID : String{
     }
 }
 
-var graphQLEndpoint : String {
-    get {
-        switch environment {
-        case .development:
-            return "https://ptbeta.xyz/api/graphql"
-        case .production:
-            return "https://ptbeta.xyz/api/graphql"
-        case .localhost:
-            return "https://ptbeta.xyz/api/graphql"
-        }
-    }
-}
+//var graphQLEndpoint : String {
+//    get {
+//        switch environment {
+//        case .development:
+//            return "https://ptbeta.xyz/api/graphql"
+//        case .production:
+//            return "https://ptbeta.xyz/api/graphql"
+//        case .localhost:
+//            return "https://ptbeta.xyz/api/graphql"
+//        }
+//    }
+//}
 
 //var graphQLEndpoint : String {
 //    get {
@@ -173,6 +189,20 @@ var graphQLEndpoint : String {
 //        }
 //    }
 //}
+
+
+var graphQLEndpoint : String {
+    get {
+        switch environment {
+        case .development:
+            return "http://product.boosturrental.com/api/graphql"
+        case .production:
+            return "http://product.boosturrental.com/api/graphql"
+        case .localhost:
+            return "http://product.boosturrental.com/api/graphql"
+        }
+    }
+}
 
 let GOOGLE_CLIENT_ID = "1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at.apps.googleusercontent.com"
 
