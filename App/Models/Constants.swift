@@ -74,12 +74,6 @@ var BASE_URL : String {
     }
 }
 
-
-//return "http://www.boosturrental.com/api/graphql"
-
-
-
-
 let IMAGE_AVATAR_MEDIUM = "\(BASE_URL)/images/avatar/medium_"
 let IMAGE_AVATAR_SMALL = "\(BASE_URL)/images/avatar/medium_"
 let IMAGE_AVATAR_URL = "\(BASE_URL)/images/avatar/"

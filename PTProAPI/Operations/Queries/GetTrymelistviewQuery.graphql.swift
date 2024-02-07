@@ -8,15 +8,15 @@ extension PTProAPI {
     static let operationName: String = "getTrymelistview"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query getTrymelistview($userId: String, $listId: Int) { getTrymelistview(userId: $userId, listId: $listId) { __typename errorMessage status } }"#
+        #"query getTrymelistview($userId: String!, $listId: Int!) { getTrymelistview(userId: $userId, listId: $listId) { __typename errorMessage status } }"#
       ))
 
-    public var userId: GraphQLNullable<String>
-    public var listId: GraphQLNullable<Int>
+    public var userId: String
+    public var listId: Int
 
     public init(
-      userId: GraphQLNullable<String>,
-      listId: GraphQLNullable<Int>
+      userId: String,
+      listId: Int
     ) {
       self.userId = userId
       self.listId = listId

@@ -1594,22 +1594,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D2E67205-F382-47F9-A15B-3E24029435E4"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "3082"
-            endingLineNumber = "3082"
-            landmarkName = "searchListingAPICall()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "93130310-5140-43A4-80E7-62A4875705A5"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -2866,6 +2850,342 @@
             startingLineNumber = "255"
             endingLineNumber = "255"
             landmarkName = "saveandExitAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DE236C6E-C9D3-48CB-8B63-DC14E781069C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/PayoutPreference/PayoutPreferenceVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "453"
+            endingLineNumber = "453"
+            landmarkName = "VerifyAPICall(stripeaccountID:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F496CECF-E12B-4CA3-A6AB-EF4805A029D9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/PayoutPreference/BankAccountVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "487"
+            endingLineNumber = "487"
+            landmarkName = "finishAPICall()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5A96AE38-9C63-4F72-A2FC-7D1A40ED302B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New Group/PaymentSelectionPage/PaymentSelectionPage.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "599"
+            endingLineNumber = "599"
+            landmarkName = "PaymentAPICall(cardtoken:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "01DBB3F7-CD2A-479E-ADD3-789DF31087BD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New Group/PaymentSelectionPage/PaymentSelectionPage.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "553"
+            endingLineNumber = "553"
+            landmarkName = "PaymentAPICall(cardtoken:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "01DBB3F7-CD2A-479E-ADD3-789DF31087BD - fcf735187b070b01"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "App.PaymentSelectionPage.PaymentAPICall(cardtoken: Swift.String) -&gt; ()"
+                  moduleName = "App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New%20Group/PaymentSelectionPage/PaymentSelectionPage.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "553"
+                  endingLineNumber = "553"
+                  offsetFromSymbolStart = "7760">
+               </Location>
+               <Location
+                  uuid = "01DBB3F7-CD2A-479E-ADD3-789DF31087BD - f46893dc8b874cf8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.CreateReservationMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.PaymentSelectionPage.PaymentAPICall(cardtoken: Swift.String) -&gt; ()"
+                  moduleName = "App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New%20Group/PaymentSelectionPage/PaymentSelectionPage.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "555"
+                  endingLineNumber = "555"
+                  offsetFromSymbolStart = "148">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1645F99A-27F5-4FBE-8F6F-7B5251E6AE07"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New Group/PaymentSelectionPage/PaymentSelectionPage.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "652"
+            endingLineNumber = "652"
+            landmarkName = "subscriptionPaymentAPICall(cardtoken:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1645F99A-27F5-4FBE-8F6F-7B5251E6AE07 - 1941c6840b4e8575"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "App.PaymentSelectionPage.subscriptionPaymentAPICall(cardtoken: Swift.String) -&gt; ()"
+                  moduleName = "App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New%20Group/PaymentSelectionPage/PaymentSelectionPage.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "652"
+                  endingLineNumber = "652"
+                  offsetFromSymbolStart = "2264">
+               </Location>
+               <Location
+                  uuid = "1645F99A-27F5-4FBE-8F6F-7B5251E6AE07 - db54999c3fb7c5db"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.CreateSubscriptionPaymentMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.PaymentSelectionPage.subscriptionPaymentAPICall(cardtoken: Swift.String) -&gt; ()"
+                  moduleName = "App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New%20Group/PaymentSelectionPage/PaymentSelectionPage.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "654"
+                  endingLineNumber = "654"
+                  offsetFromSymbolStart = "172">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0CBC7405-802B-4401-9B9F-E612D2AFCEF4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New Group/PaymentSelectionPage/PaymentSelectionPage.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "705"
+            endingLineNumber = "705"
+            landmarkName = "subscriptionPaymentAPICall(cardtoken:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7B8D712A-CE36-4052-9AC3-1C5F7E3CBAF1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New Group/PaymentSelectionPage/PaymentSelectionPage.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "656"
+            endingLineNumber = "656"
+            landmarkName = "subscriptionPaymentAPICall(cardtoken:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C396B655-69A3-4320-A6C0-6E5D06400C8E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/TryMe/YouMayLikeVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "519"
+            endingLineNumber = "519"
+            landmarkName = "apiCallGetHosted(priceRange:review:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D89B8275-532D-4676-982C-9A69E8CCFE60"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/TryMe/YouMayLikeVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "509"
+            endingLineNumber = "509"
+            landmarkName = "apiCallGetHosted(priceRange:review:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B728B0DD-7EDA-4DC1-9ABB-1155EB5048FF"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "3158"
+            endingLineNumber = "3158"
+            landmarkName = "createSearchListAPI()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5E9DB579-84C2-4730-B282-C1FB51EE41B8"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "3163"
+            endingLineNumber = "3163"
+            landmarkName = "createSearchListAPI()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "71779EAE-3C58-48C4-A7BB-FA55C1131F8B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "3174"
+            endingLineNumber = "3174"
+            landmarkName = "GetTrymelistviewAPI(listId:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "43C3434D-193A-44DC-B4F8-69C37C902853"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1472"
+            endingLineNumber = "1472"
+            landmarkName = "collectionView(_:didSelectItemAt:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "43C3434D-193A-44DC-B4F8-69C37C902853 - 154b93bf214938a6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "App.ExplorePageVC.collectionView(_: __C.UICollectionView, didSelectItemAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1472"
+                  endingLineNumber = "1472"
+                  offsetFromSymbolStart = "1708">
+               </Location>
+               <Location
+                  uuid = "43C3434D-193A-44DC-B4F8-69C37C902853 - 4169e19984958774"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in App.ExplorePageVC.collectionView(_: __C.UICollectionView, didSelectItemAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1473"
+                  endingLineNumber = "1473"
+                  offsetFromSymbolStart = "128">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "72728B4F-2922-40EF-9A81-AE03CACB80AF"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1499"
+            endingLineNumber = "1499"
+            landmarkName = "collectionView(_:didSelectItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "15B6E0DA-4B25-43DA-AE9D-EF20CBF7634A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1509"
+            endingLineNumber = "1509"
+            landmarkName = "collectionView(_:didSelectItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

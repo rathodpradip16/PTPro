@@ -505,11 +505,12 @@ class YouMayLikeVC: UIViewController,UICollectionViewDelegate,UICollectionViewDa
                 if let status = result.data?.getHostSuggested?.status,status == 200 {
                     if let list =  result.data?.getHostSuggested, let results = list.results{
                         self.arrGetHosted = results as! [PTProAPI.GetHostSuggestedQuery.Data.GetHostSuggested.Result]
-                        self.NoresultView.isHidden = true
                         self.lblLocation.text = list.aaddress
                         if results.count == 0{
                             self.arrGetHosted.removeAll()
                             self.NoresultView.isHidden = false
+                        }else{
+                            self.NoresultView.isHidden = true
                         }
                     }
                     self.cvLinkSearch.setContentOffset(.zero, animated: true)

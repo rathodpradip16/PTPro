@@ -1470,7 +1470,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
             }
             
             self.present(viewListing, animated: true, completion: {
-                if(Utility.shared.selectedstartDate_filter != "" && Utility.shared.selectedEndDate_filter != ""){
+                if(Utility.shared.selectedstartDate_filter != "" && Utility.shared.selectedEndDate_filter != "") && Utility.shared.locationfromSearch != nil && Utility.shared.locationfromSearch != ""{
                     self.GetTrymelistviewAPI(listId: self.FilterArray[indexPath.row].id ?? 0)
                 }
             })
@@ -2155,7 +2155,11 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
 //                imageCell.contentView.backgroundColor = UIColor.white
                 viewListing.cc_setZoomTransition(originalView:imageCell.contentView)
             }
-            self.present(viewListing, animated: true, completion: nil)
+            self.present(viewListing, animated: true, completion: {
+                if(Utility.shared.selectedstartDate_filter != "" && Utility.shared.selectedEndDate_filter != "") && Utility.shared.locationfromSearch != nil && Utility.shared.locationfromSearch != ""{
+                    self.GetTrymelistviewAPI(listId: self.FilterArray[sender.view!.tag].id ?? 0)
+                }
+            })
         }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -3078,7 +3082,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
                         self.viewDidLayoutSubviews()
                     }
                     
-                    if(Utility.shared.selectedstartDate_filter != "" && Utility.shared.selectedEndDate_filter != ""){
+                    if(Utility.shared.selectedstartDate_filter != "" && Utility.shared.selectedEndDate_filter != "") && Utility.shared.locationfromSearch != nil && Utility.shared.locationfromSearch != ""{
                         self.createSearchListAPI()
                     }
                 }
@@ -3146,7 +3150,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     //MARK: - createSearchListAPI
     func createSearchListAPI(){
         if Utility.shared.isConnectedToNetwork(){
-            let createSearchlistMutation = PTProAPI.CreateSearchlistMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), dates: .some("'\( Utility.shared.selectedstartDate_filter)' AND '\(Utility.shared.selectedEndDate_filter)'"))
+            let createSearchlistMutation = PTProAPI.CreateSearchlistMutation(userId: Utility.shared.ProfileAPIArray?.userId ?? "", dates: "'\( Utility.shared.selectedstartDate_filter)' AND '\(Utility.shared.selectedEndDate_filter)'", address: Utility.shared.locationfromSearch)
             Network.shared.apollo_headerClient.perform(mutation: createSearchlistMutation){ [self] response in
                 switch response {
                 case .success(let result):
@@ -3158,7 +3162,6 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
                 case .failure(let error):
                     self.view.makeToast(error.localizedDescription)
                 }
-                
             }
         }
     }
@@ -3166,7 +3169,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     //MARK: - GetTrymelistviewAPI
     func GetTrymelistviewAPI(listId:Int){
         if Utility.shared.isConnectedToNetwork(){
-            let getTrymelistviewQuery = PTProAPI.GetTrymelistviewQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), listId: .some(listId))
+            let getTrymelistviewQuery = PTProAPI.GetTrymelistviewQuery(userId: Utility.shared.ProfileAPIArray?.userId ?? "", listId: listId)
                     
             Network.shared.apollo_headerClient.fetch(query: getTrymelistviewQuery,cachePolicy:.fetchIgnoringCacheData){ [self] response in
                 switch response {

@@ -8,23 +8,27 @@ extension PTProAPI {
     static let operationName: String = "CreateSearchlist"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"mutation CreateSearchlist($userId: String, $dates: String) { CreateSearchlist(userId: $userId, dates: $dates) { __typename status errorMessage } }"#
+        #"mutation CreateSearchlist($userId: String!, $dates: String!, $address: String!) { CreateSearchlist(userId: $userId, dates: $dates, address: $address) { __typename status errorMessage } }"#
       ))
 
-    public var userId: GraphQLNullable<String>
-    public var dates: GraphQLNullable<String>
+    public var userId: String
+    public var dates: String
+    public var address: String
 
     public init(
-      userId: GraphQLNullable<String>,
-      dates: GraphQLNullable<String>
+      userId: String,
+      dates: String,
+      address: String
     ) {
       self.userId = userId
       self.dates = dates
+      self.address = address
     }
 
     public var __variables: Variables? { [
       "userId": userId,
-      "dates": dates
+      "dates": dates,
+      "address": address
     ] }
 
     struct Data: PTProAPI.SelectionSet {
@@ -35,7 +39,8 @@ extension PTProAPI {
       static var __selections: [Apollo.Selection] { [
         .field("CreateSearchlist", CreateSearchlist?.self, arguments: [
           "userId": .variable("userId"),
-          "dates": .variable("dates")
+          "dates": .variable("dates"),
+          "address": .variable("address")
         ]),
       ] }
 
