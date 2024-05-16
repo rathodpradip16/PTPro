@@ -644,7 +644,7 @@ class PaymentSelectionPage: UIViewController {
             planID = planId
         }
         
-        let createSubscriptionPaymentMutation = PTProAPI.CreateSubscriptionPaymentMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), planId: .some(planID), total: Double(subscriptionTotal), paymentType: .some(self.selectedPaymentType == 1 ? 2 : 1), paymentCurrency: .some(self.selectedCurrency), cardToken: .some(cardtoken), currency: currency_con, planType: (isYearlySelected ? "year" : "month"), totaldiscount: .some(Double(isCouponApplied ? subscriptionDiscount : 0.0)), couponCode: .some(isCouponApplied ? subscriptionCouponCode : ""))
+        let createSubscriptionPaymentMutation = PTProAPI.CreateSubscriptionPaymentMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), planId: .some(planID), total: Double(subscriptionTotal), paymentType: .some(self.selectedPaymentType == 1 ? 2 : 1), paymentCurrency: .some(self.selectedCurrency), cardToken: .some(cardtoken), currency: currency_con, planType: (isYearlySelected ? "yearly" : "monthly"), totaldiscount: .some(Double(isCouponApplied ? subscriptionDiscount : 0.0)), couponCode: .some(isCouponApplied ? subscriptionCouponCode : ""))
         
 //        print("{\"userId\":\"\(Utility.shared.ProfileAPIArray?.userId ?? "")","planId\":\(planID),\"total\":\(subscriptionTotal),\"paymentType\":\(self.selectedPaymentType),\"paymentCurrency\":\"\(self.selectedCurrency)\",\"cardToken\":\"\",\"currency\":\"\(currency_con)","planType\":\"month","couponCode\":\"\(subscriptionCouponCode)\"}")
         

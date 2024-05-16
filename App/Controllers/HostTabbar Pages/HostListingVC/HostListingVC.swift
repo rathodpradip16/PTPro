@@ -608,9 +608,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                     self.noDataView.isHidden = false
                 }
                 if(!self.ispublish){
-                    DispatchQueue.main.async {
-                        self.becomeListingTable.reloadData()
-                    }
+                    self.becomeListingTable.reloadData()
                 }
                 else{
                     self.ispublish = false
@@ -620,9 +618,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                     self.becomeListingTable.isHidden = true
                     self.noDataView.isHidden = false
                 }
-                DispatchQueue.main.async {
-                    self.becomeListingTable.reloadData()
-                }
+                self.becomeListingTable.reloadData()
             } else {
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 let welcomeObj = WelcomePageVC()
@@ -1304,7 +1300,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 }
             } else {
                 self.lottieViewbtn.isHidden = true
-                btnsendtag.setTitle("  \((Utility.shared.getLanguage()?.value(forKey:"unpublish"))!)  ", for: .normal)
+                self.becomeListingTable.reloadData()
                 self.view.makeToast(result.data?.managePublishStatus?.errorMessage!)
             }
         case .failure(let error):
@@ -1516,9 +1512,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         btnInProgress.setTitleColor( UIColor(named: "Title_Header"), for: .normal)
         inprogressTapped = true
         completedTapped = false
-        DispatchQueue.main.async {
-            self.becomeListingTable.reloadData()
-        }
+        self.becomeListingTable.reloadData()
     }
     
     @IBAction func completedTapped(_ sender: Any) {
@@ -1550,9 +1544,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         
         inprogressTapped = false
         completedTapped = true
-        DispatchQueue.main.async {
-            self.becomeListingTable.reloadData()
-        }
+        self.becomeListingTable.reloadData()
     }
     
     

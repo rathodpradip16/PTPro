@@ -874,11 +874,6 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
             if(btnsendtag.currentTitle == "\((Utility.shared.getLanguage()?.value(forKey:"publishnow"))!)"){
                 Utility.shared.unpublish_preview_check = false
                 PublishAPICall(listid:showListingstepArray?.listId! ?? 0, action: "publish",sender:sender,tag:sender.tag)
-//                btnsendtag.setTitle("UnPublish Now", for: .normal)
-//
-//                cell!.listnameLabel.text = "Your Listing is Published"
-                
-                
             } else if(btnsendtag.currentTitle == "\((Utility.shared.getLanguage()?.value(forKey:"submit_appeal"))!)" || btnsendtag.currentTitle == "\((Utility.shared.getLanguage()?.value(forKey:"submit_verification"))!)")
             {
                 submitForVerification(listID: showListingstepArray?.listId! ?? 0)
@@ -886,10 +881,6 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
             else {
                 Utility.shared.unpublish_preview_check = true
                 PublishAPICall(listid: showListingstepArray?.listId! ?? 0, action: "unPublish",sender:sender,tag:sender.tag)
-//                btnsendtag.setTitle("Publish Now", for: .normal)
-//
-//                cell!.listnameLabel.text = "Your Listing is ready to Publish!"
-               
             }
         }
     
