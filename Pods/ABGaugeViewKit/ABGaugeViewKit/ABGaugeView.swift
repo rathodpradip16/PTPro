@@ -36,7 +36,7 @@ public class ABGaugeView: UIView {
         }
     }
     
-    @IBInspectable public var blinkAnimate: Bool = true
+    @IBInspectable public var blinkAnimate: Bool = false
     
     @IBInspectable public var circleColor: UIColor = UIColor.black
     @IBInspectable public var shadowColor: UIColor = UIColor.lightGray.withAlphaComponent(0.3)
@@ -210,11 +210,11 @@ public class ABGaugeView: UIView {
         let theD = (radians - thisRadians)/2
         firstAngle += theD
         let needleValue = radian(for: self.needleValue) + firstAngle
-//        animate(triangleLayer: triangleLayer, shadowLayer: shadowLayer, fromValue: 0, toValue: needleValue*1.05, duration: 0.5) {
+        animate(triangleLayer: triangleLayer, shadowLayer: shadowLayer, fromValue: 0, toValue: needleValue*1.05, duration: 0.5) {
             self.animate(triangleLayer: triangleLayer, shadowLayer: shadowLayer, fromValue: needleValue*1.05, toValue: needleValue*0.95, duration: 0.4, callBack: {
                 self.animate(triangleLayer: triangleLayer, shadowLayer: shadowLayer, fromValue: needleValue*0.95, toValue: needleValue, duration: 0.6, callBack: {})
             })
-   //     }
+        }
     }
     
     func animate(triangleLayer: CAShapeLayer, shadowLayer:CAShapeLayer, fromValue: CGFloat, toValue:CGFloat, duration: CFTimeInterval, callBack:@escaping ()->Void) {
