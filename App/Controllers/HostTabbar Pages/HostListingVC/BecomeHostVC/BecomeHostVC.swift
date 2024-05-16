@@ -681,7 +681,6 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
             }
             else if(Utility.shared.listingApproval == "required" && showListingstepArray?.listing?.listApprovalStatus == "pending")
             {
-                
                 cell.listnameLabel.text = "* \((Utility.shared.getLanguage()?.value(forKey:"your_listing_submisison"))!)"
                 cell.publishBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"waitingforAdmin"))!)", for: .normal)
                 cell.publishBtn.isUserInteractionEnabled = false

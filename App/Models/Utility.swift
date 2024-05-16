@@ -245,9 +245,8 @@ public class Utility: NSObject {
     var ProfileAPIArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
     var isPhonenumberCountrycode : Bool = false
     
-    var listingApproval = String()
-    
-    
+    var listingApproval = ""
+
     //MARK: - Configure  App Language
     func configureLanguage()
     {

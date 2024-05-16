@@ -14,9 +14,7 @@ import SwiftMessages
 import FTPopOverMenu_Swift
 
 class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate,SkeletonTableViewDataSource{
-   
-    
-    
+
     //MARK: - IBOUTLET & GLOBAL VARIABLE CONNECTIONS#imageLiteral(resourceName: "IMG_0872.JPG")
     
     @IBOutlet weak var noDataView: UIView!
@@ -520,7 +518,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     func siteSettingsAPICall()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let siteSettingsquery = PTProAPI.SiteSettingsQuery(type: .some(""))
+            let siteSettingsquery = PTProAPI.SiteSettingsQuery(type: .none)
             Network.shared.apollo_headerClient.fetch(query:siteSettingsquery,cachePolicy: .fetchIgnoringCacheData){ [self] response in
                 switch response {
                 case .success(let result):
@@ -610,7 +608,9 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                     self.noDataView.isHidden = false
                 }
                 if(!self.ispublish){
-                    self.becomeListingTable.reloadData()
+                    DispatchQueue.main.async {
+                        self.becomeListingTable.reloadData()
+                    }
                 }
                 else{
                     self.ispublish = false
@@ -620,7 +620,9 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                     self.becomeListingTable.isHidden = true
                     self.noDataView.isHidden = false
                 }
-                
+                DispatchQueue.main.async {
+                    self.becomeListingTable.reloadData()
+                }
             } else {
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 let welcomeObj = WelcomePageVC()
@@ -1508,16 +1510,15 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         }
         }
         else {
-           
                 becomeListingTable.isSkeletonable = true
                 becomeListingTable.showAnimatedGradientSkeleton()
-            
-            
         }
         btnInProgress.setTitleColor( UIColor(named: "Title_Header"), for: .normal)
         inprogressTapped = true
         completedTapped = false
-        self.becomeListingTable.reloadData()
+        DispatchQueue.main.async {
+            self.becomeListingTable.reloadData()
+        }
     }
     
     @IBAction func completedTapped(_ sender: Any) {
@@ -1549,8 +1550,9 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         
         inprogressTapped = false
         completedTapped = true
-        self.becomeListingTable.reloadData()
-        
+        DispatchQueue.main.async {
+            self.becomeListingTable.reloadData()
+        }
     }
     
     

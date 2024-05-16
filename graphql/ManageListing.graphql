@@ -50,8 +50,6 @@ errorMessage
 }
 }
 
-
-
 #Become a Host
 
 query ShowListingSteps($listId:String!) {

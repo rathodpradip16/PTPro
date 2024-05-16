@@ -171,6 +171,7 @@ class AffiliateRegistrationDocument: UIViewController,UICollectionViewDelegate,U
     
     @IBAction func onClickPrevious(_ sender: Any) {
         if let parent = parent as? AffiliateRegistration{
+            parent.delegate?.userStepInfoUpdate()
             parent.showWebsiteview()
         }
     }

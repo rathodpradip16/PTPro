@@ -285,6 +285,7 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
                 if let data = result.data?.createAffiliateUserWebList?.status,data == 200 {
                     self.view.makeToast("success")
                     if let parent =  self.parent as? AffiliateRegistration{
+                        parent.delegate?.userStepInfoUpdate()
                         parent.showDocumentview()
                     }
                 } else {
