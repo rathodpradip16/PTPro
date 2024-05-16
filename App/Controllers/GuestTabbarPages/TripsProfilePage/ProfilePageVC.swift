@@ -466,7 +466,7 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
             let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchtohostCell", for: indexPath) as! SwitchtohostCell
             cell.selectionStyle = .none
             cell.profileSettingLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"ViewSubscriptions") ?? "View Subscriptions")"
-            cell.iconImage.image =  #imageLiteral(resourceName: "switch-to-travelling-25")
+            cell.iconImage.image =  #imageLiteral(resourceName: "subscription")
             return cell
         }
     }else if indexPath.section == 3{
@@ -766,10 +766,15 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             self.didSelectAccountSetting(indexPath: indexPath)
         }else{
             if indexPath.row == 0{
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let vc = storyboard.instantiateViewController(withIdentifier: "PropertyInsightsVC") as! PropertyInsightsVC
-                vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true, completion: nil)
+                let arrListing = Utility.shared.utManageListingArray
+                if arrListing.count != 0{
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let vc = storyboard.instantiateViewController(withIdentifier: "PropertyInsightsVC") as! PropertyInsightsVC
+                    vc.modalPresentationStyle = .fullScreen
+                    self.present(vc, animated: true, completion: nil)
+                }else{
+                    self.tabBarController?.selectedIndex = 0
+                }
             }else{
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vc = storyboard.instantiateViewController(withIdentifier: "OccupancyInsightsVC") as! OccupancyInsightsVC
@@ -860,6 +865,7 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             webviewObj.webstring = HELP_URL
             webviewObj.isFromStaticContent = true
             webviewObj.id = 5
+            webviewObj.pageName = "Help"
             webviewObj.modalPresentationStyle = .fullScreen
             webviewObj.pageTitle = "\(Utility.shared.getLanguage()?.value(forKey: "gethelp") ?? "Get Help")"
             webviewObj.webviewRedirection(webviewString:HELP_URL)
@@ -871,6 +877,7 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             let webviewObj = WebviewVC()
             webviewObj.isFromStaticContent = true
             webviewObj.id = 4
+            webviewObj.pageName = "Terms & Privacy"
             webviewObj.webstring = TERMS_URL
             webviewObj.pageTitle = "\(Utility.shared.getLanguage()?.value(forKey: "termsprivacy") ?? "Privacy Policy")"
             webviewObj.modalPresentationStyle = .fullScreen

@@ -10,21 +10,24 @@ import UIKit
 
 /// A rudimentary hosting view for SwiftUI messages.
 @available(iOS 14.0, *)
-public class MessageHostingView<Content>: BaseView, Identifiable where Content: View {
+public class MessageHostingView<Content>: UIView, Identifiable where Content: View {
 
     // MARK: - API
 
     public let id: String
 
-    public init<Message>(message: Message) where Message: MessageViewConvertible, Message.Content == Content {
-        let messageView: Content = message.asMessageView()
-        hostVC = UIHostingController(rootView: messageView)
-        id = message.id
+    public init(id: String, content: Content) {
+        hostVC = UIHostingController(rootView: content)
+        self.id = id
         super.init(frame: .zero)
         hostVC.loadViewIfNeeded()
         installContentView(hostVC.view)
         backgroundColor = .clear
         hostVC.view.backgroundColor = .clear
+    }
+
+    convenience public init<Message>(message: Message) where Message: MessageViewConvertible, Message.Content == Content {
+        self.init(id: message.id, content: message.asMessageView() )
     }
 
     // MARK: - Constants
@@ -46,5 +49,18 @@ public class MessageHostingView<Content>: BaseView, Identifiable where Content: 
         // inserts another intermediate view that should also ignore touches.
         if view == self || view?.superview == self { return nil }
         return view
+    }
+
+    // MARK: - Configuration
+
+    private func installContentView(_ contentView: UIView) {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(contentView)
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            contentView.leftAnchor.constraint(equalTo: leftAnchor),
+            contentView.rightAnchor.constraint(equalTo: rightAnchor),
+        ])
     }
 }

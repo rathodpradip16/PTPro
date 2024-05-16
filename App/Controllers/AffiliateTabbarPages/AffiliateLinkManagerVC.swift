@@ -238,6 +238,12 @@ class AffiliateLinkManagerVC: UIViewController,UICollectionViewDelegate,UICollec
                         if let list =  result.data?.affiliateLinkManager, let results = list.results{
                             self.arrLinkManagerList = results as! [PTProAPI.AffiliateLinkManagerQuery.Data.AffiliateLinkManager.Result]
                             self.NoresultView.isHidden = true
+                            if results.count == 0{
+                                self.arrLinkManagerList.removeAll()
+                                self.NoresultView.isHidden = false
+                            }else{
+                                self.NoresultView.isHidden = true
+                            }
                         }else{
                             self.arrLinkManagerList.removeAll()
                             self.NoresultView.isHidden = false

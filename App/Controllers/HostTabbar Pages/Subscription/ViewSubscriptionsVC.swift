@@ -73,7 +73,7 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
     
     @IBOutlet weak var mainViewHeight: NSLayoutConstraint!
 
-    var arrPlans = [PTProAPI.GetPlanDetailsQuery.Data.GetPlanDetails.Result]()
+    var arrPlans = [PTProAPI.GetPlanDetailQuery.Data.GetPlanDetails.Result]()
     var currencysymbol = ""
     var isYearlySelected = false
     
@@ -215,14 +215,14 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
     
     //MARK: - API CALL
     func getPlanDetailsAPICall(){
-        let getPlanDetailsQuery = PTProAPI.GetPlanDetailsQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""))
+        let getPlanDetailsQuery = PTProAPI.GetPlanDetailQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""))
         Network.shared.apollo_headerClient.fetch(query: getPlanDetailsQuery, cachePolicy: .fetchIgnoringCacheData) { response in
             switch response{
             case .success(let result):
                 if let data = result.data?.getPlanDetails?.status,data == 200 {
                     if let list =  result.data?.getPlanDetails, let results = list.results{
 //                        let arrSorted = (results as! [PTProAPI.GetPlanDetailsQuery.Data.GetPlanDetails.Result]).sorted { $0.id ?? 0 < $1.id ?? 0 }
-                        self.arrPlans = results as! [PTProAPI.GetPlanDetailsQuery.Data.GetPlanDetails.Result]
+                        self.arrPlans = results as! [PTProAPI.GetPlanDetailQuery.Data.GetPlanDetails.Result]
                         if self.arrPlans.count > 0{
                             self.updateBenifitData(indexPath: 0)
                         }
@@ -232,6 +232,24 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
                     self.cvSubscriptionPlans.reloadData()
                 } else {
                     self.view.makeToast(result.data?.getPlanDetails?.errorMessage)
+                }
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+                break
+            }
+        }
+    }
+    
+    func getCancelPlanAPICall(){
+        let getCancelmembershipQuery = PTProAPI.CancelmembershipQuery(userId: Utility.shared.ProfileAPIArray?.userId ?? "")
+        Network.shared.apollo_headerClient.fetch(query: getCancelmembershipQuery, cachePolicy: .fetchIgnoringCacheData) { response in
+            switch response{
+            case .success(let result):
+                if let data = result.data?.cancelmembership?.status,data == 200 {
+                    self.getPlanDetailsAPICall()
+                    self.view.makeToast(result.data?.cancelmembership?.errorMessage)
+                } else {
+                    self.view.makeToast(result.data?.cancelmembership?.errorMessage)
                 }
             case .failure(let error):
                 self.view.makeToast(error.localizedDescription)
@@ -283,7 +301,7 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         cell.btnListNow.tag = indexPath.row
         cell.btnListNow.addTarget(self, action: #selector(onClickListNow(sender:)), for: .touchUpInside)
         cell.lblCustomPlan.text = ""
-        
+        cell.lblListNow.text = "List Now"
         cell.btnSegment.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
         cell.btnSegment.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
 //        cell.btnSegment.backgroundColor = Theme.subSegmentBgColor
@@ -370,9 +388,10 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         }else if let intStatus = arrPlans[indexPath.row].status,intStatus == 1{
             cell.imgBigIcon.image = UIImage(named: "")
             cell.viewSegment.isHidden = true
-            cell.viewListNow.isHidden = true
+            cell.viewListNow.isHidden = false
+            cell.lblListNow.text = "Upgrade"
             cell.lblActiveSub.text = "✓ You're currently our member"
-            if let strDate = arrPlans[indexPath.row].expiryDate?.components(separatedBy: ","),strDate.count != 0{
+            if let strDate = arrPlans[indexPath.row].expiryDate?.components(separatedBy: ","),strDate.count != 0,strDate[0].trimmingCharacters(in: .whitespaces) != ""{
                 cell.lblExpDate.text = "Exp:\(strDate[0])"
             }else{
                 cell.lblExpDate.text = arrPlans[indexPath.row].expiryDate
@@ -416,12 +435,39 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     @objc func onClickListNow(sender:UIButton){
-        let paymentSelectionPage = PaymentSelectionPage()
-        paymentSelectionPage.selectedPlanDetail = self.arrPlans[sender.tag]
-        paymentSelectionPage.isFromSubscriptionPage = true
-        paymentSelectionPage.isYearlySelected = isYearlySelected
-        paymentSelectionPage.modalPresentationStyle = .fullScreen
-        self.present(paymentSelectionPage, animated: true, completion: nil)
+        if let intStatus = arrPlans[sender.tag].status,intStatus == 1{
+            let alert = UIAlertController(title: "Chose an Option", message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Upgrade", style: .default, handler: { action in
+                let paymentSelectionPage = PaymentSelectionPage()
+                paymentSelectionPage.selectedPlanDetail = self.arrPlans[sender.tag]
+                paymentSelectionPage.isFromSubscriptionPage = true
+                paymentSelectionPage.isYearlySelected = self.arrPlans[sender.tag].planType == "yearly"
+                paymentSelectionPage.modalPresentationStyle = .fullScreen
+                self.present(paymentSelectionPage, animated: true, completion: nil)
+            }))
+            alert.addAction(UIAlertAction(title: "Renew", style: .default, handler: { action in
+                let paymentSelectionPage = PaymentSelectionPage()
+                paymentSelectionPage.selectedPlanDetail = self.arrPlans[sender.tag]
+                paymentSelectionPage.isFromSubscriptionPage = true
+                paymentSelectionPage.isYearlySelected = self.arrPlans[sender.tag].planType == "yearly"
+                paymentSelectionPage.modalPresentationStyle = .fullScreen
+                self.present(paymentSelectionPage, animated: true, completion: nil)
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel Plan", style: .default, handler: { action in
+                self.getCancelPlanAPICall()
+            }))
+            alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: { action in
+                
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }else{
+            let paymentSelectionPage = PaymentSelectionPage()
+            paymentSelectionPage.selectedPlanDetail = self.arrPlans[sender.tag]
+            paymentSelectionPage.isFromSubscriptionPage = true
+            paymentSelectionPage.isYearlySelected = isYearlySelected
+            paymentSelectionPage.modalPresentationStyle = .fullScreen
+            self.present(paymentSelectionPage, animated: true, completion: nil)
+        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

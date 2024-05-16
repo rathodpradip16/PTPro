@@ -196,6 +196,7 @@ class OccupancyInsightsVC: UIViewController, CLLocationManagerDelegate{
         self.updateDateMaxMin()
         self.view.endEditing(true)
         self.lottieAnimation()
+        selectedFilterType = "Date"
         self.calculateOccupancyRateAPICall()
     }
     
@@ -208,6 +209,7 @@ class OccupancyInsightsVC: UIViewController, CLLocationManagerDelegate{
         self.updateDateMaxMin()
         self.view.endEditing(true)
         self.lottieAnimation()
+        selectedFilterType = "Date"
         self.calculateOccupancyRateAPICall()
     }
     

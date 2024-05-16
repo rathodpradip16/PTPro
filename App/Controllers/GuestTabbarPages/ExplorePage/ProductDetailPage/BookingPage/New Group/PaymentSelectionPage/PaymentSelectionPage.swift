@@ -60,7 +60,7 @@ class PaymentSelectionPage: UIViewController {
     var getpaymentmethodsArray = [PTProAPI.GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
     var getpaymentmethodsArrayFilter = [PTProAPI.GetPaymentMethodsQuery.Data.GetPaymentMethods.Result]()
     
-    var selectedPlanDetail:PTProAPI.GetPlanDetailsQuery.Data.GetPlanDetails.Result?
+    var selectedPlanDetail:PTProAPI.GetPlanDetailQuery.Data.GetPlanDetails.Result?
     
     var couponData:PTProAPI.GetcouponcodeQuery.Data.Getcouponcode.Datum?
     

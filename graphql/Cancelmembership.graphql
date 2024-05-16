@@ -1,0 +1,6 @@
+query Cancelmembership($userId: String!) {
+Cancelmembership(userId: $userId) {
+status
+errorMessage
+}
+}

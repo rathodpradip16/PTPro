@@ -335,6 +335,7 @@ class HostCalendarVC: UIViewController,WWCalendarTimeSelectorProtocol,CalendarLi
                     }
                     self.lottieView.isHidden = true
                     self.manageListingArray = ((result.data?.manageListings?.results)!) as! [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]
+                    Utility.shared.utManageListingArray = self.manageListingArray
                     self.completed_List_Array.removeAll()
                     self.inprogress_List_Array.removeAll()
                     for i in self.manageListingArray

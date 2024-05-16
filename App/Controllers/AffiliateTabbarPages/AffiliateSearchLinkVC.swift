@@ -179,7 +179,7 @@ class AffiliateSearchLinkVC: UIViewController,UICollectionViewDelegate,UICollect
         if let generated = arrLinkSearchList[selectedIndex].isGenerated,generated == 1{
             self.shareUrl(selectedIndex: selectedIndex)
         }else{
-            self.createAffiliateLinkAPICALL(propertyId: arrLinkSearchList[selectedIndex].id ?? 0, affiliateId: arrLinkSearchList[selectedIndex].affiliateId ?? "", selectedIndex: selectedIndex)
+            self.createAffiliateLinkAPICALL(propertyId: arrLinkSearchList[selectedIndex].id ?? 0, affiliateId: Utility.shared.ProfileAPIArray?.userId ?? "", selectedIndex: selectedIndex)
         }
     }
     
@@ -282,6 +282,12 @@ class AffiliateSearchLinkVC: UIViewController,UICollectionViewDelegate,UICollect
                     if let list =  result.data?.affiliateSearchListing, let results = list.results{
                         self.arrLinkSearchList = results as! [PTProAPI.AffiliateSearchListingQuery.Data.AffiliateSearchListing.Result]
                         self.NoresultView.isHidden = true
+                        if results.count == 0{
+                            self.arrLinkSearchList.removeAll()
+                            self.NoresultView.isHidden = false
+                        }else{
+                            self.NoresultView.isHidden = true
+                        }
                     }else{
                         self.arrLinkSearchList.removeAll()
                         self.NoresultView.isHidden = false

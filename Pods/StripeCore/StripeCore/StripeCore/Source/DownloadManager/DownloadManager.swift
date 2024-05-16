@@ -12,6 +12,11 @@ import UIKit
 @_spi(STP) public class DownloadManager: NSObject, URLSessionDelegate {
     public typealias UpdateImageHandler = (UIImage) -> Void
 
+    private enum Error: Swift.Error {
+        case downloadSyncFailure
+        case downloadAsyncFailure
+    }
+
     public static let sharedManager = DownloadManager()
 
     let downloadQueue: DispatchQueue
@@ -116,15 +121,16 @@ extension DownloadManager {
             return image
         }
         let urlRequest = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy)
-        let task = self.session.downloadTask(with: url) { tempURL, response, _ in
-            guard let tempURL = tempURL,
+        let task = self.session.downloadTask(with: url) { [weak self] tempURL, response, _ in
+            guard let self = self,
+                  let tempURL = tempURL,
                 let response = response,
                 let data = self.getDataFromURL(tempURL),
                 let image = self.persistToMemory(data, forImageName: imageName)
             else {
-                self.pendingRequestsSemaphore.wait()
-                self.pendingRequests.removeValue(forKey: imageName)
-                self.pendingRequestsSemaphore.signal()
+                self?.pendingRequestsSemaphore.wait()
+                self?.pendingRequests.removeValue(forKey: imageName)
+                self?.pendingRequestsSemaphore.signal()
                 return
             }
             self.urlCache?.storeCachedResponse(

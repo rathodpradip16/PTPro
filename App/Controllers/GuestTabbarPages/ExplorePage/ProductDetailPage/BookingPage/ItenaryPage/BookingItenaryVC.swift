@@ -42,8 +42,10 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     @IBOutlet weak var uhohLabel: UILabel!
     @IBOutlet weak var ErrorDescLabel: UILabel!
     @IBOutlet weak var ErrorCodeLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        definesPresentationContext = true
         self.initialsetup()
 
         self.view.backgroundColor = UIColor(named: "colorController")
@@ -633,10 +635,9 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
         viewListing.modalPresentationStyle = .fullScreen
         self.present(viewListing, animated: true, completion: nil)
     }
+    
     @objc func ReceiptBtnTapped()
     {
-        if #available(iOS 11.0, *) {
-            
             let receiptPageObj = ReceiptVC()
              Utility.shared.host_isfrom_hostRecipt = false
             if let reservationArray = getReservationArray{
@@ -650,13 +651,8 @@ class BookingItenaryVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             }
             receiptPageObj.currencyvalue_from_API_base = currencyvalue_from_API_base
             receiptPageObj.modalPresentationStyle = .overFullScreen
-            self.view.window?.rootViewController?.present(receiptPageObj, animated:false, completion: nil)
+            self.present(receiptPageObj, animated:false, completion: nil)
             //self.present(receiptPageObj, animated: true, completion: nil)
-        } else {
-            // Fallback on earlier versions
-        }
-        
-        
     }
     
     @objc func likeBtnTapped(_ sender: UIButton!)

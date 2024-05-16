@@ -201,6 +201,7 @@ class AffiliateOverviewVC: UIViewController, UITextFieldDelegate {
         selectedStartDate = formatter.string(from: datePickerStartDate!.date)
     self.updateDateMaxMin()
      self.view.endEditing(true)
+        selectedGraphfilterType = .PleaseSelect
         self.affiliateDashboardDataAPICall()
    }
 
@@ -211,7 +212,8 @@ class AffiliateOverviewVC: UIViewController, UITextFieldDelegate {
         formatter.dateFormat = "yyyy-MM-dd"
         selectedEndDate = formatter.string(from: datePickerEndDate!.date)
         self.updateDateMaxMin()
-     self.view.endEditing(true)
+        self.view.endEditing(true)
+        selectedGraphfilterType = .PleaseSelect
         self.affiliateDashboardDataAPICall()
    }
     
@@ -245,6 +247,7 @@ class AffiliateOverviewVC: UIViewController, UITextFieldDelegate {
         dropDownFilter.rowHeight = 40
         dropDownFilter.listHeight = 200
         dropDownFilter.borderC = UIColor.lightGray
+        dropDownFilter.delegate = self
         dropDownFilter.didSelect{(selectedText , index ,id) in
             switch index{
             case 0:
@@ -336,8 +339,9 @@ class AffiliateOverviewVC: UIViewController, UITextFieldDelegate {
     }
     
     //MARK: - API CALL
-    func affiliateDashboardDataAPICall(){
+    func   affiliateDashboardDataAPICall(){
         let getDashboardDataQuery = PTProAPI.GetDashboardDataQuery(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), fromDate: .some(selectedStartDate), toDate: .some(selectedEndDate), filter: .some(selectedGraphfilterType.rawValue), graphType: .some(selectedGraphType.rawValue))
+        print("======== \(getDashboardDataQuery.__variables?._jsonEncodableValue ?? "")")
         Network.shared.apollo_headerClient.fetch(query: getDashboardDataQuery, cachePolicy: .fetchIgnoringCacheData) { response in
             switch response{
             case .success(let result):
@@ -425,6 +429,7 @@ extension AffiliateOverviewVC: ChartViewDelegate{
             let xAxis = chartView.xAxis
             xAxis.valueFormatter = CustomXAxisValueFormatter(arrData: self.graphData, filterType: selectedGraphfilterType)
             xAxis.labelCount = graphData.count
+            print("selectedGraphfilterType x:\(selectedGraphfilterType)")
 
             var arrChartEntry = [BarChartDataEntry]()
             var i = 0

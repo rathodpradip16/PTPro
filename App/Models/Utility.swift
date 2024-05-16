@@ -97,6 +97,7 @@ public class Utility: NSObject {
     var recommendListingArray = [PTProAPI.GetDefaultSettingQuery.Data.GetRecommend.Result]()
 //    var mostListingArray = [GetDefaultSettingQuery.Data.GetMostViewedListing.Result]()
     var GetAffiliateUserStep: PTProAPI.GetAffiliateUserStepQuery.Data.GetAffiliateUserStep?
+    var utManageListingArray = [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]()
 
     //MARK: - Receipt Page
     var isreceiptAccepted : Bool = false

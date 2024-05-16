@@ -18,17 +18,6 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
-    <key>GIDClientID</key>
-    <string>1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at.apps.googleusercontent.com</string>
-    <key>CFBundleURLTypes</key>
-    <array>
-      <dict>
-        <key>CFBundleURLSchemes</key>
-        <array>
-          <string>com.googleusercontent.apps.1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at</string>
-        </array>
-      </dict>
-    </array>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -72,14 +61,16 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
 	<string>1941512669534476</string>
-    <key>FacebookClientToken</key>
-    <string>1b21ce3f6ae9ed0508c859933242edee</string>
-    <key>FacebookDisplayName</key>
+	<key>FacebookClientToken</key>
+	<string>1b21ce3f6ae9ed0508c859933242edee</string>
+	<key>FacebookDisplayName</key>
 	<string>PTP</string>
 	<key>FirebaseAppDelegateProxyEnabled = YES</key>
 	<string>YES</string>
 	<key>FirebaseMessagingAutoInitEnabled</key>
 	<string>NO</string>
+	<key>GIDClientID</key>
+	<string>1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at.apps.googleusercontent.com</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -89,6 +80,8 @@
 		<string>google_client_id</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
@@ -175,6 +168,8 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIStatusBarStyle</key>
@@ -189,9 +184,5 @@
 	<array>
 		<string>Default</string>
 	</array>
-    <key>UIFileSharingEnabled</key>
-    <true/>
-    <key>LSSupportsOpeningDocumentsInPlace</key>
-    <true/>
 </dict>
 </plist>

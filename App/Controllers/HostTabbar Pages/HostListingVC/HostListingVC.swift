@@ -103,27 +103,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 //MARK: -  IBACTIONS & FUNCTIONS DECLARATIONS
     @IBAction func ListAddBtnTapped(_ sender: Any) {
         if Utility.shared.isConnectedToNetwork(){
-            if Utility.shared.getListSettingsArray?.personCapacity != nil{
-        let baseHost = BaseHostTableviewController()
-                baseHost.showOverlay = true
-        baseHost.getListSettingsArray = Utility.shared.getListSettingsArray
-        Utility.shared.createId = Int()
-        Utility.shared.createId = 0
-        Utility.shared.host_basePrice = 0
-        Utility.shared.step1_inactivestatus  = ""
-        Utility.shared.isfrombecomehoststep1Edit = false
-        Utility.shared.selectedAmenityIdList.removeAllObjects()
-        Utility.shared.selectedspaceAmenityIdList.removeAllObjects()
-        Utility.shared.selectedsafetyAmenityIdList.removeAllObjects()
-        Utility.shared.selectedRules.removeAllObjects()
-        Utility.shared.step2_Description = ""
-        Utility.shared.step2_Title = ""
-        Utility.shared.currencyvalue = ""
-        Utility.shared.step1ValuesInfo = [String : Any]()
-        self.view.window?.backgroundColor = UIColor.white
-       baseHost.modalPresentationStyle = .fullScreen
-        self.present(baseHost, animated:false, completion: nil)
-            }
+            self.GetPropertieCountAPICAll()
         }
         else
         {
@@ -150,7 +130,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     @IBAction func newListingBtnTapped(_ sender: Any) {
         if Utility.shared.isConnectedToNetwork(){
-            self.GoToBaseHostVC() //self.GetPropertieCountAPICAll()
+           self.GetPropertieCountAPICAll()
         }
         else
         {
@@ -304,7 +284,15 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
             switch response {
             case .success(let result):
                 if let status = result.data?.getPropertieCount?.status, status == 200 {
-                    self.GoToBaseHostVC()
+                    if let arrResults = result.data?.getPropertieCount?.results,let propertycount = arrResults.propertieCount{
+                        if self.manageListingArray.count < propertycount{
+                            self.GoToBaseHostVC()
+                        }else{
+                            self.upgradeAlert()
+                        }
+                    }else{
+                        self.GoToBaseHostVC()
+                    }
                 }else if let status = result.data?.getPropertieCount?.status, status == 401 {
                     self.subscriptionAlert()
                 }else{
@@ -321,7 +309,23 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                alert.addAction(UIAlertAction(title: "CANCEL", style: .cancel, handler: { action in
                }))
                alert.addAction(UIAlertAction(title: "BUY NOW", style: .default, handler: { action in
-                   
+                   let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                   let vc = storyboard.instantiateViewController(withIdentifier: "ViewSubscriptionsVC") as! ViewSubscriptionsVC
+                   vc.modalPresentationStyle = .fullScreen
+                   self.present(vc, animated: true, completion: nil)
+               }))
+               self.present(alert, animated: true, completion: nil)
+    }
+    
+    func upgradeAlert(){
+        let alert = UIAlertController(title: "Subscription Upgrade Required", message: String(format: "\n To access this feature, please upgrade your subscription\n") , preferredStyle: .alert)
+               alert.addAction(UIAlertAction(title: "CANCEL", style: .cancel, handler: { action in
+               }))
+               alert.addAction(UIAlertAction(title: "Upgrade NOW", style: .default, handler: { action in
+                   let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                   let vc = storyboard.instantiateViewController(withIdentifier: "ViewSubscriptionsVC") as! ViewSubscriptionsVC
+                   vc.modalPresentationStyle = .fullScreen
+                   self.present(vc, animated: true, completion: nil)
                }))
                self.present(alert, animated: true, completion: nil)
     }
@@ -583,7 +587,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
                 self.completed_List_Array.removeAll()
                 self.becomeListingTable.isHidden = false
                 self.manageListingArray = ((result.data?.manageListings?.results)!) as! [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]
-                
+                Utility.shared.utManageListingArray = self.manageListingArray
                 for i in self.manageListingArray
                 {
                     if(i.isReady == false)

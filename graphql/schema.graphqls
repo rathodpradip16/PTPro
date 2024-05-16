@@ -13,7 +13,7 @@ directive @import(
 
 type Query {
   validateEmailExist(email: String!): CommonType
-  getCouponEdit(userId: String, couponType: String, listId: Int, subscriptionType: String): Couponmanager
+  Cancelmembership(userId: String): subscriptionPaymentType
   getPropertieCount(userId: String): subscriptionPaymentType
   getDashboardData(userId: String, clickCount: Int, fromDate: String, toDate: String, filter: String, graphType: String): GetClicksType
   calculateOccupancyRate(lat: Float, lng: Float, startDate: String, endDate: String, filter: String): CalculateOccupancyRate
@@ -78,54 +78,21 @@ type Query {
   getPendingUserReview(reservationId: Int!): CommonReservationType
   getPaymentSettings: GetPaymentKey
   getImageBanner: ImageBannerCommonType
-  getStaticPageContent(id: Int): StaticPageCommonType
+  getStaticPageContent(pageName: String): StaticPageCommonType
   getWhyHostData: WhyHostCommonType
   getPopularLocations: PopularLocationCommonType
   getApplicationVersionInfo(appType: String!, version: String!): SiteSettingsCommon
   getcouponuse(userId: String, couponCode: String, listId: Int, planId: Int, isforplan: Boolean): Couponmanager
   getHostSuggested(userId: String, currentPage: Int, lat: Float, lng: Float, priceRange: [Int], review: String): HostSuggested
   getcouponcode(userId: String, couponType: String, listId: Int, subscriptionType: String): Couponmanager
-  UpdateListViews(userId: String, listId: Int, searchId: Int): ListViews
   getTrymelistview(userId: String, listId: Int, searchId: Int): Trymelistviews
+  getCouponEdit(userId: String, couponType: String, listId: Int, subscriptionType: String): Couponmanager
+  pricing(listId: Int): price
 }
 
 type CommonType {
   errorMessage: String
   status: Int
-}
-
-type Couponmanager {
-  id: Int
-  userId: String
-  listId: Int
-  couponCode: String
-  couponType: String
-  discount: Float
-  activeStatus: String
-  startDate: String
-  endDate: String
-  description: String
-  status: Int
-  errorMessage: String
-  userType: String
-  couponCount: Int
-  planId: Int
-  isforplan: Boolean
-  deletedDate: String
-  deleted: Int
-  data: [Getcoupon]
-}
-
-type Getcoupon {
-  id: Int
-  couponCode: String
-  couponType: String
-  discount: Float
-  activeStatus: String
-  startDate: String
-  endDate: String
-  description: String
-  userType: String
 }
 
 type subscriptionPaymentType {
@@ -777,6 +744,10 @@ type CalculateOccupancyRate {
   lng: Float
   Occupancy_Rate: Float
   filter: String
+  count: Int
+  totalavailable: Int
+  booked: Int
+  filteramount: Int
   status: Int
   errorMessage: String
 }
@@ -832,7 +803,7 @@ type GetPlanDetailsType {
   currency: String
   status: Int
   expiryDate: String
-  expiryDateee: String
+  planType: String
 }
 
 type WholeAccount {
@@ -1103,7 +1074,6 @@ type SearchListing {
   checkOut: String
   currentPage: Int
   results: [ShowListing]
-  dates: String
   status: Int
   address: String
   errorMessage: String
@@ -1620,6 +1590,39 @@ type PopularLocationCommonType {
   results: [PopularLocationListing]
 }
 
+type Couponmanager {
+  id: Int
+  userId: String
+  listId: Int
+  couponCode: String
+  couponType: String
+  discount: Float
+  activeStatus: String
+  startDate: String
+  endDate: String
+  description: String
+  status: Int
+  errorMessage: String
+  userType: String
+  couponCount: Int
+  isforplan: Boolean
+  deletedDate: String
+  deleted: Int
+  data: [Getcoupon]
+}
+
+type Getcoupon {
+  id: Int
+  couponCode: String
+  couponType: String
+  discount: Float
+  activeStatus: String
+  startDate: String
+  endDate: String
+  description: String
+  userType: String
+}
+
 type HostSuggested {
   userId: String
   review: String
@@ -1635,7 +1638,7 @@ type HostSuggested {
   errorMessage: String
 }
 
-type ListViews {
+type Trymelistviews {
   id: Int
   listId: String
   userId: String
@@ -1646,15 +1649,48 @@ type ListViews {
   errorMessage: String
 }
 
-type Trymelistviews {
-  id: Int
-  listId: String
-  userId: String
-  count: Int
-  createdAt: String
-  searchId: Int
-  status: String
+type price {
+  listId: Int
+  basePrice: Int
+  results: [pricedetail]
+  currentPropertyResult: [pricedetail]
+  status: Int
   errorMessage: String
+}
+
+type pricedetail {
+  id: Int
+  title: String
+  basePrice: Int
+  distance: Float
+  score: Float
+  UserAmenities: [item]
+  sefetyAmenities: [item]
+  places: [item]
+  userspace: [item]
+  otherdata: [other]
+  rating: [ratings]
+  occupacy: [occupacys]
+}
+
+type item {
+  itemName: String
+  score: Float
+}
+
+type other {
+  bedrooms: String
+  personCapacity: Int
+  cancle: Int
+  bookingtype: Int
+}
+
+type ratings {
+  rating: Float
+}
+
+type occupacys {
+  occupacy: Float
 }
 
 type Mutation {
@@ -1693,7 +1729,7 @@ type Mutation {
   AddPhoneNumber(countryCode: String!, phoneNumber: String!): UserAccount
   RemovePhoneNumber: UserAccount
   EmailVerification(token: String!, email: String!): AllEmailToken
-  createSubscriptionPayment(userId: String, total: Float!, paymentType: Int, planId: Int, cardToken: String, paymentCurrency: String, currency: String, planType: String, couponCode: String, totaldiscount: Float): subscriptionPaymentType
+  createSubscriptionPayment(userId: String, total: Float!, paymentType: Int, planId: Int, cardToken: String, paymentCurrency: String, currency: String!, planType: String, couponCode: String, totaldiscount: Float): subscriptionPaymentType
   VerifyPhoneNumber(verificationCode: Int!): UserAccount
   SocialVerification(verificationType: String!, actionType: String!): SocialVerification
   createListing(listId: Int, roomType: String, houseType: String, residenceType: String, bedrooms: String, buildingSize: String, bedType: String, beds: Int, personCapacity: Int, bathrooms: Float, bathroomType: String, country: String, street: String, buildingName: String, city: String, state: String, zipcode: String, lat: Float, lng: Float, bedTypes: String, isMapTouched: Boolean, amenities: [Int], safetyAmenities: [Int], spaces: [Int]): ListingResponse
@@ -1717,8 +1753,8 @@ type Mutation {
   confirmPayPalExecute(paymentId: String!, payerId: String!): ReservationPayment
   submitForVerification(id: Int!, listApprovalStatus: String): EditListingResponse
   deleteUser: UserCommon
-  CreateSearchlist(userId: String, checkIn: String, checkOut: String, address: String, dates: String): SearchListing
   Createcouponcode(userId: String, listId: Int, couponCode: String, couponType: String, discount: Float, startDate: String, endDate: String, description: String, userType: String): Couponmanager
+  CreateSearchlist(userId: String, checkIn: String, checkOut: String, address: String, dates: String): SearchListing
 }
 
 type CreateCustomPlanRequestType {

@@ -45,7 +45,6 @@ class YouMayLikeVC: UIViewController,UICollectionViewDelegate,UICollectionViewDa
     @IBOutlet weak var error_label: UILabel!
 
     
-    @IBOutlet weak var btnFiveStar: UIButton!
     @IBOutlet weak var btnFourStar: UIButton!
     @IBOutlet weak var btnThreeStar: UIButton!
     @IBOutlet weak var btnTwoStar: UIButton!
@@ -71,7 +70,8 @@ class YouMayLikeVC: UIViewController,UICollectionViewDelegate,UICollectionViewDa
         self.lblLocation.text = ""
         self.lblLocation.textColor =  .lightGray
         self.initializeRangeView()
-        
+        self.sliderView.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
+
         self.viewFilter.isHidden = true
         self.viewFilterBG.isHidden = true
 
@@ -80,7 +80,6 @@ class YouMayLikeVC: UIViewController,UICollectionViewDelegate,UICollectionViewDa
     }
     
     func initializeRangeView(){
-        self.sliderView.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
         self.priceRangeLabel.textColor = UIColor(named: "searchPlaces_TextColor")
 
         if(Utility.shared.getPreferredCurrency() != nil && Utility.shared.getPreferredCurrency() != "")
@@ -199,32 +198,40 @@ class YouMayLikeVC: UIViewController,UICollectionViewDelegate,UICollectionViewDa
         btnTwoStar.setImage(UIImage(named: "circleUnCheck"), for: .normal)
         btnThreeStar.setImage(UIImage(named: "circleUnCheck"), for: .normal)
         btnFourStar.setImage(UIImage(named: "circleUnCheck"), for: .normal)
-        btnFiveStar.setImage(UIImage(named: "circleUnCheck"), for: .normal)
 
         switch sender.tag{
         case 1:
             selectedRating = "1"
             btnOneStar.setImage(UIImage(named: "purpleCheck"), for: .normal)
+            break
         case 2:
             selectedRating = "2"
             btnTwoStar.setImage(UIImage(named: "purpleCheck"), for: .normal)
+            break
         case 3:
             selectedRating = "3"
             btnThreeStar.setImage(UIImage(named: "purpleCheck"), for: .normal)
+            break
         case 4:
             selectedRating = "4"
             btnFourStar.setImage(UIImage(named: "purpleCheck"), for: .normal)
-        case 5:
-            selectedRating = "5"
-            btnFiveStar.setImage(UIImage(named: "purpleCheck"), for: .normal)
             break
         default: break
         }
     }
     
     @IBAction func onClickCancel(_ sender: UIButton) {
-        self.viewFilter.isHidden = true
-        self.viewFilterBG.isHidden = true
+        selectedRating = "0"
+
+        btnOneStar.setImage(UIImage(named: "circleUnCheck"), for: .normal)
+        btnTwoStar.setImage(UIImage(named: "circleUnCheck"), for: .normal)
+        btnThreeStar.setImage(UIImage(named: "circleUnCheck"), for: .normal)
+        btnFourStar.setImage(UIImage(named: "circleUnCheck"), for: .normal)
+        DispatchQueue.main.async {
+            self.initializeRangeView()
+            self.sliderView.selectedMinValue = CGFloat(self.minvalue)
+            self.sliderView.selectedMaxValue = CGFloat(self.maxValue)
+        }
     }
     
     @IBAction func onClickApply(_ sender: UIButton) {
@@ -517,9 +524,13 @@ class YouMayLikeVC: UIViewController,UICollectionViewDelegate,UICollectionViewDa
                     self.cvLinkSearch.reloadData()
                 } else {
                     self.view.makeToast(result.data?.getHostSuggested?.errorMessage)
+                    self.arrGetHosted.removeAll()
+                    self.NoresultView.isHidden = false
                 }
             case .failure(let error):
                 self.view.makeToast(error.localizedDescription)
+                self.arrGetHosted.removeAll()
+                self.NoresultView.isHidden = false
                 break
             }
             self.cvLinkSearch?.isSkeletonable = false

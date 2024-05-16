@@ -3150,7 +3150,7 @@ extension ExplorePageVC:UITableViewDataSource,UITableViewDelegate {
     //MARK: - createSearchListAPI
     func createSearchListAPI(){
         if Utility.shared.isConnectedToNetwork(){
-            let createSearchlistMutation = PTProAPI.CreateSearchlistMutation(userId: Utility.shared.ProfileAPIArray?.userId ?? "", dates: "'\( Utility.shared.selectedstartDate_filter)' AND '\(Utility.shared.selectedEndDate_filter)'", address: Utility.shared.locationfromSearch)
+            let createSearchlistMutation = PTProAPI.CreateSearchlistMutation(userId: Utility.shared.ProfileAPIArray?.userId ?? "", dates: "'\(Utility.shared.selectedstartDate_filter)' AND '\(Utility.shared.selectedEndDate_filter)'", address: Utility.shared.locationfromSearch ?? "")
             Network.shared.apollo_headerClient.perform(mutation: createSearchlistMutation){ [self] response in
                 switch response {
                 case .success(let result):

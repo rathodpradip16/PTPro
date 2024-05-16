@@ -80,6 +80,7 @@ class CalendarListingVC: UIViewController,UITableViewDelegate,UITableViewDataSou
     {
         self.lottieView.play()
     }
+    
     func manageListingAPICall()
     {
         
@@ -93,6 +94,7 @@ class CalendarListingVC: UIViewController,UITableViewDelegate,UITableViewDataSou
                     return
                 }
                 self.manageListingArray = ((result.data?.manageListings?.results)!) as! [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]
+                Utility.shared.utManageListingArray = self.manageListingArray
                 for i in self.manageListingArray
                 {
                     if(i.isReady == false)

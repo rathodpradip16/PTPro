@@ -110,6 +110,7 @@ class CustomHostTabbar: UITabBarController,UITabBarControllerDelegate {
         
         
     }
+    
     @objc func goToTripsPage(){
         if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
         {
@@ -121,6 +122,7 @@ class CustomHostTabbar: UITabBarController,UITabBarControllerDelegate {
         }
         
     }
+    
     //MARK: setup bottom tab bar
     func ConfigureView() {
         //ExplorePageVC

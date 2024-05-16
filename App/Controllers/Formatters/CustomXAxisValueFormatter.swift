@@ -23,8 +23,10 @@ class CustomXAxisValueFormatter: NSObject,AxisValueFormatter {
     
     public func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         if self.graphData.count > Int(value), let data = self.graphData[Int(value)]?.graphDate{
-            if self.selectedGraphFilter == .PleaseSelect || self.selectedGraphFilter == .last7Days{
+            if self.selectedGraphFilter == .PleaseSelect{
                 return self.dayformatDate(strDate: data)
+            }else if self.selectedGraphFilter == .last7Days{
+                return self.weekDayformatDate(strDate: data)
             }else{
                 return data
             }
@@ -38,6 +40,17 @@ class CustomXAxisValueFormatter: NSObject,AxisValueFormatter {
         formatter.dateFormat = "yyyy-MM-dd"
         if let dt = formatter.date(from: strDate){
             formatter.dateFormat = "MMM dd"
+            return formatter.string(from: dt)
+        }else{
+            return ""
+        }
+    }
+    
+    func weekDayformatDate(strDate:String) -> String{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        if let dt = formatter.date(from: strDate){
+            formatter.dateFormat = "EEE"
             return formatter.string(from: dt)
         }else{
             return ""

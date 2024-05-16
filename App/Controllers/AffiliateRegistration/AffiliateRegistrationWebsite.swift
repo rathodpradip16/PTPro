@@ -21,7 +21,7 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     @IBOutlet weak var lblHowManyVisitorsShouldYourWebsiteGet: UILabel!
     @IBOutlet weak var lblHowDoYouUsuallyBuildLinks: UILabel!
     @IBOutlet weak var lblHowElseDoYouMonetize: UILabel!
-
+    
     
     @IBOutlet weak var txtNameOfYourWebsite: CustomUITextField!
     @IBOutlet weak var txtURLYouWillSendTheTraffic: CustomUITextField!
@@ -35,7 +35,7 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     @IBOutlet weak var btnAmenities: UIButton!
     @IBOutlet weak var btnCountry: UIButton!
     @IBOutlet weak var btnLorem: UIButton!
-
+    
     @IBOutlet weak var btnECommerceWebsite: UIButton!
     @IBOutlet weak var btnBusinessWebsite: UIButton!
     @IBOutlet weak var btnBlogWebsite: UIButton!
@@ -48,22 +48,22 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     @IBOutlet weak var btnOnlineWebsite: UIButton!
     
     @IBOutlet weak var dropDownWhatTypeOfSiteIsYourWebsite: DropDown!
-
+    
     @IBOutlet weak var btnNext: UIButton!
     @IBOutlet weak var btnPrevious: UIButton!
     
-    var dicSelectedTypeList : [String:Bool] = ["Amenities":false,"Country":false,"Lorem":false]
+    var dicSelectedTypeList : [String:Bool] = ["Travel Products":false,"⁠Travel Events":false,"Other":false]
     var dicSelectedDriveWebSitelist : [String:Bool] = ["ECommerce website":false,
-                                       "Business website":false,
-                                       "Blog website":false,
-                                       "Portfolio website":false,
-                                       "Event website":false,
-                                       "Personal website":false,
-                                       "Membership website":false,
-                                       "Nonprofit website":false,
-                                       "Informational website":false,
-                                       "Online forum":false]
-
+                                                       "Business website":false,
+                                                       "Blog website":false,
+                                                       "Portfolio website":false,
+                                                       "Event website":false,
+                                                       "Personal website":false,
+                                                       "Membership website":false,
+                                                       "Nonprofit website":false,
+                                                       "Informational website":false,
+                                                       "Online forum":false]
+    
     //MARK: - VIEW LIFE CYCLE
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +71,7 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
         self.initializeBtnTitle()
         self.initializeLocalization()
         self.initializeBtnListData()
-        
+ 
         // The list of array to display. Can be changed dynamically
         dropDownWhatTypeOfSiteIsYourWebsite.optionArray = ["ECommerce website",
                                                            "Business website",
@@ -113,10 +113,10 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     }
     
     func initializeBtnListData(){
-        btnAmenities.setImage(#imageLiteral(resourceName: dicSelectedTypeList[btnAmenities.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnCountry.setImage(#imageLiteral(resourceName: dicSelectedTypeList[btnCountry.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnLorem.setImage(#imageLiteral(resourceName: dicSelectedTypeList[btnLorem.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
-
+        btnAmenities.setImage(#imageLiteral(resourceName: dicSelectedTypeList["Travel Products"] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnCountry.setImage(#imageLiteral(resourceName: dicSelectedTypeList["Travel Events"] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnLorem.setImage(#imageLiteral(resourceName: dicSelectedTypeList["Other"] ?? false ? "checked" : "unchecked"), for: .normal)
+        
         btnECommerceWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnECommerceWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
         btnBusinessWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnBusinessWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
         btnBlogWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnBlogWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
@@ -146,9 +146,9 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     
     func initializeBtnTitle(){
         if #available(iOS 15.0, *) {
-//            btnAmenities.configuration?.imagePadding = 10
-//            btnCountry.configuration?.imagePadding = 10
-//            btnLorem.configuration?.imagePadding = 10
+            //            btnAmenities.configuration?.imagePadding = 10
+            //            btnCountry.configuration?.imagePadding = 10
+            //            btnLorem.configuration?.imagePadding = 10
             btnECommerceWebsite.configuration?.imagePadding = 10
             btnBusinessWebsite.configuration?.imagePadding = 10
             btnBlogWebsite.configuration?.imagePadding = 10
@@ -160,9 +160,9 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
             btnInformationalWebsite.configuration?.imagePadding = 10
             btnOnlineWebsite.configuration?.imagePadding = 10
         } else {
-//            btnAmenities.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
-//            btnCountry.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
-//            btnLorem.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+            //            btnAmenities.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+            //            btnCountry.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+            //            btnLorem.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
             btnECommerceWebsite.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
             btnBusinessWebsite.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
             btnBlogWebsite.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
@@ -178,56 +178,60 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     
     func initializeLocalization(){
         lblNameOfYourWebsite.text = "\((Utility.shared.getLanguage()?.value(forKey:"NameOfYourWebsite")) ?? "What is the name of your website")"
-            lblURLYouWillSendTheTraffic.text = "\((Utility.shared.getLanguage()?.value(forKey:"URLYouWillSendTheTraffic")) ?? "URL - you will to send the traffic")"
-            lblWhatIsYourWebsiteAccount.text = "\((Utility.shared.getLanguage()?.value(forKey:"WhatIsYourWebsiteAbout")) ?? "What is your website about")"
-            lblwhatTypeOfItemsDoYouWantToList.text = "\((Utility.shared.getLanguage()?.value(forKey:"whatTypeOfItemsDoYouWantToList")) ?? "What type of items do you want to list")"
-            lblHowDoYouDriveTrafficToYourWebsite.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowDoYouDriveTrafficToYourWebsite")) ?? "How do you drive traffic to your website")"
-            lblWhatTypeOfSiteIsYourWebsite.text = "\((Utility.shared.getLanguage()?.value(forKey:"WhatTypeOfSiteIsYourWebsite")) ?? "What type of site is your website")"
-            lblPrimaryReasonForJoining.text = "\((Utility.shared.getLanguage()?.value(forKey:"PrimaryReasonForJoining")) ?? "What is the Primary reason for joining")"
-            lblHowManyVisitorsShouldYourWebsiteGet.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowManyVisitorsShouldYourWebsiteGet")) ?? "How Many Visitors Should Your Website Get")"
-            lblHowDoYouUsuallyBuildLinks.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowDoYouUsuallyBuildLinks")) ?? "How do you usually build links")"
-            lblHowElseDoYouMonetize.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowElseDoYouMonetize")) ?? "How else do you monetize your Website")"
+        lblURLYouWillSendTheTraffic.text = "\((Utility.shared.getLanguage()?.value(forKey:"URLYouWillSendTheTraffic")) ?? "URL - you will to send the traffic")"
+        lblWhatIsYourWebsiteAccount.text = "\((Utility.shared.getLanguage()?.value(forKey:"WhatIsYourWebsiteAbout")) ?? "What is your website about")"
+        lblwhatTypeOfItemsDoYouWantToList.text = "\((Utility.shared.getLanguage()?.value(forKey:"whatTypeOfItemsDoYouWantToList")) ?? "What type of items do you want to list")"
+        lblHowDoYouDriveTrafficToYourWebsite.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowDoYouDriveTrafficToYourWebsite")) ?? "How do you drive traffic to your website")"
+        lblWhatTypeOfSiteIsYourWebsite.text = "\((Utility.shared.getLanguage()?.value(forKey:"WhatTypeOfSiteIsYourWebsite")) ?? "What type of site is your website")"
+        lblPrimaryReasonForJoining.text = "\((Utility.shared.getLanguage()?.value(forKey:"PrimaryReasonForJoining")) ?? "What is the Primary reason for joining")"
+        lblHowManyVisitorsShouldYourWebsiteGet.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowManyVisitorsShouldYourWebsiteGet")) ?? "How Many Visitors Should Your Website Get")"
+        lblHowDoYouUsuallyBuildLinks.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowDoYouUsuallyBuildLinks")) ?? "How do you usually build links")"
+        lblHowElseDoYouMonetize.text = "\((Utility.shared.getLanguage()?.value(forKey:"HowElseDoYouMonetize")) ?? "How else do you monetize your Website")"
     }
     
     //MARK: - Action Methods
     @IBAction func onClickAmenities(_ sender: UIButton) {
-        if(dicSelectedTypeList[sender.titleLabel!.text!]!){
-            dicSelectedTypeList[sender.titleLabel!.text!] = false
+        if let strTitleLabel = sender.titleLabel,let txt = strTitleLabel.text,dicSelectedTypeList[txt] ?? false{
+            dicSelectedTypeList["Travel Products"] = false
+            sender.setImage(#imageLiteral(resourceName: "unchecked"), for: .normal)
         }else{
-            dicSelectedTypeList[sender.titleLabel!.text!] = true
+            dicSelectedTypeList["Travel Products"] = true
+            sender.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
         }
-        sender.setImage(#imageLiteral(resourceName: dicSelectedTypeList[sender.titleLabel!.text!]! ? "checked" : "unchecked"), for: .normal)
         sender.tintColor = Theme.affiliatePurpleColor
-
+        
     }
     
     @IBAction func onClickCountry(_ sender: UIButton) {
-        if(dicSelectedTypeList[sender.titleLabel!.text!]!){
-            dicSelectedTypeList[sender.titleLabel!.text!] = false
+        if let strTitleLabel = sender.titleLabel,let txt = strTitleLabel.text,dicSelectedTypeList[txt] ?? false{
+                dicSelectedTypeList["Travel Events"] = false
+                sender.setImage(#imageLiteral(resourceName: "unchecked"), for: .normal)
         }else{
-            dicSelectedTypeList[sender.titleLabel!.text!] = true
+            dicSelectedTypeList["Travel Events"] = true
+            sender.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
         }
-        sender.setImage(#imageLiteral(resourceName: dicSelectedTypeList[sender.titleLabel!.text!]! ? "checked" : "unchecked"), for: .normal)
         sender.tintColor = Theme.affiliatePurpleColor
     }
-
+    
     @IBAction func onClickLorem(_ sender: UIButton) {
-        if(dicSelectedTypeList[sender.titleLabel!.text!]!){
-            dicSelectedTypeList[sender.titleLabel!.text!] = false
+        if let strTitleLabel = sender.titleLabel,let txt = strTitleLabel.text,dicSelectedTypeList[txt] ?? false{
+            dicSelectedTypeList["Other"] = false
+            sender.setImage(#imageLiteral(resourceName: "unchecked"), for: .normal)
         }else{
-            dicSelectedTypeList[sender.titleLabel!.text!] = true
+            dicSelectedTypeList["Other"] = true
+            sender.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
         }
-        sender.setImage(#imageLiteral(resourceName: dicSelectedTypeList[sender.titleLabel!.text!]! ? "checked" : "unchecked"), for: .normal)
         sender.tintColor = Theme.affiliatePurpleColor
     }
-
+    
     @IBAction func onClickHowYouDriveTrafficToYourWebsite(_ sender: UIButton) {
-        if(dicSelectedDriveWebSitelist[sender.titleLabel!.text!]!){
-            dicSelectedDriveWebSitelist[sender.titleLabel!.text!] = false
+        if let strTitleLabel = sender.titleLabel,let txt = strTitleLabel.text,dicSelectedTypeList[txt] ?? false{
+            dicSelectedDriveWebSitelist[txt] = false
+            sender.setImage(#imageLiteral(resourceName: "unchecked"), for: .normal)
         }else{
             dicSelectedDriveWebSitelist[sender.titleLabel!.text!] = true
+            sender.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
         }
-        sender.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[sender.titleLabel!.text!]! ? "checked" : "unchecked"), for: .normal)
         sender.tintColor = Theme.affiliatePurpleColor
     }
     
@@ -272,6 +276,9 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     //MARK: - API CALL
     func apiCreateAffiliateUserWebList(){
         let createAffiliateUserWebsite = PTProAPI.CreateAffiliateUserWebListMutation(userId: .some(Utility.shared.ProfileAPIArray?.userId ?? ""), websiteName: .some(txtNameOfYourWebsite.text!), websiteUrl: .some(txtURLYouWillSendTheTraffic.text!), websiteAbout: .some(txtWhatIsYourWebsiteAccount.text!), typeList: .some(convertTypeListToString()), websiteDrive: .some(convertDriveWebsiteListToString()), typesOfWebsite: .some(dropDownWhatTypeOfSiteIsYourWebsite.text ?? ""), primryJoining: .some(txtPrimaryReasonForJoining.text!), websiteVisitors: .some(txtHowManyVisitorsShouldYourWebsiteGet.text!), buildLinks: .some(txtHowDoYouUsuallyBuildLinks.text!), websiteMonitize: .some(txtHowElseDoYouMonetize.text!))
+        print("\(Utility.shared.ProfileAPIArray?.userId ?? "") \n \(txtNameOfYourWebsite.text!) \n \(txtURLYouWillSendTheTraffic.text!) \n \(txtWhatIsYourWebsiteAccount.text!) \n \(convertTypeListToString()) \n \(convertDriveWebsiteListToString()) \n \(dropDownWhatTypeOfSiteIsYourWebsite.text ?? "") \n \(txtPrimaryReasonForJoining.text!) \n \(txtHowManyVisitorsShouldYourWebsiteGet.text!) \n \(txtHowManyVisitorsShouldYourWebsiteGet.text!) \n \(txtHowDoYouUsuallyBuildLinks.text!) \n \(txtHowDoYouUsuallyBuildLinks.text!) \n \(txtHowElseDoYouMonetize.text!)")
+        
+        print(createAffiliateUserWebsite.__variables?._jsonEncodableValue ?? "")
         Network.shared.apollo_headerClient.perform(mutation: createAffiliateUserWebsite){  response in
             switch response {
             case .success(let result):
@@ -302,12 +309,28 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     }
     
     func convertTypeListToString() -> String{
-        let jsonData = try! JSONSerialization.data(withJSONObject: dicSelectedTypeList, options: [])
-        return String(data: jsonData, encoding: .utf8)!
+        print(dicSelectedTypeList)
+        do{
+            let data = try JSONSerialization.data(withJSONObject: dicSelectedTypeList, options: [])
+            if let string = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
+                return string as String
+            }
+        }catch{
+            return ""
+        }
+        return ""
     }
     
     func convertDriveWebsiteListToString() -> String{
-        let jsonData = try! JSONSerialization.data(withJSONObject: dicSelectedDriveWebSitelist, options: [])
-        return String(data: jsonData, encoding: .utf8)!
+        print(dicSelectedDriveWebSitelist)
+        do{
+            let data = try JSONSerialization.data(withJSONObject: dicSelectedDriveWebSitelist, options: [])
+            if let string = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
+                return string as String
+            }
+        }catch{
+            return ""
+        }
+        return ""
     }
 }

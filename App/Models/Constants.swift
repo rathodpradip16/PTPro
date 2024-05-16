@@ -35,44 +35,7 @@ let environment = Environment.development
 let environment = Environment.production
 #endif
 
-//var BASE_URL : String {
-//    get {
-//        switch environment {
-//        case .development:
-//            return "https://ptbeta.xyz"
-//        case .production:
-//            return "https://ptbeta.xyz"
-//        case .localhost:
-//            return "https://ptbeta.xyz"
-//        }
-//    }
-//}
 
-//var BASE_URL : String {
-//    get {
-//        switch environment {
-//        case .development:
-//            return "http://ptpro.paperbirdtech.com:3000"
-//        case .production:
-//            return "http://ptpro.paperbirdtech.com:3000"
-//        case .localhost:
-//            return "http://ptpro.paperbirdtech.com:3000"
-//        }
-//    }
-//}
-
-var BASE_URL : String {
-    get {
-        switch environment {
-        case .development:
-            return "http://product.boosturrental.com"
-        case .production:
-            return "http://product.boosturrental.com"
-        case .localhost:
-            return "http://product.boosturrental.com"
-        }
-    }
-}
 
 let IMAGE_AVATAR_MEDIUM = "\(BASE_URL)/images/avatar/medium_"
 let IMAGE_AVATAR_SMALL = "\(BASE_URL)/images/avatar/medium_"
@@ -117,7 +80,7 @@ let IS_IPHONE_XS_MAX = UIDevice().userInterfaceIdiom == .phone && (UIScreen.main
 
 let categoryIdentifier = "myNotificationCategory"
 
-
+let whyHostURL = "https://ptbeta.xyz/whyhost1"
 
 var GOOGLE_API_KEY : String{
     get{
@@ -158,45 +121,84 @@ var PayPal_Client_ID : String{
     }
 }
 
-//var graphQLEndpoint : String {
+var BASE_URL : String {
+    get {
+        switch environment {
+        case .development:
+            return "https://ptbeta.xyz"
+        case .production:
+            return "https://ptbeta.xyz"
+        case .localhost:
+            return "https://ptbeta.xyz"
+        }
+    }
+}
+
+//var BASE_URL : String {
 //    get {
 //        switch environment {
 //        case .development:
-//            return "https://ptbeta.xyz/api/graphql"
+//            return "http://ptpro.paperbirdtech.com:3000"
 //        case .production:
-//            return "https://ptbeta.xyz/api/graphql"
+//            return "http://ptpro.paperbirdtech.com:3000"
 //        case .localhost:
-//            return "https://ptbeta.xyz/api/graphql"
+//            return "http://ptpro.paperbirdtech.com:3000"
 //        }
 //    }
 //}
 
-//var graphQLEndpoint : String {
+//var BASE_URL : String {
 //    get {
 //        switch environment {
 //        case .development:
-//            return "http://ptpro.paperbirdtech.com:4000/graphql"
+//            return "https://product.boosturrental.com"
 //        case .production:
-//            return "http://ptpro.paperbirdtech.com:4000/graphql"
+//            return "https://product.boosturrental.com"
 //        case .localhost:
-//            return "http://ptpro.paperbirdtech.com:4000/graphql"
+//            return "https://product.boosturrental.com"
 //        }
 //    }
 //}
-
 
 var graphQLEndpoint : String {
     get {
         switch environment {
         case .development:
-            return "http://product.boosturrental.com/api/graphql"
+            return "https://ptbeta.xyz/api/graphql"
         case .production:
-            return "http://product.boosturrental.com/api/graphql"
+            return "https://ptbeta.xyz/api/graphql"
         case .localhost:
-            return "http://product.boosturrental.com/api/graphql"
+            return "https://ptbeta.xyz/api/graphql"
         }
     }
 }
+
+//var graphQLEndpoint : String {
+//    get {
+//        switch environment {
+//        case .development:
+//            return "http://ptpro.paperbirdtech.com:4000/graphql"
+//        case .production:
+//            return "http://ptpro.paperbirdtech.com:4000/graphql"
+//        case .localhost:
+//            return "http://ptpro.paperbirdtech.com:4000/graphql"
+//        }
+//    }
+//}
+
+
+//var graphQLEndpoint : String {
+//    get {
+//        switch environment {
+//        case .development:
+//            return "https://product.boosturrental.com/api/graphql"
+//        case .production:
+//            return "https://product.boosturrental.com/api/graphql"
+//        case .localhost:
+//            return "https://product.boosturrental.com/api/graphql"
+//        }
+//    }
+//}
 
 let GOOGLE_CLIENT_ID = "1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at.apps.googleusercontent.com"
 

@@ -8,16 +8,16 @@ extension PTProAPI {
     static let operationName: String = "getStaticPageContent"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query getStaticPageContent($id: Int) { getStaticPageContent(id: $id) { __typename status errorMessage result { __typename id pageName metaTitle metaDescription content createdAt } } }"#
+        #"query getStaticPageContent($pageName: String) { getStaticPageContent(pageName: $pageName) { __typename status errorMessage result { __typename id pageName metaTitle metaDescription content createdAt } } }"#
       ))
 
-    public var id: GraphQLNullable<Int>
+    public var pageName: GraphQLNullable<String>
 
-    public init(id: GraphQLNullable<Int>) {
-      self.id = id
+    public init(pageName: GraphQLNullable<String>) {
+      self.pageName = pageName
     }
 
-    public var __variables: Variables? { ["id": id] }
+    public var __variables: Variables? { ["pageName": pageName] }
 
     struct Data: PTProAPI.SelectionSet {
       let __data: DataDict
@@ -25,7 +25,7 @@ extension PTProAPI {
 
       static var __parentType: Apollo.ParentType { PTProAPI.Objects.Query }
       static var __selections: [Apollo.Selection] { [
-        .field("getStaticPageContent", GetStaticPageContent?.self, arguments: ["id": .variable("id")]),
+        .field("getStaticPageContent", GetStaticPageContent?.self, arguments: ["pageName": .variable("pageName")]),
       ] }
 
       var getStaticPageContent: GetStaticPageContent? { __data["getStaticPageContent"] }

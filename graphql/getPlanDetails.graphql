@@ -1,9 +1,10 @@
-query getPlanDetails($userId: String,){
+query getPlanDetail($userId: String,){
 getPlanDetails(userId:$userId){
 errorMessage
 status
 results{
 id
+planType
 title
 one
 two
@@ -14,6 +15,7 @@ six
 monthly
 yearly
 currency
+planType
 status
 expiryDate
 }

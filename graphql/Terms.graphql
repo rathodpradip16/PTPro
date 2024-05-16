@@ -1,5 +1,5 @@
-query getStaticPageContent($id: Int) {
-getStaticPageContent(id: $id) {
+query getStaticPageContent($pageName: String) {
+getStaticPageContent(pageName: $pageName) {
 status
 errorMessage
 result {

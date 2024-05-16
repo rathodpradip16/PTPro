@@ -132,6 +132,7 @@ class AffiliateRegistrationDocument: UIViewController,UICollectionViewDelegate,U
         btnFinish.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"FINISH")) ?? "FINISH")", for: .normal)
         btnPrevious.setTitle( "\((Utility.shared.getLanguage()?.value(forKey:"PREVIOUS")) ?? "PREVIOUS")", for: .normal)
     }
+    
     //MARK: - actions
     @IBAction func retryBtnTapped(_ sender: Any){
         if Utility.shared.isConnectedToNetwork(){
@@ -151,7 +152,6 @@ class AffiliateRegistrationDocument: UIViewController,UICollectionViewDelegate,U
         viewTerms4.isHidden = !viewTerms4.isHidden
         stackviewEmpty1.isHidden = !stackviewEmpty1.isHidden
         stackviewEmpty2.isHidden = !stackviewEmpty2.isHidden
-        
     }
     
     @IBAction func onClickBtnAgreeTermsAndConditions(_ sender: Any) {

@@ -107,6 +107,7 @@
 		765DFEB12B60297000F1B800 /* CreateSearchlistMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765DFEB02B60297000F1B800 /* CreateSearchlistMutation.graphql.swift */; };
 		765DFEB32B602A4D00F1B800 /* Trymelistviews.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765DFEB22B602A4D00F1B800 /* Trymelistviews.graphql.swift */; };
 		765E56CF2AEAC06200615750 /* MonthAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765E56CE2AEAC06200615750 /* MonthAxisValueFormatter.swift */; };
+		766874A32BEA32B200796361 /* CancelmembershipQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766874A22BEA32B200796361 /* CancelmembershipQuery.graphql.swift */; };
 		7669E93E2AB6C32900938861 /* ThreadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669E93D2AB6C32900938861 /* ThreadItem.swift */; };
 		766B33ED2B0F3FF500556052 /* OrderSummaryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766B33EC2B0F3FF500556052 /* OrderSummaryVC.swift */; };
 		766C072C2AFFE0CB00E68E60 /* ProfileFields.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766C06322AFFE0CA00E68E60 /* ProfileFields.graphql.swift */; };
@@ -187,7 +188,6 @@
 		766C07782AFFE0CB00E68E60 /* ShowListingStepsQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766C06812AFFE0CA00E68E60 /* ShowListingStepsQuery.graphql.swift */; };
 		766C07792AFFE0CB00E68E60 /* GetStep1ListingDetailsQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766C06822AFFE0CA00E68E60 /* GetStep1ListingDetailsQuery.graphql.swift */; };
 		766C077A2AFFE0CB00E68E60 /* ManageListingsQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766C06832AFFE0CA00E68E60 /* ManageListingsQuery.graphql.swift */; };
-		766C077B2AFFE0CB00E68E60 /* GetPlanDetailsQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766C06842AFFE0CA00E68E60 /* GetPlanDetailsQuery.graphql.swift */; };
 		766C077C2AFFE0CB00E68E60 /* GetCountrycodeQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766C06852AFFE0CA00E68E60 /* GetCountrycodeQuery.graphql.swift */; };
 		766C077D2AFFE0CB00E68E60 /* UserReviewsQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766C06862AFFE0CA00E68E60 /* UserReviewsQuery.graphql.swift */; };
 		766C077E2AFFE0CB00E68E60 /* GetApplicationVersionInfoQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766C06872AFFE0CA00E68E60 /* GetApplicationVersionInfoQuery.graphql.swift */; };
@@ -373,6 +373,7 @@
 		76D26F2F2B503D27006CEA17 /* ListingResponse.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D26F2E2B503D27006CEA17 /* ListingResponse.graphql.swift */; };
 		76DE9F782AB4BA98003191ED /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE9F772AB4BA98003191ED /* Network.swift */; };
 		76E7B40D2B4FFD2000A8C370 /* GetPropertieCountQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E7B40C2B4FFD2000A8C370 /* GetPropertieCountQuery.graphql.swift */; };
+		76E9BB002BF26F6D007C37E1 /* GetPlanDetailQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E9BAFF2BF26F6D007C37E1 /* GetPlanDetailQuery.graphql.swift */; };
 		76EA816E2B0CFD5200714A66 /* ConfirmPayPalExecuteMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EA816D2B0CFD5200714A66 /* ConfirmPayPalExecuteMutation.graphql.swift */; };
 		76EA81702B0CFD7F00714A66 /* CreateSubscriptionPaymentMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EA816F2B0CFD7E00714A66 /* CreateSubscriptionPaymentMutation.graphql.swift */; };
 		76EA81722B0D017300714A66 /* SubscriptionPaymentType.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EA81712B0D017300714A66 /* SubscriptionPaymentType.graphql.swift */; };
@@ -1043,6 +1044,7 @@
 		765DFEB22B602A4D00F1B800 /* Trymelistviews.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trymelistviews.graphql.swift; sourceTree = "<group>"; };
 		765E56CE2AEAC06200615750 /* MonthAxisValueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthAxisValueFormatter.swift; sourceTree = "<group>"; };
 		7664AA8B2AFB97FB00AD697A /* getPlanDetails.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = getPlanDetails.graphql; sourceTree = "<group>"; };
+		766874A22BEA32B200796361 /* CancelmembershipQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CancelmembershipQuery.graphql.swift; sourceTree = "<group>"; };
 		7669E93D2AB6C32900938861 /* ThreadItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadItem.swift; sourceTree = "<group>"; };
 		766B33EC2B0F3FF500556052 /* OrderSummaryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSummaryVC.swift; sourceTree = "<group>"; };
 		766C06282AFFD8BE00E68E60 /* getCouponCode.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = getCouponCode.graphql; sourceTree = "<group>"; };
@@ -1125,7 +1127,6 @@
 		766C06812AFFE0CA00E68E60 /* ShowListingStepsQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowListingStepsQuery.graphql.swift; sourceTree = "<group>"; };
 		766C06822AFFE0CA00E68E60 /* GetStep1ListingDetailsQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetStep1ListingDetailsQuery.graphql.swift; sourceTree = "<group>"; };
 		766C06832AFFE0CA00E68E60 /* ManageListingsQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageListingsQuery.graphql.swift; sourceTree = "<group>"; };
-		766C06842AFFE0CA00E68E60 /* GetPlanDetailsQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPlanDetailsQuery.graphql.swift; sourceTree = "<group>"; };
 		766C06852AFFE0CA00E68E60 /* GetCountrycodeQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetCountrycodeQuery.graphql.swift; sourceTree = "<group>"; };
 		766C06862AFFE0CA00E68E60 /* UserReviewsQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserReviewsQuery.graphql.swift; sourceTree = "<group>"; };
 		766C06872AFFE0CA00E68E60 /* GetApplicationVersionInfoQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetApplicationVersionInfoQuery.graphql.swift; sourceTree = "<group>"; };
@@ -1303,6 +1304,7 @@
 		768CAE562B6AA9E2004CD8EC /* AffiliateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateCell.swift; sourceTree = "<group>"; };
 		768CAE572B6AA9E2004CD8EC /* AffiliateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AffiliateCell.xib; sourceTree = "<group>"; };
 		7690ECA32B0DBB0000CF4CD9 /* Locator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locator.swift; sourceTree = "<group>"; };
+		76B34D312BE90A920005991A /* Cancelmembership.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cancelmembership.graphql; sourceTree = "<group>"; };
 		76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateSearchLinkCVC.swift; sourceTree = "<group>"; };
 		76CEB1E42B36A5DB00C057AC /* YouMayLikeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouMayLikeVC.swift; sourceTree = "<group>"; };
 		76CEB1E92B36B37100C057AC /* HostSuggested.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HostSuggested.graphql.swift; sourceTree = "<group>"; };
@@ -1313,6 +1315,7 @@
 		76DE9F772AB4BA98003191ED /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		76E7B40B2B4FFCEF00A8C370 /* getPropertieCount.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = getPropertieCount.graphql; sourceTree = "<group>"; };
 		76E7B40C2B4FFD2000A8C370 /* GetPropertieCountQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPropertieCountQuery.graphql.swift; sourceTree = "<group>"; };
+		76E9BAFF2BF26F6D007C37E1 /* GetPlanDetailQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPlanDetailQuery.graphql.swift; sourceTree = "<group>"; };
 		76EA816B2B0CFC3A00714A66 /* createSubscriptionPayment.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = createSubscriptionPayment.graphql; sourceTree = "<group>"; };
 		76EA816C2B0CFC5500714A66 /* confirmSubscriptionPayPalExecute.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = confirmSubscriptionPayPalExecute.graphql; sourceTree = "<group>"; };
 		76EA816D2B0CFD5200714A66 /* ConfirmPayPalExecuteMutation.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmPayPalExecuteMutation.graphql.swift; sourceTree = "<group>"; };
@@ -1887,6 +1890,7 @@
 		762C856B2ABC73CF00DAC707 /* graphql */ = {
 			isa = PBXGroup;
 			children = (
+				76B34D312BE90A920005991A /* Cancelmembership.graphql */,
 				76D26F292B503B54006CEA17 /* CreateListing.graphql */,
 				76E7B40B2B4FFCEF00A8C370 /* getPropertieCount.graphql */,
 				7670CA372B3D5FE4005D9CE1 /* getHostSuggested.graphql */,
@@ -2104,6 +2108,8 @@
 		766C06682AFFE0CA00E68E60 /* Queries */ = {
 			isa = PBXGroup;
 			children = (
+				76E9BAFF2BF26F6D007C37E1 /* GetPlanDetailQuery.graphql.swift */,
+				766874A22BEA32B200796361 /* CancelmembershipQuery.graphql.swift */,
 				765DFEAE2B60295000F1B800 /* GetTrymelistviewQuery.graphql.swift */,
 				76E7B40C2B4FFD2000A8C370 /* GetPropertieCountQuery.graphql.swift */,
 				767A84BA2B4ED40A0038D2D1 /* GetListingDetailsStep3Query.graphql.swift */,
@@ -2137,7 +2143,6 @@
 				766C06812AFFE0CA00E68E60 /* ShowListingStepsQuery.graphql.swift */,
 				766C06822AFFE0CA00E68E60 /* GetStep1ListingDetailsQuery.graphql.swift */,
 				766C06832AFFE0CA00E68E60 /* ManageListingsQuery.graphql.swift */,
-				766C06842AFFE0CA00E68E60 /* GetPlanDetailsQuery.graphql.swift */,
 				766C06852AFFE0CA00E68E60 /* GetCountrycodeQuery.graphql.swift */,
 				766C06862AFFE0CA00E68E60 /* UserReviewsQuery.graphql.swift */,
 				766C06872AFFE0CA00E68E60 /* GetApplicationVersionInfoQuery.graphql.swift */,
@@ -4517,6 +4522,7 @@
 				B53772E12248A8E900F5976C /* BaseCell.swift in Sources */,
 				766C07D72AFFE0CB00E68E60 /* Currencies.graphql.swift in Sources */,
 				B5771AAC2244E0D50070DD96 /* TripsMessageVC.swift in Sources */,
+				76E9BB002BF26F6D007C37E1 /* GetPlanDetailQuery.graphql.swift in Sources */,
 				2CB9479E22EC2EE500AA5A63 /* GuestListingViewController.swift in Sources */,
 				766C08152AFFE0CB00E68E60 /* SendMessage.graphql.swift in Sources */,
 				7602D0B92ABCA50F00635A6D /* AffiliateRegistration.swift in Sources */,
@@ -4840,6 +4846,7 @@
 				B553A3E2224CA0FA00138107 /* PriceRangeCell.swift in Sources */,
 				766C07432AFFE0CB00E68E60 /* ReadMessageMutation.graphql.swift in Sources */,
 				767A84BB2B4ED40A0038D2D1 /* GetListingDetailsStep3Query.graphql.swift in Sources */,
+				766874A32BEA32B200796361 /* CancelmembershipQuery.graphql.swift in Sources */,
 				B5FC75C52253373B0055D81C /* SearchResuktsMapPeage.swift in Sources */,
 				2C77EB0623BB4A330014199D /* AboutDynamicCell.swift in Sources */,
 				B56945E822F3FA4000595CA8 /* NSCalendar+Timepiece.swift in Sources */,
@@ -4980,7 +4987,6 @@
 				766C07B22AFFE0CB00E68E60 /* GetGraphType.graphql.swift in Sources */,
 				766C07DA2AFFE0CB00E68E60 /* UserLanguagesType.graphql.swift in Sources */,
 				B53772E52248AA7500F5976C /* Date.swift in Sources */,
-				766C077B2AFFE0CB00E68E60 /* GetPlanDetailsQuery.graphql.swift in Sources */,
 				766C07952AFFE0CB00E68E60 /* AffiliateShowDocumentListQuery.graphql.swift in Sources */,
 				765DE79E2AF3FD5D001FE2D2 /* PropertyInsightsVC.swift in Sources */,
 				766C08182AFFE0CB00E68E60 /* UserAccount.graphql.swift in Sources */,
@@ -5206,13 +5212,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = WX3M78775Y;
+				DEVELOPMENT_TEAM = WX3M78775Y;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "\"<Multiple values>\"";
 				"EXCLUDED_ARCHS[sdk=*]" = armv7;
@@ -5231,14 +5235,13 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.8;
 				NEW_SETTING = "";
 				OTHER_CODE_SIGN_FLAGS = "";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ptpro.solutionvalley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Dev_PTPro;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OBJC_BRIDGING_HEADER = "App/App-Bridging-Header.h";
@@ -5255,12 +5258,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = WX3M78775Y;
+				DEVELOPMENT_TEAM = WX3M78775Y;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "\"<Multiple values>\"";
 				"EXCLUDED_ARCHS[sdk=*]" = armv7;
@@ -5279,14 +5280,13 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.8;
 				NEW_SETTING = "";
 				OTHER_CODE_SIGN_FLAGS = "";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ptpro.solutionvalley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Dev_PTPro;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "App/App-Bridging-Header.h";

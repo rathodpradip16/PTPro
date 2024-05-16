@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="lineto-circular-pro-medium.ttf">
-            <string>Circular-Medium</string>
-        </array>
-    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WhyhostVC" customModule="App" customModuleProvider="target">
             <connections>
-                <outlet property="BckImg" destination="U7D-lR-4ck" id="b5b-5t-zyK"/>
                 <outlet property="backBtn" destination="cuy-ZB-xrz" id="x2A-q3-wmR"/>
+                <outlet property="hostWebView" destination="or0-PN-wK9" id="cIl-lE-wuq"/>
                 <outlet property="litsBtn" destination="fic-ce-Opf" id="Zyj-eT-A0a"/>
-                <outlet property="pageController" destination="HFy-Lc-YuL" id="EeQ-cF-VEu"/>
-                <outlet property="titleLabel" destination="Mbm-z9-XST" id="W64-JE-4ea"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -28,31 +22,44 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U7D-lR-4ck">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="667.00000000000045"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </imageView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuy-ZB-xrz">
-                    <rect key="frame" x="20" y="45" width="40" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="back_white"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qqc-0m-kMM">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <subviews>
+                        <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="or0-PN-wK9">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <wkWebViewConfiguration key="configuration">
+                                <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                <wkPreferences key="preferences"/>
+                            </wkWebViewConfiguration>
+                        </wkWebView>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="or0-PN-wK9" firstAttribute="top" secondItem="Qqc-0m-kMM" secondAttribute="top" id="4P5-Xe-fAH"/>
+                        <constraint firstAttribute="trailing" secondItem="or0-PN-wK9" secondAttribute="trailing" id="CPD-Za-2iM"/>
+                        <constraint firstAttribute="bottom" secondItem="or0-PN-wK9" secondAttribute="bottom" id="X6t-Ad-byI"/>
+                        <constraint firstItem="or0-PN-wK9" firstAttribute="leading" secondItem="Qqc-0m-kMM" secondAttribute="leading" id="kGm-14-tlS"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuy-ZB-xrz">
+                    <rect key="frame" x="10" y="24" width="40" height="40"/>
+                    <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="2pr-5D-xZ2"/>
+                        <constraint firstAttribute="width" constant="40" id="3hh-lB-V8S"/>
+                    </constraints>
+                    <state key="normal" image="back_black"/>
                     <connections>
                         <action selector="backBtnTapped:" destination="-1" eventType="touchUpInside" id="Atx-av-7E2"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mbm-z9-XST">
-                    <rect key="frame" x="50" y="487" width="275" height="23"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fic-ce-Opf">
+                    <rect key="frame" x="10" y="597" width="355" height="50"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <fontDescription key="fontDescription" name="Circular-Medium" family="Circular" pointSize="18"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fic-ce-Opf">
-                    <rect key="frame" x="0.0" y="617" width="375" height="50"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="pFp-5D-Ii2"/>
+                    </constraints>
                     <state key="normal">
                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </state>
@@ -60,18 +67,30 @@
                         <action selector="listBtnTapped:" destination="-1" eventType="touchUpInside" id="snV-rl-xOX"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HFy-Lc-YuL" customClass="SCPageControlView" customModule="SCPageControl">
-                    <rect key="frame" x="0.0" y="566" width="375" height="43"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="fic-ce-Opf" secondAttribute="bottom" constant="20" id="6LH-Dv-JBg"/>
+                <constraint firstItem="fic-ce-Opf" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="10" id="8mL-n6-Zqz"/>
+                <constraint firstItem="Qqc-0m-kMM" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="9Sd-1O-cND"/>
+                <constraint firstItem="cuy-ZB-xrz" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="4" id="fML-JT-Zg4"/>
+                <constraint firstAttribute="bottom" secondItem="Qqc-0m-kMM" secondAttribute="bottom" id="hB4-w1-ISZ"/>
+                <constraint firstItem="cuy-ZB-xrz" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="10" id="m55-Q7-aAf"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="fic-ce-Opf" secondAttribute="trailing" constant="10" id="ttB-FB-peN"/>
+                <constraint firstAttribute="trailing" secondItem="Qqc-0m-kMM" secondAttribute="trailing" id="zE8-Xd-afH"/>
+                <constraint firstItem="Qqc-0m-kMM" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="zry-2T-2vv"/>
+            </constraints>
             <point key="canvasLocation" x="140" y="91.304347826086968"/>
         </view>
     </objects>
     <resources>
-        <image name="back_white" width="25" height="25"/>
+        <image name="back_black" width="25" height="25"/>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

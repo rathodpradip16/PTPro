@@ -239,6 +239,7 @@ class PropertyInsightsVC: UIViewController, UITextFieldDelegate {
         selectedStartDate = formatter.string(from: datePickerStartDate!.date)
         self.updateDateMaxMin()
         self.view.endEditing(true)
+        selectedPropertyGraphFilterType = .PleaseSelect
         self.propertyDashboardDataAPICall()
     }
     
@@ -250,6 +251,7 @@ class PropertyInsightsVC: UIViewController, UITextFieldDelegate {
         selectedEndDate = formatter.string(from: datePickerEndDate!.date)
         self.updateDateMaxMin()
         self.view.endEditing(true)
+        selectedPropertyGraphFilterType = .PleaseSelect
         self.propertyDashboardDataAPICall()
     }
     
@@ -284,6 +286,7 @@ class PropertyInsightsVC: UIViewController, UITextFieldDelegate {
         dropDownFilter.listHeight = 200
         dropDownFilter.borderC = UIColor.lightGray
         dropDownFilter.font = UIFont.boldSystemFont(ofSize: 17)
+        dropDownFilter.delegate = self
         dropDownFilter.didSelect{(selectedText , index ,id) in
             switch index{
             case 0:
@@ -304,7 +307,6 @@ class PropertyInsightsVC: UIViewController, UITextFieldDelegate {
             }
             self.propertyDashboardDataAPICall()
         }
-        dropDownFilter.delegate = self
     }
     
     func selectGraphType(){
@@ -591,7 +593,7 @@ extension PropertyInsightsVC: ChartViewDelegate{
             self.lblTotalOccupancyRateValue.text = "\(data.occupancy_Rate ?? 0)%"
             self.lblTotalAverageDailyRateValue.text = "\(currencysymbol)\(data.average_Daily_Rate ?? 0)"
             self.lblTotalRevenuePerRoomValue.text = "\(currencysymbol)\(data.revPAR ?? 0)"
-            self.lblFilterConversionRateTitle.text = "Convestion Rate"
+            self.lblFilterConversionRateTitle.text = "Conversion Rate"
             let strPercentage = "%"
 
             switch selectedPropertyGraphType {

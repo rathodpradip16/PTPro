@@ -81,6 +81,7 @@ class AboutPageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
             webviewObj.isFromStaticContent = true
                                        webviewObj.webstring = ABOUT_URL
             webviewObj.id = 1
+            webviewObj.pageName = "About Us"
             webviewObj.pageTitle = "\(Utility.shared.getLanguage()?.value(forKey: "aboutus") ?? "About Us")"
                                        webviewObj.modalPresentationStyle = .fullScreen
                                       webviewObj.webviewRedirection(webviewString:ABOUT_URL)
@@ -89,8 +90,9 @@ class AboutPageVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
             
             let webviewObj = WebviewVC()
             webviewObj.isFromStaticContent = true
-                                       webviewObj.webstring = SAFETY_URL
+            webviewObj.webstring = SAFETY_URL
             webviewObj.id = 2
+            webviewObj.pageName = "Trust & Safety"
             webviewObj.pageTitle = "\(Utility.shared.getLanguage()?.value(forKey: "trustandsafety") ?? "Trust & Safety")"
                                        webviewObj.modalPresentationStyle = .fullScreen
                                       webviewObj.webviewRedirection(webviewString:SAFETY_URL)
