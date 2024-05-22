@@ -47,4 +47,8 @@ class PropertyCompareVC: UIViewController,UITableViewDelegate,UITableViewDataSou
         return cell
     }
     
+    @IBAction func onClickBack(_ sender: Any) {
+        self.dismiss(animated: true)
+    }
+
 }
