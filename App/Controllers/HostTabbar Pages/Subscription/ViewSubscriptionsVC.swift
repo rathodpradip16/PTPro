@@ -441,7 +441,7 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
                 let paymentSelectionPage = PaymentSelectionPage()
                 paymentSelectionPage.selectedPlanDetail = self.arrPlans[sender.tag]
                 paymentSelectionPage.isFromSubscriptionPage = true
-                paymentSelectionPage.isYearlySelected = self.arrPlans[sender.tag].planType == "yearly"
+                paymentSelectionPage.isYearlySelected = (self.arrPlans[sender.tag].planType == "monthly") ? true : false
                 paymentSelectionPage.modalPresentationStyle = .fullScreen
                 self.present(paymentSelectionPage, animated: true, completion: nil)
             }))
@@ -449,12 +449,12 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
                 let paymentSelectionPage = PaymentSelectionPage()
                 paymentSelectionPage.selectedPlanDetail = self.arrPlans[sender.tag]
                 paymentSelectionPage.isFromSubscriptionPage = true
-                paymentSelectionPage.isYearlySelected = self.arrPlans[sender.tag].planType == "yearly"
+                paymentSelectionPage.isYearlySelected = (self.arrPlans[sender.tag].planType == "monthly") ? false : true
                 paymentSelectionPage.modalPresentationStyle = .fullScreen
                 self.present(paymentSelectionPage, animated: true, completion: nil)
             }))
             alert.addAction(UIAlertAction(title: "Cancel Plan", style: .default, handler: { action in
-                self.getCancelPlanAPICall()
+                self.confirmCancelPlan()
             }))
             alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: { action in
                 
@@ -468,6 +468,17 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
             paymentSelectionPage.modalPresentationStyle = .fullScreen
             self.present(paymentSelectionPage, animated: true, completion: nil)
         }
+    }
+    
+    func confirmCancelPlan(){
+            let alert = UIAlertController(title: "Are you sure you want to cancel it?", message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+                self.getCancelPlanAPICall()
+            }))
+            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { action in
+                
+            }))
+            self.present(alert, animated: true, completion: nil)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

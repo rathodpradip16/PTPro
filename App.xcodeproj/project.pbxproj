@@ -368,6 +368,18 @@
 		76C50E182ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */; };
 		76CEB1E52B36A5DB00C057AC /* YouMayLikeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CEB1E42B36A5DB00C057AC /* YouMayLikeVC.swift */; };
 		76CEB1EA2B36B37100C057AC /* HostSuggested.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CEB1E92B36B37100C057AC /* HostSuggested.graphql.swift */; };
+		76D113862BFCD1490092E1FD /* BasePriceTipCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D113842BFCD1490092E1FD /* BasePriceTipCell.swift */; };
+		76D113872BFCD1490092E1FD /* BasePriceTipCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76D113852BFCD1490092E1FD /* BasePriceTipCell.xib */; };
+		76D113892BFCD3030092E1FD /* pricing.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 76D113882BFCD3020092E1FD /* pricing.graphql */; };
+		76D1138B2BFCD5A60092E1FD /* PricingQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D1138A2BFCD5A60092E1FD /* PricingQuery.graphql.swift */; };
+		76D1138D2BFCD5D30092E1FD /* Price.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D1138C2BFCD5D30092E1FD /* Price.graphql.swift */; };
+		76D1138F2BFCDE730092E1FD /* PropertyCompareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D1138E2BFCDE730092E1FD /* PropertyCompareVC.swift */; };
+		76D113912BFCE3BE0092E1FD /* PropertyCompareTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D113902BFCE3BE0092E1FD /* PropertyCompareTVC.swift */; };
+		76D113932BFCEADA0092E1FD /* Pricedetail.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D113922BFCEADA0092E1FD /* Pricedetail.graphql.swift */; };
+		76D113952BFCEB6B0092E1FD /* Item.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D113942BFCEB6B0092E1FD /* Item.graphql.swift */; };
+		76D113972BFCEB990092E1FD /* Other.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D113962BFCEB990092E1FD /* Other.graphql.swift */; };
+		76D113992BFCEBAB0092E1FD /* Ratings.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D113982BFCEBAB0092E1FD /* Ratings.graphql.swift */; };
+		76D1139B2BFCEBC50092E1FD /* Occupacys.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D1139A2BFCEBC50092E1FD /* Occupacys.graphql.swift */; };
 		76D26F2B2B503B75006CEA17 /* CreateListingMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D26F2A2B503B75006CEA17 /* CreateListingMutation.graphql.swift */; };
 		76D26F2D2B503BC9006CEA17 /* CreateListing.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D26F2C2B503BC8006CEA17 /* CreateListing.graphql.swift */; };
 		76D26F2F2B503D27006CEA17 /* ListingResponse.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D26F2E2B503D27006CEA17 /* ListingResponse.graphql.swift */; };
@@ -1308,6 +1320,18 @@
 		76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateSearchLinkCVC.swift; sourceTree = "<group>"; };
 		76CEB1E42B36A5DB00C057AC /* YouMayLikeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouMayLikeVC.swift; sourceTree = "<group>"; };
 		76CEB1E92B36B37100C057AC /* HostSuggested.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HostSuggested.graphql.swift; sourceTree = "<group>"; };
+		76D113842BFCD1490092E1FD /* BasePriceTipCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePriceTipCell.swift; sourceTree = "<group>"; };
+		76D113852BFCD1490092E1FD /* BasePriceTipCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BasePriceTipCell.xib; sourceTree = "<group>"; };
+		76D113882BFCD3020092E1FD /* pricing.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pricing.graphql; sourceTree = "<group>"; };
+		76D1138A2BFCD5A60092E1FD /* PricingQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PricingQuery.graphql.swift; sourceTree = "<group>"; };
+		76D1138C2BFCD5D30092E1FD /* Price.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Price.graphql.swift; sourceTree = "<group>"; };
+		76D1138E2BFCDE730092E1FD /* PropertyCompareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyCompareVC.swift; sourceTree = "<group>"; };
+		76D113902BFCE3BE0092E1FD /* PropertyCompareTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyCompareTVC.swift; sourceTree = "<group>"; };
+		76D113922BFCEADA0092E1FD /* Pricedetail.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pricedetail.graphql.swift; sourceTree = "<group>"; };
+		76D113942BFCEB6B0092E1FD /* Item.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.graphql.swift; sourceTree = "<group>"; };
+		76D113962BFCEB990092E1FD /* Other.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Other.graphql.swift; sourceTree = "<group>"; };
+		76D113982BFCEBAB0092E1FD /* Ratings.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ratings.graphql.swift; sourceTree = "<group>"; };
+		76D1139A2BFCEBC50092E1FD /* Occupacys.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Occupacys.graphql.swift; sourceTree = "<group>"; };
 		76D26F292B503B54006CEA17 /* CreateListing.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreateListing.graphql; sourceTree = "<group>"; };
 		76D26F2A2B503B75006CEA17 /* CreateListingMutation.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateListingMutation.graphql.swift; sourceTree = "<group>"; };
 		76D26F2C2B503BC8006CEA17 /* CreateListing.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateListing.graphql.swift; sourceTree = "<group>"; };
@@ -1890,6 +1914,7 @@
 		762C856B2ABC73CF00DAC707 /* graphql */ = {
 			isa = PBXGroup;
 			children = (
+				76D113882BFCD3020092E1FD /* pricing.graphql */,
 				76B34D312BE90A920005991A /* Cancelmembership.graphql */,
 				76D26F292B503B54006CEA17 /* CreateListing.graphql */,
 				76E7B40B2B4FFCEF00A8C370 /* getPropertieCount.graphql */,
@@ -2108,6 +2133,7 @@
 		766C06682AFFE0CA00E68E60 /* Queries */ = {
 			isa = PBXGroup;
 			children = (
+				76D1138A2BFCD5A60092E1FD /* PricingQuery.graphql.swift */,
 				76E9BAFF2BF26F6D007C37E1 /* GetPlanDetailQuery.graphql.swift */,
 				766874A22BEA32B200796361 /* CancelmembershipQuery.graphql.swift */,
 				765DFEAE2B60295000F1B800 /* GetTrymelistviewQuery.graphql.swift */,
@@ -2192,6 +2218,12 @@
 		766C06A72AFFE0CA00E68E60 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				76D1139A2BFCEBC50092E1FD /* Occupacys.graphql.swift */,
+				76D113982BFCEBAB0092E1FD /* Ratings.graphql.swift */,
+				76D113962BFCEB990092E1FD /* Other.graphql.swift */,
+				76D113942BFCEB6B0092E1FD /* Item.graphql.swift */,
+				76D113922BFCEADA0092E1FD /* Pricedetail.graphql.swift */,
+				76D1138C2BFCD5D30092E1FD /* Price.graphql.swift */,
 				765DFEB22B602A4D00F1B800 /* Trymelistviews.graphql.swift */,
 				76D26F2E2B503D27006CEA17 /* ListingResponse.graphql.swift */,
 				76D26F2C2B503BC8006CEA17 /* CreateListing.graphql.swift */,
@@ -2573,6 +2605,8 @@
 				2C024E6022F1C49500217EBE /* SafeAmenitiesViewController.xib */,
 				2C024E6322F1C4BA00217EBE /* SpaceListViewController.swift */,
 				2C024E6422F1C4BA00217EBE /* SpaceListViewController.xib */,
+				76D113842BFCD1490092E1FD /* BasePriceTipCell.swift */,
+				76D113852BFCD1490092E1FD /* BasePriceTipCell.xib */,
 				B5B083FE2897B71A00668D0F /* TipCell.swift */,
 				B5B083FF2897B71A00668D0F /* TipCell.xib */,
 				B5FC54492898E56E004C11EE /* AmenitiesCollectionCollectionViewCell.swift */,
@@ -2607,6 +2641,8 @@
 				2CFAA45822FBF1E9004A2B2E /* IncreaseEarningViewController.xib */,
 				2CFAA45B22FBF209004A2B2E /* LawAndTaxViewController.swift */,
 				2CFAA45C22FBF209004A2B2E /* LawAndTaxViewController.xib */,
+				76D1138E2BFCDE730092E1FD /* PropertyCompareVC.swift */,
+				76D113902BFCE3BE0092E1FD /* PropertyCompareTVC.swift */,
 			);
 			path = Step3Pages;
 			sourceTree = "<group>";
@@ -4155,6 +4191,7 @@
 				B5F28C3C28350DD200075348 /* PaymentCell.xib in Resources */,
 				B5FE3D4C229D502E0086D3FE /* bookinoneCell.xib in Resources */,
 				B5BD575622AA2D69005B132D /* TripsCancelVC.xib in Resources */,
+				76D113892BFCD3030092E1FD /* pricing.graphql in Resources */,
 				B5723D7B2818165B008F826A /* SettingsPageVC.xib in Resources */,
 				B567AF792851C66D00DC88B8 /* ManageAccVC.xib in Resources */,
 				B5FC84CB2255CDD4003C8EAC /* GuestDetailVC.xib in Resources */,
@@ -4184,6 +4221,7 @@
 				B5F8DC602258A3DF000B3894 /* ReadmoreCell.xib in Resources */,
 				B5AD7DB822424A5F00E10420 /* ForgotPasswordVC.xib in Resources */,
 				B5516F2B22FE9B5A004E672E /* CalendarDetailVC.xib in Resources */,
+				76D113872BFCD1490092E1FD /* BasePriceTipCell.xib in Resources */,
 				B528EEF1228E73B600C99BFC /* HouseRulesVC.xib in Resources */,
 				B570951122AE1BCE000E6A07 /* InboxContentCell.xib in Resources */,
 				B5FC84E622562A00003C8EAC /* HeaderDetailCell.xib in Resources */,
@@ -4539,6 +4577,7 @@
 				B5EE962922578308004E4A2D /* ShareProductVC.swift in Sources */,
 				7690ECA42B0DBB0000CF4CD9 /* Locator.swift in Sources */,
 				766C07C52AFFE0CB00E68E60 /* AffiliateUserverificationwebType.graphql.swift in Sources */,
+				76D1138D2BFCD5D30092E1FD /* Price.graphql.swift in Sources */,
 				766C075D2AFFE0CB00E68E60 /* SubmitForVerificationMutation.graphql.swift in Sources */,
 				766C072D2AFFE0CB00E68E60 /* PTProAPI.graphql.swift in Sources */,
 				B5E4CEE722A1015100FC9A3D /* ItenaryListCell.swift in Sources */,
@@ -4582,6 +4621,7 @@
 				766C07A12AFFE0CB00E68E60 /* AllReservation.graphql.swift in Sources */,
 				2C024E5D22F1B0B300217EBE /* AmenitiesViewController.swift in Sources */,
 				766C07D92AFFE0CB00E68E60 /* GetPaymentType.graphql.swift in Sources */,
+				76D1139B2BFCEBC50092E1FD /* Occupacys.graphql.swift in Sources */,
 				B5EAE9B5229FAC5600EFAAC3 /* BookingStepFourVC.swift in Sources */,
 				76EA81722B0D017300714A66 /* SubscriptionPaymentType.graphql.swift in Sources */,
 				B56945ED22F3FA4000595CA8 /* String+Timepiece.swift in Sources */,
@@ -4661,6 +4701,7 @@
 				766C07932AFFE0CB00E68E60 /* GetcouponcodeQuery.graphql.swift in Sources */,
 				B5AD7DB722424A5F00E10420 /* ForgotPasswordVC.swift in Sources */,
 				761FD1A92B0FBA0D0082D2C6 /* ConfirmSubscriptionPayPalExecuteMutation.graphql.swift in Sources */,
+				76D113952BFCEB6B0092E1FD /* Item.graphql.swift in Sources */,
 				766C07AD2AFFE0CB00E68E60 /* ShowListing.graphql.swift in Sources */,
 				766C077D2AFFE0CB00E68E60 /* UserReviewsQuery.graphql.swift in Sources */,
 				2CFAA45922FBF1E9004A2B2E /* IncreaseEarningViewController.swift in Sources */,
@@ -4705,6 +4746,7 @@
 				B54ED843241B80FD00487C20 /* CCSwipBackPresentationController.swift in Sources */,
 				B55A7CFE22EAC0410051B62F /* BecomeHostVC.swift in Sources */,
 				766C07342AFFE0CB00E68E60 /* CreateAffiliateUserWebListMutation.graphql.swift in Sources */,
+				76D113862BFCD1490092E1FD /* BasePriceTipCell.swift in Sources */,
 				766C07462AFFE0CB00E68E60 /* CreateWishListGroupMutation.graphql.swift in Sources */,
 				766C07F62AFFE0CB00E68E60 /* Threads.graphql.swift in Sources */,
 				7602D0BD2ABCA50F00635A6D /* AffiliateRegistrationAccount.swift in Sources */,
@@ -4823,6 +4865,7 @@
 				B5AD18E322E8867700EF84AC /* HostListingVC.swift in Sources */,
 				766C07BB2AFFE0CB00E68E60 /* AllEmailToken.graphql.swift in Sources */,
 				766C07302AFFE0CB00E68E60 /* UpdateSpecialPriceMutation.graphql.swift in Sources */,
+				76D113992BFCEBAB0092E1FD /* Ratings.graphql.swift in Sources */,
 				B561E6E522D5DD5B00B18368 /* whishheaderView.swift in Sources */,
 				B545163522AF676F006D7009 /* InboxListingVC.swift in Sources */,
 				B5F28C3F2835188F00075348 /* PaymentFooterCell.swift in Sources */,
@@ -4837,6 +4880,7 @@
 				765DFEAF2B60295000F1B800 /* GetTrymelistviewQuery.graphql.swift in Sources */,
 				B55A7D0822EAC07F0051B62F /* StepTwoCell.swift in Sources */,
 				B55A7D0322EAC0600051B62F /* StepOneCell.swift in Sources */,
+				76D113912BFCE3BE0092E1FD /* PropertyCompareTVC.swift in Sources */,
 				B5E87EFF2600E481000B37A3 /* UpdatedReviewCells.swift in Sources */,
 				766C07542AFFE0CB00E68E60 /* CreateWishListMutation.graphql.swift in Sources */,
 				766C07752AFFE0CB00E68E60 /* GetStaticPageContentQuery.graphql.swift in Sources */,
@@ -4864,6 +4908,7 @@
 				2C93337F22FAE8F900884A3B /* NoticeArrivalViewController.swift in Sources */,
 				766C07B52AFFE0CB00E68E60 /* WholeManageListingsType.graphql.swift in Sources */,
 				763407492AC542E8001DA7CF /* iOSDropDown.swift in Sources */,
+				76D113932BFCEADA0092E1FD /* Pricedetail.graphql.swift in Sources */,
 				B5CD193F228037C100A8D83E /* EditnameCell.swift in Sources */,
 				B5CD1929227FF56A00A8D83E /* HeaderProfileCell.swift in Sources */,
 				2C024E5522F1575B00217EBE /* BathroomsListingViewController.swift in Sources */,
@@ -4899,6 +4944,7 @@
 				B5BD575E22AA33D0005B132D /* ReservationCancelCell.swift in Sources */,
 				766C07B02AFFE0CB00E68E60 /* Profile.graphql.swift in Sources */,
 				B56945E922F3FA4000595CA8 /* Int+Timepiece.swift in Sources */,
+				76D1138F2BFCDE730092E1FD /* PropertyCompareVC.swift in Sources */,
 				766C07DB2AFFE0CB00E68E60 /* AllWishListGroup.graphql.swift in Sources */,
 				766C07DD2AFFE0CB00E68E60 /* SettingsType.graphql.swift in Sources */,
 				B54ED839241B4D5100487C20 /* VerifyOTPPage.swift in Sources */,
@@ -4985,6 +5031,7 @@
 				766C08002AFFE0CB00E68E60 /* ListingSettings.graphql.swift in Sources */,
 				766C078F2AFFE0CB00E68E60 /* GetWishListGroupQuery.graphql.swift in Sources */,
 				766C07B22AFFE0CB00E68E60 /* GetGraphType.graphql.swift in Sources */,
+				76D113972BFCEB990092E1FD /* Other.graphql.swift in Sources */,
 				766C07DA2AFFE0CB00E68E60 /* UserLanguagesType.graphql.swift in Sources */,
 				B53772E52248AA7500F5976C /* Date.swift in Sources */,
 				766C07952AFFE0CB00E68E60 /* AffiliateShowDocumentListQuery.graphql.swift in Sources */,
@@ -4999,6 +5046,7 @@
 				766C07F52AFFE0CB00E68E60 /* PaymentMethods.graphql.swift in Sources */,
 				B56602D922E9683F00A144CE /* CompletedCell.swift in Sources */,
 				766C07FC2AFFE0CB00E68E60 /* Country.graphql.swift in Sources */,
+				76D1138B2BFCD5A60092E1FD /* PricingQuery.graphql.swift in Sources */,
 				B500E169230A5B8C0055C1D4 /* PayoutCountryVC.swift in Sources */,
 				B5D4AF41230673DF0066BD3F /* PayoutCell.swift in Sources */,
 				B5F492C022E5924A000B3085 /* BaseHostTableviewController.swift in Sources */,

@@ -116,6 +116,12 @@ extension PTProAPI {
       case "AffiliateUserType": return PTProAPI.Objects.AffiliateUserType
       case "CreateCustomPlanRequestType": return PTProAPI.Objects.CreateCustomPlanRequestType
       case "CalculateOccupancyRate": return PTProAPI.Objects.CalculateOccupancyRate
+      case "price": return PTProAPI.Objects.Price
+      case "pricedetail": return PTProAPI.Objects.Pricedetail
+      case "item": return PTProAPI.Objects.Item
+      case "other": return PTProAPI.Objects.Other
+      case "ratings": return PTProAPI.Objects.Ratings
+      case "occupacys": return PTProAPI.Objects.Occupacys
       case "AllListing": return PTProAPI.Objects.AllListing
       case "allListSettingTypes": return PTProAPI.Objects.AllListSettingTypes
       case "listBlockedDates": return PTProAPI.Objects.ListBlockedDates

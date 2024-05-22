@@ -1633,22 +1633,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "12CB0C8E-9A6E-49FF-AC1F-63DED2B0D175"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "App/Controllers/HostTabbar Pages/HostListingVC/Step3Pages/BasePriceViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "309"
-            endingLineNumber = "309"
-            landmarkName = "saveandexitAction(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "83205C23-29EB-4E72-8DD3-7C916B687882"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -2289,38 +2273,6 @@
             startingLineNumber = "221"
             endingLineNumber = "221"
             landmarkName = "onClickLorem(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B30B704E-F813-4322-95BF-A87627472D33"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "App/Controllers/HostTabbar Pages/HostListingVC/BecomeHostVC/BecomeHostVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
-            landmarkName = "siteSettingsAPICall()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "BED5EE91-6573-4D88-AB7A-AD1D32810FE8"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "App/Controllers/HostTabbar Pages/HostListingVC/BecomeHostVC/BecomeHostVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "296"
-            endingLineNumber = "296"
-            landmarkName = "siteSettingsAPICall()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

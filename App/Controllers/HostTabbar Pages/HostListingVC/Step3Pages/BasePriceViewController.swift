@@ -40,6 +40,14 @@ class BasePriceViewController: BaseHostTableviewController {
     let characterset = NSCharacterSet(charactersIn: "0123456789.")
     let cleaning_character = NSCharacterSet(charactersIn: "0123456789")
     
+    var arrPricingResult = [PTProAPI.PricingQuery.Data.Pricing.Result?]()
+    var arrPricingFilter = [[String:Any]]()
+    var arrCurrentPricingFilter = [[String:Any]]()
+    var quickTipAvailable = false
+    var showQuickTip = false
+    var currentTotalScore = 0.0
+    var resultBasePrice = 0
+
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
     @IBOutlet weak var stepTitleHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var stepTitleTopConstraint: NSLayoutConstraint!
@@ -91,6 +99,7 @@ class BasePriceViewController: BaseHostTableviewController {
         self.stepsTitleView.whichStep = 3
         self.stepsTitleView.selectedViewIndex = 2
         self.stepsTitleView.delegateSteps = self
+        self.pricingApiCall()
         // Do any additional setup after loading the view.
     }
 
@@ -151,6 +160,297 @@ class BasePriceViewController: BaseHostTableviewController {
       
     }
     
+    func pricingApiCall(){
+        let getPricingQuery = PTProAPI.PricingQuery(listId: .some(Utility.shared.createId))
+        Network.shared.apollo_headerClient.fetch(query: getPricingQuery,cachePolicy:.fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                if let results = result.data?.pricing?.results,results.count != 0{
+                    self.arrPricingResult = results
+                    self.arrPricingFilter.removeAll()
+                    self.arrCurrentPricingFilter.removeAll()
+
+                    var arrUserAmenites = [PTProAPI.PricingQuery.Data.Pricing.Result.UserAmenity?]()
+                    var arrSefetyAmenities = [PTProAPI.PricingQuery.Data.Pricing.Result.SefetyAmenity?]()
+                    var arrUserspace = [PTProAPI.PricingQuery.Data.Pricing.Result.Userspace?]()
+                    var arrPlace = [PTProAPI.PricingQuery.Data.Pricing.Result.Place?]()
+                    var arrOtherdata = [PTProAPI.PricingQuery.Data.Pricing.Result.Otherdatum?]()
+                    var arrRating = [PTProAPI.PricingQuery.Data.Pricing.Result.Rating?]()
+                    var arrOccupacy = [PTProAPI.PricingQuery.Data.Pricing.Result.Occupacy?]()
+                    
+                    var arrCurUserAmenites = [PTProAPI.PricingQuery.Data.Pricing.CurrentPropertyResult.UserAmenity?]()
+                    var arrCurSefetyAmenities = [PTProAPI.PricingQuery.Data.Pricing.CurrentPropertyResult.SefetyAmenity?]()
+                    var arrCurUserspace = [PTProAPI.PricingQuery.Data.Pricing.CurrentPropertyResult.Userspace?]()
+                    var arrCurPlace = [PTProAPI.PricingQuery.Data.Pricing.CurrentPropertyResult.Place?]()
+                    var arrCurOtherdata = [PTProAPI.PricingQuery.Data.Pricing.CurrentPropertyResult.Otherdatum?]()
+                    var arrCurRating = [PTProAPI.PricingQuery.Data.Pricing.CurrentPropertyResult.Rating?]()
+                    var arrCurOccupacy = [PTProAPI.PricingQuery.Data.Pricing.CurrentPropertyResult.Occupacy?]()
+                    
+                    if let arrData = self.arrPricingResult[0]{
+                        self.resultBasePrice = arrData.basePrice ?? 0
+
+                        if let userAmenities = arrData.userAmenities{
+                            arrUserAmenites = userAmenities
+                        }
+                        
+                        if let sefetyAmenities = arrData.sefetyAmenities{
+                            arrSefetyAmenities = sefetyAmenities
+                        }
+                        
+                        if let userspace = arrData.userspace{
+                            arrUserspace = userspace
+                        }
+                        
+                        if let arPlace = arrData.places {
+                            arrPlace = arPlace
+                        }
+                        
+                        if let otherdata = arrData.otherdata {
+                            arrOtherdata = otherdata
+                        }
+                        
+                        if let rating = arrData.rating {
+                            arrRating = rating
+                        }
+                        
+                        if let occupacy = arrData.occupacy {
+                            arrOccupacy = occupacy
+                        }
+                        
+                        if let arrCurData = result.data?.pricing?.currentPropertyResult,arrCurData.count != 0,let arrCurrentData = arrCurData[0]{
+                           
+                            if let userAmenities = arrCurrentData.userAmenities{
+                                arrCurUserAmenites = userAmenities
+                            }
+                            
+                            if let sefetyAmenities = arrCurrentData.sefetyAmenities{
+                                arrCurSefetyAmenities = sefetyAmenities
+                            }
+                            
+                            if let userspace = arrCurrentData.userspace{
+                                arrCurUserspace = userspace
+                            }
+                            
+                            if let arPlace = arrCurrentData.places {
+                                arrCurPlace = arPlace
+                            }
+                            
+                            if let otherdata = arrCurrentData.otherdata {
+                                arrCurOtherdata = otherdata
+                            }
+                            
+                            if let rating = arrCurrentData.rating {
+                                arrCurRating = rating
+                            }
+                            
+                            if let occupacy = arrCurrentData.occupacy {
+                                arrCurOccupacy = occupacy
+                            }
+                            
+                            var dicTitle1 = [String:Any]()
+                            dicTitle1["itemName"] = "Title"
+                            dicTitle1["score"] = "\(arrCurrentData.title ?? "")"
+                            self.arrCurrentPricingFilter.append(dicTitle1)
+
+                            var dicBase1 = [String:Any]()
+                            dicBase1["itemName"] = "BasePrice"
+                            dicBase1["score"] = "\(arrCurrentData.basePrice ?? 0)"
+                            self.arrCurrentPricingFilter.append(dicBase1)
+
+                            self.currentTotalScore = arrCurrentData.score ?? 0.0
+                        }
+                        
+                        var dicTitle = [String:Any]()
+                        dicTitle["itemName"] = "Title"
+                        dicTitle["score"] = "\(arrData.title ?? "")"
+                        self.arrPricingFilter.append(dicTitle)
+
+                        var dicBase = [String:Any]()
+                        dicBase["itemName"] = "BasePrice"
+                        dicBase["score"] = "\(arrData.basePrice ?? 0)"
+                        self.arrPricingFilter.append(dicBase)
+                        
+                                                
+                        for data in arrUserAmenites{
+                            var dic = [String:Any]()
+                            if let itemName = data?.itemName{
+                                dic["itemName"] = "\(itemName)"
+                                dic["score"] = "\(data?.score ?? 0)"
+                                self.arrPricingFilter.append(dic)
+                            }
+                        }
+                        
+                        for data in arrSefetyAmenities{
+                            var dic = [String:Any]()
+                            if let itemName = data?.itemName{
+                                dic["itemName"] = "\(itemName)"
+                                dic["score"] = "\(data?.score ?? 0)"
+                                self.arrPricingFilter.append(dic)
+                            }
+                        }
+
+                        for data in arrUserspace{
+                            var dic = [String:Any]()
+                            if let itemName = data?.itemName{
+                                dic["itemName"] = "\(itemName)"
+                                dic["score"] = "\(data?.score ?? 0)"
+                                self.arrPricingFilter.append(dic)
+                            }
+                        }
+
+                        for data in arrPlace{
+                            var dic = [String:Any]()
+                            if let itemName = data?.itemName{
+                                dic["itemName"] = "\(itemName)"
+                                dic["score"] = "\(data?.score ?? 0)"
+                                self.arrPricingFilter.append(dic)
+                            }
+                        }
+
+                        for data in arrOtherdata{
+                            var dic = [String:Any]()
+                            if let bedrooms = data?.bedrooms{
+                                dic["itemName"] = "Bedrooms"
+                                dic["score"] = "\(bedrooms)"
+                                self.arrPricingFilter.append(dic)
+                            }
+                            
+                            if let personCapacity = data?.personCapacity{
+                                dic["itemName"] = "Person Capacity"
+                                dic["score"] = "\(personCapacity)"
+                                self.arrPricingFilter.append(dic)
+                            }
+
+                            if let Cancle = data?.cancle{
+                                dic["itemName"] = "Cancle"
+                                dic["score"] = "\(Cancle)"
+                                self.arrPricingFilter.append(dic)
+                            }
+                            
+                            if let bookingtype = data?.bookingtype{
+                                dic["itemName"] = "Booking Type"
+                                dic["score"] = "\(bookingtype)"
+                                self.arrPricingFilter.append(dic)
+                            }
+                        }
+
+                        for data in arrRating{
+                            var dic = [String:Any]()
+                            if let rating = data?.rating{
+                                dic["itemName"] = "Rating"
+                                dic["score"] = "\(rating)"
+                                self.arrPricingFilter.append(dic)
+                            }
+                        }
+
+                        for data in arrOccupacy{
+                            var dic = [String:Any]()
+                            if let Occupacy = data?.occupacy{
+                                dic["itemName"] = "Occupacy"
+                                dic["score"] = "\(Occupacy)"
+                                self.arrPricingFilter.append(dic)
+                            }
+                        }
+                        
+                        var dicScore = [String:Any]()
+                        dicScore["itemName"] = "Score"
+                        dicScore["score"] = "\(arrData.score ?? 0.0)"
+                        self.arrPricingFilter.append(dicScore)
+
+                        
+                        ///////////////////////////////
+                                        
+
+                        for data in arrCurUserAmenites{
+                            var dic = [String:Any]()
+                                dic["itemName"] = "\(data?.itemName ?? "")"
+                                dic["score"] = "\(data?.score ?? 0)"
+                                self.arrCurrentPricingFilter.append(dic)
+                        }
+                        
+                        for data in arrCurSefetyAmenities{
+                            var dic = [String:Any]()
+                            dic["itemName"] = "\(data?.itemName ?? "")"
+                            dic["score"] = "\(data?.score ?? 0)"
+                            self.arrCurrentPricingFilter.append(dic)
+                        }
+
+                        for data in arrCurUserspace{
+                            var dic = [String:Any]()
+                            dic["itemName"] = "\(data?.itemName ?? "")"
+                            dic["score"] = "\(data?.score ?? 0)"
+                            self.arrCurrentPricingFilter.append(dic)
+                        }
+                        
+                        for data in arrCurPlace{
+                            var dic = [String:Any]()
+                            dic["itemName"] = "\(data?.itemName ?? "")"
+                            dic["score"] = "\(data?.score ?? 0)"
+                            self.arrCurrentPricingFilter.append(dic)
+                        }
+
+                        for data in arrCurOtherdata{
+                            var dic = [String:Any]()
+                            if let bedrooms = data?.bedrooms{
+                                dic["itemName"] = "Bedrooms"
+                                dic["score"] = "\(bedrooms)"
+                                self.arrCurrentPricingFilter.append(dic)
+                            }
+                            
+                            if let personCapacity = data?.personCapacity{
+                                dic["itemName"] = "Person Capacity"
+                                dic["score"] = "\(personCapacity)"
+                                self.arrCurrentPricingFilter.append(dic)
+                            }
+
+                            if let Cancle = data?.cancle{
+                                dic["itemName"] = "Cancle"
+                                dic["score"] = "\(Cancle)"
+                                self.arrCurrentPricingFilter.append(dic)
+                            }
+                            
+                            if let bookingtype = data?.bookingtype{
+                                dic["itemName"] = "Booking Type"
+                                dic["score"] = "\(bookingtype)"
+                                self.arrCurrentPricingFilter.append(dic)
+                            }
+                        }
+
+                        for data in arrCurRating{
+                            var dic = [String:Any]()
+                            if let rating = data?.rating{
+                                dic["itemName"] = "Rating"
+                                dic["score"] = "\(rating)"
+                                self.arrCurrentPricingFilter.append(dic)
+                            }
+                        }
+
+                        for data in arrCurOccupacy{
+                            var dic = [String:Any]()
+                            if let Occupacy = data?.occupacy{
+                                dic["itemName"] = "Occupacy"
+                                dic["score"] = "\(Occupacy)"
+                                self.arrCurrentPricingFilter.append(dic)
+                            }
+                        }
+                        
+                        var dicScore1 = [String:Any]()
+                        dicScore1["itemName"] = "Score"
+                        dicScore1["score"] = "\(self.currentTotalScore)"
+                        self.arrCurrentPricingFilter.append(dicScore1)
+                    }
+                    self.quickTipAvailable = true
+                }else{
+                    self.quickTipAvailable = false
+                }
+                self.tableView.reloadData()
+            case .failure(let error):
+                self.quickTipAvailable = true
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
+    }
+    
     override func setdropdown()
     {
         inputUIView.frame = CGRect(x: 0, y: FULLHEIGHT-200, width: FULLWIDTH, height: 200)
@@ -168,6 +468,7 @@ class BasePriceViewController: BaseHostTableviewController {
         tableView.register(UINib(nibName: "TextFieldCell", bundle: nil), forCellReuseIdentifier: "textfieldcell")
         
         tableView.register(UINib(nibName: "TipCell", bundle: nil), forCellReuseIdentifier: "TipCell")
+        tableView.register(UINib(nibName: "BasePriceTipCell", bundle: nil), forCellReuseIdentifier: "BasePriceTipCell")
         tableView.register(UINib(nibName: "AffiliateCell", bundle: nil), forCellReuseIdentifier: "AffiliateCell")
     }
     
@@ -296,6 +597,7 @@ class BasePriceViewController: BaseHostTableviewController {
         self.present(becomeHost, animated:false, completion: nil)
     }
     
+    
     @IBAction func retryBtnTapped(_ sender: Any) {
          if Utility.shared.isConnectedToNetwork(){
            self.offlineUIView.isHidden = true
@@ -354,6 +656,7 @@ class BasePriceViewController: BaseHostTableviewController {
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
+    
     override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
@@ -362,6 +665,10 @@ class BasePriceViewController: BaseHostTableviewController {
         return 5
     }
     
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return tableView.estimatedRowHeight
+    }
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let headerLabel = UILabel(frame: CGRect(x:15, y: 8, width:FULLWIDTH-40, height: 100))
@@ -384,12 +691,24 @@ class BasePriceViewController: BaseHostTableviewController {
         
         if indexPath.row == 2
         {
-            let cells = tableView
-                .dequeueReusableCell(withIdentifier: "TipCell", for: indexPath) as? TipCell
-            cells?.tipText.text = "\(Utility.shared.getLanguage()?.value(forKey: "basepricedsec")as! String)"
+            let cell = tableView.dequeueReusableCell(withIdentifier: "BasePriceTipCell", for: indexPath) as? BasePriceTipCell
+            cell?.tipText.text = "\(Utility.shared.getLanguage()?.value(forKey: "basepricedsec")as! String)"
             
-            cells?.selectionStyle = .none
-            return cells!
+            cell?.btnQuickTip.tag = indexPath.row
+            cell?.btnQuickTip.addTarget(self, action: #selector(quickTipBtnTapped(_:)), for: .touchUpInside)
+            
+            cell?.btnViewDetails.tag = indexPath.row
+            cell?.btnViewDetails.addTarget(self, action: #selector(quickTipBtnTapped(_:)), for: .touchUpInside)
+            
+            cell?.lblPrice.text = "$\(resultBasePrice)"
+            cell?.selectionStyle = .none
+            
+            if self.showQuickTip{
+                cell?.viewMainQuickTip.isHidden = false
+            }else{
+                cell?.viewMainQuickTip.isHidden = true
+            }
+            return cell!
         }else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: "AffiliateCell", for: indexPath) as? AffiliateCell
             cell?.affiliateListTile.text = "Get more Bbookings by Affiliates"
@@ -666,6 +985,16 @@ class BasePriceViewController: BaseHostTableviewController {
         }
     }
 
+    @objc func quickTipBtnTapped(_ sender: UIButton)
+    {
+        let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "PropertyCompareVC") as! PropertyCompareVC
+        vc.modalPresentationStyle = .fullScreen
+        vc.arrPricingFilter = self.arrPricingFilter
+        vc.arrCurrentPricingFilter = self.arrCurrentPricingFilter
+        self.present(vc, animated:false, completion: nil)
+ 
+       // PropertyCompareVC
+    }
     
     //MARK: - UIPickerViewDelegate and Datasource
     
@@ -733,6 +1062,16 @@ class BasePriceViewController: BaseHostTableviewController {
     override func textFieldDidBeginEditing(_ textField: UITextField) {
         selectedTextfield = textField.tag
         inputPickerView.reloadAllComponents()
+        
+        if selectedTextfield == 1{
+            if quickTipAvailable{
+                showQuickTip = true
+                tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+            }else{
+                showQuickTip = false
+                tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+            }
+        }
     }
     
 
@@ -797,6 +1136,10 @@ class BasePriceViewController: BaseHostTableviewController {
                 Utility.shared.step3ValuesInfo.updateValue(0.0, forKey: "basePrice")
             }
             
+            if selectedTextfield == 1{
+                showQuickTip = false
+                tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+            }
         }
         if textField.tag == 2
         {

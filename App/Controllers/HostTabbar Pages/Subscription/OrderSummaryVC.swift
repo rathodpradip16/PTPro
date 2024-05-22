@@ -69,7 +69,7 @@ class OrderSummaryVC: UIViewController {
                 if let status = result.data?.getReceiptPayment?.status,status == 200{
                     if let data = result.data?.getReceiptPayment?.data{
                         DispatchQueue.main.async {
-                            self.lblPlanName.text = "\(self.selectedPlan): \((data.planType) == "month" ? "Monthly Plan" : "Yearly Plan")"
+                            self.lblPlanName.text = "\(self.selectedPlan): \((data.planType) == "monthly" ? "Monthly Plan" : "Yearly Plan")"
                             self.lblPlanAmountValue.text = "\(data.total ?? 0.0)"
                             self.lblPlanTotalPaidValue.text = "\(data.total ?? 0.0)"
                             self.lblPlanTransactionIdValue.text = data.transactionId

@@ -949,6 +949,10 @@ func updateListingAPICall(completion: (_ success: Bool) -> Void) {
         return 0
     }
    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 0
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
     }

@@ -8,7 +8,7 @@ extension PTProAPI {
     static let operationName: String = "getPlanDetail"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query getPlanDetail($userId: String) { getPlanDetails(userId: $userId) { __typename errorMessage status results { __typename id planType title one two three four five six monthly yearly currency planType status expiryDate } } }"#
+        #"query getPlanDetail($userId: String) { getPlanDetails(userId: $userId) { __typename errorMessage status results { __typename id title one two three four five six monthly yearly currency planType status expiryDate } } }"#
       ))
 
     public var userId: GraphQLNullable<String>
@@ -60,7 +60,6 @@ extension PTProAPI {
           static var __selections: [Apollo.Selection] { [
             .field("__typename", String.self),
             .field("id", Int?.self),
-            .field("planType", String?.self),
             .field("title", String?.self),
             .field("one", String?.self),
             .field("two", String?.self),
@@ -71,12 +70,12 @@ extension PTProAPI {
             .field("monthly", Int?.self),
             .field("yearly", Int?.self),
             .field("currency", String?.self),
+            .field("planType", String?.self),
             .field("status", Int?.self),
             .field("expiryDate", String?.self),
           ] }
 
           var id: Int? { __data["id"] }
-          var planType: String? { __data["planType"] }
           var title: String? { __data["title"] }
           var one: String? { __data["one"] }
           var two: String? { __data["two"] }
@@ -87,6 +86,7 @@ extension PTProAPI {
           var monthly: Int? { __data["monthly"] }
           var yearly: Int? { __data["yearly"] }
           var currency: String? { __data["currency"] }
+          var planType: String? { __data["planType"] }
           var status: Int? { __data["status"] }
           var expiryDate: String? { __data["expiryDate"] }
         }
