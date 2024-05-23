@@ -606,7 +606,7 @@ func checkForUpdate(){
                     deleteObj.modalPresentationStyle = .overFullScreen
                     self.present(deleteObj, animated: false, completion: nil)
                     
-                    //                    let alertController = UIAlertController(title: "PTPRO", message: result.data?.getApplicationVersionInfo?.errorMessage, preferredStyle: .alert)
+                    //                    let alertController = UIAlertController(title: "ParadiseTerra", message: result.data?.getApplicationVersionInfo?.errorMessage, preferredStyle: .alert)
                     //                    alertController.addAction(UIAlertAction(title: "\(Utility.shared.getLanguage()?.value(forKey:"Update") ?? "Update")", style: .default, handler: { action in
                     //
                     

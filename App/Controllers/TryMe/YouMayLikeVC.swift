@@ -523,12 +523,12 @@ class YouMayLikeVC: UIViewController,UICollectionViewDelegate,UICollectionViewDa
                     self.cvLinkSearch.setContentOffset(.zero, animated: true)
                     self.cvLinkSearch.reloadData()
                 } else {
-                    self.view.makeToast(result.data?.getHostSuggested?.errorMessage)
+                   // self.view.makeToast(result.data?.getHostSuggested?.errorMessage)
                     self.arrGetHosted.removeAll()
                     self.NoresultView.isHidden = false
                 }
             case .failure(let error):
-                self.view.makeToast(error.localizedDescription)
+               // self.view.makeToast(error.localizedDescription)
                 self.arrGetHosted.removeAll()
                 self.NoresultView.isHidden = false
                 break

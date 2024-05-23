@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 import Apollo
 
-
-
 let FULLWIDTH  = UIScreen.main.bounds.width
 
 let FULLHEIGHT = UIScreen.main.bounds.height
@@ -56,6 +54,8 @@ let Banner_URL = "\(BASE_URL)/images/banner/"
 let AffiliateDocument_URL =  "\(BASE_URL)/images/AffiliateDocument/"
 let AffiliateDocument_UPLOAD_PHOTO = "\(BASE_URL)/AffiliateDocument"
 let Download_Receipt_URL = "\(BASE_URL)/pdf"
+let whyHostURL = "\(BASE_URL)/whyhost1"
+
 let GUEST = "guest"
 let HOST = "host"
 
@@ -79,8 +79,6 @@ let IS_IPHONE_5 = UIDevice().userInterfaceIdiom == .phone && (UIScreen.main.nati
 let IS_IPHONE_XS_MAX = UIDevice().userInterfaceIdiom == .phone && (UIScreen.main.nativeBounds.height == 2688)
 
 let categoryIdentifier = "myNotificationCategory"
-
-let whyHostURL = "https://ptbeta.xyz/whyhost1"
 
 var GOOGLE_API_KEY : String{
     get{
@@ -125,14 +123,27 @@ var BASE_URL : String {
     get {
         switch environment {
         case .development:
-            return "https://ptbeta.xyz"
+            return "https://www.paradiseterra.com"
         case .production:
-            return "https://ptbeta.xyz"
+            return "https://www.paradiseterra.com"
         case .localhost:
-            return "https://ptbeta.xyz"
+            return "https://www.paradiseterra.com"
         }
     }
 }
+
+//var BASE_URL : String {
+//    get {
+//        switch environment {
+//        case .development:
+//            return "https://ptbeta.xyz"
+//        case .production:
+//            return "https://ptbeta.xyz"
+//        case .localhost:
+//            return "https://ptbeta.xyz"
+//        }
+//    }
+//}
 
 //var BASE_URL : String {
 //    get {
@@ -164,14 +175,27 @@ var graphQLEndpoint : String {
     get {
         switch environment {
         case .development:
-            return "https://ptbeta.xyz/api/graphql"
+            return "https://www.paradiseterra.com/api/graphql"
         case .production:
-            return "https://ptbeta.xyz/api/graphql"
+            return "https://www.paradiseterra.com/api/graphql"
         case .localhost:
-            return "https://ptbeta.xyz/api/graphql"
+            return "https://www.paradiseterra.com/api/graphql"
         }
     }
 }
+
+//var graphQLEndpoint : String {
+//    get {
+//        switch environment {
+//        case .development:
+//            return "https://ptbeta.xyz/api/graphql"
+//        case .production:
+//            return "https://ptbeta.xyz/api/graphql"
+//        case .localhost:
+//            return "https://ptbeta.xyz/api/graphql"
+//        }
+//    }
+//}
 
 //var graphQLEndpoint : String {
 //    get {

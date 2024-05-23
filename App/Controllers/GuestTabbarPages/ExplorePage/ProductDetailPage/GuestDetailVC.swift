@@ -2960,7 +2960,7 @@ func initialSetup()
                                NSAttributedString.Key.foregroundColor:  UIColor(named: "Title_Header")
                            ]
                                
-                let attributedString = NSMutableAttributedString(string: "\(Utility.shared.getLanguage()?.value(forKey: "Verifiedby") ?? "Verified by") \(Utility.shared.getLanguage()?.value(forKey: "appname") ?? "PTPRO")" , attributes: attributes as [NSAttributedString.Key : Any])
+                let attributedString = NSMutableAttributedString(string: "\(Utility.shared.getLanguage()?.value(forKey: "Verifiedby") ?? "Verified by") \(Utility.shared.getLanguage()?.value(forKey: "appname") ?? "ParadiseTerra")" , attributes: attributes as [NSAttributedString.Key : Any])
                 
                 cell.titleLabel.attributedText = attributedString
                 cell.titleLabel.isHidden = false

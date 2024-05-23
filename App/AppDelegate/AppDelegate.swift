@@ -1647,7 +1647,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
 //
 //    //        siren.rulesManager = RulesManager(globalRules: .annoying, revisionUpdateRules: Rules(promptFrequency: .immediately, forAlertType: .force))
 //        siren.presentationManager = PresentationManager(alertTintColor:Theme.PRIMARY_COLOR,
-//                                                            appName: "PTPRO")
+//                                                            appName: "ParadiseTerra")
 //            siren.wail { results in
 //                switch results {
 //                case .success(let updateResults):
