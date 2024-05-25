@@ -77,7 +77,7 @@ class LawAndTaxViewController: BaseHostTableviewController {
         self.labelOne.font = UIFont(name: APP_FONT_MEDIUM, size: 14)
         self.labelOne.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         
-        self.labelTwo.text = "\(Utility.shared.getLanguage()?.value(forKey: "lawdes") ?? "Your local laws and taxes")"
+        self.labelTwo.text = String(format:"\(Utility.shared.getLanguage()?.value(forKey: "lawdes") ?? "Your local laws and taxes")",appName)
         self.labelTwo.textColor = UIColor(named: "searchPlaces_TextColor")
         self.labelTwo.font = UIFont(name: APP_FONT, size: 14)
         self.labelTwo.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
@@ -355,7 +355,7 @@ class LawAndTaxViewController: BaseHostTableviewController {
             }
             else if indexPath.row == 1
             {
-               let text = "\((Utility.shared.getLanguage()?.value(forKey:"lawdes"))!)"
+                let text = String(format:"\((Utility.shared.getLanguage()?.value(forKey:"lawdes"))!)",appName)
                 
                 cell.textLabel?.attributedText = NSAttributedString(string:text,
                                                           attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])

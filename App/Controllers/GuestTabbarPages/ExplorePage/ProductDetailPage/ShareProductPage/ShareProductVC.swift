@@ -122,7 +122,7 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                 convertedTitle = convertedTitle.replacingOccurrences(of:"%", with:"-")
                 let profileimage = "\(convertedTitle)" + "-\(listid ?? 0)"
                 let urltoShare =  "\(SHARE_URL)\(String(describing: profileimage.lowercased()))"
-                let messageBody = "\((Utility.shared.getLanguage()?.value(forKey:"sharedesc"))!) \(viewListingArray?.title ?? "") \((Utility.shared.getLanguage()?.value(forKey:"sharedesc_next"))!) \(urltoShare)"
+                let messageBody = "\((Utility.shared.getLanguage()?.value(forKey:"sharedesc"))!) \(viewListingArray?.title ?? "") \(String(format:(Utility.shared.getLanguage()?.value(forKey:"sharedesc_next")) as? String ?? "%@",appName)) \(urltoShare)"
                 // let toRecipents = ["friend@stackoverflow.com"]
                 if MFMailComposeViewController.canSendMail() {
                 let mc: MFMailComposeViewController = MFMailComposeViewController()
@@ -157,7 +157,7 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
                     let profileimage = "\(convertedTitle)" + "-\(listid ?? 0)"
                     let urltoShare =  "\(SHARE_URL)\(String(describing: profileimage.lowercased()))"
                     
-                    controller.body = "\((Utility.shared.getLanguage()?.value(forKey:"sharedesc"))!) \(viewListingArray?.title ?? "") \((Utility.shared.getLanguage()?.value(forKey:"sharedesc_next"))!) \(urltoShare)"
+                    controller.body = "\((Utility.shared.getLanguage()?.value(forKey:"sharedesc"))!) \(viewListingArray?.title ?? "") \(String(format:(Utility.shared.getLanguage()?.value(forKey:"sharedesc_next")) as? String ?? "",appName)) \(urltoShare)"
                     
                     controller.messageComposeDelegate = self
                     

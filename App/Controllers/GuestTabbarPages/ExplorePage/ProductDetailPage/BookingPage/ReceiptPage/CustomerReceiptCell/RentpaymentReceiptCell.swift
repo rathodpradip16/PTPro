@@ -20,7 +20,7 @@ class RentpaymentReceiptCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        payemntdescriptionLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"payment_accept_info"))!)"
+        payemntdescriptionLabel.text = String(format:"\((Utility.shared.getLanguage()?.value(forKey:"payment_accept_info"))!)",appName,appName,appName)
         
         paymentreceiveLAbel.text = "\((Utility.shared.getLanguage()?.value(forKey:"paymentreceive"))!)"
         // Initialization code

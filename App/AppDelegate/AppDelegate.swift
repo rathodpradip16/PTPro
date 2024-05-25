@@ -48,10 +48,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
-//        let config = CheckoutConfig(clientID: PayPal_Client_ID, returnUrl: "Your_app_BundleID://paypalpay", environment: .sandbox)
+//        let config = CheckoutConfig(clientID: PayPal_Client_ID, returnUrl: "Your_app_BundleID://paypalpay", environment: environment)
 //        Checkout.set(config: config)
 
-        BTAppContextSwitcher.setReturnURLScheme("com.ptpro.solutionvalley.payments")
+        BTAppContextSwitcher.setReturnURLScheme("com.paradise.terra.payments")
 
         
         Utility.shared.showGuestCount = false

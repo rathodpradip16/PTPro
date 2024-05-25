@@ -402,7 +402,7 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
                 if Utility.shared.isfromNotificationHost || Utility.shared.isfromOfflineNotification || Utility.shared.isfromBackroundBooking || Utility.shared.isfromOfflineBooking
                 {
                     cell.profileSettingLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"switchtraveling") ?? "Switch to Travelling")"
-                    cell.iconImage.image = UIImage(named: "travelling")
+                    cell.iconImage.image = #imageLiteral(resourceName: "switch-to-travelling-25")
                     
                 }else if (Utility.shared.ProfileAPIArray?.isAddedList == true){
                     cell.profileSettingLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"Switchhosting") ?? "Switch to Hosting")"
@@ -429,7 +429,7 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
                 {
                     if( Utility.shared.host_message_isfromHost) {
                         cell.profileSettingLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"switchtraveling") ?? "Switch to Travelling")"
-                        cell.iconImage.image = UIImage(named: "travelling")
+                        cell.iconImage.image = #imageLiteral(resourceName: "switch-to-travelling-25")
                     }
                     else {
                         cell.profileSettingLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"Switchhosting") ?? "Switch to Hosting")"

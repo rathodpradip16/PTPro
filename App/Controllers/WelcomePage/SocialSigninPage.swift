@@ -34,7 +34,7 @@ class SocialSigninPage: UIViewController {
         super.viewDidLoad()
 //        GIDSignIn.sharedInstance().delegate = self
 //        GIDSignIn.sharedInstance()?.presentingViewController = self
-        welcomeLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"welcome_rent"))!)"
+        welcomeLabel.text = String(format:"\((Utility.shared.getLanguage()?.value(forKey:"welcome_rent"))!)",appName)
         appleView_imageView.image = #imageLiteral(resourceName: "apple-black-shape-logo-with-a-bite-hole")
         appleView_Label.text = "\((Utility.shared.getLanguage()?.value(forKey: "appleSignin"))!)"
         appleView_Label.textColor = .white

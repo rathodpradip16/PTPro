@@ -34,6 +34,7 @@ class BasePriceTipCell: UITableViewCell {
         self.viewQuickTip.dropShadow(scale: true)
 
         self.viewQuickTip.layer.cornerRadius = 25
+        self.btnQuickTip.layer.cornerRadius = 25
         // Initialization code
     }
 

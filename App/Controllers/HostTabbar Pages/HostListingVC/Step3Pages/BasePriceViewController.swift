@@ -43,10 +43,11 @@ class BasePriceViewController: BaseHostTableviewController {
     var arrPricingResult = [PTProAPI.PricingQuery.Data.Pricing.Result?]()
     var arrPricingFilter = [[String:Any]]()
     var arrCurrentPricingFilter = [[String:Any]]()
-    var quickTipAvailable = false
+    var pricePredectionLabel = ""
+    var pricePredection = ""
+
     var showQuickTip = false
     var currentTotalScore = 0.0
-    var resultBasePrice = 0
 
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
     @IBOutlet weak var stepTitleHeightConstraint: NSLayoutConstraint!
@@ -165,7 +166,7 @@ class BasePriceViewController: BaseHostTableviewController {
         Network.shared.apollo_headerClient.fetch(query: getPricingQuery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
-                if let results = result.data?.pricing?.results,results.count != 0{
+                if let pricing = result.data?.pricing, let results = pricing.results,results.count != 0{
                     self.arrPricingResult = results
                     self.arrPricingFilter.removeAll()
                     self.arrCurrentPricingFilter.removeAll()
@@ -187,7 +188,7 @@ class BasePriceViewController: BaseHostTableviewController {
                     var arrCurOccupacy = [PTProAPI.PricingQuery.Data.Pricing.CurrentPropertyResult.Occupacy?]()
                     
                     if let arrData = self.arrPricingResult[0]{
-                        self.resultBasePrice = arrData.basePrice ?? 0
+                        self.pricePredection = "\(arrData.basePrice ?? 0)"
 
                         if let userAmenities = arrData.userAmenities{
                             arrUserAmenites = userAmenities
@@ -438,14 +439,22 @@ class BasePriceViewController: BaseHostTableviewController {
                         dicScore1["itemName"] = "Score"
                         dicScore1["score"] = "\(self.currentTotalScore)"
                         self.arrCurrentPricingFilter.append(dicScore1)
+                    }else{
+                        if let msg = pricing.errorMessage{
+                            self.pricePredectionLabel = msg
+                            self.pricePredection = ""
+                        }
                     }
-                    self.quickTipAvailable = true
                 }else{
-                    self.quickTipAvailable = false
+                    if let msg = result.data?.pricing?.errorMessage{
+                        self.pricePredectionLabel = msg
+                        self.pricePredection = ""
+                    }
                 }
                 self.tableView.reloadData()
             case .failure(let error):
-                self.quickTipAvailable = true
+                self.pricePredectionLabel = error.localizedDescription
+                self.pricePredection = ""
                 self.view.makeToast(error.localizedDescription)
             }
         }
@@ -700,7 +709,13 @@ class BasePriceViewController: BaseHostTableviewController {
             cell?.btnViewDetails.tag = indexPath.row
             cell?.btnViewDetails.addTarget(self, action: #selector(quickTipBtnTapped(_:)), for: .touchUpInside)
             
-            cell?.lblPrice.text = "$\(resultBasePrice)"
+            if pricePredection == ""{
+                cell?.lblBestPriceTitle.isHidden = true
+                cell?.lblPrice.text = "\(pricePredectionLabel)"
+            }else{
+                cell?.lblBestPriceTitle.isHidden = false
+                cell?.lblPrice.text = "\(Utility.shared.currencyvalue)\(pricePredection)"
+            }
             cell?.selectionStyle = .none
             
             if self.showQuickTip{
@@ -711,7 +726,7 @@ class BasePriceViewController: BaseHostTableviewController {
             return cell!
         }else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: "AffiliateCell", for: indexPath) as? AffiliateCell
-            cell?.affiliateListTile.text = "Get more Bbookings by Affiliates"
+            cell?.affiliateListTile.text = "Get more Bookings by Affiliates"
             cell?.tag = ((indexPath.row)+500)
                         
             if let isAffiliate = Utility.shared.step3ValuesInfo["is_affiliate"] as? Int,isAffiliate == 1{
@@ -987,13 +1002,13 @@ class BasePriceViewController: BaseHostTableviewController {
 
     @objc func quickTipBtnTapped(_ sender: UIButton)
     {
-        let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "PropertyCompareVC") as! PropertyCompareVC
-        vc.modalPresentationStyle = .fullScreen
-        vc.arrPricingFilter = self.arrPricingFilter
-        vc.arrCurrentPricingFilter = self.arrCurrentPricingFilter
-        self.present(vc, animated:false, completion: nil)
- 
-       // PropertyCompareVC
+        if pricePredection != ""{
+            let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "PropertyCompareVC") as! PropertyCompareVC
+            vc.modalPresentationStyle = .fullScreen
+            vc.arrPricingFilter = self.arrPricingFilter
+            vc.arrCurrentPricingFilter = self.arrCurrentPricingFilter
+            self.present(vc, animated:false, completion: nil)
+        }
     }
     
     //MARK: - UIPickerViewDelegate and Datasource
@@ -1064,13 +1079,8 @@ class BasePriceViewController: BaseHostTableviewController {
         inputPickerView.reloadAllComponents()
         
         if selectedTextfield == 1{
-            if quickTipAvailable{
                 showQuickTip = true
                 tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
-            }else{
-                showQuickTip = false
-                tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
-            }
         }
     }
     

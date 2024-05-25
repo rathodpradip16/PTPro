@@ -32,7 +32,6 @@ class SwitchTravelAndHostVC: UIViewController {
             switchTravelAndHostLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"Switchhosting"))!)"
         } else {
             switchTravelAndHostLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"switchtraveling"))!)"
-//            self.SwitchTravelAndHostImage.image = self.SwitchTravelAndHostImage.image?.withRenderingMode(.alwaysTemplate)
         }
      
      

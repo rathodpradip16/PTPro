@@ -66,7 +66,7 @@ class PhonekitVC: UIViewController,UITextFieldDelegate,CountryDelegate{
         phoneTF.keyboardType = .numberPad
         phoneTF.becomeFirstResponder()
         confirmphoneLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"confirmphone"))!)"
-         phonedescLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"confirmtext"))!)"
+         phonedescLabel.text = String(format:"\((Utility.shared.getLanguage()?.value(forKey:"confirmtext"))!)",appName)
          phoneLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"phone"))!)"
         
         phoneLabel.textColor = UIColor(named: "Title_Header")

@@ -107,7 +107,9 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
                     }
                     
                     self.lottieView.isHidden = true
-                    self.showuserprofileArray = ((result.data?.showUserProfile?.results)!)
+                    if let data = result.data,let showUserProfile =  data.showUserProfile,let dataResult = showUserProfile.results{
+                        self.showuserprofileArray = dataResult
+                    }
                     self.verifiedInfoCount = 0
                     self.hostprofileTable.reloadData()
                 case .failure(let error):
@@ -234,8 +236,11 @@ class HostProfileViewPage: UIViewController,UITableViewDelegate,UITableViewDataS
             }
             if showuserprofileArray?.picture != nil
             {
-                let profImage = showuserprofileArray?.picture!
-              cell.profileImage.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(profImage)"), completed: nil)
+                if let profileArray = showuserprofileArray, let profImage = profileArray.picture{
+                    cell.profileImage.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(profImage)"), completed: nil)
+                }else{
+                    cell.profileImage.image  = #imageLiteral(resourceName: "unknown")
+                }
                 
             } else {
                cell.profileImage.image  = #imageLiteral(resourceName: "unknown")

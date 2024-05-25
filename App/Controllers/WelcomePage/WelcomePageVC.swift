@@ -547,7 +547,7 @@ class WelcomePageVC: UIViewController  {
         closeBtn.clipsToBounds = true
         closeBtn.backgroundColor = .clear
         closeBtn.titleLabel?.font = UIFont(name: APP_FONT_MEDIUM, size: 14)
-        welcomeLabel.text = "\(Utility.shared.getLanguage()?.value(forKey:"welcome_rent") ?? "Welcome to PTPRO")"
+        welcomeLabel.text = String(format:"\(Utility.shared.getLanguage()?.value(forKey:"welcome_rent") ?? "Welcome to \(appName)")",appName)
         welcomeLabel.textColor = UIColor(named: "Title_Header")
         welcomeLabel.textAlignment = Utility.shared.isRTLLanguage() ? .right : .left
         welcomeLabel.font = UIFont(name: APP_FONT_SEMIBOLD, size: 20.0)

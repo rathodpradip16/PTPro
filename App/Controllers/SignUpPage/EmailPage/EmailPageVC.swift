@@ -152,7 +152,7 @@ class EmailPageVC: UIViewController {
         errorLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"error_field"))!)"
         retryBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"retry"))!)", for:.normal)
         emailLAbel.text = "\((Utility.shared.getLanguage()?.value(forKey:"email_address"))!)"
-        info.text = "\((Utility.shared.getLanguage()?.value(forKey:"email_info"))!)"
+        info.text = String(format:"\((Utility.shared.getLanguage()?.value(forKey:"email_info"))!)",appName)
         emailexistLAbel.text = "\((Utility.shared.getLanguage()?.value(forKey:"emailexist"))!)"
         emailTitleLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"andyouremail"))!)"
         loginBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"login_string"))!)", for:.normal)

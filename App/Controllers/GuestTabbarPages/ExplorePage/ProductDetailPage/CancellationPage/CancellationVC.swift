@@ -219,7 +219,7 @@ class CancellationVC: UIViewController,UITableViewDelegate,UITableViewDataSource
 
         }else{
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReadmoreCell", for: indexPath)as! ReadmoreCell
-        let description = "\((Utility.shared.getLanguage()?.value(forKey:"cleaningdescription"))!)"
+            let description = String(format:"\((Utility.shared.getLanguage()?.value(forKey:"cleaningdescription"))!)",appName,appName,appName,appName,appName)
             
             cell.descriptionLabel?.attributedText = NSAttributedString(string:description,
                                                                        attributes: [NSAttributedString.Key.foregroundColor:UIColor(named: "searchPlaces_TextColor")!])

@@ -174,7 +174,7 @@ class DateofBirthVC: UIViewController {
         errorLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"error_field"))!)"
         retryBtn.setTitle("\((Utility.shared.getLanguage()?.value(forKey:"retry"))!)", for:.normal)
         birthTitleLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"birthday"))!)"
-          birthcontentLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"birth_info"))!)"
+        birthcontentLabel.text = String(format:"\((Utility.shared.getLanguage()?.value(forKey:"birth_info"))!)",appName)
         errorLabel.textColor =  UIColor(named: "Title_Header")
         retryBtn.setTitleColor(Theme.PRIMARY_COLOR, for: .normal)
         

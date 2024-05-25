@@ -158,36 +158,6 @@
             endingLineNumber = "327"
             landmarkName = "checkLoginAPI()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "6A98037E-B291-49E8-9A29-BD5FEFA3177E - d75141264ebb635d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.LoginPageVC.checkLoginAPI() -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/LoginPage/LoginPageVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "327"
-                  endingLineNumber = "327">
-               </Location>
-               <Location
-                  uuid = "6A98037E-B291-49E8-9A29-BD5FEFA3177E - d5781a9e7bd58d6a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.LoginQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.LoginPageVC.checkLoginAPI() -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/LoginPage/LoginPageVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "329"
-                  endingLineNumber = "329">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -204,50 +174,6 @@
             endingLineNumber = "329"
             landmarkName = "checkLoginAPI()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "78B32D95-1298-426C-A1C6-1183BCF5A15A - d5781a9e7bd58d6a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.LoginQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.LoginPageVC.checkLoginAPI() -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/LoginPage/LoginPageVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "329"
-                  endingLineNumber = "329">
-               </Location>
-               <Location
-                  uuid = "78B32D95-1298-426C-A1C6-1183BCF5A15A - d5781a9e7bd58d6a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.LoginQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.LoginPageVC.checkLoginAPI() -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/LoginPage/LoginPageVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "329"
-                  endingLineNumber = "329">
-               </Location>
-               <Location
-                  uuid = "78B32D95-1298-426C-A1C6-1183BCF5A15A - d5781a9e7bd58d6a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.LoginQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.LoginPageVC.checkLoginAPI() -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/LoginPage/LoginPageVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "329"
-                  endingLineNumber = "329">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -264,36 +190,6 @@
             endingLineNumber = "330"
             landmarkName = "checkLoginAPI()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "466C6459-AB90-4B7A-9869-8F9AD6119C9D - d5781a9e7bd5f28b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.LoginQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.LoginPageVC.checkLoginAPI() -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/LoginPage/LoginPageVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "330"
-                  endingLineNumber = "330">
-               </Location>
-               <Location
-                  uuid = "466C6459-AB90-4B7A-9869-8F9AD6119C9D - d5781a9e7bd5f28b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.LoginQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.LoginPageVC.checkLoginAPI() -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/LoginPage/LoginPageVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "330"
-                  endingLineNumber = "330">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -310,36 +206,6 @@
             endingLineNumber = "390"
             landmarkName = "checkLoginAPI()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "313A8DF6-65EC-4987-8C02-046E5FDA3937 - 784df70e2c7434a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.LoginQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.WelcomePageVC.checkLoginAPI() -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/WelcomePage/WelcomePageVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "390"
-                  endingLineNumber = "390">
-               </Location>
-               <Location
-                  uuid = "313A8DF6-65EC-4987-8C02-046E5FDA3937 - 93a01af39685071f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 @Swift.MainActor () -&gt; () in closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.LoginQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.WelcomePageVC.checkLoginAPI() -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/WelcomePage/WelcomePageVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "391"
-                  endingLineNumber = "391">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -356,36 +222,6 @@
             endingLineNumber = "294"
             landmarkName = "faceBookLogin(viewC:button:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "11A49C3D-2B56-4548-9B5F-1CAB2EE8999D - f51a63dd8f2446b1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.EmailGoogleFBViewController.faceBookLogin(viewC: __C.UIViewController, button: __C.UIButton) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/Verifications/EmailGoogleFBViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "294"
-                  endingLineNumber = "294">
-               </Location>
-               <Location
-                  uuid = "11A49C3D-2B56-4548-9B5F-1CAB2EE8999D - ada5978ed4ad9546"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;__C.FBSDKLoginManagerLoginResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in App.EmailGoogleFBViewController.faceBookLogin(viewC: __C.UIViewController, button: __C.UIButton) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/Verifications/EmailGoogleFBViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "295"
-                  endingLineNumber = "295">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -610,36 +446,6 @@
             endingLineNumber = "976"
             landmarkName = "ConfirmPayPal(paymentID:PayerID:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "376399CF-3D9C-4026-982B-E23B49BE2F1F - 67691d866ed08c2d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.PaymentSelectionPage.ConfirmPayPal(paymentID: Swift.String, PayerID: Swift.String) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New%20Group/PaymentSelectionPage/PaymentSelectionPage.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "976"
-                  endingLineNumber = "976">
-               </Location>
-               <Location
-                  uuid = "376399CF-3D9C-4026-982B-E23B49BE2F1F - c9e0f089ea4182c0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.ConfirmPayPalExecuteMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.PaymentSelectionPage.ConfirmPayPal(paymentID: Swift.String, PayerID: Swift.String) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New%20Group/PaymentSelectionPage/PaymentSelectionPage.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "978"
-                  endingLineNumber = "978">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -656,36 +462,6 @@
             endingLineNumber = "929"
             landmarkName = "confirmSubscriptionPayPalExecute(paymentID:PayerID:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "DCA06152-0D17-4F59-AFAA-58A5CA7836B8 - 3f9a7a27cd43c153"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.PaymentSelectionPage.confirmSubscriptionPayPalExecute(paymentID: Swift.String, PayerID: Swift.String) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New%20Group/PaymentSelectionPage/PaymentSelectionPage.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "929"
-                  endingLineNumber = "929">
-               </Location>
-               <Location
-                  uuid = "DCA06152-0D17-4F59-AFAA-58A5CA7836B8 - 923fc9ace10a9219"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.ConfirmSubscriptionPayPalExecuteMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.PaymentSelectionPage.confirmSubscriptionPayPalExecute(paymentID: Swift.String, PayerID: Swift.String) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New%20Group/PaymentSelectionPage/PaymentSelectionPage.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "931"
-                  endingLineNumber = "931">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -750,36 +526,6 @@
             endingLineNumber = "1196"
             landmarkName = "createReservationAPICall(reservationid:senderBtn:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "963C35F6-3658-4FCF-ABE9-8E02188AD137 - 2dcdb234d1f2be43"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.GetReservationQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.HostProgressVC.createReservationAPICall(reservationid: Swift.Int, senderBtn: __C.UIButton) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostProgressVC/HostProgressVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1196"
-                  endingLineNumber = "1196">
-               </Location>
-               <Location
-                  uuid = "963C35F6-3658-4FCF-ABE9-8E02188AD137 - 2dcdb234d1f2be43"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.GetReservationQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.HostProgressVC.createReservationAPICall(reservationid: Swift.Int, senderBtn: __C.UIButton) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostProgressVC/HostProgressVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1196"
-                  endingLineNumber = "1196">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -956,36 +702,6 @@
             endingLineNumber = "522"
             landmarkName = "updateListingAPICall(completion:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "44FC26B8-BDB2-416B-AA6F-C7A1374AC9A0 - b6603659946a5ca"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.BaseHostTableviewController.updateListingAPICall(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/Step1Pages/BaseHostTableviewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "522"
-                  endingLineNumber = "522">
-               </Location>
-               <Location
-                  uuid = "44FC26B8-BDB2-416B-AA6F-C7A1374AC9A0 - 8159b68289ace3ad"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.CreateListingMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.BaseHostTableviewController.updateListingAPICall(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/Step1Pages/BaseHostTableviewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "524"
-                  endingLineNumber = "524">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1002,36 +718,6 @@
             endingLineNumber = "314"
             landmarkName = "updateListingAPICallAfterCreate()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "0E132C85-9E5B-42DB-9005-E06FD287DEF3 - 34a70371d53a577e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.SpaceListViewController.updateListingAPICallAfterCreate() -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/Step1Pages/SpaceListViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "314"
-                  endingLineNumber = "314">
-               </Location>
-               <Location
-                  uuid = "0E132C85-9E5B-42DB-9005-E06FD287DEF3 - 45ff2373de2ead6f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.CreateListingMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.SpaceListViewController.updateListingAPICallAfterCreate() -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/Step1Pages/SpaceListViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "316"
-                  endingLineNumber = "316">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1048,36 +734,6 @@
             endingLineNumber = "344"
             landmarkName = "manageListingSteps(listId:currentStep:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "9B3BCFD1-A2E2-4CF6-AFCF-E12291A7A267 - a14bf6c9d7407679"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.SpaceListViewController.manageListingSteps(listId: Swift.String, currentStep: Swift.Int) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/Step1Pages/SpaceListViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "344"
-                  endingLineNumber = "344">
-               </Location>
-               <Location
-                  uuid = "9B3BCFD1-A2E2-4CF6-AFCF-E12291A7A267 - 1a51032c5622424"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.ManageListingStepsMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.SpaceListViewController.manageListingSteps(listId: Swift.String, currentStep: Swift.Int) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/Step1Pages/SpaceListViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "346"
-                  endingLineNumber = "346">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1094,36 +750,6 @@
             endingLineNumber = "394"
             landmarkName = "manageListingSteps(listId:currentStep:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "DF813EF5-2A97-4F24-9BF8-409BA54725C7 - b25b649aa917e223"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.AddressListingViewController.manageListingSteps(listId: Swift.String, currentStep: Swift.Int) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/Step1Pages/AddressListingViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "394"
-                  endingLineNumber = "394">
-               </Location>
-               <Location
-                  uuid = "DF813EF5-2A97-4F24-9BF8-409BA54725C7 - 495fd2395aea3df0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.ManageListingStepsMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.AddressListingViewController.manageListingSteps(listId: Swift.String, currentStep: Swift.Int) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/Step1Pages/AddressListingViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "396"
-                  endingLineNumber = "396">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1204,36 +830,6 @@
             endingLineNumber = "117"
             landmarkName = "nextBtnTapped(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "469755C4-4619-42E3-94C9-AE8CDD44AD50 - 1684113fc63d9b91"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.ListingDescriptionVC.nextBtnTapped(Any) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/StepTwoVC/ListingDescriptionVC/ListingDescriptionVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "117"
-                  endingLineNumber = "117">
-               </Location>
-               <Location
-                  uuid = "469755C4-4619-42E3-94C9-AE8CDD44AD50 - f0ccbf0b36960ed3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Bool) -&gt; () in App.ListingDescriptionVC.nextBtnTapped(Any) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/StepTwoVC/ListingDescriptionVC/ListingDescriptionVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "118"
-                  endingLineNumber = "118">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1282,36 +878,6 @@
             endingLineNumber = "140"
             landmarkName = "saveAndExitBtnTapped(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "9E7126FF-2665-4569-AF7D-00A7050AF28B - 63e045ef048ce33e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.ListingDescriptionVC.saveAndExitBtnTapped(Any) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/StepTwoVC/ListingDescriptionVC/ListingDescriptionVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "140"
-                  endingLineNumber = "140">
-               </Location>
-               <Location
-                  uuid = "9E7126FF-2665-4569-AF7D-00A7050AF28B - 74acc12572fe7e3e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Bool) -&gt; () in App.ListingDescriptionVC.saveAndExitBtnTapped(Any) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/StepTwoVC/ListingDescriptionVC/ListingDescriptionVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "141"
-                  endingLineNumber = "141">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1376,36 +942,6 @@
             endingLineNumber = "575"
             landmarkName = "updatelistingStep2APICall(completion:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "9109C17E-EA3B-4A8F-A514-EEF62551C9C9 - 204e8538c8c45bb0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.BaseHostTableviewController.updatelistingStep2APICall(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/Step1Pages/BaseHostTableviewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "575"
-                  endingLineNumber = "575">
-               </Location>
-               <Location
-                  uuid = "9109C17E-EA3B-4A8F-A514-EEF62551C9C9 - 9b37bdf96fb130a8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.UpdateListingStep2Mutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.BaseHostTableviewController.updatelistingStep2APICall(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/Step1Pages/BaseHostTableviewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "577"
-                  endingLineNumber = "577">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1454,36 +990,6 @@
             endingLineNumber = "382"
             landmarkName = "manageListingSteps(listId:currentStep:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "4E962960-E374-4823-8DF9-D68E4C28F3A9 - eb104437ade5b57"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.ListingTitleVC.manageListingSteps(listId: Swift.String, currentStep: Swift.Int) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/StepTwoVC/ListingTitleVC/ListingTitleVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "382"
-                  endingLineNumber = "382">
-               </Location>
-               <Location
-                  uuid = "4E962960-E374-4823-8DF9-D68E4C28F3A9 - e12a43a35adbcaa3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.ManageListingStepsMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.ListingTitleVC.manageListingSteps(listId: Swift.String, currentStep: Swift.Int) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/StepTwoVC/ListingTitleVC/ListingTitleVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "384"
-                  endingLineNumber = "384">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1560,24 +1066,8 @@
             filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/RequestbookVC/RequestbookVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "573"
-            endingLineNumber = "573"
-            landmarkName = "tableView(_:cellForRowAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E4C0ECFC-4AF0-41C7-BE04-9C12556083DD"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/RequestbookVC/RequestbookVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "617"
-            endingLineNumber = "617"
+            startingLineNumber = "582"
+            endingLineNumber = "582"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1692,36 +1182,6 @@
             endingLineNumber = "553"
             landmarkName = "PaymentAPICall(cardtoken:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "01DBB3F7-CD2A-479E-ADD3-789DF31087BD - fcf735187b070b01"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.PaymentSelectionPage.PaymentAPICall(cardtoken: Swift.String) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New%20Group/PaymentSelectionPage/PaymentSelectionPage.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "553"
-                  endingLineNumber = "553">
-               </Location>
-               <Location
-                  uuid = "01DBB3F7-CD2A-479E-ADD3-789DF31087BD - f46893dc8b874cf8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.CreateReservationMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.PaymentSelectionPage.PaymentAPICall(cardtoken: Swift.String) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New%20Group/PaymentSelectionPage/PaymentSelectionPage.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "555"
-                  endingLineNumber = "555">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1738,36 +1198,6 @@
             endingLineNumber = "652"
             landmarkName = "subscriptionPaymentAPICall(cardtoken:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "1645F99A-27F5-4FBE-8F6F-7B5251E6AE07 - 1941c6840b4e8575"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.PaymentSelectionPage.subscriptionPaymentAPICall(cardtoken: Swift.String) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New%20Group/PaymentSelectionPage/PaymentSelectionPage.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "652"
-                  endingLineNumber = "652">
-               </Location>
-               <Location
-                  uuid = "1645F99A-27F5-4FBE-8F6F-7B5251E6AE07 - db54999c3fb7c5db"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.CreateSubscriptionPaymentMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.PaymentSelectionPage.subscriptionPaymentAPICall(cardtoken: Swift.String) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New%20Group/PaymentSelectionPage/PaymentSelectionPage.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "654"
-                  endingLineNumber = "654">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1837,38 +1267,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "72728B4F-2922-40EF-9A81-AE03CACB80AF"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1499"
-            endingLineNumber = "1499"
-            landmarkName = "collectionView(_:didSelectItemAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "15B6E0DA-4B25-43DA-AE9D-EF20CBF7634A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1509"
-            endingLineNumber = "1509"
-            landmarkName = "collectionView(_:didSelectItemAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "8D90E887-B41A-4607-8520-82967151A50D"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -1928,50 +1326,6 @@
             endingLineNumber = "3176"
             landmarkName = "GetTrymelistviewAPI(listId:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "E79DC4BC-D921-4804-9EA0-26BC9A40172A - 1e8074b77f310ffa"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.GetTrymelistviewQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.ExplorePageVC.GetTrymelistviewAPI(listId: Swift.Int) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "3176"
-                  endingLineNumber = "3176">
-               </Location>
-               <Location
-                  uuid = "E79DC4BC-D921-4804-9EA0-26BC9A40172A - 1e8074b77f310ffa"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.GetTrymelistviewQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.ExplorePageVC.GetTrymelistviewAPI(listId: Swift.Int) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "3176"
-                  endingLineNumber = "3176">
-               </Location>
-               <Location
-                  uuid = "E79DC4BC-D921-4804-9EA0-26BC9A40172A - 1e8074b77f310ffa"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.GetTrymelistviewQuery.Data&gt;, Swift.Error&gt;) -&gt; () in App.ExplorePageVC.GetTrymelistviewAPI(listId: Swift.Int) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/GuestTabbarPages/ExplorePage/ExplorePageVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "3176"
-                  endingLineNumber = "3176">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2196,36 +1550,6 @@
             endingLineNumber = "895"
             landmarkName = "PublishAPICall(listid:action:sender:tag:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "C1F2C32E-F13E-4404-9BC6-A72462EA17C2 - c0656bb3605b6084"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.ManagePublishStatusMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.BecomeHostVC.PublishAPICall(listid: Swift.Int, action: Swift.String, sender: __C.UIButton, tag: Swift.Int) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/BecomeHostVC/BecomeHostVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "895"
-                  endingLineNumber = "895">
-               </Location>
-               <Location
-                  uuid = "C1F2C32E-F13E-4404-9BC6-A72462EA17C2 - c0656bb3605b6084"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Result&lt;Apollo.GraphQLResult&lt;App.PTProAPI.ManagePublishStatusMutation.Data&gt;, Swift.Error&gt;) -&gt; () in App.BecomeHostVC.PublishAPICall(listid: Swift.Int, action: Swift.String, sender: __C.UIButton, tag: Swift.Int) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/Porject/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/BecomeHostVC/BecomeHostVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "895"
-                  endingLineNumber = "895">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2289,6 +1613,118 @@
             startingLineNumber = "876"
             endingLineNumber = "876"
             landmarkName = "PublishBtnTapped(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E9A967B2-590E-4AAD-9EAD-E2DBACD90E00"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/ItenaryPage/BookingItenaryVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "521"
+            endingLineNumber = "521"
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F64CAC04-EAC8-4061-8E9E-4DC4D8319FED"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/DescriptionCell/HostProfileViewPage.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "240"
+            endingLineNumber = "240"
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "51FC29CD-3E8C-4194-B217-DC20D84CCE6C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/HostTabbar Pages/HostListingVC/Step3Pages/BasePriceViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "191"
+            endingLineNumber = "191"
+            landmarkName = "pricingApiCall()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "08D64E2D-BF98-4E14-90B1-C3CFA946BFF2"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New Group/BookingStepFour/BookingStepFourVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "311"
+            endingLineNumber = "311"
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "215467AF-9A45-4AE6-B7D1-B4F5612DCFAB"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/New Group/BookingStepFour/BookingStepFourVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "347"
+            endingLineNumber = "347"
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3A8B0B46-E3B5-4D34-B2DD-6B282113ED30"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/RequestbookVC/RequestbookVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "545"
+            endingLineNumber = "545"
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "880B8625-4E5B-411C-834F-3738F1C00C48"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "App/Controllers/GuestTabbarPages/ExplorePage/ProductDetailPage/BookingPage/RequestbookVC/RequestbookVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "588"
+            endingLineNumber = "588"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -23,7 +23,7 @@ class ReviewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        verifyLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"verifyrentall"))!)"
+        verifyLabel.text = String(format:"\((Utility.shared.getLanguage()?.value(forKey:"verifyrentall"))!)",appName)
         reviewTitleLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"review"))!)"
         
         reviewRateView.settings.filledColor = Theme.PRIMARY_COLOR

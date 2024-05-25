@@ -68,7 +68,7 @@ class TripsMainVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UI
         self.lottieAnimation()
         lottieView = LottieAnimationView.init(name:"animation")
         
-        startLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"startplanningfirst"))!)"
+        startLabel.text = String(format:"\((Utility.shared.getLanguage()?.value(forKey:"startplanningfirst"))!)",appName)
 
         myTripsTitleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey: "My_Trips") ?? "My trips")"
         myTripsTitleLabel.textColor = UIColor(named: "Title_Header")
@@ -150,7 +150,7 @@ class TripsMainVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UI
         self.lottieAnimation()
         previousEnabled = false
         isupcomingTable = true
-        startLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"startplanningfirst"))!)"
+        startLabel.text = String(format:"\((Utility.shared.getLanguage()?.value(forKey:"startplanningfirst"))!)",appName)
         self.upcomingTable.isHidden = false
 //        upcomingBtn.isUserInteractionEnabled = false
        previousBtn.isUserInteractionEnabled = true
@@ -196,7 +196,7 @@ class TripsMainVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UI
         self.lottieAnimation()
         self.upcomingTable.isHidden = true
         self.previousTable.isHidden = false
-        startLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"startplanning"))!)"
+        startLabel.text = String(format:"\((Utility.shared.getLanguage()?.value(forKey:"startplanning"))!)",appName)
   
         if(getpreviousReservationquery.count == 0)
         {

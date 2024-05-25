@@ -17,8 +17,10 @@ class Theme {
     
     static let TERTIARY_COLOR = UIColor(red: 65.0 / 255.0, green: 171.0 / 255.0, blue: 175.0 / 255.0, alpha: 1.0)
     
-    static let SECONDARY_COLOR = UIColor(red: 255.0 / 255.0, green: 90.0 / 255.0, blue: 95.0 / 255.0, alpha: 1.0)
+ //   static let SECONDARY_COLOR = UIColor(red: 255.0 / 255.0, green: 90.0 / 255.0, blue: 95.0 / 255.0, alpha: 1.0)
         //
+    static let SECONDARY_COLOR = UIColor().hexValue(hex: "8c52ff")
+
     
     static let Gradient_color = UIColor(red: 252.0 / 255.0, green: 111.0 / 255.0, blue: 116.0 / 255.0, alpha: 1.0)
     
@@ -77,7 +79,9 @@ class Theme {
     static let Border_color = UIColor().hexValue(hex: "E0E0E0")
     static let Explore_PlaceHolder = UIColor().hexValue(hex: "969696")
     static let Recom_most_cell_BG = UIColor().hexValue(hex: "F6F6F6")
-    static let Button_BG = UIColor().hexValue(hex: "FF5A5F")
+    static let Button_BG = UIColor().hexValue(hex: "8c52ff")
+//    static let Button_BG = UIColor().hexValue(hex: "FF5A5F")
+
     static let viewBG = UIColor().hexValue(hex: "F9F9F9")
    
     static let mapview_BG = UIColor().hexValue(hex: "D1D1D1")

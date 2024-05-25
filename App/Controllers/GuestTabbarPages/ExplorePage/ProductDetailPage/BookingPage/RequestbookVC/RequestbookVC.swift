@@ -224,16 +224,25 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
         {
             if(getbillingArray?.discountLabel != nil && getbillingArray?.discount != 0)
             {
+                if getbillingArray?.guestServiceFee == nil{
+                    return 2
+                }
                 return 3
+            }else if getbillingArray?.guestServiceFee == nil{
+                return 1
             }
             return 2
-            
         }
         else
         {
             if(getbillingArray?.discountLabel != nil && getbillingArray?.discount != 0 )
             {
+                if getbillingArray?.guestServiceFee == nil{
+                    return 3
+                }
                 return 4
+            }else if getbillingArray?.guestServiceFee == nil{
+                return 2
             }
              return 3
         }

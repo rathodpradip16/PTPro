@@ -99,12 +99,27 @@ var STRIPE_PUBLISHABLE_KEY : String{
         case .development:
             return "pk_test_C5ukBJM7qr5P1F8dY4XKhdyp"
         case .production:
-            return "pk_test_C5ukBJM7qr5P1F8dY4XKhdyp"
+            return "pk_live_vRogLalXbvIoHzQ9zVEKZYxr"
         case .localhost:
             return "pk_test_C5ukBJM7qr5P1F8dY4XKhdyp"
         }
     }
 }
+
+
+var BT_API_ClientID : String{
+    get{
+        switch environment{
+        case .development:
+            return "sandbox_9qm88ts8_znhjthkx85kvbd4q"
+        case .production:
+            return "ASn8rBbWMwbXc8WXi95vZLie39PhlN7eAIabqKUagh19NUp0rQwmK1JTotq9ljatFtxvSX_gN4sKrMfd"
+        case .localhost:
+            return "sandbox_9qm88ts8_znhjthkx85kvbd4q"
+        }
+    }
+}
+
 
 var PayPal_Client_ID : String{
     get{
@@ -112,12 +127,15 @@ var PayPal_Client_ID : String{
         case .development:
             return ""
         case .production:
-            return ""
+            return "ASn8rBbWMwbXc8WXi95vZLie39PhlN7eAIabqKUagh19NUp0rQwmK1JTotq9ljatFtxvSX_gN4sKrMfd"
         case .localhost:
             return ""
         }
     }
 }
+
+let dataPartnerId = "WIJPEXN"
+let appName = "ParadiseTerra"
 
 var BASE_URL : String {
     get {

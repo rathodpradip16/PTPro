@@ -19,6 +19,7 @@ class SwitchtohostCell: UITableViewCell {
     
     @IBOutlet weak var profileRightValueLabel: UILabel!
     @IBOutlet weak var profileLblLeadingConstraint: NSLayoutConstraint!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         profileSettingLabel.font = UIFont(name: APP_FONT, size: 14)

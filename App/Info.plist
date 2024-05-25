@@ -28,6 +28,16 @@
 			<key>CFBundleURLName</key>
 			<string>com.paradise.terra</string>
 		</dict>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLName</key>
+            <string>com.paradise.terra.payments</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>com.paradise.terra.payments</string>
+            </array>
+        </dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>

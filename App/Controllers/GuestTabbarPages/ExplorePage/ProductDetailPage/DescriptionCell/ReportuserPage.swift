@@ -53,7 +53,7 @@ class ReportuserPage: UIViewController,UITableViewDelegate,UITableViewDataSource
         reportuserTable.estimatedRowHeight = 50
         reportuserTable.rowHeight = UITableView.automaticDimension
        
-        reportcontentArray = ["\((Utility.shared.getLanguage()?.value(forKey:"shoudnotavailable"))!)","\((Utility.shared.getLanguage()?.value(forKey:"attemptinfo"))!)","\((Utility.shared.getLanguage()?.value(forKey:"inappropriatespam"))!)"]
+        reportcontentArray = [String(format:"\((Utility.shared.getLanguage()?.value(forKey:"shoudnotavailable"))!)",appName),"\((Utility.shared.getLanguage()?.value(forKey:"attemptinfo"))!)","\((Utility.shared.getLanguage()?.value(forKey:"inappropriatespam"))!)"]
         reportAPIArray = ["shouldnt_available","direct_contact","spam"]
         saveBtn.layer.cornerRadius = saveBtn.frame.size.height/2
         saveBtn.layer.masksToBounds = true

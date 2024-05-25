@@ -15,7 +15,7 @@ class paymentpaypalcell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
        
-        paydescriptionLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"paypaldescription"))!)"
+        paydescriptionLabel.text = String(format:"\((Utility.shared.getLanguage()?.value(forKey:"paypaldescription"))!)",appName,appName)
 
         paydescriptionLabel.font = UIFont(name: APP_FONT, size: 14)
         paydescriptionLabel.textColor =   UIColor(named: "searchPlaces_TextColor")

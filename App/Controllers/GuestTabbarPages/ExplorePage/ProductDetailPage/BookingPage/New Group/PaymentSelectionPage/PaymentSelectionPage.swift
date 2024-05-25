@@ -339,7 +339,7 @@ class PaymentSelectionPage: UIViewController {
             backBtn.rotateImageViewofBtn()
         }
         setdropdown()
-        self.braintreeClient = BTAPIClient(authorization: "sandbox_9qm88ts8_znhjthkx85kvbd4q")
+        self.braintreeClient = BTAPIClient(authorization: BT_API_ClientID)
     }
     
     
