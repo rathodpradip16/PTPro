@@ -20,6 +20,8 @@ import FirebaseMessaging
 import Siren
 import Braintree
 import GooglePlaces
+import FBSDKCoreKit
+
 //#import "PayPalMobile.h"
 
 //MARK: **************************************** GLOBAL VARIABLE DECLARATIONS **************************************************************>
@@ -368,21 +370,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     }
     
     func getStripePublishableKey(){
+        STPAPIClient.shared.publishableKey = STRIPE_PUBLISHABLE_KEY
+        STPPaymentConfiguration.shared.publishableKey = STRIPE_PUBLISHABLE_KEY
+        STPPaymentConfiguration.shared.requiredBillingAddressFields = .none
         
-        let getStripeKey = PTProAPI.GetPaymentSettingsQuery()
-        
-        Network.shared.apollo_headerClient.fetch(query: getStripeKey){ response in
-            switch response {
-            case .success(let result):
-                if result == nil{
-                    STPPaymentConfiguration.shared.publishableKey = STRIPE_PUBLISHABLE_KEY
-                }else{
-                    STPPaymentConfiguration.shared.publishableKey = result.data?.getPaymentSettings?.result?.publishableKey
-                    STPPaymentConfiguration.shared.requiredBillingAddressFields = .none
-                }
-            case .failure(_): break
-            }
-        }
+//        let getStripeKey = PTProAPI.GetPaymentSettingsQuery()
+//        
+//        Network.shared.apollo_headerClient.fetch(query: getStripeKey){ response in
+//            switch response {
+//            case .success(let result):
+//                if result == nil{
+//                  //  STPPaymentConfiguration.shared.publishableKey = STRIPE_PUBLISHABLE_KEY
+//                    STPAPIClient.shared.publishableKey = STRIPE_PUBLISHABLE_KEY
+//                }else{
+//                 //   STPPaymentConfiguration.shared.publishableKey = result.data?.getPaymentSettings?.result?.publishableKey
+//                    STPAPIClient.shared.publishableKey = result.data?.getPaymentSettings?.result?.publishableKey
+//                    STPPaymentConfiguration.shared.requiredBillingAddressFields = .none
+//                }
+//            case .failure(_): break
+//            }
+//        }
     }
 
     
@@ -1026,8 +1033,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
                } else {
                    // This was not a Stripe url – handle the URL normally as you would
                }
+        
+        ApplicationDelegate.shared.application(
+            app,
+            open: url,
+            sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+            annotation: options[UIApplication.OpenURLOptionsKey.annotation]
+        )
         return true
     }
+    
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
 
         let facebookHandle = ApplicationDelegate.shared.application(application,open: (url as URL?)!,sourceApplication: sourceApplication,annotation: annotation)
@@ -1660,6 +1675,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
 //                }
 //            }
         }
- 
-
 }

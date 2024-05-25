@@ -335,6 +335,7 @@ class PaymentSelectionPage: UIViewController {
         proceedToPayBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey: "Proceed_Pay") ?? "Proceed to pay")", for: .normal)
         proceedToPayBtn.layer.cornerRadius = proceedToPayBtn.frame.size.height / 2
         proceedToPayBtn.layer.masksToBounds = true
+        proceedToPayBtn.backgroundColor = Theme.Button_BG
         if Utility.shared.isRTLLanguage(){
             backBtn.rotateImageViewofBtn()
         }

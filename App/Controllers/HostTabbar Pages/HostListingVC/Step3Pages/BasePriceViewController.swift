@@ -167,6 +167,7 @@ class BasePriceViewController: BaseHostTableviewController {
             switch response {
             case .success(let result):
                 if let pricing = result.data?.pricing, let results = pricing.results,results.count != 0{
+
                     self.arrPricingResult = results
                     self.arrPricingFilter.removeAll()
                     self.arrCurrentPricingFilter.removeAll()
@@ -189,6 +190,7 @@ class BasePriceViewController: BaseHostTableviewController {
                     
                     if let arrData = self.arrPricingResult[0]{
                         self.pricePredection = "\(arrData.basePrice ?? 0)"
+                        self.pricePredectionLabel = "\(pricing.errorMessage ?? "Best price you can put here")"
 
                         if let userAmenities = arrData.userAmenities{
                             arrUserAmenites = userAmenities
@@ -440,15 +442,19 @@ class BasePriceViewController: BaseHostTableviewController {
                         dicScore1["score"] = "\(self.currentTotalScore)"
                         self.arrCurrentPricingFilter.append(dicScore1)
                     }else{
+                        self.pricePredection = ""
                         if let msg = pricing.errorMessage{
                             self.pricePredectionLabel = msg
-                            self.pricePredection = ""
+                        }else{
+                            self.pricePredectionLabel = "Your Price is Already Best"
                         }
                     }
                 }else{
+                    self.pricePredection = ""
                     if let msg = result.data?.pricing?.errorMessage{
                         self.pricePredectionLabel = msg
-                        self.pricePredection = ""
+                    }else{
+                        self.pricePredectionLabel = "Your Price is Already Best"
                     }
                 }
                 self.tableView.reloadData()
@@ -714,7 +720,8 @@ class BasePriceViewController: BaseHostTableviewController {
                 cell?.lblPrice.text = "\(pricePredectionLabel)"
             }else{
                 cell?.lblBestPriceTitle.isHidden = false
-                cell?.lblPrice.text = "\(Utility.shared.currencyvalue)\(pricePredection)"
+                cell?.lblBestPriceTitle.text = "\(pricePredectionLabel)"
+                cell?.lblPrice.text = "\(Utility.shared.getCurrency()?.value(forKey: Utility.shared.currencyvalue) ?? "$")\(pricePredection)"
             }
             cell?.selectionStyle = .none
             

@@ -10,6 +10,8 @@ import UIKit
 import Alamofire
 
 class OrderSummaryVC: UIViewController {
+    @IBOutlet weak var lblTilte: UILabel!
+
     @IBOutlet weak var lblPlanName: UILabel!
     @IBOutlet weak var viewOrderSummary: UIView!
     
@@ -36,6 +38,7 @@ class OrderSummaryVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lblTilte.text = appName
         self.GetReceiptPaymentQueryAPICall()
         
         switch selectedPlan{

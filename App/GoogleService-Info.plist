@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at.apps.googleusercontent.com</string>
+	<string>1059773356859-b7s99h13ai87dchullamd6lkqcfc020c.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1059773356859-ijc0h2t6k5dvnqi9s0s5hp1poac6r2at</string>
+	<string>com.googleusercontent.apps.1059773356859-b7s99h13ai87dchullamd6lkqcfc020c</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>1059773356859-d50knriuh38abearkdsvei8g05r0b19b.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,22 +15,22 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ptpro.solutionvalley</string>
+	<string>com.paradise.terra</string>
 	<key>PROJECT_ID</key>
 	<string>ptprofirebase</string>
 	<key>STORAGE_BUCKET</key>
 	<string>ptprofirebase.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1059773356859:ios:58627f543b3e6f44cbb51e</string>
+	<string>1:1059773356859:ios:f7adcffeeaab2209cbb51e</string>
 </dict>
 </plist>

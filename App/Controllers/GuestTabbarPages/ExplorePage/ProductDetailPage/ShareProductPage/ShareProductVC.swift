@@ -54,7 +54,7 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
         shareTable.register(UINib(nibName: "ShareProductCell", bundle: nil), forCellReuseIdentifier: "ShareProductCell")
         shareTable.register(UINib(nibName: "ShareListCell", bundle: nil), forCellReuseIdentifier: "ShareListCell")
           let profileimage = viewListingArray?.listPhotoName!
-        self.backgrndImage.sd_setImage(with: URL(string:"\(IMAGE_LISTING_MEDIUM)\(String(describing: profileimage))"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
+        self.backgrndImage.sd_setImage(with: URL(string:"\(IMAGE_LISTING_MEDIUM)\(profileimage ?? "")"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
     }
     //MARK:*************************************************** TABLEVIEW DELEGATE & DATASOURCE METHODS ************************************************>
     
@@ -85,7 +85,7 @@ class ShareProductVC: UIViewController,UITableViewDelegate,UITableViewDataSource
             cell.imgBckgrdView.layer.cornerRadius = 5.0
             cell.imgBckgrdView.clipsToBounds = true
             let profileimage = viewListingArray?.listPhotoName!
-            cell.productImg.sd_setImage(with: URL(string:"\(IMAGE_LISTING_MEDIUM)\(String(describing: profileimage))"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
+            cell.productImg.sd_setImage(with: URL(string:"\(IMAGE_LISTING_MEDIUM)\(profileimage ?? "")"), placeholderImage: #imageLiteral(resourceName: "placeholderimg"))
             cell.productTitleLabel.text = viewListingArray?.title!
             cell.productTitleLabel.backgroundColor = UIColor(named: "colorController")
             cell.closeBtn.addTarget(self, action: #selector(closeBtnTapped), for: .touchUpInside)
