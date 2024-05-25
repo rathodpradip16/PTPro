@@ -97,7 +97,7 @@ var STRIPE_PUBLISHABLE_KEY : String{
     get{
         switch environment{
         case .development:
-            return "pk_test_C5ukBJM7qr5P1F8dY4XKhdyp"
+            return "pk_live_vRogLalXbvIoHzQ9zVEKZYxr"
         case .production:
             return "pk_live_vRogLalXbvIoHzQ9zVEKZYxr"
         case .localhost:
@@ -111,7 +111,7 @@ var BT_API_ClientID : String{
     get{
         switch environment{
         case .development:
-            return "sandbox_9qm88ts8_znhjthkx85kvbd4q"
+            return "ASn8rBbWMwbXc8WXi95vZLie39PhlN7eAIabqKUagh19NUp0rQwmK1JTotq9ljatFtxvSX_gN4sKrMfd"
         case .production:
             return "ASn8rBbWMwbXc8WXi95vZLie39PhlN7eAIabqKUagh19NUp0rQwmK1JTotq9ljatFtxvSX_gN4sKrMfd"
         case .localhost:
@@ -125,7 +125,7 @@ var PayPal_Client_ID : String{
     get{
         switch environment{
         case .development:
-            return ""
+            return "ASn8rBbWMwbXc8WXi95vZLie39PhlN7eAIabqKUagh19NUp0rQwmK1JTotq9ljatFtxvSX_gN4sKrMfd"
         case .production:
             return "ASn8rBbWMwbXc8WXi95vZLie39PhlN7eAIabqKUagh19NUp0rQwmK1JTotq9ljatFtxvSX_gN4sKrMfd"
         case .localhost:
