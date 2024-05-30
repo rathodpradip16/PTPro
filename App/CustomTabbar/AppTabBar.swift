@@ -65,9 +65,19 @@ class AppTabBar: UITabBar {
 }
 
 extension UITabBar {
+    static let height: CGFloat = 49.0
+
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
+        guard let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first else {
+            return super.sizeThatFits(size)
+        }
+        
         var sizeThatFits = super.sizeThatFits(size)
-        sizeThatFits.height = 74
+        if #available(iOS 11.0, *) {
+            sizeThatFits.height = UITabBar.height + window.safeAreaInsets.bottom
+        } else {
+            sizeThatFits.height = UITabBar.height
+        }
         return sizeThatFits
     }
 }

@@ -63,14 +63,22 @@ class CustomTabbar: UITabBarController,UITabBarControllerDelegate {
     
     
     func configBtn(){
+
+        let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first
         
-        if (IS_IPHONE_XR || IS_IPHONE_X || IS_IPHONE_XS_MAX) {
-            self.tabBar.frame.size.height = 83
-            tabBar.frame.origin.y = view.frame.height - 83
-        }else{
-            self.tabBar.frame.size.height = 49
+        if #available(iOS 11.0, *) {
+            tabBar.frame.origin.y = view.frame.height - (49 + (window?.safeAreaInsets.bottom ?? 34))
+        } else {
             tabBar.frame.origin.y = view.frame.height - 49
         }
+        
+//        if (IS_IPHONE_XR || IS_IPHONE_X || IS_IPHONE_XS_MAX) {
+//            self.tabBar.frame.size.height = 83
+//            tabBar.frame.origin.y = view.frame.height - 83
+//        }else{
+//            self.tabBar.frame.size.height = 49
+//            tabBar.frame.origin.y = view.frame.height - 49
+//        }
         
         let middleView = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
 
@@ -238,3 +246,4 @@ class CustomTabbar: UITabBarController,UITabBarControllerDelegate {
      */
     
 }
+
