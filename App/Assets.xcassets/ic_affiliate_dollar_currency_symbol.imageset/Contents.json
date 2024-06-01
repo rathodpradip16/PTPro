@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_affiliate_dollar_currency_symbol.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "ic_affiliate_dollar_currency_symbol@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "ic_affiliate_dollar_currency_symbol@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
