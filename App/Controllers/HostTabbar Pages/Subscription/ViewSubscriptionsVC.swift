@@ -307,6 +307,12 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
 //        cell.btnSegment.backgroundColor = Theme.subSegmentBgColor
 
         cell.btnSegment.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
+    
+        cell.btnStartHere.setTitle("", for: .normal)
+        cell.btnStartHere.addTarget(self, action: #selector(onClickStartHere(sender:)), for: .touchUpInside)
+        cell.viewStartHere.isHidden = true
+        cell.imgDownArrow.isHidden = true
+
         switch arrPlans[indexPath.row].title ?? ""{
         case "Economy":
             cell.lblMemberShipCard.text = "MEMBERSHIP CARD"
@@ -386,6 +392,8 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
             cell.lblExpDate.text = ""
             cell.lblActiveSub.text = ""
         }else if let intStatus = arrPlans[indexPath.row].status,intStatus == 1{
+            cell.viewStartHere.isHidden = false
+            cell.imgDownArrow.isHidden = false
             cell.imgBigIcon.image = UIImage(named: "")
             cell.viewSegment.isHidden = true
             cell.viewListNow.isHidden = false
@@ -433,6 +441,16 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         
     }
+
+    @objc func onClickStartHere(sender:UIButton){
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+
+        Utility.shared.setopenTabbar(iswhichtabbar: true)
+        appDelegate.addingElementsToObjects()
+        self.view.window?.rootViewController?.dismiss(animated: false, completion: nil)
+        Utility.shared.setHostTab(index: 0)
+        appDelegate.HostTabbarInitialize(initialView: CustomHostTabbar())
+    }
     
     @objc func onClickListNow(sender:UIButton){
         if let intStatus = arrPlans[sender.tag].status,intStatus == 1{
@@ -453,7 +471,7 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
                 paymentSelectionPage.modalPresentationStyle = .fullScreen
                 self.present(paymentSelectionPage, animated: true, completion: nil)
             }))
-            alert.addAction(UIAlertAction(title: "Cancel Plan", style: .default, handler: { action in
+            alert.addAction(UIAlertAction(title: "Cancel Membership", style: .default, handler: { action in
                 self.confirmCancelPlan()
             }))
             alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: { action in

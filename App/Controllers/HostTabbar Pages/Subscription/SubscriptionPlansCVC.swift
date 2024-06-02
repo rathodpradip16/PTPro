@@ -29,4 +29,7 @@ class SubscriptionPlansCVC: UICollectionViewCell {
     @IBOutlet weak var lblExpDate: UILabel!
     @IBOutlet weak var lblActiveSub: UILabel!
 
+    @IBOutlet weak var btnStartHere: UIButton!
+    @IBOutlet weak var viewStartHere: UIView!
+    @IBOutlet weak var imgDownArrow: UIImageView!
 }

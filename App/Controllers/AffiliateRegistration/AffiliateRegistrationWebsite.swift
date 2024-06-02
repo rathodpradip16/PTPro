@@ -33,7 +33,7 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     
     
     @IBOutlet weak var btnAmenities: UIButton!
-    @IBOutlet weak var btnCountry: UIButton!
+    @IBOutlet weak var btnTravelEvents: UIButton!
     @IBOutlet weak var btnLorem: UIButton!
     
     @IBOutlet weak var btnECommerceWebsite: UIButton!
@@ -52,17 +52,19 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     @IBOutlet weak var btnNext: UIButton!
     @IBOutlet weak var btnPrevious: UIButton!
     
-    var dicSelectedTypeList : [String:Bool] = ["Travel Products":false,"⁠Travel Events":false,"Other":false]
-    var dicSelectedDriveWebSitelist : [String:Bool] = ["ECommerce website":false,
-                                                       "Business website":false,
-                                                       "Blog website":false,
-                                                       "Portfolio website":false,
-                                                       "Event website":false,
-                                                       "Personal website":false,
-                                                       "Membership website":false,
-                                                       "Nonprofit website":false,
-                                                       "Informational website":false,
-                                                       "Online forum":false]
+    var dicSelectedTypeList : [String:Bool] = [appKeys.TravelProducts:false,
+                                               appKeys.Other:false,
+                                               appKeys.TravelEvents:false]
+    var dicSelectedDriveWebSitelist : [String:Bool] = [appKeys.ECommerceWebsite:false,
+                                                       appKeys.BusinessWebsite:false,
+                                                       appKeys.BlogWebsite:false,
+                                                       appKeys.PortfolioWebsite:false,
+                                                       appKeys.EventWebsite:false,
+                                                       appKeys.PersonalWebsite:false,
+                                                       appKeys.MembershipWebsite:false,
+                                                       appKeys.NonprofitWebsite:false,
+                                                       appKeys.InformationalWebsite:false,
+                                                       appKeys.OnlineForum:false]
     
     //MARK: - VIEW LIFE CYCLE
     override func viewDidLoad() {
@@ -73,16 +75,16 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
         self.initializeBtnListData()
  
         // The list of array to display. Can be changed dynamically
-        dropDownWhatTypeOfSiteIsYourWebsite.optionArray = ["ECommerce website",
-                                                           "Business website",
-                                                           "Blog website",
-                                                           "Portfolio website",
-                                                           "Event website",
-                                                           "Personal website",
-                                                           "Membership website",
-                                                           "Nonprofit website",
-                                                           "Informational website",
-                                                           "Online forum"]
+        dropDownWhatTypeOfSiteIsYourWebsite.optionArray = [appKeys.ECommerceWebsite,
+                                                           appKeys.BusinessWebsite,
+                                                           appKeys.BlogWebsite,
+                                                           appKeys.PortfolioWebsite,
+                                                           appKeys.EventWebsite,
+                                                           appKeys.PersonalWebsite,
+                                                           appKeys.MembershipWebsite,
+                                                           appKeys.NonprofitWebsite,
+                                                           appKeys.InformationalWebsite,
+                                                           appKeys.OnlineForum]
         dropDownWhatTypeOfSiteIsYourWebsite.rowHeight = 40
         dropDownWhatTypeOfSiteIsYourWebsite.listHeight = 200
         dropDownWhatTypeOfSiteIsYourWebsite.borderC = UIColor.lightGray
@@ -113,24 +115,24 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     }
     
     func initializeBtnListData(){
-        btnAmenities.setImage(#imageLiteral(resourceName: dicSelectedTypeList["Travel Products"] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnCountry.setImage(#imageLiteral(resourceName: dicSelectedTypeList["Travel Events"] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnLorem.setImage(#imageLiteral(resourceName: dicSelectedTypeList["Other"] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnAmenities.setImage(#imageLiteral(resourceName: dicSelectedTypeList[appKeys.TravelProducts] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnTravelEvents.setImage(#imageLiteral(resourceName: dicSelectedTypeList[ appKeys.TravelEvents ] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnLorem.setImage(#imageLiteral(resourceName: dicSelectedTypeList[appKeys.Other] ?? false ? "checked" : "unchecked"), for: .normal)
         
-        btnECommerceWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnECommerceWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnBusinessWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnBusinessWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnBlogWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnBlogWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnPortfolioWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnPortfolioWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnEventWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnEventWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnPersonalWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnPersonalWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnMembershipWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnMembershipWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnNonprofitWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnNonprofitWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnInformationalWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnInformationalWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
-        btnOnlineWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnOnlineWebsite.titleLabel?.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnECommerceWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnECommerceWebsite.titleLabel!.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnBusinessWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnBusinessWebsite.titleLabel!.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnBlogWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnBlogWebsite.titleLabel!.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnPortfolioWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnPortfolioWebsite.titleLabel!.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnEventWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnEventWebsite.titleLabel!.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnPersonalWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnPersonalWebsite.titleLabel!.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnMembershipWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnMembershipWebsite.titleLabel!.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnNonprofitWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnNonprofitWebsite.titleLabel!.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnInformationalWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnInformationalWebsite.titleLabel!.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
+        btnOnlineWebsite.setImage(#imageLiteral(resourceName: dicSelectedDriveWebSitelist[btnOnlineWebsite.titleLabel!.text ?? ""] ?? false ? "checked" : "unchecked"), for: .normal)
         
         btnAmenities.tintColor = Theme.affiliatePurpleColor
         btnAmenities.tintColor = Theme.affiliatePurpleColor
-        btnCountry.tintColor = Theme.affiliatePurpleColor
+        btnTravelEvents.tintColor = Theme.affiliatePurpleColor
         btnLorem.tintColor = Theme.affiliatePurpleColor
         btnECommerceWebsite.tintColor = Theme.affiliatePurpleColor
         btnBusinessWebsite.tintColor = Theme.affiliatePurpleColor
@@ -174,6 +176,21 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
             btnInformationalWebsite.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
             btnOnlineWebsite.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         }
+        
+        btnAmenities.setTitle(appKeys.TravelProducts, for: .normal)
+        btnTravelEvents.setTitle(appKeys.TravelEvents, for: .normal)
+        btnLorem.setTitle(appKeys.Other, for: .normal)
+        
+        btnECommerceWebsite.setTitle(appKeys.ECommerceWebsite, for: .normal)
+        btnBusinessWebsite.setTitle(appKeys.BusinessWebsite, for: .normal)
+        btnBlogWebsite.setTitle(appKeys.BlogWebsite, for: .normal)
+        btnPortfolioWebsite.setTitle(appKeys.PortfolioWebsite, for: .normal)
+        btnEventWebsite.setTitle(appKeys.EventWebsite, for: .normal)
+        btnPersonalWebsite.setTitle(appKeys.PersonalWebsite, for: .normal)
+        btnMembershipWebsite.setTitle(appKeys.MembershipWebsite, for: .normal)
+        btnNonprofitWebsite.setTitle(appKeys.NonprofitWebsite, for: .normal)
+        btnInformationalWebsite.setTitle(appKeys.InformationalWebsite, for: .normal)
+        btnOnlineWebsite.setTitle(appKeys.OnlineForum, for: .normal)
     }
     
     func initializeLocalization(){
@@ -191,48 +208,53 @@ class AffiliateRegistrationWebsite: UIViewController,UITextFieldDelegate{
     
     //MARK: - Action Methods
     @IBAction func onClickAmenities(_ sender: UIButton) {
-        if let strTitleLabel = sender.titleLabel,let txt = strTitleLabel.text,dicSelectedTypeList[txt] ?? false{
-            dicSelectedTypeList["Travel Products"] = false
+        if dicSelectedTypeList[appKeys.TravelProducts] == true{
+            dicSelectedTypeList.updateValue(false, forKey: appKeys.TravelProducts)
             sender.setImage(#imageLiteral(resourceName: "unchecked"), for: .normal)
         }else{
-            dicSelectedTypeList["Travel Products"] = true
+            dicSelectedTypeList.updateValue(true, forKey: appKeys.TravelProducts)
             sender.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
         }
         sender.tintColor = Theme.affiliatePurpleColor
-        
+        print(dicSelectedTypeList)
     }
     
-    @IBAction func onClickCountry(_ sender: UIButton) {
-        if let strTitleLabel = sender.titleLabel,let txt = strTitleLabel.text,dicSelectedTypeList[txt] ?? false{
-                dicSelectedTypeList["Travel Events"] = false
+    @IBAction func onClickTravelEvents(_ sender: UIButton) {
+        if dicSelectedTypeList[ appKeys.TravelEvents ] == true{
+                                dicSelectedTypeList.updateValue(false, forKey: appKeys.TravelEvents )
                 sender.setImage(#imageLiteral(resourceName: "unchecked"), for: .normal)
         }else{
-            dicSelectedTypeList["Travel Events"] = true
+            dicSelectedTypeList.updateValue(true, forKey: appKeys.TravelEvents )
             sender.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
         }
         sender.tintColor = Theme.affiliatePurpleColor
+        print(dicSelectedTypeList)
     }
     
     @IBAction func onClickLorem(_ sender: UIButton) {
-        if let strTitleLabel = sender.titleLabel,let txt = strTitleLabel.text,dicSelectedTypeList[txt] ?? false{
-            dicSelectedTypeList["Other"] = false
+        if dicSelectedTypeList[appKeys.Other] == true{
+            dicSelectedTypeList.updateValue(false, forKey: appKeys.Other)
             sender.setImage(#imageLiteral(resourceName: "unchecked"), for: .normal)
         }else{
-            dicSelectedTypeList["Other"] = true
+            dicSelectedTypeList.updateValue(true, forKey: appKeys.Other)
             sender.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
         }
         sender.tintColor = Theme.affiliatePurpleColor
+        print(dicSelectedTypeList)
     }
     
     @IBAction func onClickHowYouDriveTrafficToYourWebsite(_ sender: UIButton) {
-        if let strTitleLabel = sender.titleLabel,let txt = strTitleLabel.text,dicSelectedTypeList[txt] ?? false{
-            dicSelectedDriveWebSitelist[txt] = false
+        if let strTitleLabel = sender.titleLabel,let txt = strTitleLabel.text,dicSelectedDriveWebSitelist[txt] ?? false{
+            dicSelectedDriveWebSitelist.updateValue(false, forKey: txt)
             sender.setImage(#imageLiteral(resourceName: "unchecked"), for: .normal)
         }else{
-            dicSelectedDriveWebSitelist[sender.titleLabel!.text!] = true
+            dicSelectedDriveWebSitelist.updateValue(true, forKey: sender.titleLabel!.text!)
             sender.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
         }
         sender.tintColor = Theme.affiliatePurpleColor
+        print(dicSelectedTypeList)
+        print(dicSelectedDriveWebSitelist)
+
     }
     
     @IBAction func onClickBtnNext(_ sender: Any) {

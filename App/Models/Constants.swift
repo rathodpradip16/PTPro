@@ -315,3 +315,19 @@ extension UINavigationController {
         return self.visibleViewController!.topMostViewController()
     }
 }
+
+struct appKeys{
+    static let TravelProducts = "Travel Products"
+    static let Other = "Other"
+    static let TravelEvents = "Travel Events"
+    static let ECommerceWebsite = "ECommerce website"
+    static let BusinessWebsite = "Business website"
+    static let BlogWebsite = "Blog website"
+    static let PortfolioWebsite = "Portfolio website"
+    static let EventWebsite = "Event website"
+    static let PersonalWebsite = "Personal website"
+    static let MembershipWebsite = "Membership website"
+    static let NonprofitWebsite = "Nonprofit website"
+    static let InformationalWebsite = "Informational website"
+    static let OnlineForum = "Online forum"
+}
