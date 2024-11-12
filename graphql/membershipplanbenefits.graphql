@@ -1,0 +1,21 @@
+query membershipplanbenefits($userId: String,){
+membershipplanbenefits(userId:$userId){
+errorMessage
+status
+results{
+id
+title
+one
+two
+three
+four
+five
+six
+seven
+eight
+monthly
+yearly
+currency
+}
+}
+}

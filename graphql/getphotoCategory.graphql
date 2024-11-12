@@ -1,0 +1,14 @@
+query getphotoCategory {
+getphotoCategory{
+status
+errorMessage
+results {
+photoCategorysTypes {
+id
+photoCategoryId
+name
+svgurl
+}
+}
+}
+}

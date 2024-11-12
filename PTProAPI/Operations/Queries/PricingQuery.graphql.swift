@@ -8,12 +8,12 @@ extension PTProAPI {
     static let operationName: String = "pricing"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query pricing($listId: Int) { pricing(listId: $listId) { __typename errorMessage status results { __typename id title distance basePrice score UserAmenities { __typename itemName score } sefetyAmenities { __typename itemName score } places { __typename itemName score } userspace { __typename itemName score } otherdata { __typename bedrooms personCapacity cancle bookingtype } rating { __typename rating } occupacy { __typename occupacy } } currentPropertyResult { __typename id title distance basePrice score UserAmenities { __typename itemName score } sefetyAmenities { __typename itemName score } places { __typename itemName score } userspace { __typename itemName score } otherdata { __typename bedrooms personCapacity cancle bookingtype } rating { __typename rating } occupacy { __typename occupacy } } } }"#
+        #"query pricing($listId: Int!) { pricing(listId: $listId) { __typename errorMessage status results { __typename id title distance baseprice score UserAmenities { __typename itemName score } sefetyAmenities { __typename itemName score } places { __typename itemName score } userspace { __typename itemName score } otherdata { __typename bedrooms personCapacity cancle bookingtype } rating { __typename rating } occupacy { __typename occupacy } } currentPropertyResult { __typename id title distance baseprice score UserAmenities { __typename itemName score } sefetyAmenities { __typename itemName score } places { __typename itemName score } userspace { __typename itemName score } otherdata { __typename bedrooms personCapacity cancle bookingtype } rating { __typename rating } occupacy { __typename occupacy } } } }"#
       ))
 
-    public var listId: GraphQLNullable<Int>
+    public var listId: Int
 
-    public init(listId: GraphQLNullable<Int>) {
+    public init(listId: Int) {
       self.listId = listId
     }
 
@@ -64,7 +64,7 @@ extension PTProAPI {
             .field("id", Int?.self),
             .field("title", String?.self),
             .field("distance", Double?.self),
-            .field("basePrice", Int?.self),
+            .field("baseprice", Int?.self),
             .field("score", Double?.self),
             .field("UserAmenities", [UserAmenity?]?.self),
             .field("sefetyAmenities", [SefetyAmenity?]?.self),
@@ -78,7 +78,7 @@ extension PTProAPI {
           var id: Int? { __data["id"] }
           var title: String? { __data["title"] }
           var distance: Double? { __data["distance"] }
-          var basePrice: Int? { __data["basePrice"] }
+          var baseprice: Int? { __data["baseprice"] }
           var score: Double? { __data["score"] }
           var userAmenities: [UserAmenity?]? { __data["UserAmenities"] }
           var sefetyAmenities: [SefetyAmenity?]? { __data["sefetyAmenities"] }
@@ -228,7 +228,7 @@ extension PTProAPI {
             .field("id", Int?.self),
             .field("title", String?.self),
             .field("distance", Double?.self),
-            .field("basePrice", Int?.self),
+            .field("baseprice", Int?.self),
             .field("score", Double?.self),
             .field("UserAmenities", [UserAmenity?]?.self),
             .field("sefetyAmenities", [SefetyAmenity?]?.self),
@@ -242,7 +242,7 @@ extension PTProAPI {
           var id: Int? { __data["id"] }
           var title: String? { __data["title"] }
           var distance: Double? { __data["distance"] }
-          var basePrice: Int? { __data["basePrice"] }
+          var baseprice: Int? { __data["baseprice"] }
           var score: Double? { __data["score"] }
           var userAmenities: [UserAmenity?]? { __data["UserAmenities"] }
           var sefetyAmenities: [SefetyAmenity?]? { __data["sefetyAmenities"] }

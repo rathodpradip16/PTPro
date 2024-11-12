@@ -31,6 +31,26 @@ class PlaceListingViewController: BaseHostTableviewController,GuestListingViewCo
     @IBOutlet weak var saveAndExit: UIButton!
     @IBOutlet weak var retryButn: UIButton!
     
+    @IBOutlet weak var viewBedAndBath: UIView!
+    @IBOutlet weak var lblHowManyBedsCanGuestUse: UILabel!
+    @IBOutlet weak var imgBath: UIImageView!
+    @IBOutlet weak var imgBed: UIImageView!
+    @IBOutlet weak var lblBath: UILabel!
+    @IBOutlet weak var lblBed: UILabel!
+    
+    @IBOutlet weak var btnBathMinus: UIButton!
+    @IBOutlet weak var btnBathPlus: UIButton!
+    @IBOutlet weak var btnBedMinus: UIButton!
+    @IBOutlet weak var btnBedPlus: UIButton!
+    @IBOutlet weak var btnBBAdd: UIButton!
+    @IBOutlet weak var btnBBCancel: UIButton!
+
+    @IBOutlet weak var lblBathroomCount: UILabel!
+    @IBOutlet weak var lblBedroomCount: UILabel!
+
+    @IBOutlet weak var viewBedBathBG: UIView!
+    
+    var MaxBedCount:Int = 0
     
     @IBOutlet var bottomView: UIView!
     @IBOutlet var progressViewWidth: NSLayoutConstraint!
@@ -98,6 +118,13 @@ class PlaceListingViewController: BaseHostTableviewController,GuestListingViewCo
         self.stepsTitleView.selectedViewIndex = 0
        
         self.stepsTitleView.delegateSteps = self
+       
+        viewBedAndBath.isHidden = true
+        viewBedBathBG.isHidden = true
+        // Add tap gesture recognizer to dismiss when tapping outside of the pop-up
+//  let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapOutside))
+//  self.viewBedBathBG.addGestureRecognizer(tapGesture)
+        updateLabels()
     }
     
     override func viewDidLayoutSubviews() {
@@ -153,6 +180,23 @@ class PlaceListingViewController: BaseHostTableviewController,GuestListingViewCo
         tableView.reloadData()
     }
     
+    // Update the labels with current values
+    func updateLabels() {
+        btnBathMinus.setTitle("", for: .normal)
+        btnBathPlus.setTitle("", for: .normal)
+        btnBedMinus.setTitle("", for: .normal)
+        btnBedPlus.setTitle("", for: .normal)
+        lblBathroomCount.text = "\(Utility.shared.bathcount)"
+        lblBedroomCount.text = "\(Utility.shared.bedcount)"
+    }
+    
+//    // Function to dismiss the view when tapping outside the pop-up
+//    @objc func didTapOutside(_ sender: UITapGestureRecognizer) {
+//        let location = sender.location(in: self.view)
+//        viewBedBathBG.isHidden = true
+//        viewBedAndBath.isHidden = true
+//    }
+
     func setHouseType()
     {
         let listSettings = (Utility.shared.getListSettingsArray?.houseType?.listSettings!)!
@@ -321,6 +365,67 @@ class PlaceListingViewController: BaseHostTableviewController,GuestListingViewCo
     //IBActions
     
     @IBAction func RedirectNextPage(_ sender: Any) {
+       
+        if(Utility.shared.createId == 0){
+                let arrCount = buildingSizeLbl.replacingOccurrences(of: "Rooms", with: "").trimmingCharacters(in: .whitespaces).components(separatedBy: "-")
+                if arrCount.count == 2{
+                    MaxBedCount = Int(arrCount[1]) ?? 6
+                }else{
+                    MaxBedCount = 6
+                }
+            viewBedAndBath.isHidden = false
+            viewBedBathBG.isHidden = false
+        }else{
+            self.reDirectToNext()
+        }
+    }
+    
+    @IBAction func onClickBathMinus(_ sender: Any) {
+        if Utility.shared.bathcount > 1 {
+            Utility.shared.bathcount -= 1
+            updateLabels()
+        }
+    }
+
+    @IBAction func onClickPlusBath(_ sender: Any) {
+        Utility.shared.bathcount += 1
+        updateLabels()
+    }
+    
+    @IBAction func onClickBedMinus(_ sender: Any) {
+        if Utility.shared.bedcount > 1 {
+            Utility.shared.bedcount -= 1
+            updateLabels()
+        }
+    }
+    
+    @IBAction func onClickBedPlus(_ sender: Any) {
+        if Utility.shared.bedcount < MaxBedCount{
+            Utility.shared.bedcount += 1
+            updateLabels()
+        }
+    }
+
+    @IBAction func onClickCancel(_ sender: Any) {
+        viewBedAndBath.isHidden = true
+        viewBedBathBG.isHidden = true
+    }
+    
+    @IBAction func onClickAdd(_ sender: Any) {
+        viewBedAndBath.isHidden = true
+        viewBedBathBG.isHidden = true
+      //  self.reDirectToNext()
+        self.redirectToBedBath()
+    }
+    
+    func redirectToBedBath(){
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let bedBathListVC = mainStoryboard.instantiateViewController(withIdentifier: "BedBathListVC") as! BedBathListVC
+        bedBathListVC.modalPresentationStyle = .fullScreen
+        self.present(bedBathListVC, animated: false, completion: nil)
+    }
+
+    func reDirectToNext(){
         if Utility.shared.isConnectedToNetwork(){
         let guestListing = GuestListingViewController()
         guestListing.delegateGuestListing = self
@@ -360,8 +465,8 @@ class PlaceListingViewController: BaseHostTableviewController,GuestListingViewCo
         }else{
             self.goToBecomeHost()
         }
-        
     }
+    
     func goToBecomeHost(){
         let becomeHost = BecomeHostVC()
         becomeHost.listID = "\(Utility.shared.createId)"

@@ -30,12 +30,10 @@ dateOfBirth
 }
 userAmenities {
 id
-image
 itemName
 }
 userSafetyAmenities {
 id
-image
 itemName
 }
 userSpaces {
@@ -61,54 +59,5 @@ bedType
 }
 }
 
-}
-}
-
-query GetListingDetailsStep3($listId:String!, $preview: Boolean) {
-getListingDetails (listId:$listId, preview: $preview) {
-__typename
-status
-errorMessage
-results{
-__typename
-id
-userId
-bookingType
-isPublished
-houseRules {
-__typename
-id
-}
-listingData {
-__typename
-bookingNoticeTime,
-checkInStart,
-checkInEnd,
-maxDaysNotice,
-minNight,
-maxNight,
-basePrice,
-cleaningPrice,
-currency,
-is_affiliate,
-affiliate_commission,
-weeklyDiscount,
-monthlyDiscount,
-cancellationPolicy
-}
-blockedDates {
-__typename
-blockedDates
-reservationId
-}
-calendars {
-__typename
-id
-name
-url
-listId
-status
-}
-}
 }
 }

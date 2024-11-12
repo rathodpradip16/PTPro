@@ -101,7 +101,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
 //MARK: -  IBACTIONS & FUNCTIONS DECLARATIONS
     @IBAction func ListAddBtnTapped(_ sender: Any) {
         if Utility.shared.isConnectedToNetwork(){
-            self.GetPropertieCountAPICAll()
+            self.GoToBaseHostVC()
         }
         else
         {
@@ -128,7 +128,7 @@ class HostListingVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     @IBAction func newListingBtnTapped(_ sender: Any) {
         if Utility.shared.isConnectedToNetwork(){
-           self.GetPropertieCountAPICAll()
+            self.GoToBaseHostVC()
         }
         else
         {

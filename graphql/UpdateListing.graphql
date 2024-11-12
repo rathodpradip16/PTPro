@@ -1,12 +1,13 @@
-mutation UpdateListingStep3(
+mutation updateListingStep3(
 $id: Int,
-$houseRules: [Int],
+$houseRules: String,
 $bookingNoticeTime:String,
 $checkInStart:String,
 $checkInEnd:String,
 $maxDaysNotice:String,
 $minNight:Int,
 $maxNight:Int,
+$earlyCheckInFees:Int,
 $basePrice:Float,
 $cleaningPrice:Float,
 $currency:String,
@@ -17,6 +18,16 @@ $monthlyDiscount:Int,
 $blockedDates: [String],
 $bookingType: String!,
 $cancellationPolicy: Int,
+$petFee:Int,
+$petSelected:Boolean,
+$checkInEntrySelected:Boolean,
+$checkInType:String,
+$texTypeId:Int,
+$taxPercentage:Float,
+$taxPersonAge:Int,
+$taxAmount:Int,
+$aboutHost:String,
+
 )
 {
 updateListingStep3(
@@ -28,6 +39,7 @@ checkInEnd:$checkInEnd,
 maxDaysNotice:$maxDaysNotice,
 minNight:$minNight,
 maxNight:$maxNight,
+earlyCheckInFees:$earlyCheckInFees,
 basePrice:$basePrice,
 cleaningPrice:$cleaningPrice,
 currency:$currency,
@@ -37,26 +49,98 @@ weeklyDiscount:$weeklyDiscount,
 monthlyDiscount:$monthlyDiscount,
 blockedDates: $blockedDates,
 bookingType: $bookingType,
-cancellationPolicy: $cancellationPolicy
+cancellationPolicy: $cancellationPolicy,
+petFee: $petFee,
+petSelected: $petSelected,
+checkInEntrySelected: $checkInEntrySelected,
+checkInType: $checkInType,
+texTypeId: $texTypeId,
+taxPercentage: $taxPercentage,
+taxPersonAge: $taxPersonAge,
+taxAmount: $taxAmount,
+aboutHost: $aboutHost,
 ) {
-results{
-id,
-houseRules,
-bookingNoticeTime,
-checkInStart,
-checkInEnd,
-maxDaysNotice,
-minNight,
-maxNight,
-basePrice,
-cleaningPrice,
-currency,
-is_affiliate,
-affiliate_commission,
-weeklyDiscount,
-monthlyDiscount,
-blockedDates,
+results {
+id
+houseRules {
+isAgeSelected
+isEventSelected
+isPetSelected
+isChildrenSelected
+isSmokingSelected
+age {
+age
+}
+event {
+isBirthDay
+isFamilyGathering
+isOtherSelcted
+otherDetails
+attendees
+}
+pet {
+petNo
+isDogAllowed
+isCatAllowed
+anypet
+petSize
+}
+children {
+twoyears
+twelveyears
+seventeenyears
+}
+smoking {
+indoors
+outDoors
+details
+}
+dynamicRules
+{
+rule
+id
+isSelected
+isYesSelected
+isNoSelected
+Details
+}
 
+}
+bookingNoticeTime
+checkInStart
+checkInEnd
+maxDaysNotice
+minNight
+maxNight
+basePrice
+cleaningPrice
+currency
+is_affiliate
+affiliate_commission
+weeklyDiscount
+monthlyDiscount
+blockedDates
+petFee
+petSelected
+checkInEntrySelected
+checkInType
+earlyCheckInFees
+texTypeId
+taxPercentage
+taxPersonAge
+taxAmount
+aboutHost{
+isProfessional
+bdStreet
+bdApt
+bdCity
+bdState
+bdzipcode
+bdCountry
+bmFirstname
+bmLastname
+businessName
+}
 }
 status
 errorMessage

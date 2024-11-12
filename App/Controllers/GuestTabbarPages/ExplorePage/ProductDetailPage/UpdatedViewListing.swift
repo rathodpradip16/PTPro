@@ -977,11 +977,11 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
 //        self.checkOutValueLabel.textColor = UIColor(named: "searchPlaces_TextColor")
 //        self.checkOutValueLabel.font = UIFont(name: APP_FONT, size: 14.0)
         
-        if self.viewModel?.viewListingArray?.houseRules?.count != 0{
-            self.houseRulesView.isHidden = false
-        }else{
+//        if self.viewModel?.viewListingArray?.houseRules?.count != 0{
+//            self.houseRulesView.isHidden = false
+//        }else{
             self.houseRulesView.isHidden = true
-        }
+//        }
         
         self.houseRulesTitleLabel.text = "\(Utility.shared.getLanguage()?.value(forKey: "houserules") ?? "House rules")"
         self.houseRulesTitleLabel.textColor = UIColor(named: "Title_Header")
@@ -1058,7 +1058,7 @@ class UpdatedViewListing: UIViewController, ImageScrollerDelegate {
     
     @IBAction func onClickHouseRulesBtn(_ sender: UIButton) {
         let houserulesObj = HouseRulesVC()
-        houserulesObj.houserulesArray = self.viewModel?.viewListingArray?.houseRules! as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
+        houserulesObj.houserulesArray = self.viewModel?.viewListingArray?.houseRules! as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRules]
         houserulesObj.titleString = "\((Utility.shared.getLanguage()?.value(forKey:"houserules"))!)"
         houserulesObj.modalPresentationStyle = .fullScreen
         self.present(houserulesObj, animated: true, completion: nil)
@@ -1739,7 +1739,7 @@ extension UpdatedViewListing {
 extension UpdatedViewListing: WhishlistPageVCProtocol, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, SKPhotoBrowserDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.imgCollectionView{
-            return (viewModel?.viewListingArray?.listingPhotos?.count ?? 0) > 0 ? 1 : 0
+            return (viewModel?.viewListingArray?.listPhotos?.count ?? 0) > 0 ? 1 : 0
         }else if collectionView == self.similarListingCollectionView{
             return self.viewModel?.similarlistingArray.count ?? 0
         }else{
@@ -1763,11 +1763,11 @@ extension UpdatedViewListing: WhishlistPageVCProtocol, UICollectionViewDelegate,
             imageScroller.scrollView.bounces = false
         
            
-            let array = self.viewModel?.viewListingArray?.listingPhotos
+            let array = self.viewModel?.viewListingArray?.listPhotos
             
             for j in array!
             {
-                if(self.viewModel?.viewListingArray?.listPhotoName == self.viewModel?.viewListingArray?.listingPhotos?[0]?.name)
+                if(self.viewModel?.viewListingArray?.listPhotoName == self.viewModel?.viewListingArray?.listPhotos?[0]?.name)
                 {
                     if(filteredImageArray.contains("\(IMAGE_LISTING_MEDIUM)\(j?.name ?? "0")" as Any))
                     {

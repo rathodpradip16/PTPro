@@ -137,15 +137,41 @@ var PayPal_Client_ID : String{
 let dataPartnerId = "WIJPEXN"
 let appName = "ParadiseTerra"
 
+//var BASE_URL : String {
+//    get {
+//        switch environment {
+//        case .development:
+//            return "https://www.paradiseterra.com"
+//        case .production:
+//            return "https://www.paradiseterra.com"
+//        case .localhost:
+//            return "https://www.paradiseterra.com"
+//        }
+//    }
+//}
+
+//var BASE_URL : String {
+//    get {
+//        switch environment {
+//        case .development:
+//            return "https://ptbeta.xyz"
+//        case .production:
+//            return "https://ptbeta.xyz"
+//        case .localhost:
+//            return "https://ptbeta.xyz"
+//        }
+//    }
+//}
+
 var BASE_URL : String {
     get {
         switch environment {
         case .development:
-            return "https://www.paradiseterra.com"
+            return "http://ptpro.paperbirdtech.com:3000"
         case .production:
-            return "https://www.paradiseterra.com"
+            return "http://ptpro.paperbirdtech.com:3000"
         case .localhost:
-            return "https://www.paradiseterra.com"
+            return "http://ptpro.paperbirdtech.com:3000"
         }
     }
 }
@@ -154,37 +180,37 @@ var BASE_URL : String {
 //    get {
 //        switch environment {
 //        case .development:
-//            return "https://ptbeta.xyz"
+//            return "https://product.boosturrental.com"
 //        case .production:
-//            return "https://ptbeta.xyz"
+//            return "https://product.boosturrental.com"
 //        case .localhost:
-//            return "https://ptbeta.xyz"
+//            return "https://product.boosturrental.com"
 //        }
 //    }
 //}
 
-//var BASE_URL : String {
+//var graphQLEndpoint : String {
 //    get {
 //        switch environment {
 //        case .development:
-//            return "http://ptpro.paperbirdtech.com:3000"
+//            return "https://www.paradiseterra.com/api/graphql"
 //        case .production:
-//            return "http://ptpro.paperbirdtech.com:3000"
+//            return "https://www.paradiseterra.com/api/graphql"
 //        case .localhost:
-//            return "http://ptpro.paperbirdtech.com:3000"
+//            return "https://www.paradiseterra.com/api/graphql"
 //        }
 //    }
 //}
 
-//var BASE_URL : String {
+//var graphQLEndpoint : String {
 //    get {
 //        switch environment {
 //        case .development:
-//            return "https://product.boosturrental.com"
+//            return "https://ptbeta.xyz/api/graphql"
 //        case .production:
-//            return "https://product.boosturrental.com"
+//            return "https://ptbeta.xyz/api/graphql"
 //        case .localhost:
-//            return "https://product.boosturrental.com"
+//            return "https://ptbeta.xyz/api/graphql"
 //        }
 //    }
 //}
@@ -193,40 +219,14 @@ var graphQLEndpoint : String {
     get {
         switch environment {
         case .development:
-            return "https://www.paradiseterra.com/api/graphql"
+            return "http://ptpro.paperbirdtech.com:4000/graphql"
         case .production:
-            return "https://www.paradiseterra.com/api/graphql"
+            return "http://ptpro.paperbirdtech.com:4000/graphql"
         case .localhost:
-            return "https://www.paradiseterra.com/api/graphql"
+            return "http://ptpro.paperbirdtech.com:4000/graphql"
         }
     }
 }
-
-//var graphQLEndpoint : String {
-//    get {
-//        switch environment {
-//        case .development:
-//            return "https://ptbeta.xyz/api/graphql"
-//        case .production:
-//            return "https://ptbeta.xyz/api/graphql"
-//        case .localhost:
-//            return "https://ptbeta.xyz/api/graphql"
-//        }
-//    }
-//}
-
-//var graphQLEndpoint : String {
-//    get {
-//        switch environment {
-//        case .development:
-//            return "http://ptpro.paperbirdtech.com:4000/graphql"
-//        case .production:
-//            return "http://ptpro.paperbirdtech.com:4000/graphql"
-//        case .localhost:
-//            return "http://ptpro.paperbirdtech.com:4000/graphql"
-//        }
-//    }
-//}
 
 
 //var graphQLEndpoint : String {
@@ -331,3 +331,15 @@ struct appKeys{
     static let InformationalWebsite = "Informational website"
     static let OnlineForum = "Online forum"
 }
+
+struct PTImages{
+    static let subChat = "ic_chat"
+    static let subUnlimited = "subBooking"
+    static let subSeo = "ic_seo"
+    static let subPricePredicition = "ic_price_predicition"
+    static let subSerachRank = "ic_seo"
+    static let subInsights = "ic_insights"
+    static let subGlobalVisibility = "ic_insights"
+    static let subAffiliate = "affiliate_booking_assistance"
+}
+

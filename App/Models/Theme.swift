@@ -174,6 +174,30 @@ class Theme {
     static let subPlatinumSegmentBorderColor = UIColor().hexValue(hex:"40778088" )
 
     static let subListNowBorderColor = UIColor().hexValue(hex:"686868" )
+        
+    static let subBronzeGradiantStartColor = UIColor().hexValue(hex:"804A00" )
+    static let subBronzeGradiantCenterColor = UIColor().hexValue(hex:"B08D57" )
+    static let subBronzeGradiantEndColor = UIColor().hexValue(hex:"9C7A3C" )
+
+    static let subGoldGradiantStartColor = UIColor().hexValue(hex:"BF953F" )
+    static let subGoldGradiantCenterColor = UIColor().hexValue(hex:"F0E9A3" )
+    static let subGoldGradiantEndColor = UIColor().hexValue(hex:"B38728" )
+
+    static let subPlatinumGradiantStartColor = UIColor().hexValue(hex:"a8a9ad" )
+    static let subPlatinumGradiantCenterColor = UIColor().hexValue(hex:"e3e3e3" )
+    static let subPlatinumGradiantEndColor = UIColor().hexValue(hex:"cbcccd" )
+    
+    static let subRedGradiantStartColor = UIColor().hexValue(hex:"E5E483" )
+    static let subRedGradiantCenterColor = UIColor().hexValue(hex:"F1F5A8" )
+    static let subRedGradiantEndColor = UIColor().hexValue(hex:"F6F5F5" )
+
+    static let subSilverGradiantStartColor = UIColor().hexValue(hex:"a8a9ad" )
+    static let subSilverGradiantCenterColor = UIColor().hexValue(hex:"e3e3e3" )
+    static let subSilverGradiantEndColor = UIColor().hexValue(hex:"cbcccd" )
+    
+    static let subPPBGradiantStartColor = UIColor().hexValue(hex:"0061ff")
+    static let subPPBGradiantEndColor = UIColor().hexValue(hex:"60efff")
+
 }
 
 

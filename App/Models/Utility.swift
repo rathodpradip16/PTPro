@@ -236,7 +236,8 @@ public class Utility: NSObject {
     var isTodayEnable: Bool = false
     var step2_Title = String()
     var step2_Description = String()
-    var bedcount = 0
+    var bedcount = 1
+    var bathcount = 1
     
     var getListSettingsArray : PTProAPI.GetListingSettingQuery.Data.GetListingSettings.Results?
     

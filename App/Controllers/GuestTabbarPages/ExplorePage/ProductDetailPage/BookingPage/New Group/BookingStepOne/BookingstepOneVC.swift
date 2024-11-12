@@ -28,7 +28,7 @@ class BookingstepOneVC: UIViewController,UITableViewDelegate,UITableViewDataSour
     var totalPriceLabel = String()
     
     
-    var houserulesArray = [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]()
+    var houserulesArray = [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRules]()
     var viewListingArray : PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results?
     
     
@@ -186,7 +186,7 @@ class BookingstepOneVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             cell.selectionStyle = .none
             cell.rightArrowimg.isHidden = true
             cell.editLabel.isHidden = true
-            cell.aboutLabel.text = houserulesArray[indexPath.row].itemName != nil ? houserulesArray[indexPath.row].itemName! : ""
+      //      cell.aboutLabel.text = houserulesArray[indexPath.row].itemName != nil ? houserulesArray[indexPath.row].itemName! : ""
             return cell
         }
     }

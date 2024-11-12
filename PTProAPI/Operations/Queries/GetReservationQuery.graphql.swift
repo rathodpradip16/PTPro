@@ -228,12 +228,12 @@ extension PTProAPI {
 
             /// GetReservation.Results.ListData.ListingData
             ///
-            /// Parent Type: `ListingData`
+            /// Parent Type: `ListingDatas`
             struct ListingData: PTProAPI.SelectionSet {
               let __data: DataDict
               init(_dataDict: DataDict) { __data = _dataDict }
 
-              static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListingData }
+              static var __parentType: Apollo.ParentType { PTProAPI.Objects.ListingDatas }
               static var __selections: [Apollo.Selection] { [
                 .field("__typename", String.self),
                 .field("checkInStart", String?.self),

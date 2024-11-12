@@ -32,7 +32,7 @@
   "schemaDownloadConfiguration": {
       "downloadMethod": {
           "introspection": {
-              "endpointURL": "https://www.paradiseterra.com/api/graphql",
+              "endpointURL": "http://ptpro.paperbirdtech.com:4000/graphql",
               "httpMethod": {
                   "POST": {}
               },

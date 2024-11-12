@@ -12,7 +12,13 @@ directive @import(
 ) repeatable on QUERY | MUTATION | SUBSCRIPTION | FRAGMENT_DEFINITION
 
 type Query {
+  getdynamicbedtypelist: getdynamicbedtypelist
+  getAllAdminListSettings(typeId: Int, currentPage: Int): GetAllListSettings
+  getcategoryListcount(listId: Int): categoryListcountType
+  getphotoCategory: PhotoCategoryType
+  getdynamicbedbath(userId: String, listId: Int): GetDynamicBedBathType
   validateEmailExist(email: String!): CommonType
+  membershipplanbenefits(userId: String): MembershipPlanBenefitsType
   Cancelmembership(userId: String): subscriptionPaymentType
   getPropertieCount(userId: String): subscriptionPaymentType
   getDashboardData(userId: String, clickCount: Int, fromDate: String, toDate: String, filter: String, graphType: String): GetClicksType
@@ -29,7 +35,7 @@ type Query {
   affiliateShowDocumentList(userId: String): [AffiliateUserDocumentManagementType]
   getAffiliateUserStep(userId: String): affiliatestepType
   affiliateLinkManager(userId: String, address: String): resultdata
-  getListingSettings: listingSettingsCommonTypes
+  getListingSettings(listId: Int): listingSettingsCommonTypes
   userSocialLogin(firstName: String, lastName: String, email: String!, dateOfBirth: String, deviceType: String!, deviceDetail: String, deviceId: String!, registerType: String, gender: String, profilePicture: String): UserCommon
   getMostViewedListing: AllList
   getRecommend: AllList
@@ -41,13 +47,13 @@ type Query {
   dateAvailability(listId: Int!, startDate: String!, endDate: String!): DateAvailabilityType
   getListingSettingsCommon(step: String): listingSettingCommonTypes
   getAllReservation(userType: String, currentPage: Int, dateFilter: String): AllReservation
-  getBillingCalculation(listId: Int!, startDate: String!, endDate: String!, guests: Int!, convertCurrency: String!): AllBillingType
+  getBillingCalculation(userId: String, listId: Int!, startDate: String!, endDate: String!, guests: Int!, convertCurrency: String!): AllBillingType
   getCurrencies: AllCurrenciesType
   Currency: Currency
   siteSettings(type: String): SiteSettingsCommon
   getSearchSettings: AllSearchSettingsType
   getDateAvailability(listId: Int!, startDate: String!, endDate: String!): ContactHostAvailability
-  getReservation(reservationId: Int!, convertCurrency: String): Reservationlist
+  getReservation(userId: String, reservationId: Int!, convertCurrency: String): Reservationlist
   getUnReadCount: UnreadThreadsCount
   getUnReadThreadCount(threadId: Int): UnreadThreadsCount
   getAllThreads(threadType: String, threadId: Int, currentPage: Int): AllThreads
@@ -90,9 +96,176 @@ type Query {
   pricing(listId: Int): price
 }
 
+type getdynamicbedtypelist {
+  results: [getdynamicbedtype]
+  status: Int
+  errorMessage: String
+}
+
+type getdynamicbedtype {
+  id: Int
+  typeId: Int
+  itemName: String
+  status: Int
+  errorMessage: String
+}
+
+"""This represent list data for admin management"""
+type GetAllListSettings {
+  listSettingsTypeData: listingSettingsTypesCommons
+  listSettingsData: [AdminListSettings]
+  count: Int
+  status: Int
+  errorMessage: String
+}
+
+"""Represents listing field types for the frontend"""
+type listingSettingsTypesCommons {
+  id: Int
+  typeName: String
+  typeLabel: String
+  step: String
+  fieldType: String
+  isMultiValue: Boolean
+  isEnable: String
+  status: String
+  listSettings: [listingSettingsCommons]
+}
+
+"""Represents listing field values for the frontend"""
+type listingSettingsCommons {
+  id: Int
+  typeId: Int
+  itemName: String
+  otherItemName: String
+  maximum: Int
+  minimum: Int
+  startValue: Int
+  endValue: Int
+  isEnable: String
+  image: String
+}
+
+"""Represents listing field values"""
+type AdminListSettings {
+  id: Int
+  typeId: Int
+  itemName: String
+  itemDescription: String
+  otherItemName: String
+  maximum: Int
+  minimum: Int
+  startValue: Int
+  endValue: Int
+  isEnable: String
+  image: String
+}
+
+type categoryListcountType {
+  status: Int
+  errorMessage: String
+  listId: Int
+  results: RresultssType
+}
+
+type RresultssType {
+  categoryList: [CategorysType]
+  photoList: [PhotosType]
+}
+
+type CategorysType {
+  categoryName: String
+  categoryCount: String
+  photoCategoryId: String
+}
+
+type PhotosType {
+  name: String
+  id: String
+  photoCategoryId: String
+}
+
+type PhotoCategoryType {
+  status: Int
+  errorMessage: String
+  results: Results1Type
+}
+
+type Results1Type {
+  photoCategorysTypes: [photoCategorylistType]
+}
+
+type photoCategorylistType {
+  id: Int
+  photoCategoryId: Int
+  name: String
+  svgurl: String
+}
+
+type GetDynamicBedBathType {
+  status: Int
+  errorMessage: String
+  results: ResultsType
+}
+
+type ResultsType {
+  userId: String
+  listId: Int
+  bathroomTypes: [BathroomdataType]
+  bedroomTypes: [BedroomdataType]
+}
+
+type BathroomdataType {
+  isBathroom: Boolean
+  bathroomname: String
+  bathroomId: String
+  bathroomtype: String
+  bathroomamenities: String
+}
+
+type BedroomdataType {
+  isbedroom: Boolean
+  bedroomname: String
+  bedroomId: String
+  bedType: [BeddataType]
+}
+
+type BeddataType {
+  bedCount: String
+  bedname: String
+  bedId: String
+  bedtype: String
+  bedsize: String
+}
+
 type CommonType {
   errorMessage: String
   status: Int
+}
+
+type MembershipPlanBenefitsType {
+  status: Int
+  errorMessage: String
+  results: MembershipPlanType
+}
+
+type MembershipPlanType {
+  id: Int
+  title: String
+  one: String
+  two: String
+  three: String
+  four: String
+  five: String
+  six: String
+  seven: String
+  eight: String
+  monthly: Int
+  yearly: Int
+  currency: String
+  status: Int
+  expiryDate: String
+  planType: String
 }
 
 type subscriptionPaymentType {
@@ -115,6 +288,7 @@ type subscriptionPaymentType {
 }
 
 type Reservation {
+  userId: String
   id: Int
   listId: Int
   nights: Int
@@ -171,6 +345,7 @@ type Reservation {
 
 type ShowListing {
   id: Int
+  isPopularChoice: String
   userId: String
   title: String
   description: String
@@ -211,7 +386,7 @@ type ShowListing {
   settingsData: [userListingData]
   roomType: String
   listBedTypes: [listBedTypes]
-  listingData: listingData
+  listingData: listingDatas
   blockedDates: [listBlockedDates]
   checkInBlockedDates: [listBlockedDates]
   fullBlockedDates: [listBlockedDates]
@@ -228,7 +403,7 @@ type ShowListing {
   userAmenities: [allListSettingTypes]
   userSafetyAmenities: [allListSettingTypes]
   userSpaces: [allListSettingTypes]
-  houseRules: [allListSettingTypes]
+  houseRules: HouseRules1
   houseType: String
   popularLocationListing: [PopularLocationListing]
 }
@@ -237,6 +412,7 @@ type listPhotosData {
   id: Int
   listId: Int
   name: String
+  photoCategoryId: String
   type: String
   status: String
 }
@@ -306,7 +482,7 @@ type listBedTypes {
   listsettings: singleListSettings
 }
 
-type listingData {
+type listingDatas {
   bookingNoticeTime: String
   checkInStart: String
   checkInEnd: String
@@ -321,7 +497,30 @@ type listingData {
   weeklyDiscount: Int
   monthlyDiscount: Int
   cancellationPolicy: Int
+  petFee: Int
+  petSelected: Boolean
+  checkInEntrySelected: Boolean
+  earlyCheckInFees: Int
+  checkInType: String
+  texTypeId: Int
+  taxPercentage: Float
+  taxPersonAge: Int
+  taxAmount: Int
+  aboutHost: aboutTypes
   cancellation: Cancellation
+}
+
+type aboutTypes {
+  isProfessional: Boolean
+  bdStreet: String
+  bdApt: String
+  bdCity: String
+  bdState: String
+  bdzipcode: String
+  bdCountry: String
+  bmFirstname: String
+  bmLastname: String
+  businessName: String
 }
 
 type Cancellation {
@@ -559,6 +758,61 @@ type allListSettingTypes {
   image: String
 }
 
+type HouseRules1 {
+  isAgeSelected: Boolean
+  isEventSelected: Boolean
+  isPetSelected: Boolean
+  isChildrenSelected: Boolean
+  isSmokingSelected: Boolean
+  age: ageypes
+  event: Events
+  pet: Pets
+  children: Childrens
+  smoking: Smokings
+  dynamicRules: [dynamicRules]
+}
+
+type ageypes {
+  age: Int
+}
+
+type Events {
+  isBirthDay: Boolean
+  isFamilyGathering: Boolean
+  isOtherSelcted: Boolean
+  otherDetails: String
+  attendees: Int
+}
+
+type Pets {
+  petNo: Int
+  isDogAllowed: Boolean
+  isCatAllowed: Boolean
+  anypet: Boolean
+  petSize: String
+}
+
+type Childrens {
+  twoyears: Boolean
+  twelveyears: Boolean
+  seventeenyears: Boolean
+}
+
+type Smokings {
+  indoors: Boolean
+  outDoors: Boolean
+  details: String
+}
+
+type dynamicRules {
+  rule: String
+  id: Int
+  isSelected: Boolean
+  isYesSelected: Boolean
+  isNoSelected: Boolean
+  Details: String
+}
+
 type PopularLocationListing {
   id: Int
   location: String
@@ -793,11 +1047,21 @@ type GetPlanDetailsType {
   id: Int
   title: String
   one: String
+  onetitle: String
   two: String
+  twotitle: String
   three: String
+  threetitle: String
   four: String
+  fourtitle: String
   five: String
+  fivetitle: String
   six: String
+  sixtitle: String
+  seven: String
+  seventitle: String
+  eight: String
+  eighttitle: String
   monthly: Int
   yearly: Int
   currency: String
@@ -1033,7 +1297,7 @@ type listingSettingsTypes {
   isMultiValue: Boolean
   isEnable: String
   status: String
-  listSettings: [listingSettings]
+  listSettings(listId: Int): [listingSettings]
 }
 
 """Represents listing field values for the frontend"""
@@ -1041,6 +1305,7 @@ type listingSettings {
   id: Int
   typeId: Int
   itemName: String
+  listId: Int
   otherItemName: String
   maximum: Int
   minimum: Int
@@ -1070,6 +1335,7 @@ type AllReview {
 
 type SearchListing {
   count: Int
+  isPopularChoice: Boolean
   checkIn: String
   checkOut: String
   currentPage: Int
@@ -1125,12 +1391,18 @@ type BillingType {
   monthlyDiscountPercentage: Float
   subtotal: Float
   guests: Int
+  conveniencefees: Int
   averagePrice: Float
   priceForDays: Float
   specialPricing: [SpecialPricingType]
   isSpecialPriceAssigned: Boolean
   hostServiceFeeType: String
   hostServiceFeeValue: Float
+  petFee: Float
+  taxAmount: Float
+  texTypeId: Int
+  taxPercentage: Float
+  userId: String
 }
 
 type SpecialPricingType {
@@ -1342,6 +1614,7 @@ type ReservationCancel {
 type AllWishListGroup {
   results: [WishListGroup]
   count: Int
+  userId: String
   status: Int
   errorMessage: String
 }
@@ -1461,11 +1734,22 @@ type ListPhotosCommon {
 type ListPhotos {
   id: Int!
   listId: Int!
+  userId: String
   name: String
+  photoCategoryId: String
+  svgurl: String
+  photoCategory: photoCategorylistdataType
   type: String
   isCover: Int
   photosCount: Int
   status: String
+}
+
+type photoCategorylistdataType {
+  id: Int
+  photoCategoryId: Int
+  name: String
+  svgurl: String
 }
 
 type PayoutWholeType {
@@ -1482,6 +1766,7 @@ type WholeManageListingsType {
 }
 
 type GetPaymentType {
+  userId: String
   results: [PaymentMethods]
   status: Int
   errorMessage: String
@@ -1651,7 +1936,7 @@ type Trymelistviews {
 
 type price {
   listId: Int
-  basePrice: Int
+  baseprice: Int
   results: [pricedetail]
   currentPropertyResult: [pricedetail]
   status: Int
@@ -1661,7 +1946,7 @@ type price {
 type pricedetail {
   id: Int
   title: String
-  basePrice: Int
+  baseprice: Int
   distance: Float
   score: Float
   UserAmenities: [item]
@@ -1694,7 +1979,10 @@ type occupacys {
 }
 
 type Mutation {
+  customAmenities(listId: Int, itemName: String): customAmenitiesType
   createUser(firstName: String, lastName: String, email: String!, password: String!, dateOfBirth: String, deviceType: String!, deviceDetail: String, deviceId: String!, registerType: String): UserCommon
+  Updatephoto(listId: Int!, id: Int, photoCategoryId: String): ListPhotosCommon
+  dynamicBedBath(userId: String, listId: Int, bathroomTypes: String, bedroomTypes: String): Bathroom
   Couponcount(id: Int!, couponCode: String): Couponmanager
   deleteCoupon(id: Int!, couponCode: String): Couponmanager
   testToken(token: String): UserType
@@ -1735,9 +2023,9 @@ type Mutation {
   createListing(listId: Int, roomType: String, houseType: String, residenceType: String, bedrooms: String, buildingSize: String, bedType: String, beds: Int, personCapacity: Int, bathrooms: Float, bathroomType: String, country: String, street: String, buildingName: String, city: String, state: String, zipcode: String, lat: Float, lng: Float, bedTypes: String, isMapTouched: Boolean, amenities: [Int], safetyAmenities: [Int], spaces: [Int]): ListingResponse
   updateListingStep2(id: Int, title: String, description: String, coverPhoto: Int): EditListingResponse
   ManageListingSteps(listId: String!, currentStep: Int!): ShowListingCommon
-  updateListingStep3(id: Int, houseRules: [Int], bookingNoticeTime: String, checkInStart: String, checkInEnd: String, maxDaysNotice: String, minNight: Int, maxNight: Int, basePrice: Float, cleaningPrice: Float, currency: String, is_affiliate: Int, affiliate_commission: Float, weeklyDiscount: Int, monthlyDiscount: Int, blockedDates: [String], bookingType: String!, cancellationPolicy: Int): EditListingResponse
+  updateListingStep3(id: Int, houseRules: String, bookingNoticeTime: String, checkInStart: String, checkInEnd: String, maxDaysNotice: String, minNight: Int, maxNight: Int, basePrice: Float, cleaningPrice: Float, currency: String, is_affiliate: Int, affiliate_commission: Float, weeklyDiscount: Int, earlyCheckInFees: Int, monthlyDiscount: Int, blockedDates: [String], bookingType: String!, cancellationPolicy: Int, petFee: Int, petSelected: Boolean, checkInEntrySelected: Boolean, checkInType: String, texTypeId: Int, taxPercentage: Float, taxPersonAge: Int, taxAmount: Int, aboutHost: String): EditListingResponse
   managePublishStatus(listId: Int!, action: String!): AllList
-  RemoveListPhotos(listId: Int!, name: String): ListPhotosCommon
+  RemoveListPhotos(listId: Int!, userId: String, name: String): ListPhotosCommon
   setDefaultPayout(id: Int!, type: String!): Payout
   addPayout(methodId: Int, payEmail: String, address1: String, address2: String, city: String, state: String, country: String, zipcode: String, currency: String, firstname: String, lastname: String, accountNumber: String, routingNumber: String, businessType: String, accountToken: String, personToken: String): GetPayoutType
   RemoveListing(listId: Int!): ListPhotosCommon
@@ -1755,6 +2043,49 @@ type Mutation {
   deleteUser: UserCommon
   Createcouponcode(userId: String, listId: Int, couponCode: String, couponType: String, discount: Float, startDate: String, endDate: String, description: String, userType: String): Couponmanager
   CreateSearchlist(userId: String, checkIn: String, checkOut: String, address: String, dates: String): SearchListing
+}
+
+type customAmenitiesType {
+  id: Int
+  listId: Int
+  typeId: Int
+  itemName: String
+  isEnable: String
+  siteAdminId: String
+  status: String
+  errorMessage: String
+}
+
+type Bathroom {
+  userId: String
+  listId: Int
+  bathroomTypes: [BathroomTypeType1]
+  bedroomTypes: [BedroomTypeInput1]
+  status: Int
+  errorMessage: String
+}
+
+type BathroomTypeType1 {
+  isBathroom: Boolean
+  bathroomname: String
+  bathroomtype: String
+  bathroomId: String
+  bathroomamenities: String
+}
+
+type BedroomTypeInput1 {
+  isbedroom: Boolean
+  bedroomname: String
+  bedroomId: String
+  bedType: [BedTypeInput1]
+}
+
+type BedTypeInput1 {
+  bedCount: String
+  bedname: String
+  bedId: String
+  bedtype: String
+  bedsize: String
 }
 
 type CreateCustomPlanRequestType {
@@ -1970,8 +2301,9 @@ type EditListing {
   amenities: [Int]
   safetyAmenities: [Int]
   spaces: [Int]
-  houseRules: [Int]
+  houseRules: HouseRules
   bookingNoticeTime: String
+  earlyCheckInFees: Int
   checkInStart: String
   checkInEnd: String
   maxDaysNotice: String
@@ -1987,6 +2319,83 @@ type EditListing {
   coverPhoto: Int
   blockedDates: [String]
   listApprovalStatus: String
+  petFee: Int
+  petSelected: Boolean
+  checkInEntrySelected: Boolean
+  checkInType: String
+  texTypeId: Int
+  taxPercentage: Float
+  taxPersonAge: Int
+  taxAmount: Int
+  aboutHost: aboutType
+}
+
+type HouseRules {
+  isAgeSelected: Boolean
+  isEventSelected: Boolean
+  isPetSelected: Boolean
+  isChildrenSelected: Boolean
+  isSmokingSelected: Boolean
+  age: ageype
+  event: Event
+  pet: Pet
+  children: Children
+  smoking: Smoking
+  dynamicRules: [dynamicRule]
+}
+
+type ageype {
+  age: Int
+}
+
+type Event {
+  isBirthDay: Boolean
+  isFamilyGathering: Boolean
+  isOtherSelcted: Boolean
+  otherDetails: String
+  attendees: Int
+}
+
+type Pet {
+  petNo: Int
+  isDogAllowed: Boolean
+  isCatAllowed: Boolean
+  anypet: Boolean
+  petSize: String
+}
+
+type Children {
+  twoyears: Boolean
+  twelveyears: Boolean
+  seventeenyears: Boolean
+}
+
+type Smoking {
+  indoors: Boolean
+  outDoors: Boolean
+  details: String
+}
+
+type dynamicRule {
+  rule: String
+  id: Int
+  isSelected: Boolean
+  isYesSelected: Boolean
+  isNoSelected: Boolean
+  Details: String
+}
+
+type aboutType {
+  isProfessional: Boolean
+  bdStreet: String
+  bdApt: String
+  bdCity: String
+  bdState: String
+  bdzipcode: String
+  bdCountry: String
+  bmFirstname: String
+  bmLastname: String
+  businessName: String
 }
 
 type GetPayoutType {

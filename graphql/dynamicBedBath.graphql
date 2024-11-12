@@ -1,0 +1,32 @@
+mutation dynamicBedBath($userId: String!, $listId: Int!, $bathroomTypes: String, $bedroomTypes: String) {
+dynamicBedBath(
+userId: $userId,
+listId: $listId,
+bathroomTypes: $bathroomTypes,
+bedroomTypes: $bedroomTypes
+) {
+status
+errorMessage
+userId
+listId
+bathroomTypes {
+isBathroom
+bathroomname
+bathroomId
+bathroomtype
+bathroomamenities
+}
+bedroomTypes {
+isbedroom
+bedroomname
+bedroomId
+bedType {
+bedCount
+bedname
+bedId
+bedtype
+bedsize
+}
+}
+}
+}

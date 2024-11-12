@@ -48,13 +48,29 @@ extension PTProAPI {
       case "StaticPageType": return PTProAPI.Objects.StaticPageType
       case "EditListingResponse": return PTProAPI.Objects.EditListingResponse
       case "EditListing": return PTProAPI.Objects.EditListing
+      case "HouseRules": return PTProAPI.Objects.HouseRules
+      case "ageype": return PTProAPI.Objects.Ageype
+      case "Event": return PTProAPI.Objects.Event
+      case "Pet": return PTProAPI.Objects.Pet
+      case "Children": return PTProAPI.Objects.Children
+      case "Smoking": return PTProAPI.Objects.Smoking
+      case "dynamicRule": return PTProAPI.Objects.DynamicRule
+      case "aboutType": return PTProAPI.Objects.AboutType
       case "TransactionType": return PTProAPI.Objects.TransactionType
+      case "categoryListcountType": return PTProAPI.Objects.CategoryListcountType
+      case "RresultssType": return PTProAPI.Objects.RresultssType
+      case "CategorysType": return PTProAPI.Objects.CategorysType
+      case "PhotosType": return PTProAPI.Objects.PhotosType
+      case "Bathroom": return PTProAPI.Objects.Bathroom
+      case "BathroomTypeType1": return PTProAPI.Objects.BathroomTypeType1
+      case "BedroomTypeInput1": return PTProAPI.Objects.BedroomTypeInput1
+      case "BedTypeInput1": return PTProAPI.Objects.BedTypeInput1
       case "AllWishListGroup": return PTProAPI.Objects.AllWishListGroup
       case "WishListGroup": return PTProAPI.Objects.WishListGroup
       case "WishList": return PTProAPI.Objects.WishList
       case "ShowListing": return PTProAPI.Objects.ShowListing
       case "listPhotosData": return PTProAPI.Objects.ListPhotosData
-      case "listingData": return PTProAPI.Objects.ListingData
+      case "listingDatas": return PTProAPI.Objects.ListingDatas
       case "userListingData": return PTProAPI.Objects.UserListingData
       case "singleListSettings": return PTProAPI.Objects.SingleListSettings
       case "GetWishListType": return PTProAPI.Objects.GetWishListType
@@ -70,6 +86,22 @@ extension PTProAPI {
       case "PaymentMethods": return PTProAPI.Objects.PaymentMethods
       case "GetPaymentType": return PTProAPI.Objects.GetPaymentType
       case "GetPayoutType": return PTProAPI.Objects.GetPayoutType
+      case "AllListing": return PTProAPI.Objects.AllListing
+      case "listBlockedDates": return PTProAPI.Objects.ListBlockedDates
+      case "BedTypes": return PTProAPI.Objects.BedTypes
+      case "listSettingsTypes": return PTProAPI.Objects.ListSettingsTypes
+      case "user": return PTProAPI.Objects.User
+      case "profile": return PTProAPI.Objects.Profile
+      case "allListSettingTypes": return PTProAPI.Objects.AllListSettingTypes
+      case "HouseRules1": return PTProAPI.Objects.HouseRules1
+      case "ageypes": return PTProAPI.Objects.Ageypes
+      case "Events": return PTProAPI.Objects.Events
+      case "Pets": return PTProAPI.Objects.Pets
+      case "Childrens": return PTProAPI.Objects.Childrens
+      case "Smokings": return PTProAPI.Objects.Smokings
+      case "dynamicRules": return PTProAPI.Objects.DynamicRules
+      case "Cancellation": return PTProAPI.Objects.Cancellation
+      case "aboutTypes": return PTProAPI.Objects.AboutTypes
       case "Reservationlist": return PTProAPI.Objects.Reservationlist
       case "Threads": return PTProAPI.Objects.Threads
       case "AllThreads": return PTProAPI.Objects.AllThreads
@@ -86,9 +118,12 @@ extension PTProAPI {
       case "listingDataa": return PTProAPI.Objects.ListingDataa
       case "PlanDetailsType": return PTProAPI.Objects.PlanDetailsType
       case "GetPlanDetailsType": return PTProAPI.Objects.GetPlanDetailsType
+      case "MembershipPlanBenefitsType": return PTProAPI.Objects.MembershipPlanBenefitsType
+      case "MembershipPlanType": return PTProAPI.Objects.MembershipPlanType
       case "Getcoupon": return PTProAPI.Objects.Getcoupon
       case "ImageBannerCommonType": return PTProAPI.Objects.ImageBannerCommonType
       case "ImageBanner": return PTProAPI.Objects.ImageBanner
+      case "ListPhotosCommon": return PTProAPI.Objects.ListPhotosCommon
       case "UserCommon": return PTProAPI.Objects.UserCommon
       case "userEditProfile": return PTProAPI.Objects.UserEditProfile
       case "UserProfile": return PTProAPI.Objects.UserProfile
@@ -107,6 +142,7 @@ extension PTProAPI {
       case "ReportUserResult": return PTProAPI.Objects.ReportUserResult
       case "affiliatestepType": return PTProAPI.Objects.AffiliatestepType
       case "CommonReservationType": return PTProAPI.Objects.CommonReservationType
+      case "customAmenitiesType": return PTProAPI.Objects.CustomAmenitiesType
       case "listingSettingsCommonTypes": return PTProAPI.Objects.ListingSettingsCommonTypes
       case "settingsType": return PTProAPI.Objects.SettingsType
       case "listingSettingsTypes": return PTProAPI.Objects.ListingSettingsTypes
@@ -114,6 +150,9 @@ extension PTProAPI {
       case "ListBlockedDatesResponseType": return PTProAPI.Objects.ListBlockedDatesResponseType
       case "ListBlockedDates": return PTProAPI.Objects.ListBlockedDates
       case "AffiliateUserType": return PTProAPI.Objects.AffiliateUserType
+      case "PhotoCategoryType": return PTProAPI.Objects.PhotoCategoryType
+      case "Results1Type": return PTProAPI.Objects.Results1Type
+      case "photoCategorylistType": return PTProAPI.Objects.PhotoCategorylistType
       case "CreateCustomPlanRequestType": return PTProAPI.Objects.CreateCustomPlanRequestType
       case "CalculateOccupancyRate": return PTProAPI.Objects.CalculateOccupancyRate
       case "price": return PTProAPI.Objects.Price
@@ -122,9 +161,6 @@ extension PTProAPI {
       case "other": return PTProAPI.Objects.Other
       case "ratings": return PTProAPI.Objects.Ratings
       case "occupacys": return PTProAPI.Objects.Occupacys
-      case "AllListing": return PTProAPI.Objects.AllListing
-      case "allListSettingTypes": return PTProAPI.Objects.AllListSettingTypes
-      case "listBlockedDates": return PTProAPI.Objects.ListBlockedDates
       case "ListCalendar": return PTProAPI.Objects.ListCalendar
       case "HostSuggested": return PTProAPI.Objects.HostSuggested
       case "SearchListing": return PTProAPI.Objects.SearchListing
@@ -142,12 +178,19 @@ extension PTProAPI {
       case "LanguageItemType": return PTProAPI.Objects.LanguageItemType
       case "AllCurrenciesType": return PTProAPI.Objects.AllCurrenciesType
       case "Currencies": return PTProAPI.Objects.Currencies
+      case "GetDynamicBedBathType": return PTProAPI.Objects.GetDynamicBedBathType
+      case "ResultsType": return PTProAPI.Objects.ResultsType
+      case "BathroomdataType": return PTProAPI.Objects.BathroomdataType
+      case "BedroomdataType": return PTProAPI.Objects.BedroomdataType
+      case "BeddataType": return PTProAPI.Objects.BeddataType
       case "AllReservation": return PTProAPI.Objects.AllReservation
       case "AffiliateUserverificationwebType": return PTProAPI.Objects.AffiliateUserverificationwebType
       case "ReviewResponse": return PTProAPI.Objects.ReviewResponse
       case "AllReview": return PTProAPI.Objects.AllReview
       case "WhyHostCommonType": return PTProAPI.Objects.WhyHostCommonType
       case "WhyHostType": return PTProAPI.Objects.WhyHostType
+      case "ListPhotos": return PTProAPI.Objects.ListPhotos
+      case "photoCategorylistdataType": return PTProAPI.Objects.PhotoCategorylistdataType
       case "GetClicks": return PTProAPI.Objects.GetClicks
       case "getData": return PTProAPI.Objects.GetData
       case "GetGraph": return PTProAPI.Objects.GetGraph
@@ -162,17 +205,10 @@ extension PTProAPI {
       case "ReservationCancel": return PTProAPI.Objects.ReservationCancel
       case "ShowUserProfileCommon": return PTProAPI.Objects.ShowUserProfileCommon
       case "ShowUserProfile": return PTProAPI.Objects.ShowUserProfile
-      case "BedTypes": return PTProAPI.Objects.BedTypes
-      case "user": return PTProAPI.Objects.User
-      case "profile": return PTProAPI.Objects.Profile
-      case "listSettingsTypes": return PTProAPI.Objects.ListSettingsTypes
-      case "Cancellation": return PTProAPI.Objects.Cancellation
       case "WholeManageListingsType": return PTProAPI.Objects.WholeManageListingsType
       case "userListingSteps": return PTProAPI.Objects.UserListingSteps
       case "ShowListingCommon": return PTProAPI.Objects.ShowListingCommon
       case "ShowListingSteps": return PTProAPI.Objects.ShowListingSteps
-      case "ListPhotosCommon": return PTProAPI.Objects.ListPhotosCommon
-      case "ListPhotos": return PTProAPI.Objects.ListPhotos
       default: return nil
       }
     }

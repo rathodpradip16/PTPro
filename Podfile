@@ -53,7 +53,7 @@ pod 'GrowingTextView'
 pod 'DropDown'
 pod 'DGCharts'
 pod 'ABGaugeViewKit'
-
+pod 'YRCoverFlowLayout'
 
   target 'AppTests' do
     inherit! :search_paths

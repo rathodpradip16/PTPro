@@ -16,7 +16,7 @@ class HouseRulesVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     @IBOutlet weak var houseTV: UITableView!
     @IBOutlet weak var topView: UIView!
     var titleString = ""
-    var houserulesArray = [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]()
+    var houserulesArray = [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRules]()
     var safetyAmeneties = [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.UserSafetyAmenity]()
     var beds = [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.UserBedsType?]()
     var ameneties = [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.UserAmenity]()
@@ -142,7 +142,7 @@ class HouseRulesVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
         if(Utility.shared.isRTLLanguage()) {
         cell.amenityImage.performRTLTransform()
         }
-        cell.amenityLabel.text = houserulesArray[indexPath.row].itemName != nil ?  houserulesArray[indexPath.row].itemName! : ""
+       // cell.amenityLabel.text = houserulesArray[indexPath.row].itemName != nil ?  houserulesArray[indexPath.row].itemName! : ""
         cell.amenityImage.image = #imageLiteral(resourceName: "bullet")
         cell.amenityImgLeading.constant = 15
         cell.amenityLblLeadingConstraint.constant = 12

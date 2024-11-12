@@ -162,7 +162,7 @@ class BasePriceViewController: BaseHostTableviewController {
     }
     
     func pricingApiCall(){
-        let getPricingQuery = PTProAPI.PricingQuery(listId: .some(Utility.shared.createId))
+        let getPricingQuery = PTProAPI.PricingQuery(listId: Utility.shared.createId)
         Network.shared.apollo_headerClient.fetch(query: getPricingQuery,cachePolicy:.fetchIgnoringCacheData){ response in
             switch response {
             case .success(let result):
@@ -189,7 +189,7 @@ class BasePriceViewController: BaseHostTableviewController {
                     var arrCurOccupacy = [PTProAPI.PricingQuery.Data.Pricing.CurrentPropertyResult.Occupacy?]()
                     
                     if let arrData = self.arrPricingResult[0]{
-                        self.pricePredection = "\(arrData.basePrice ?? 0)"
+                        self.pricePredection = "\(arrData.baseprice ?? 0)"
                         self.pricePredectionLabel = "\(pricing.errorMessage ?? "Best price you can put here")"
 
                         if let userAmenities = arrData.userAmenities{
@@ -257,7 +257,7 @@ class BasePriceViewController: BaseHostTableviewController {
 
                             var dicBase1 = [String:Any]()
                             dicBase1["itemName"] = "BasePrice"
-                            dicBase1["score"] = "\(arrCurrentData.basePrice ?? 0)"
+                            dicBase1["score"] = "\(arrCurrentData.baseprice ?? 0)"
                             self.arrCurrentPricingFilter.append(dicBase1)
 
                             self.currentTotalScore = arrCurrentData.score ?? 0.0
@@ -270,7 +270,7 @@ class BasePriceViewController: BaseHostTableviewController {
 
                         var dicBase = [String:Any]()
                         dicBase["itemName"] = "BasePrice"
-                        dicBase["score"] = "\(arrData.basePrice ?? 0)"
+                        dicBase["score"] = "\(arrData.baseprice ?? 0)"
                         self.arrPricingFilter.append(dicBase)
                         
                                                 

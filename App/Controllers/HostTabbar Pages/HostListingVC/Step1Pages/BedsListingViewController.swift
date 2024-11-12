@@ -27,18 +27,18 @@ class BedsListingViewController: BaseHostTableviewController {
     @IBOutlet weak var errorLabel: UILabel!
     
     //MARK: - This Property
-    var singleArr = [Int]()
-    var singleValue = Int()
-    var doubleArr = [Int]()
-    var doubleValue = Int()
-    var queenArr = [Int]()
-    var queenValue = Int()
-    var kingArr = [Int]()
-    var kingValue = Int()
-    var bunkBedArr = [Int]()
-    var bunkBedValue = Int()
-    var indoorStallArr = [Int]()
-    var indoorStallVal = Int()
+//    var singleArr = [Int]()
+//    var singleValue = Int()
+//    var doubleArr = [Int]()
+//    var doubleValue = Int()
+//    var queenArr = [Int]()
+//    var queenValue = Int()
+//    var kingArr = [Int]()
+//    var kingValue = Int()
+//    var bunkBedArr = [Int]()
+//    var bunkBedValue = Int()
+//    var indoorStallArr = [Int]()
+//    var indoorStallVal = Int()
     var bedTypeValue = ""
     var bedType = [String]()
     

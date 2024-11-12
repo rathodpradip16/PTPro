@@ -141,45 +141,45 @@ class LawAndTaxViewController: BaseHostTableviewController {
     
     func updateListingAPI()
     {
-        let updatelist = PTProAPI.UpdateListingStep3Mutation(id: .some(Utility.shared.step3ValuesInfo["id"] as! Int),
-                                                    houseRules: .some(Utility.shared.step3ValuesInfo["houseRules"] as! [Int]),
-                                                    bookingNoticeTime: .some("\(Utility.shared.step3ValuesInfo["bookingNoticeTime"] ?? "")"),
-                                                    checkInStart: .some("\(Utility.shared.step3ValuesInfo["checkInStart"] ?? "")"),
-                                                    checkInEnd: .some("\(Utility.shared.step3ValuesInfo["checkInEnd"] ?? "")"),
-                                                    maxDaysNotice: .some("\(Utility.shared.step3ValuesInfo["maxDaysNotice"] ?? "")"),
-                                                    minNight: .some(Utility.shared.step3ValuesInfo["minNight"] as! Int),
-                                                    maxNight: .some(Utility.shared.step3ValuesInfo["maxNight"] as! Int),
-                                                    basePrice: .some(Utility.shared.step3ValuesInfo["basePrice"] as! Double),
-                                                    cleaningPrice: .some(Utility.shared.step3ValuesInfo["cleaningPrice"] as! Double),
-                                                    currency: .some("\(Utility.shared.step3ValuesInfo["currency"] ?? "")"),is_affiliate: .some(Utility.shared.step3ValuesInfo["is_affiliate"] as? Int ?? 0 ), affiliate_commission: .some(Utility.shared.step3ValuesInfo["affiliate_commission"] as? Double ?? 0.0),
-                                                    weeklyDiscount: .some(Utility.shared.step3ValuesInfo["weeklyDiscount"] as! Int),
-                                                    monthlyDiscount: .some(Utility.shared.step3ValuesInfo["monthlyDiscount"] as! Int), blockedDates: .some([]) ,
-                                                    bookingType: "\(Utility.shared.step3ValuesInfo["bookingType"] ?? "")",
-                                                    cancellationPolicy: .some(Utility.shared.step3ValuesInfo["cancellationPolicy"] as! Int))
-        Network.shared.apollo_headerClient.perform(mutation: updatelist){  response in
-            switch response {
-            case .success(let result):
-                if let data = result.data?.updateListingStep3?.status,data == 200 {
-                    self.lottieView.isHidden = true
-                    if(result.data?.updateListingStep3?.results != nil)
-                    {
-                        self.updateResults = (result.data?.updateListingStep3?.results)!
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            // code to remove your view
-                            let becomeHostObj = BecomeHostVC()
-                            becomeHostObj.listID = "\(Utility.shared.step3ValuesInfo["id"]!)"
-                            becomeHostObj.showListingStepsAPICall(listID:"\(Utility.shared.step3ValuesInfo["id"]!)")
-                            becomeHostObj.modalPresentationStyle = .fullScreen
-                            self.present(becomeHostObj, animated:false, completion: nil)
-                        }
-                    }
-                } else {
-                    self.view.makeToast(result.data?.updateListingStep3?.errorMessage)
-                }
-            case .failure(let error):
-                self.view.makeToast(error.localizedDescription)
-            }
-        }
+//        let updatelist = PTProAPI.UpdateListingStep3Mutation(id: .some(Utility.shared.step3ValuesInfo["id"] as! Int),
+//                                                    houseRules: .some(Utility.shared.step3ValuesInfo["houseRules"] as! [Int]),
+//                                                    bookingNoticeTime: .some("\(Utility.shared.step3ValuesInfo["bookingNoticeTime"] ?? "")"),
+//                                                    checkInStart: .some("\(Utility.shared.step3ValuesInfo["checkInStart"] ?? "")"),
+//                                                    checkInEnd: .some("\(Utility.shared.step3ValuesInfo["checkInEnd"] ?? "")"),
+//                                                    maxDaysNotice: .some("\(Utility.shared.step3ValuesInfo["maxDaysNotice"] ?? "")"),
+//                                                    minNight: .some(Utility.shared.step3ValuesInfo["minNight"] as! Int),
+//                                                    maxNight: .some(Utility.shared.step3ValuesInfo["maxNight"] as! Int),
+//                                                    basePrice: .some(Utility.shared.step3ValuesInfo["basePrice"] as! Double),
+//                                                    cleaningPrice: .some(Utility.shared.step3ValuesInfo["cleaningPrice"] as! Double),
+//                                                    currency: .some("\(Utility.shared.step3ValuesInfo["currency"] ?? "")"),is_affiliate: .some(Utility.shared.step3ValuesInfo["is_affiliate"] as? Int ?? 0 ), affiliate_commission: .some(Utility.shared.step3ValuesInfo["affiliate_commission"] as? Double ?? 0.0),
+//                                                    weeklyDiscount: .some(Utility.shared.step3ValuesInfo["weeklyDiscount"] as! Int),
+//                                                    monthlyDiscount: .some(Utility.shared.step3ValuesInfo["monthlyDiscount"] as! Int), blockedDates: .some([]) ,
+//                                                    bookingType: "\(Utility.shared.step3ValuesInfo["bookingType"] ?? "")",
+//                                                    cancellationPolicy: .some(Utility.shared.step3ValuesInfo["cancellationPolicy"] as! Int))
+//        Network.shared.apollo_headerClient.perform(mutation: updatelist){  response in
+//            switch response {
+//            case .success(let result):
+//                if let data = result.data?.updateListingStep3?.status,data == 200 {
+//                    self.lottieView.isHidden = true
+//                    if(result.data?.updateListingStep3?.results != nil)
+//                    {
+//                        self.updateResults = (result.data?.updateListingStep3?.results)!
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                            // code to remove your view
+//                            let becomeHostObj = BecomeHostVC()
+//                            becomeHostObj.listID = "\(Utility.shared.step3ValuesInfo["id"]!)"
+//                            becomeHostObj.showListingStepsAPICall(listID:"\(Utility.shared.step3ValuesInfo["id"]!)")
+//                            becomeHostObj.modalPresentationStyle = .fullScreen
+//                            self.present(becomeHostObj, animated:false, completion: nil)
+//                        }
+//                    }
+//                } else {
+//                    self.view.makeToast(result.data?.updateListingStep3?.errorMessage)
+//                }
+//            case .failure(let error):
+//                self.view.makeToast(error.localizedDescription)
+//            }
+//        }
     }
     //MARK: - Progress Indicator
     

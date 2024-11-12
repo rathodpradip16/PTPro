@@ -28,8 +28,8 @@ class viewListingModel{
     public var selectedEndDate: Date?
     
     func createLocalPhotos() -> [SKPhotoProtocol] {
-        return (0..<(viewListingArray?.listingPhotos?.count ?? 0)).map { (i: Int) -> SKPhotoProtocol in
-            let photo = SKPhoto.photoWithImageURL("\(IMAGE_LISTING_MEDIUM)\(viewListingArray?.listingPhotos?[i]?.name ?? "")")
+        return (0..<(viewListingArray?.listPhotos?.count ?? 0)).map { (i: Int) -> SKPhotoProtocol in
+            let photo = SKPhoto.photoWithImageURL("\(IMAGE_LISTING_MEDIUM)\(viewListingArray?.listPhotos?[i]?.name ?? "")")
             
             return photo
         }

@@ -129,14 +129,13 @@ class HouseRulesViewController: BaseHostTableviewController {
             {
                 for i in 0..<typeInfo.count
                 {
-                    if let userhouseTypes = typeInfo[i] as? PTProAPI.GetListingDetailsStep3Query.Data.GetListingDetails.Results.HouseRule
+                    if let userhouseTypes = typeInfo[i] as? PTProAPI.GetListingDetailsStep3Query.Data.GetListingDetails.Results.HouseRules
                     {
-                        if houseRules.contains(where: { (item) -> Bool in
-                            (item["id"] as? Int == (userhouseTypes.id))
-                        }){
-                           Utility.shared.selectedRules.add(userhouseTypes.id!)
-                            
-                        }
+//                        if houseRules.contains(where: { (item) -> Bool in
+//                            (item["id"] as? Int == (userhouseTypes.id))
+//                        }){
+//                           Utility.shared.selectedRules.add(userhouseTypes.id!)
+//                        }
                         
                     }
                 }

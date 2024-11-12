@@ -841,7 +841,7 @@ class RequestbookVC: UIViewController,UITableViewDelegate,UITableViewDataSource,
     
     @objc func handleTapGesture(sender: UITapGestureRecognizer) {
     let houserulesObj = HouseRulesVC()
-        houserulesObj.houserulesArray = viewListingArray?.houseRules! as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
+        houserulesObj.houserulesArray = viewListingArray?.houseRules! as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRules]
     houserulesObj.titleString = "\((Utility.shared.getLanguage()?.value(forKey:"houserules"))!)"
     houserulesObj.modalPresentationStyle = .fullScreen
     self.present(houserulesObj, animated: true, completion: nil)

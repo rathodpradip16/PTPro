@@ -8,7 +8,7 @@ extension PTProAPI {
     static let operationName: String = "getStep1ListingDetails"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"query getStep1ListingDetails($listId: String!, $preview: Boolean) { getListingDetails(listId: $listId, preview: $preview) { __typename status errorMessage results { __typename id userId country street buildingName city state zipcode lat lng isMapTouched bedrooms residenceType beds personCapacity bathrooms user { __typename email userBanStatus profile { __typename firstName lastName dateOfBirth } } userAmenities { __typename id image itemName } userSafetyAmenities { __typename id image itemName } userSpaces { __typename id itemName } settingsData { __typename id settingsId listsettings { __typename id itemName settingsType { __typename typeName } } } userBedsTypes { __typename id listId bedCount bedType } } } }"#
+        #"query getStep1ListingDetails($listId: String!, $preview: Boolean) { getListingDetails(listId: $listId, preview: $preview) { __typename status errorMessage results { __typename id userId country street buildingName city state zipcode lat lng isMapTouched bedrooms residenceType beds personCapacity bathrooms user { __typename email userBanStatus profile { __typename firstName lastName dateOfBirth } } userAmenities { __typename id itemName } userSafetyAmenities { __typename id itemName } userSpaces { __typename id itemName } settingsData { __typename id settingsId listsettings { __typename id itemName settingsType { __typename typeName } } } userBedsTypes { __typename id listId bedCount bedType } } } }"#
       ))
 
     public var listId: String
@@ -168,12 +168,10 @@ extension PTProAPI {
             static var __selections: [Apollo.Selection] { [
               .field("__typename", String.self),
               .field("id", Int?.self),
-              .field("image", String?.self),
               .field("itemName", String?.self),
             ] }
 
             var id: Int? { __data["id"] }
-            var image: String? { __data["image"] }
             var itemName: String? { __data["itemName"] }
           }
 
@@ -188,12 +186,10 @@ extension PTProAPI {
             static var __selections: [Apollo.Selection] { [
               .field("__typename", String.self),
               .field("id", Int?.self),
-              .field("image", String?.self),
               .field("itemName", String?.self),
             ] }
 
             var id: Int? { __data["id"] }
-            var image: String? { __data["image"] }
             var itemName: String? { __data["itemName"] }
           }
 

@@ -829,7 +829,7 @@ func initialSetup()
     
     //MARK:*************************************************** TABLEVIEW DELEGATE & DATASOURCE METHODS ************************************************>
     func numberOfSections(in tableView: UITableView) -> Int {
-        if(viewListingArray?.listingPhotos != nil)
+        if(viewListingArray?.listPhotos != nil)
         {
         return 10
         }
@@ -1098,39 +1098,39 @@ func initialSetup()
         else if(section == 8){
             if(viewListingArray?.reviewsCount == 0)
             {
-                if(viewListingArray?.houseRules?.count == 0)
-                {
-                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
-                    {
-                        return 4
-                    }
-                    return 5
-                }
-                else {
+//                if(viewListingArray?.houseRules?.count == 0)
+//                {
+//                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+//                    {
+//                        return 4
+//                    }
+//                    return 5
+//                }
+//                else {
                     if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                     {
                         return 5
                     }
                     return 6
-                }
+//                }
             
             }
             else {
-                if(viewListingArray?.houseRules?.count == 0)
-                {
-                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
-                    {
-                        return 5
-                    }
-                    return 6
-                }
-                else{
+//                if(viewListingArray?.houseRules?.count == 0)
+//                {
+//                    if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+//                    {
+//                        return 5
+//                    }
+//                    return 6
+//                }
+//                else{
                     if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
                     {
                         return 6
                     }
                     return 7
-                }
+//                }
             }
            
         }
@@ -1289,24 +1289,24 @@ func initialSetup()
         {
             if(viewListingArray?.reviewsCount == 0)
             {
-                if(viewListingArray?.houseRules?.count == 0)
-                {
-                    if(indexPath.row == 4)
-                    {
-                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
-                        {
-                            return .leastNormalMagnitude
-                        }
-                        
-                        return 70
-                    }
-                    else
-                    {
-                        return 70
-                    }
-                }
-                else
-                {
+//                if(viewListingArray?.houseRules?.count == 0)
+//                {
+//                    if(indexPath.row == 4)
+//                    {
+//                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+//                        {
+//                            return .leastNormalMagnitude
+//                        }
+//                        
+//                        return 70
+//                    }
+//                    else
+//                    {
+//                        return 70
+//                    }
+//                }
+//                else
+//                {
                     if(indexPath.row == 5)
                     {
                         if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
@@ -1320,7 +1320,7 @@ func initialSetup()
                         return 70
                     }
                     
-                }
+//                }
                
             }
             else {
@@ -1328,23 +1328,23 @@ func initialSetup()
                 {
                     return UITableView.automaticDimension
                 }
-                if(viewListingArray?.houseRules?.count == 0)
-                {
-                    if(indexPath.row == 5)
-                    {
-                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
-                        {
-                            return .leastNormalMagnitude
-                        }
-                        return 70
-                    }
-                    else
-                    {
-                        return 70
-                    }
-                }
-                else
-                {
+//                if(viewListingArray?.houseRules?.count == 0)
+//                {
+//                    if(indexPath.row == 5)
+//                    {
+//                        if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
+//                        {
+//                            return .leastNormalMagnitude
+//                        }
+//                        return 70
+//                    }
+//                    else
+//                    {
+//                        return 70
+//                    }
+//                }
+//                else
+//                {
                     if(indexPath.row == 6)
                     {
                         if((Utility.shared.getCurrentUserID() != nil) && ("\(viewListingArray?.userId ?? "")" == "\(String(describing: Utility.shared.getCurrentUserID()!))"))
@@ -1358,7 +1358,7 @@ func initialSetup()
                         return 70
                     }
                     
-                }
+//                }
                
             }
         }
@@ -1496,11 +1496,11 @@ func initialSetup()
             
             
             
-            let array = viewListingArray?.listingPhotos
+            let array = viewListingArray?.listPhotos
             
             for j in array!
             {
-                if(viewListingArray?.listPhotoName == viewListingArray?.listingPhotos?[0]?.name)
+                if(viewListingArray?.listPhotoName == viewListingArray?.listPhotos?[0]?.name)
                 {
                     if(filteredImageArray.contains("\(IMAGE_LISTING_MEDIUM)\(j?.name ?? "0")" as Any))
                     {
@@ -1787,60 +1787,60 @@ func initialSetup()
                 let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
                 cell.selectionStyle = UITableViewCell.SelectionStyle.none
                 cell.flexLabel.textColor = Theme.PRIMARY_COLOR
-                if(viewListingArray?.houseRules?.count == 0)
-            {
-                cell.checkLabel.text = (checkArray[indexPath.row] as! String)
-                
-                if(indexPath.row == 0)
-                {
-                    if(viewListingArray?.listingData?.checkInStart == "Flexible")
-                    {
-                    cell.flexLabel.text = viewListingArray?.listingData?.checkInStart!
-                    }
-                    else
-                    {
-                    if let checkinstart = (viewListingArray?.listingData?.checkInStart)
-                        {
-                     cell.flexLabel.text = self.conversionRailwaytime(time:checkinstart)
-                        }
-                    }
-                    return cell
-                }
-                else if(indexPath.row == 1)
-                {
-                    if(viewListingArray?.listingData?.checkInEnd == "Flexible")
-                    {
-                        cell.flexLabel.text = viewListingArray?.listingData?.checkInEnd!
-                    }
-                    else
-                    {
-                        if(viewListingArray?.listingData?.checkInEnd != nil)
-                        {
-                        cell.flexLabel.text = self.conversionRailwaytime(time: (viewListingArray?.listingData?.checkInEnd!)!)
-                        }
-                    }
-    
-                      return cell
-                }
-                else if(indexPath.row == 2)
-                {
-                 
-                    if let policyname = viewListingArray?.listingData?.cancellation?.policyName! {
-                        cell.flexLabel.text = policyname }
-                      return cell
-                }
-                else if(indexPath.row == 3)
-                {
-                    cell.flexLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"check"))!)"
-                      return cell
-                }
-                else if(indexPath.row == 4)
-                {
-                cell.flexLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"message"))!)"
-                      return cell
-                }
-                }
-            else{
+//                if(viewListingArray?.houseRules?.count == 0)
+//            {
+//                cell.checkLabel.text = (checkArray[indexPath.row] as! String)
+//                
+//                if(indexPath.row == 0)
+//                {
+//                    if(viewListingArray?.listingData?.checkInStart == "Flexible")
+//                    {
+//                    cell.flexLabel.text = viewListingArray?.listingData?.checkInStart!
+//                    }
+//                    else
+//                    {
+//                    if let checkinstart = (viewListingArray?.listingData?.checkInStart)
+//                        {
+//                     cell.flexLabel.text = self.conversionRailwaytime(time:checkinstart)
+//                        }
+//                    }
+//                    return cell
+//                }
+//                else if(indexPath.row == 1)
+//                {
+//                    if(viewListingArray?.listingData?.checkInEnd == "Flexible")
+//                    {
+//                        cell.flexLabel.text = viewListingArray?.listingData?.checkInEnd!
+//                    }
+//                    else
+//                    {
+//                        if(viewListingArray?.listingData?.checkInEnd != nil)
+//                        {
+//                        cell.flexLabel.text = self.conversionRailwaytime(time: (viewListingArray?.listingData?.checkInEnd!)!)
+//                        }
+//                    }
+//    
+//                      return cell
+//                }
+//                else if(indexPath.row == 2)
+//                {
+//                 
+//                    if let policyname = viewListingArray?.listingData?.cancellation?.policyName! {
+//                        cell.flexLabel.text = policyname }
+//                      return cell
+//                }
+//                else if(indexPath.row == 3)
+//                {
+//                    cell.flexLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"check"))!)"
+//                      return cell
+//                }
+//                else if(indexPath.row == 4)
+//                {
+//                cell.flexLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"message"))!)"
+//                      return cell
+//                }
+//                }
+//            else{
                     cell.checkLabel.text = (checkleftSideArray[indexPath.row] as! String)
                     cell.selectionStyle = UITableViewCell.SelectionStyle.none
                     if(indexPath.row == 0)
@@ -1904,7 +1904,7 @@ func initialSetup()
                           return cell
                     }
                 
-                }
+//                }
                 
                 cell.selectionStyle = UITableViewCell.SelectionStyle.none
                 
@@ -1912,160 +1912,160 @@ func initialSetup()
             }
             else{
                 
-                if(viewListingArray?.houseRules?.count == 0)
-                {
-                    
-                    if(indexPath.row == 0)
-                    {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
-                        cell.selectionStyle = UITableViewCell.SelectionStyle.none
-                        cell.flexLabel.textColor = Theme.PRIMARY_COLOR
-                        cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"checkintime"))!)"
-                        if(viewListingArray?.listingData?.checkInStart == "Flexible")
-                        {
-                            cell.flexLabel.text = viewListingArray?.listingData?.checkInStart!
-                        }
-                        else
-                        {
-                            cell.flexLabel.text = self.conversionRailwaytime(time: (viewListingArray?.listingData?.checkInStart!)!)
-                        }
-                        return cell
-                    }
-                    else if(indexPath.row == 1)
-                    {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
-                        cell.selectionStyle = UITableViewCell.SelectionStyle.none
-                        cell.flexLabel.textColor = Theme.PRIMARY_COLOR
-                        cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"checkouttime"))!)"
-                        if(viewListingArray?.listingData?.checkInEnd == "Flexible")
-                        {
-                            cell.flexLabel.text = viewListingArray?.listingData?.checkInEnd!
-                        }
-                        else
-                        {
-                            if let checkInEnd = (viewListingArray?.listingData?.checkInEnd!) {
-                                cell.flexLabel.text = self.conversionRailwaytime(time: checkInEnd) }
-                        }
-                        return cell
-                    }
-                    else if indexPath.row == 2{
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "updatedreviewCells", for: indexPath) as! UpdatedReviewCells
-                        cell.selectionStyle = .none
-                        
-                        let flowLayout = UICollectionViewFlowLayout()
-                        
-                        flowLayout.scrollDirection = .horizontal
-                        
-                        cell.collectionView.collectionViewLayout = flowLayout
-                        cell.collectionView.delegate = self
-                        cell.collectionView.dataSource = self
-                        cell.collectionView.register(UINib(nibName: "reviewCollectionCell", bundle: nil), forCellWithReuseIdentifier: "reviewCollection")
-                        DispatchQueue.main.async {
-                            cell.collectionView.reloadData()
-                        }
-                        
-                        
-                        let value1 = Double(self.viewListingArray?.reviewsCount ?? 0)
-                        let value2 = Double(self.viewListingArray?.reviewsStarRating ?? 0)
-                        var reviewcount = 0
-                        if(value2 != 0.0){
-                            reviewcount = Int(round(value2/value1))
-                        }
-                        else{
-                            reviewcount = 0
-                        }
-                        
-                        let totalReviews = self.propertyReviewsCount
-                        
-                        cell.ratingTitle.text = "\(reviewcount) / \(Utility.shared.getLanguage()?.value(forKey: "reviews") ?? "Reviews") (\(totalReviews))"
-                        self.reviewTitle = cell.ratingTitle.text ?? ""
-                        cell.showAllReviewsBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey: "Show_all") ?? "Show all") \(totalReviews) \(Utility.shared.getLanguage()?.value(forKey: "reviewssmall") ?? "reviews")", for: .normal)
-                        
-                        if self.propertyReviewsCount > 1{
-                            cell.showAllReviewsBtn.isHidden = false
-                            cell.showAllBtnHeightConstraint.constant = 45
-                            cell.showAllReviewsBtn.addTarget(self, action: #selector(propertyReviewsReadALLBtnTapped), for: .touchUpInside)
-                        }else{
-                            cell.showAllReviewsBtn.isHidden = true
-                            cell.showAllBtnHeightConstraint.constant = 0
-                        }
-                        
-                        
-                        return cell
-                    }
-//                    else if(indexPath.row == 2)
+//                if(viewListingArray?.houseRules?.count == 0)
+//                {
+//                    
+//                    if(indexPath.row == 0)
 //                    {
-//                        let cell1 = tableView.dequeueReusableCell(withIdentifier: "ReviewCell") as! ReviewCell
-//                        cell1.selectionStyle = UITableViewCell.SelectionStyle.none
-//                        if(self.getreviewArray.count > 0)
+//                        let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
+//                        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+//                        cell.flexLabel.textColor = Theme.PRIMARY_COLOR
+//                        cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"checkintime"))!)"
+//                        if(viewListingArray?.listingData?.checkInStart == "Flexible")
 //                        {
-//                            if let reviewContent = self.getreviewArray[0].reviewContent {
-//                                cell1.reviewLabel.text = reviewContent }
-//                        cell1.reviewDateLabel.text = reviewDate
-//                        cell1.reviewCountLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"readall"))!) \(viewListingArray?.reviewsCount!) \((Utility.shared.getLanguage()?.value(forKey:"views"))!)"
-//                        cell1.reviewRateView.rating = self.getreviewArray[0].rating!
-//
-//
-//                        }
-//                        else{
-//
-//                        }
-//                        if let reviewsCount = (viewListingArray?.reviewsCount)
-//                        {
-//
-////                            cell1.readallBtn.setTitle("\(reviewsCount) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)\(reviewsCount > 1 ? "s" : "")", for: .normal)
-//
-//                            if reviewsCount > 1{
-//                                cell1.readallBtn.setTitle("\(reviewsCount) \((Utility.shared.getLanguage()?.value(forKey:"reviews")) ?? "Reviews")", for: .normal)
-//                            }else{
-//                                cell1.readallBtn.setTitle("\(reviewsCount) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)", for: .normal)
-//                            }
-//                        }
-//                       if(getreviewArray.count > 0 && self.getreviewArray[0].isAdmin! == true){
-//                            cell1.profileImg.image = #imageLiteral(resourceName: "adminAvatar")
-//
-//                            cell1.verifyLabel.text = "\((Utility.shared.getLanguage()?.value(forKey: "verifyrentall"))!)"
+//                            cell.flexLabel.text = viewListingArray?.listingData?.checkInStart!
 //                        }
 //                        else
 //                        {
-//                            if getreviewArray.count > 0 {
-//                            let profImage = (getreviewArray[0].authorData?.picture)!
-//                             cell1.profileImg.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(String(describing: profImage))"),placeholderImage: #imageLiteral(resourceName: "adminAvatar"))
-//                                cell1.verifyLabel.text = "\((getreviewArray[0].authorData?.firstName != nil ? ((getreviewArray[0].authorData?.firstName!)!) : "")) \((getreviewArray[0].authorData?.lastName != nil ? ((getreviewArray[0].authorData?.lastName!)!) : ""))" }
+//                            cell.flexLabel.text = self.conversionRailwaytime(time: (viewListingArray?.listingData?.checkInStart!)!)
 //                        }
-//                        return cell1
+//                        return cell
 //                    }
-                        
-                    else if(indexPath.row == 3)
-                    {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
-                        cell.selectionStyle = UITableViewCell.SelectionStyle.none
-                        cell.flexLabel.textColor = Theme.PRIMARY_COLOR
-                        cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"cancellationPolicy"))!)"
-                        if let policyname =  viewListingArray?.listingData?.cancellation?.policyName {
-                            cell.flexLabel.text = policyname }
-                        return cell
-                    }
-                    else if(indexPath.row == 4)
-                    {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
-                        cell.selectionStyle = UITableViewCell.SelectionStyle.none
-                        cell.flexLabel.textColor = Theme.PRIMARY_COLOR
-                        cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"availability"))!)"
-                        cell.flexLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"check"))!)"
-                        return cell
-                    }
-                    else {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
-                        cell.selectionStyle = UITableViewCell.SelectionStyle.none
-                        cell.flexLabel.textColor = Theme.PRIMARY_COLOR
-                    
-                         cell.checkLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"contacthost"))!)"
-                        cell.flexLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"message"))!)"
-                        return cell
-                    }
-                }
-                else {
+//                    else if(indexPath.row == 1)
+//                    {
+//                        let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
+//                        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+//                        cell.flexLabel.textColor = Theme.PRIMARY_COLOR
+//                        cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"checkouttime"))!)"
+//                        if(viewListingArray?.listingData?.checkInEnd == "Flexible")
+//                        {
+//                            cell.flexLabel.text = viewListingArray?.listingData?.checkInEnd!
+//                        }
+//                        else
+//                        {
+//                            if let checkInEnd = (viewListingArray?.listingData?.checkInEnd!) {
+//                                cell.flexLabel.text = self.conversionRailwaytime(time: checkInEnd) }
+//                        }
+//                        return cell
+//                    }
+//                    else if indexPath.row == 2{
+//                        let cell = tableView.dequeueReusableCell(withIdentifier: "updatedreviewCells", for: indexPath) as! UpdatedReviewCells
+//                        cell.selectionStyle = .none
+//                        
+//                        let flowLayout = UICollectionViewFlowLayout()
+//                        
+//                        flowLayout.scrollDirection = .horizontal
+//                        
+//                        cell.collectionView.collectionViewLayout = flowLayout
+//                        cell.collectionView.delegate = self
+//                        cell.collectionView.dataSource = self
+//                        cell.collectionView.register(UINib(nibName: "reviewCollectionCell", bundle: nil), forCellWithReuseIdentifier: "reviewCollection")
+//                        DispatchQueue.main.async {
+//                            cell.collectionView.reloadData()
+//                        }
+//                        
+//                        
+//                        let value1 = Double(self.viewListingArray?.reviewsCount ?? 0)
+//                        let value2 = Double(self.viewListingArray?.reviewsStarRating ?? 0)
+//                        var reviewcount = 0
+//                        if(value2 != 0.0){
+//                            reviewcount = Int(round(value2/value1))
+//                        }
+//                        else{
+//                            reviewcount = 0
+//                        }
+//                        
+//                        let totalReviews = self.propertyReviewsCount
+//                        
+//                        cell.ratingTitle.text = "\(reviewcount) / \(Utility.shared.getLanguage()?.value(forKey: "reviews") ?? "Reviews") (\(totalReviews))"
+//                        self.reviewTitle = cell.ratingTitle.text ?? ""
+//                        cell.showAllReviewsBtn.setTitle("\(Utility.shared.getLanguage()?.value(forKey: "Show_all") ?? "Show all") \(totalReviews) \(Utility.shared.getLanguage()?.value(forKey: "reviewssmall") ?? "reviews")", for: .normal)
+//                        
+//                        if self.propertyReviewsCount > 1{
+//                            cell.showAllReviewsBtn.isHidden = false
+//                            cell.showAllBtnHeightConstraint.constant = 45
+//                            cell.showAllReviewsBtn.addTarget(self, action: #selector(propertyReviewsReadALLBtnTapped), for: .touchUpInside)
+//                        }else{
+//                            cell.showAllReviewsBtn.isHidden = true
+//                            cell.showAllBtnHeightConstraint.constant = 0
+//                        }
+//                        
+//                        
+//                        return cell
+//                    }
+////                    else if(indexPath.row == 2)
+////                    {
+////                        let cell1 = tableView.dequeueReusableCell(withIdentifier: "ReviewCell") as! ReviewCell
+////                        cell1.selectionStyle = UITableViewCell.SelectionStyle.none
+////                        if(self.getreviewArray.count > 0)
+////                        {
+////                            if let reviewContent = self.getreviewArray[0].reviewContent {
+////                                cell1.reviewLabel.text = reviewContent }
+////                        cell1.reviewDateLabel.text = reviewDate
+////                        cell1.reviewCountLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"readall"))!) \(viewListingArray?.reviewsCount!) \((Utility.shared.getLanguage()?.value(forKey:"views"))!)"
+////                        cell1.reviewRateView.rating = self.getreviewArray[0].rating!
+////
+////
+////                        }
+////                        else{
+////
+////                        }
+////                        if let reviewsCount = (viewListingArray?.reviewsCount)
+////                        {
+////
+//////                            cell1.readallBtn.setTitle("\(reviewsCount) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)\(reviewsCount > 1 ? "s" : "")", for: .normal)
+////
+////                            if reviewsCount > 1{
+////                                cell1.readallBtn.setTitle("\(reviewsCount) \((Utility.shared.getLanguage()?.value(forKey:"reviews")) ?? "Reviews")", for: .normal)
+////                            }else{
+////                                cell1.readallBtn.setTitle("\(reviewsCount) \((Utility.shared.getLanguage()?.value(forKey:"review"))!)", for: .normal)
+////                            }
+////                        }
+////                       if(getreviewArray.count > 0 && self.getreviewArray[0].isAdmin! == true){
+////                            cell1.profileImg.image = #imageLiteral(resourceName: "adminAvatar")
+////
+////                            cell1.verifyLabel.text = "\((Utility.shared.getLanguage()?.value(forKey: "verifyrentall"))!)"
+////                        }
+////                        else
+////                        {
+////                            if getreviewArray.count > 0 {
+////                            let profImage = (getreviewArray[0].authorData?.picture)!
+////                             cell1.profileImg.sd_setImage(with: URL(string:"\(IMAGE_AVATAR_MEDIUM)\(String(describing: profImage))"),placeholderImage: #imageLiteral(resourceName: "adminAvatar"))
+////                                cell1.verifyLabel.text = "\((getreviewArray[0].authorData?.firstName != nil ? ((getreviewArray[0].authorData?.firstName!)!) : "")) \((getreviewArray[0].authorData?.lastName != nil ? ((getreviewArray[0].authorData?.lastName!)!) : ""))" }
+////                        }
+////                        return cell1
+////                    }
+//                        
+//                    else if(indexPath.row == 3)
+//                    {
+//                        let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
+//                        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+//                        cell.flexLabel.textColor = Theme.PRIMARY_COLOR
+//                        cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"cancellationPolicy"))!)"
+//                        if let policyname =  viewListingArray?.listingData?.cancellation?.policyName {
+//                            cell.flexLabel.text = policyname }
+//                        return cell
+//                    }
+//                    else if(indexPath.row == 4)
+//                    {
+//                        let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
+//                        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+//                        cell.flexLabel.textColor = Theme.PRIMARY_COLOR
+//                        cell.checkLabel.text =  "\((Utility.shared.getLanguage()?.value(forKey:"availability"))!)"
+//                        cell.flexLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"check"))!)"
+//                        return cell
+//                    }
+//                    else {
+//                        let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
+//                        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+//                        cell.flexLabel.textColor = Theme.PRIMARY_COLOR
+//                    
+//                         cell.checkLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"contacthost"))!)"
+//                        cell.flexLabel.text = "\((Utility.shared.getLanguage()?.value(forKey:"message"))!)"
+//                        return cell
+//                    }
+//                }
+//                else {
                     if(indexPath.row == 0)
                     {
                         let cell = tableView.dequeueReusableCell(withIdentifier: "CheckingCell", for: indexPath) as! CheckingCell
@@ -2227,7 +2227,7 @@ func initialSetup()
                         return cell
                    // }
                     }
-                }
+//                }
                 
             }
             
@@ -2325,108 +2325,108 @@ func initialSetup()
         
         if(viewListingArray?.reviewsCount == 0)
         {
-            if(viewListingArray?.houseRules?.count == 0)
-            {
-                if(indexPath.row == 2)
-                {
-                    let cancellationObj = CancellationVC()
-                    if let policy = viewListingArray?.listingData?.cancellation?.policyName {
-                  Utility.shared.cancelpolicy = policy
-                        cancellationObj.cancelpolicy = policy }
-                    if((viewListingArray?.listingData?.cancellation?.policyContent!) != nil)
-                    {
-                    
-                    cancellationObj.cancelpolicy_content = (viewListingArray?.listingData?.cancellation?.policyContent!)!
-                    }
-                    cancellationObj.modalPresentationStyle = .fullScreen
-                    self.present(cancellationObj, animated: true, completion: nil)
-                }
-                if(indexPath.row == 3)
-                {
-                    Utility.shared.blocked_date_month.removeAllObjects()
-                    if let blockedDates = viewListingArray?.blockedDates{
-                        for i in blockedDates
-                        {
-                            let timestamp = i?.blockedDates
-                            let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
-                            let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
-                            let dateFormatter = DateFormatter()
-                            dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
-                            let dateFormatter1 = DateFormatter()
-                            dateFormatter1.dateFormat = "LL"
-                            // let newdate = Calendar.current.date(byAdding: .day, value: 1, to: newTime)
-                            let date = "\(dateFormatter.string(from: newTime))"
-                            if(i?.calendarStatus != "available")
-                            {
-                                Utility.shared.blocked_date_month.add("\(date)")
-                            }
-                            Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
-                        }
-                    }
-                    if let minNight = (viewListingArray?.listingData?.minNight!) {
-                        Utility.shared.minimumstay = minNight }
-                    Utility.shared.isfromcheckingPage = true
-                    let datePickerViewController = AirbnbDatePickerViewController(dateFrom: selectedStartDate, dateTo: selectedEndDate)
-                    datePickerViewController.delegate = self
-                    datePickerViewController.isFromFilter = false
-                    datePickerViewController.viewListingArray = viewListingArray
-                    let navigationController = UINavigationController(rootViewController: datePickerViewController)
-                    navigationController.modalPresentationStyle = .fullScreen
-                    self.present(navigationController, animated: true, completion: nil)
-                }
-                if(indexPath.row == 4)
-                {
-                    if Utility.shared.isConnectedToNetwork(){
-                        if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
-                        {
-                            let welcomeObj = WelcomePageVC()
-                            welcomeObj.modalPresentationStyle = .fullScreen
-                            self.present(welcomeObj, animated:false, completion: nil)
-                            //  appDelegate.setInitialViewController(initialView: welcomeObj)
-                        }
-                        else
-                        {
-                    let contactpageObj = ContacthostVC()
-                    contactpageObj.currency_Dict = currency_Dict
-                    contactpageObj.viewListingArray = viewListingArray
-                    contactpageObj.currencyvalue_from_API_base = currencyvalue_from_API_base
-                    Utility.shared.booking_message = ""
-                    contactpageObj.selectedStartDate = selectedStartDate
-                    contactpageObj.selectedEndDate = selectedEndDate
-                    contactpageObj.getbillingArray = getbillingArray
-                    contactpageObj.delegate = self
-                    contactpageObj.modalPresentationStyle = .fullScreen
-                    self.present(contactpageObj, animated: true, completion: nil)
-                        }
-                    }
-                    else
-                    {
-                        self.offlineView.isHidden = false
-                        self.bottomView.isHidden = true
-                        let shadowSize2 : CGFloat = 3.0
-                        let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
-                                                                    y: -shadowSize2 / 2,
-                                                                    width: self.offlineView.frame.size.width + shadowSize2,
-                                                                    height: self.offlineView.frame.size.height + shadowSize2))
-                        
-                        self.offlineView.layer.masksToBounds = false
-                        self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
-                        self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-                        self.offlineView.layer.shadowOpacity = 0.3
-                        self.offlineView.layer.shadowPath = shadowPath2.cgPath
-                        if IS_IPHONE_X || IS_IPHONE_XR {
-                            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-85, width: FULLWIDTH, height: 55)
-                        }else{
-                            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-55, width: FULLWIDTH, height: 55)
-                        }
-                    }
-                }
-            }
-            else{
+//            if(viewListingArray?.houseRules?.count == 0)
+//            {
+//                if(indexPath.row == 2)
+//                {
+//                    let cancellationObj = CancellationVC()
+//                    if let policy = viewListingArray?.listingData?.cancellation?.policyName {
+//                  Utility.shared.cancelpolicy = policy
+//                        cancellationObj.cancelpolicy = policy }
+//                    if((viewListingArray?.listingData?.cancellation?.policyContent!) != nil)
+//                    {
+//                    
+//                    cancellationObj.cancelpolicy_content = (viewListingArray?.listingData?.cancellation?.policyContent!)!
+//                    }
+//                    cancellationObj.modalPresentationStyle = .fullScreen
+//                    self.present(cancellationObj, animated: true, completion: nil)
+//                }
+//                if(indexPath.row == 3)
+//                {
+//                    Utility.shared.blocked_date_month.removeAllObjects()
+//                    if let blockedDates = viewListingArray?.blockedDates{
+//                        for i in blockedDates
+//                        {
+//                            let timestamp = i?.blockedDates
+//                            let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
+//                            let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
+//                            let dateFormatter = DateFormatter()
+//                            dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
+//                            let dateFormatter1 = DateFormatter()
+//                            dateFormatter1.dateFormat = "LL"
+//                            // let newdate = Calendar.current.date(byAdding: .day, value: 1, to: newTime)
+//                            let date = "\(dateFormatter.string(from: newTime))"
+//                            if(i?.calendarStatus != "available")
+//                            {
+//                                Utility.shared.blocked_date_month.add("\(date)")
+//                            }
+//                            Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
+//                        }
+//                    }
+//                    if let minNight = (viewListingArray?.listingData?.minNight!) {
+//                        Utility.shared.minimumstay = minNight }
+//                    Utility.shared.isfromcheckingPage = true
+//                    let datePickerViewController = AirbnbDatePickerViewController(dateFrom: selectedStartDate, dateTo: selectedEndDate)
+//                    datePickerViewController.delegate = self
+//                    datePickerViewController.isFromFilter = false
+//                    datePickerViewController.viewListingArray = viewListingArray
+//                    let navigationController = UINavigationController(rootViewController: datePickerViewController)
+//                    navigationController.modalPresentationStyle = .fullScreen
+//                    self.present(navigationController, animated: true, completion: nil)
+//                }
+//                if(indexPath.row == 4)
+//                {
+//                    if Utility.shared.isConnectedToNetwork(){
+//                        if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
+//                        {
+//                            let welcomeObj = WelcomePageVC()
+//                            welcomeObj.modalPresentationStyle = .fullScreen
+//                            self.present(welcomeObj, animated:false, completion: nil)
+//                            //  appDelegate.setInitialViewController(initialView: welcomeObj)
+//                        }
+//                        else
+//                        {
+//                    let contactpageObj = ContacthostVC()
+//                    contactpageObj.currency_Dict = currency_Dict
+//                    contactpageObj.viewListingArray = viewListingArray
+//                    contactpageObj.currencyvalue_from_API_base = currencyvalue_from_API_base
+//                    Utility.shared.booking_message = ""
+//                    contactpageObj.selectedStartDate = selectedStartDate
+//                    contactpageObj.selectedEndDate = selectedEndDate
+//                    contactpageObj.getbillingArray = getbillingArray
+//                    contactpageObj.delegate = self
+//                    contactpageObj.modalPresentationStyle = .fullScreen
+//                    self.present(contactpageObj, animated: true, completion: nil)
+//                        }
+//                    }
+//                    else
+//                    {
+//                        self.offlineView.isHidden = false
+//                        self.bottomView.isHidden = true
+//                        let shadowSize2 : CGFloat = 3.0
+//                        let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
+//                                                                    y: -shadowSize2 / 2,
+//                                                                    width: self.offlineView.frame.size.width + shadowSize2,
+//                                                                    height: self.offlineView.frame.size.height + shadowSize2))
+//                        
+//                        self.offlineView.layer.masksToBounds = false
+//                        self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
+//                        self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+//                        self.offlineView.layer.shadowOpacity = 0.3
+//                        self.offlineView.layer.shadowPath = shadowPath2.cgPath
+//                        if IS_IPHONE_X || IS_IPHONE_XR {
+//                            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-85, width: FULLWIDTH, height: 55)
+//                        }else{
+//                            offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-55, width: FULLWIDTH, height: 55)
+//                        }
+//                    }
+//                }
+//            }
+//            else{
                 if(indexPath.row == 2)
                 {
                     let houserulesObj = HouseRulesVC()
-                    houserulesObj.houserulesArray = self.viewListingArray?.houseRules! as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
+                    houserulesObj.houserulesArray = self.viewListingArray?.houseRules! as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRules]
                     houserulesObj.modalPresentationStyle = .fullScreen
                     self.present(houserulesObj, animated: true, completion: nil)
                 }
@@ -2527,112 +2527,112 @@ func initialSetup()
                         
                     }
                 }
-            }
+//            }
             
         }
         else
         {
-                if(viewListingArray?.houseRules?.count == 0)
-                {
-                    if(indexPath.row == 3)
-                    {
-                        let cancellationObj = CancellationVC()
-                       cancellationObj.cancelpolicy = (viewListingArray?.listingData?.cancellation?.policyName!)!
-                        Utility.shared.cancelpolicy = (viewListingArray?.listingData?.cancellation?.policyName!)!
-                        if((viewListingArray?.listingData?.cancellation?.policyContent!) != nil)
-                        {
-                            
-                            cancellationObj.cancelpolicy_content = (viewListingArray?.listingData?.cancellation?.policyContent!)!
-                        }
-                         cancellationObj.modalPresentationStyle = .fullScreen
-                        self.present(cancellationObj, animated: true, completion: nil)
-                    }
-                    else if(indexPath.row == 4)
-                    {
-                        Utility.shared.blocked_date_month.removeAllObjects()
-                        if let blockedDates = viewListingArray?.blockedDates{
-                            for i in blockedDates
-                            {
-                                let timestamp = i?.blockedDates
-                                let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
-                                let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
-                                let dateFormatter = DateFormatter()
-                                dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
-                                let dateFormatter1 = DateFormatter()
-                                dateFormatter1.dateFormat = "LL"
-                                // let newdate = Calendar.current.date(byAdding: .day, value: 1, to: newTime)
-                                let date = "\(dateFormatter.string(from: newTime))"
-                                if(i?.calendarStatus != "available")
-                                {
-                                    Utility.shared.blocked_date_month.add("\(date)")
-                                }
-                                Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
-                            }
-                        }
-                        if let minstay = (viewListingArray?.listingData?.minNight!) {
-                            Utility.shared.minimumstay = minstay}
-                        Utility.shared.isfromcheckingPage = true
-                        let datePickerViewController = AirbnbDatePickerViewController(dateFrom: selectedStartDate, dateTo: selectedEndDate)
-                        datePickerViewController.delegate = self
-                        datePickerViewController.isFromFilter = false
-                        datePickerViewController.viewListingArray = viewListingArray
-                        let navigationController = UINavigationController(rootViewController: datePickerViewController)
-                         navigationController.modalPresentationStyle = .fullScreen
-                        self.present(navigationController, animated: true, completion: nil)
-                    }
-                    if(indexPath.row == 5)
-                    {
-                        if Utility.shared.isConnectedToNetwork(){
-                            if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
-                            {
-                                let welcomeObj = WelcomePageVC()
-                                 welcomeObj.modalPresentationStyle = .fullScreen
-                                self.present(welcomeObj, animated:false, completion: nil)
-                                //  appDelegate.setInitialViewController(initialView: welcomeObj)
-                            }
-                            else
-                            {
-                        let contactpageObj = ContacthostVC()
-                        contactpageObj.currency_Dict = currency_Dict
-                        contactpageObj.viewListingArray = viewListingArray
-                        contactpageObj.currencyvalue_from_API_base = currencyvalue_from_API_base
-                        Utility.shared.booking_message = ""
-                        contactpageObj.selectedStartDate = selectedStartDate
-                        contactpageObj.selectedEndDate = selectedEndDate
-                        contactpageObj.getbillingArray = getbillingArray
-                        contactpageObj.delegate = self
-                        contactpageObj.modalPresentationStyle = .fullScreen
-                        self.present(contactpageObj, animated: true, completion: nil)
-                            }
-                        }
-                        else
-                        {
-                            self.offlineView.isHidden = false
-                            self.bottomView.isHidden = true
-                            let shadowSize2 : CGFloat = 3.0
-                            let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
-                                                                        y: -shadowSize2 / 2,
-                                                                        width: self.offlineView.frame.size.width + shadowSize2,
-                                                                        height: self.offlineView.frame.size.height + shadowSize2))
-                            
-                            self.offlineView.layer.masksToBounds = false
-                            self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
-                            self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-                            self.offlineView.layer.shadowOpacity = 0.3
-                            self.offlineView.layer.shadowPath = shadowPath2.cgPath
-                            if IS_IPHONE_X || IS_IPHONE_XR {
-                                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-85, width: FULLWIDTH, height: 55)
-                            }else{
-                                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-55, width: FULLWIDTH, height: 55)
-                            }
-                        }
-                    }
-                }
-            else{
+//                if(viewListingArray?.houseRules?.count == 0)
+//                {
+//                    if(indexPath.row == 3)
+//                    {
+//                        let cancellationObj = CancellationVC()
+//                       cancellationObj.cancelpolicy = (viewListingArray?.listingData?.cancellation?.policyName!)!
+//                        Utility.shared.cancelpolicy = (viewListingArray?.listingData?.cancellation?.policyName!)!
+//                        if((viewListingArray?.listingData?.cancellation?.policyContent!) != nil)
+//                        {
+//                            
+//                            cancellationObj.cancelpolicy_content = (viewListingArray?.listingData?.cancellation?.policyContent!)!
+//                        }
+//                         cancellationObj.modalPresentationStyle = .fullScreen
+//                        self.present(cancellationObj, animated: true, completion: nil)
+//                    }
+//                    else if(indexPath.row == 4)
+//                    {
+//                        Utility.shared.blocked_date_month.removeAllObjects()
+//                        if let blockedDates = viewListingArray?.blockedDates{
+//                            for i in blockedDates
+//                            {
+//                                let timestamp = i?.blockedDates
+//                                let timestamValue = Int(timestamp!) != nil ? Int(timestamp!)!/1000 : 0
+//                                let newTime = Date(timeIntervalSince1970: TimeInterval(timestamValue))
+//                                let dateFormatter = DateFormatter()
+//                                dateFormatter.dateFormat = "dd-LL-yyyy" //Specify your format that you want
+//                                let dateFormatter1 = DateFormatter()
+//                                dateFormatter1.dateFormat = "LL"
+//                                // let newdate = Calendar.current.date(byAdding: .day, value: 1, to: newTime)
+//                                let date = "\(dateFormatter.string(from: newTime))"
+//                                if(i?.calendarStatus != "available")
+//                                {
+//                                    Utility.shared.blocked_date_month.add("\(date)")
+//                                }
+//                                Utility.shared.blockedDates.add(dateFormatter.string(from: newTime))
+//                            }
+//                        }
+//                        if let minstay = (viewListingArray?.listingData?.minNight!) {
+//                            Utility.shared.minimumstay = minstay}
+//                        Utility.shared.isfromcheckingPage = true
+//                        let datePickerViewController = AirbnbDatePickerViewController(dateFrom: selectedStartDate, dateTo: selectedEndDate)
+//                        datePickerViewController.delegate = self
+//                        datePickerViewController.isFromFilter = false
+//                        datePickerViewController.viewListingArray = viewListingArray
+//                        let navigationController = UINavigationController(rootViewController: datePickerViewController)
+//                         navigationController.modalPresentationStyle = .fullScreen
+//                        self.present(navigationController, animated: true, completion: nil)
+//                    }
+//                    if(indexPath.row == 5)
+//                    {
+//                        if Utility.shared.isConnectedToNetwork(){
+//                            if((Utility.shared.getCurrentUserToken()) == nil || (Utility.shared.getCurrentUserToken()) == "")
+//                            {
+//                                let welcomeObj = WelcomePageVC()
+//                                 welcomeObj.modalPresentationStyle = .fullScreen
+//                                self.present(welcomeObj, animated:false, completion: nil)
+//                                //  appDelegate.setInitialViewController(initialView: welcomeObj)
+//                            }
+//                            else
+//                            {
+//                        let contactpageObj = ContacthostVC()
+//                        contactpageObj.currency_Dict = currency_Dict
+//                        contactpageObj.viewListingArray = viewListingArray
+//                        contactpageObj.currencyvalue_from_API_base = currencyvalue_from_API_base
+//                        Utility.shared.booking_message = ""
+//                        contactpageObj.selectedStartDate = selectedStartDate
+//                        contactpageObj.selectedEndDate = selectedEndDate
+//                        contactpageObj.getbillingArray = getbillingArray
+//                        contactpageObj.delegate = self
+//                        contactpageObj.modalPresentationStyle = .fullScreen
+//                        self.present(contactpageObj, animated: true, completion: nil)
+//                            }
+//                        }
+//                        else
+//                        {
+//                            self.offlineView.isHidden = false
+//                            self.bottomView.isHidden = true
+//                            let shadowSize2 : CGFloat = 3.0
+//                            let shadowPath2 = UIBezierPath(rect: CGRect(x: -shadowSize2 / 2,
+//                                                                        y: -shadowSize2 / 2,
+//                                                                        width: self.offlineView.frame.size.width + shadowSize2,
+//                                                                        height: self.offlineView.frame.size.height + shadowSize2))
+//                            
+//                            self.offlineView.layer.masksToBounds = false
+//                            self.offlineView.layer.shadowColor = Theme.TextLightColor.cgColor
+//                            self.offlineView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+//                            self.offlineView.layer.shadowOpacity = 0.3
+//                            self.offlineView.layer.shadowPath = shadowPath2.cgPath
+//                            if IS_IPHONE_X || IS_IPHONE_XR {
+//                                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-85, width: FULLWIDTH, height: 55)
+//                            }else{
+//                                offlineView.frame = CGRect.init(x: 0, y: FULLHEIGHT-55, width: FULLWIDTH, height: 55)
+//                            }
+//                        }
+//                    }
+//                }
+//            else{
                     if(indexPath.row == 3)
                     {
                         let houserulesObj = HouseRulesVC()
-                        houserulesObj.houserulesArray = self.viewListingArray?.houseRules! as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRule]
+                        houserulesObj.houserulesArray = self.viewListingArray?.houseRules! as! [PTProAPI.ViewListingDetailsQuery.Data.ViewListing.Results.HouseRules]
                         houserulesObj.modalPresentationStyle = .fullScreen
                         self.present(houserulesObj, animated: true, completion: nil)
                     }
@@ -2734,7 +2734,7 @@ func initialSetup()
                         
                     }
             
-                }
+//                }
         }
         
     }

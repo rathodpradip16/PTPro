@@ -271,22 +271,22 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
             monthprice = "0"
         }
         
-        
-        let updatelist = PTProAPI.UpdateListingStep3Mutation( id: .some(Utility.shared.step3ValuesInfo["id"] as! Int),houseRules: .some(Utility.shared.step3ValuesInfo["houseRules"] as! [Int?]), bookingNoticeTime: .some("\(Utility.shared.step3ValuesInfo["bookingNoticeTime"] ?? "")"), checkInStart: .some("\(Utility.shared.step3ValuesInfo["checkInStart"] ?? "")"), checkInEnd: .some("\(Utility.shared.step3ValuesInfo["checkInEnd"] ?? "")"), maxDaysNotice:  .some("\(Utility.shared.step3ValuesInfo["maxDaysNotice"] ?? "")"), minNight: Utility.shared.step3ValuesInfo["minNight"] as? Int ?? 0, maxNight: Utility.shared.step3ValuesInfo["maxNight"] as? Int ?? 0, basePrice: .some(Utility.shared.host_basePrice), cleaningPrice: .some(Utility.shared.host_cleanPrice), currency: .some("\(Utility.shared.step3ValuesInfo["currency"] ?? "")"),is_affiliate: .some(Utility.shared.step3ValuesInfo["is_affiliate"] as? Int ?? 0 ), affiliate_commission: .some(Utility.shared.step3ValuesInfo["affiliate_commission"] as? Double ?? 0.0), weeklyDiscount: .some(Int(weekprice) ?? 0), monthlyDiscount: .some(Int(monthprice) ?? 0), blockedDates: .some([]), bookingType: Utility.shared.step3ValuesInfo["bookingType"] as! String, cancellationPolicy: .some(Utility.shared.step3ValuesInfo["cancellationPolicy"] as! Int))
-        
-        Network.shared.apollo_headerClient.perform(mutation: updatelist){  response in
-            switch response {
-            case .success(let result):
-                if let data = result.data?.updateListingStep3?.status,data == 200 {
-                    self.lottieView.isHidden = true
-                    self.manageListingStepsvalue(listId: "\(Utility.shared.step3ValuesInfo["id"]!)" , currentStep: 3)
-                } else {
-                    self.view.makeToast(result.data?.updateListingStep3?.errorMessage)
-                }
-            case .failure(let error):
-                self.view.makeToast(error.localizedDescription)
-            }
-        }
+//        
+//        let updatelist = PTProAPI.UpdateListingStep3Mutation( id: .some(Utility.shared.step3ValuesInfo["id"] as! Int),houseRules: .some(Utility.shared.step3ValuesInfo["houseRules"] as! [Int?]), bookingNoticeTime: .some("\(Utility.shared.step3ValuesInfo["bookingNoticeTime"] ?? "")"), checkInStart: .some("\(Utility.shared.step3ValuesInfo["checkInStart"] ?? "")"), checkInEnd: .some("\(Utility.shared.step3ValuesInfo["checkInEnd"] ?? "")"), maxDaysNotice:  .some("\(Utility.shared.step3ValuesInfo["maxDaysNotice"] ?? "")"), minNight: Utility.shared.step3ValuesInfo["minNight"] as? Int ?? 0, maxNight: Utility.shared.step3ValuesInfo["maxNight"] as? Int ?? 0, basePrice: .some(Utility.shared.host_basePrice), cleaningPrice: .some(Utility.shared.host_cleanPrice), currency: .some("\(Utility.shared.step3ValuesInfo["currency"] ?? "")"),is_affiliate: .some(Utility.shared.step3ValuesInfo["is_affiliate"] as? Int ?? 0 ), affiliate_commission: .some(Utility.shared.step3ValuesInfo["affiliate_commission"] as? Double ?? 0.0), weeklyDiscount: .some(Int(weekprice) ?? 0), monthlyDiscount: .some(Int(monthprice) ?? 0), blockedDates: .some([]), bookingType: Utility.shared.step3ValuesInfo["bookingType"] as! String, cancellationPolicy: .some(Utility.shared.step3ValuesInfo["cancellationPolicy"] as! Int))
+//        
+//        Network.shared.apollo_headerClient.perform(mutation: updatelist){  response in
+//            switch response {
+//            case .success(let result):
+//                if let data = result.data?.updateListingStep3?.status,data == 200 {
+//                    self.lottieView.isHidden = true
+//                    self.manageListingStepsvalue(listId: "\(Utility.shared.step3ValuesInfo["id"]!)" , currentStep: 3)
+//                } else {
+//                    self.view.makeToast(result.data?.updateListingStep3?.errorMessage)
+//                }
+//            case .failure(let error):
+//                self.view.makeToast(error.localizedDescription)
+//            }
+//        }
     }
               
     func manageListingStepsvalue(listId:String,currentStep:Int){

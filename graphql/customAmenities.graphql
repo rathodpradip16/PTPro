@@ -1,0 +1,6 @@
+mutation customAmenities( $listId: Int, $itemName: String) {
+customAmenities (listId: $listId, itemName: $itemName) {
+status
+errorMessage
+}
+}

@@ -320,6 +320,7 @@ PODS:
   - SwiftyJSON (5.0.2)
   - Toast-Swift (5.1.1)
   - WHTabbar (0.0.1)
+  - YRCoverFlowLayout (1.3.0)
 
 DEPENDENCIES:
   - AARatingBar
@@ -370,6 +371,7 @@ DEPENDENCIES:
   - SwiftyJSON
   - Toast-Swift
   - WHTabbar
+  - YRCoverFlowLayout
 
 SPEC REPOS:
   trunk:
@@ -445,6 +447,7 @@ SPEC REPOS:
     - SwiftyJSON
     - Toast-Swift
     - WHTabbar
+    - YRCoverFlowLayout
 
 SPEC CHECKSUMS:
   AARatingBar: dc54d24687ae97688ffdb29738332d0bc5c0c09f
@@ -519,7 +522,8 @@ SPEC CHECKSUMS:
   SwiftyJSON: f5b1bf1cd8dd53cd25887ac0eabcfd92301c6a5a
   Toast-Swift: 7a03a532afe3a560d4044bc7c237e2864d295173
   WHTabbar: add14cb164535a8e5db2068c85a6c523345b681f
+  YRCoverFlowLayout: 5140d299e4d80704f618de7f7e34376ebc341484
 
-PODFILE CHECKSUM: bdff2ad33dda467e92d87716e7d780fddbf19e71
+PODFILE CHECKSUM: abffc741fef4c9ff7af57706ad57cff236bc52dc
 
 COCOAPODS: 1.15.2

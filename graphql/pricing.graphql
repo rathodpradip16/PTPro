@@ -1,4 +1,4 @@
-query pricing($listId:Int){
+query pricing($listId:Int!){
 pricing(listId:$listId){
 errorMessage
 status
@@ -6,7 +6,7 @@ results{
 id,
 title,
 distance,
-basePrice,
+baseprice,
 score,
 UserAmenities{
 itemName,
@@ -41,7 +41,7 @@ currentPropertyResult{
 id,
 title,
 distance,
-basePrice,
+baseprice,
 score,
 UserAmenities{
 itemName,

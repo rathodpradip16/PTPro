@@ -6,23 +6,83 @@ userId
 bookingType
 isPublished
 houseRules {
+isAgeSelected
+isEventSelected
+isPetSelected
+isChildrenSelected
+isSmokingSelected
+age {
+age
+}
+event {
+isBirthDay
+isFamilyGathering
+isOtherSelcted
+otherDetails
+attendees
+}
+pet {
+petNo
+isDogAllowed
+isCatAllowed
+anypet
+petSize
+}
+children {
+twoyears
+twelveyears
+seventeenyears
+}
+smoking {
+indoors
+outDoors
+details
+}
+dynamicRules{
+rule
 id
+isSelected
+isNoSelected
+Details
+}
 }
 listingData {
-bookingNoticeTime
-checkInStart
-checkInEnd
-maxDaysNotice
-minNight
-maxNight
-basePrice
-cleaningPrice
-currency
-is_affiliate
-affiliate_commission
-weeklyDiscount
-monthlyDiscount
-cancellationPolicy
+bookingNoticeTime,
+checkInStart,
+checkInEnd,
+maxDaysNotice,
+earlyCheckInFees
+
+minNight,
+maxNight,
+basePrice,
+cleaningPrice,
+currency,
+is_affiliate,
+affiliate_commission,
+weeklyDiscount,
+monthlyDiscount,
+cancellationPolicy,
+petFee,
+petSelected,
+checkInEntrySelected,
+checkInType,
+texTypeId,
+taxPercentage,
+taxPersonAge,
+taxAmount,
+aboutHost{
+isProfessional
+bdStreet
+bdApt
+bdCity
+bdState
+bdzipcode
+bdCountry
+bmFirstname
+bmLastname
+businessName
+}
 }
 blockedDates {
 blockedDates
@@ -42,4 +102,105 @@ errorMessage
 }
 
 
+query GetListingDetailsStep3($listId:String!, $preview: Boolean) {
+    getListingDetails (listId:$listId, preview: $preview) {
+        results{
+            id
+            userId
+            bookingType
+            isPublished
+            houseRules {
+                isAgeSelected
+                isEventSelected
+                isPetSelected
+                isChildrenSelected
+                isSmokingSelected
+                age {
+                    age
+                }
+                event {
+                    isBirthDay
+                    isFamilyGathering
+                    isOtherSelcted
+                    otherDetails
+                    attendees
+                }
+                pet {
+                    petNo
+                    isDogAllowed
+                    isCatAllowed
+                    anypet
+                    petSize
+                }
+                children {
+                    twoyears
+                    twelveyears
+                    seventeenyears
+                }
+                smoking {
+                    indoors
+                    outDoors
+                    details
+                }
+                dynamicRules{
+                    rule
+                    id
+                    isSelected
+                    isNoSelected
+                    Details
+                }
+            }
+            listingData {
+                bookingNoticeTime,
+                checkInStart,
+                checkInEnd,
+                maxDaysNotice,
+                earlyCheckInFees
 
+                minNight,
+                maxNight,
+                basePrice,
+                cleaningPrice,
+                currency,
+                is_affiliate,
+                affiliate_commission,
+                weeklyDiscount,
+                monthlyDiscount,
+                cancellationPolicy,
+                petFee,
+                petSelected,
+                checkInEntrySelected,
+                checkInType,
+                texTypeId,
+                taxPercentage,
+                taxPersonAge,
+                taxAmount,
+                aboutHost{
+                    isProfessional
+                    bdStreet
+                    bdApt
+                    bdCity
+                    bdState
+                    bdzipcode
+                    bdCountry
+                    bmFirstname
+                    bmLastname
+                    businessName
+                }
+            }
+            blockedDates {
+                blockedDates
+                reservationId
+            }
+            calendars {
+                id
+                name
+                url
+                listId
+                status
+            }
+        }
+        status
+        errorMessage
+    }
+}

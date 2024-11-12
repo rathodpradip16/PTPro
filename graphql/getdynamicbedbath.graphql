@@ -1,0 +1,29 @@
+query getdynamicbedbath($userId: String, $listId: Int) {
+getdynamicbedbath(userId: $userId, listId: $listId) {
+status
+errorMessage
+results {
+userId
+listId
+bathroomTypes {
+isBathroom
+bathroomname
+bathroomId
+bathroomtype
+bathroomamenities
+}
+bedroomTypes {
+isbedroom
+bedroomname
+bedroomId
+bedType {
+bedCount
+bedname
+bedId
+bedtype
+bedsize
+}
+}
+}
+}
+}

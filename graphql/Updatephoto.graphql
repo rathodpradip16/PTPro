@@ -1,0 +1,6 @@
+mutation Updatephoto ($listId: Int!,$id: Int!,$photoCategoryId:String!){
+Updatephoto(listId:$listId,id:$id,photoCategoryId:$photoCategoryId){
+status
+errorMessage
+}
+}

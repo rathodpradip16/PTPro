@@ -9,17 +9,21 @@
 import UIKit
 import NKVPhonePicker
 import IQKeyboardManagerSwift
-
+import YRCoverFlowLayout
 
 class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewControllerDelegate{
     // MARK: Vars
     private var animationsCount = 0
     
-    var centerFlowLayout: YZCenterFlowLayout {
-        return cvSubscriptionPlans.collectionViewLayout as! YZCenterFlowLayout
-    }
+//    var centerFlowLayout: YZCenterFlowLayout {
+//        return cvSubscriptionPlans.collectionViewLayout as! YZCenterFlowLayout
+//    }
+    
     var scrollToEdgeEnabled: Bool = true
     
+    @IBOutlet weak var tblProperties: UITableView!
+
+    @IBOutlet weak var coverFlowLayout: YRCoverFlowLayout!
     
     @IBOutlet weak var mainView: UIView!
     
@@ -30,28 +34,7 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
     @IBOutlet weak var imgBenefits: UIImageView!
     @IBOutlet weak var lblBenefits: UILabel!
     
-    
-    @IBOutlet weak var view1: UIView!
-    @IBOutlet weak var view2: UIView!
-    @IBOutlet weak var view3: UIView!
-    @IBOutlet weak var view4: UIView!
-    @IBOutlet weak var view5: UIView!
-    @IBOutlet weak var view6: UIView!
-    
-    
-    @IBOutlet weak var img1: UIImageView!
-    @IBOutlet weak var img2: UIImageView!
-    @IBOutlet weak var img3: UIImageView!
-    @IBOutlet weak var img4: UIImageView!
-    @IBOutlet weak var img5: UIImageView!
-    @IBOutlet weak var img6: UIImageView!
-    
-    @IBOutlet weak var lbl1: UILabel!
-    @IBOutlet weak var lbl2: UILabel!
-    @IBOutlet weak var lbl3: UILabel!
-    @IBOutlet weak var lbl4: UILabel!
-    @IBOutlet weak var lbl5: UILabel!
-    @IBOutlet weak var lbl6: UILabel!
+
     
     @IBOutlet weak var viewCustomPlan: UIView!
     @IBOutlet weak var lblFullName: UILabel!
@@ -76,9 +59,14 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
     var arrPlans = [PTProAPI.GetPlanDetailQuery.Data.GetPlanDetails.Result]()
     var currencysymbol = ""
     var isYearlySelected = false
+    var arrBenifits = [SubBenifits]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.coverFlowLayout.coverDensity = 0.07
+        self.coverFlowLayout.minCoverOpacity = 0.5
+        self.coverFlowLayout.minCoverScale = 0.7
+
         self.viewCustomPlan.isHidden = true
         self.viewBenefits.isHidden = false
         self.configureCollectionView()
@@ -94,57 +82,14 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
     private func configureCollectionView() {
         mainViewHeight.constant = 250  //* 0.35
         // Configure the required item size (REQURED)
-        centerFlowLayout.itemSize = CGSize(
-            width: view.bounds.width * 0.9,
-            height: 250)
-        
-        centerFlowLayout.animationMode = YZCenterFlowLayoutAnimation.scale(sideItemScale: 0.6, sideItemAlpha: 0.6, sideItemShift: 0.0)
-                
-        view1.layer.masksToBounds = false
-        view1.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
-        view1.layer.shadowOpacity = 0.5
-        view1.layer.shadowOffset = CGSize(width: 0, height: 0)
-        view1.layer.shadowRadius = 2.0
-        
-        view2.layer.masksToBounds = false
-        view2.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
-        view2.layer.shadowOpacity = 0.5
-        view2.layer.shadowOffset = CGSize(width: 0, height: 0)
-        view2.layer.shadowRadius = 2.0
-
-        view3.layer.masksToBounds = false
-        view3.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
-        view3.layer.shadowOpacity = 0.5
-        view3.layer.shadowOffset = CGSize(width: 0, height: 0)
-        view3.layer.shadowRadius = 2.0
-
-        view4.layer.masksToBounds = false
-        view4.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
-        view4.layer.shadowOpacity = 0.5
-        view4.layer.shadowOffset = CGSize(width: 0, height: 0)
-        view4.layer.shadowRadius = 2.0
-
-        view5.layer.masksToBounds = false
-        view5.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
-        view5.layer.shadowOpacity = 0.5
-        view5.layer.shadowOffset = CGSize(width: 0, height: 0)
-        view5.layer.shadowRadius = 2.0
-        
-        view6.layer.masksToBounds = false
-        view6.layer.shadowColor = CGColor(gray: 0.2, alpha: 1.0)
-        view6.layer.shadowOpacity = 0.5
-        view6.layer.shadowOffset = CGSize(width: 0, height: 0)
-        view6.layer.shadowRadius = 2.0
+//        centerFlowLayout.itemSize = CGSize(
+//            width: view.bounds.width * 0.9,
+//            height: 250)
+//        
+//        centerFlowLayout.animationMode = YZCenterFlowLayoutAnimation.scale(sideItemScale: 0.6, sideItemAlpha: 0.6, sideItemShift: 0.0)
     }
     
     func updateBenifitData(indexPath:Int){
-        self.lbl1.text = self.arrPlans[indexPath].one
-        self.lbl2.text = self.arrPlans[indexPath].two
-        self.lbl3.text = self.arrPlans[indexPath].three
-        self.lbl4.text = self.arrPlans[indexPath].four
-        self.lbl5.text = self.arrPlans[indexPath].five
-        self.lbl6.text = self.arrPlans[indexPath].six
-        
         self.viewBenefits.isHidden = false
         self.viewCustomPlan.isHidden = true
         switch self.arrPlans[indexPath].title{
@@ -169,6 +114,40 @@ class ViewSubscriptionsVC: UIViewController, UITextFieldDelegate ,CountriesViewC
         case .some(_):
             break
         }
+        
+        self.arrBenifits.removeAll()
+        if let one = self.arrPlans[indexPath].one,let oneTitle = self.arrPlans[indexPath].onetitle{
+            self.arrBenifits.append(SubBenifits(title: oneTitle, desc: one , img: self.getSubImageFromTitle(strTitle:oneTitle)))
+        }
+        
+        if let two = self.arrPlans[indexPath].two,let twoTitle = self.arrPlans[indexPath].twotitle{
+            self.arrBenifits.append(SubBenifits(title: twoTitle, desc: two , img: self.getSubImageFromTitle(strTitle:twoTitle)))
+        }
+        
+        if let three = self.arrPlans[indexPath].three,let threetitle = self.arrPlans[indexPath].threetitle{
+            self.arrBenifits.append(SubBenifits(title: threetitle, desc: three , img: self.getSubImageFromTitle(strTitle:threetitle)))
+        }
+        
+        if let four = self.arrPlans[indexPath].four,let fourtitle = self.arrPlans[indexPath].fourtitle{
+            self.arrBenifits.append(SubBenifits(title: fourtitle, desc: four , img: self.getSubImageFromTitle(strTitle:fourtitle)))
+        }
+        
+        if let five = self.arrPlans[indexPath].five,let fivetitle = self.arrPlans[indexPath].fivetitle{
+            self.arrBenifits.append(SubBenifits(title: fivetitle, desc: five , img: self.getSubImageFromTitle(strTitle:fivetitle)))
+        }
+        
+        if let six = self.arrPlans[indexPath].six,let sixtitle = self.arrPlans[indexPath].sixtitle{
+            self.arrBenifits.append(SubBenifits(title: sixtitle, desc: six , img: self.getSubImageFromTitle(strTitle:sixtitle)))
+        }
+        
+        if let seven = self.arrPlans[indexPath].seven,let seventitle = self.arrPlans[indexPath].seventitle{
+            self.arrBenifits.append(SubBenifits(title: seventitle, desc: seven , img: self.getSubImageFromTitle(strTitle:seventitle)))
+        }
+        
+        if let eight = self.arrPlans[indexPath].eight,let eighttitle = self.arrPlans[indexPath].eighttitle{
+            self.arrBenifits.append(SubBenifits(title: eighttitle, desc: eight , img: self.getSubImageFromTitle(strTitle:eighttitle)))
+        }
+        self.tblProperties.reloadData()
     }
     
     //MARK: - Action
@@ -313,11 +292,16 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         cell.viewStartHere.isHidden = true
         cell.imgDownArrow.isHidden = true
 
+                // Example: Apply a different gradient to each cell
+        let strTitle = (arrPlans[indexPath.row].title ?? "").trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let colors: [UIColor] = generateGradientColors(for: strTitle)
+        cell.configureGradient(with: colors)
+
         switch arrPlans[indexPath.row].title ?? ""{
         case "Economy":
             cell.lblMemberShipCard.text = "MEMBERSHIP CARD"
             
-            cell.mainView.backgroundColor = Theme.subEconomyColor
+         //   cell.mainView.backgroundColor = Theme.subEconomyColor
             cell.lblTitle.textColor = Theme.subEconomyColor
             cell.btnSegment.borderColor = Theme.subEconomySegmentBorderColor
          //   cell.btnSegment.tintColor = Theme.subSegmentBgColor
@@ -330,7 +314,7 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         case "Recommended":
             cell.lblMemberShipCard.text = "MEMBERSHIP CARD"
             
-            cell.mainView.backgroundColor = Theme.subRecommendedColor
+       //     cell.mainView.backgroundColor = Theme.subRecommendedColor
             cell.lblTitle.textColor = Theme.subRecommendedColor
             cell.btnSegment.borderColor = Theme.subRecommendedSegmentBorderColor
          //   cell.btnSegment.tintColor = Theme.subSegmentBgColor
@@ -342,7 +326,7 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         case "Gold":
             cell.lblMemberShipCard.text = "MEMBERSHIP CARD"
             
-            cell.mainView.backgroundColor = Theme.subGoldColor
+         //   cell.mainView.backgroundColor = Theme.subGoldColor
             cell.lblTitle.textColor = Theme.subGoldColor
             cell.btnSegment.borderColor = Theme.subGoldSegmentBorderColor
           //  cell.btnSegment.tintColor = Theme.subSegmentBgColor
@@ -354,7 +338,7 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         case "Platinum":
             cell.lblMemberShipCard.text = "MEMBERSHIP CARD"
             
-            cell.mainView.backgroundColor = Theme.subPlatinumColor
+        //    cell.mainView.backgroundColor = Theme.subPlatinumColor
             cell.lblTitle.textColor = Theme.subPlatinumColor
             cell.btnSegment.borderColor = Theme.subPlatinumSegmentBorderColor
       //      cell.btnSegment.tintColor = Theme.subSegmentBgColor
@@ -372,7 +356,7 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
             cell.lblCustomPlan.text = "Custom Plan"
             cell.lblTitle.text = "Custom"
             
-            cell.mainView.backgroundColor = Theme.subCustomColor
+         //   cell.mainView.backgroundColor = Theme.subCustomColor
             cell.lblTitle.textColor = Theme.subCustomTitleColor
             cell.imgSmallIcon.tintColor = Theme.subCustomTitleColor
             cell.imgBigIcon.tintColor = Theme.subCustomTitleColor
@@ -452,6 +436,24 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         appDelegate.HostTabbarInitialize(initialView: CustomHostTabbar())
     }
     
+    func generateGradientColors(for strTitle: String) -> [UIColor] {
+        switch strTitle{
+        case "bronze":
+            return [Theme.subBronzeGradiantStartColor,Theme.subBronzeGradiantCenterColor,Theme.subBronzeGradiantEndColor]
+        case "gold":
+            return [Theme.subGoldGradiantStartColor,Theme.subGoldGradiantCenterColor,Theme.subGoldGradiantEndColor]
+        case "platinum":
+            return [Theme.subPlatinumGradiantStartColor,Theme.subPlatinumGradiantCenterColor,Theme.subPlatinumGradiantEndColor]
+        case "silver":
+            return [Theme.subSilverGradiantStartColor,Theme.subSilverGradiantCenterColor,Theme.subSilverGradiantEndColor]
+        case "pay per booking":
+            return [Theme.subPPBGradiantStartColor,Theme.subPPBGradiantEndColor]
+        default:
+            return [Theme.subRedGradiantStartColor,Theme.subRedGradiantCenterColor,Theme.subRedGradiantEndColor]
+        }
+     }
+    
+    
     @objc func onClickListNow(sender:UIButton){
         if let intStatus = arrPlans[sender.tag].status,intStatus == 1{
             let alert = UIAlertController(title: "Chose an Option", message: "", preferredStyle: .alert)
@@ -506,13 +508,6 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
         if  let indexPath = cvSubscriptionPlans.indexPathForItem(at: visiblePoint){
             
             UIView.animate(withDuration: 2.0) {
-                self.lbl1.alpha = 0.0
-                self.lbl2.alpha = 0.0
-                self.lbl3.alpha = 0.0
-                self.lbl4.alpha = 0.0
-                self.lbl5.alpha = 0.0
-                self.lbl6.alpha = 0.0
-                
                 self.viewBenefits.isHidden = false
                 self.viewCustomPlan.isHidden = true
                 
@@ -539,20 +534,88 @@ extension ViewSubscriptionsVC: UICollectionViewDataSource, UICollectionViewDeleg
                     break
                 }
                 
-                self.lbl1.text = self.arrPlans[indexPath.row].one
-                self.lbl2.text = self.arrPlans[indexPath.row].two
-                self.lbl3.text = self.arrPlans[indexPath.row].three
-                self.lbl4.text = self.arrPlans[indexPath.row].four
-                self.lbl5.text = self.arrPlans[indexPath.row].five
-                self.lbl6.text = self.arrPlans[indexPath.row].six
+                self.arrBenifits.removeAll()
+                if let one = self.arrPlans[indexPath.row].one,let oneTitle = self.arrPlans[indexPath.row].onetitle{
+                    self.arrBenifits.append(SubBenifits(title: oneTitle, desc: one , img: self.getSubImageFromTitle(strTitle:oneTitle)))
+                }
                 
-                self.lbl1.alpha = 1.0
-                self.lbl2.alpha = 1.0
-                self.lbl3.alpha = 1.0
-                self.lbl4.alpha = 1.0
-                self.lbl5.alpha = 1.0
-                self.lbl6.alpha = 1.0
+                if let two = self.arrPlans[indexPath.row].two,let twoTitle = self.arrPlans[indexPath.row].twotitle{
+                    self.arrBenifits.append(SubBenifits(title: twoTitle, desc: two , img: self.getSubImageFromTitle(strTitle:twoTitle)))
+                }
+                
+                if let three = self.arrPlans[indexPath.row].three,let threetitle = self.arrPlans[indexPath.row].threetitle{
+                    self.arrBenifits.append(SubBenifits(title: threetitle, desc: three , img: self.getSubImageFromTitle(strTitle:threetitle)))
+                }
+                
+                if let four = self.arrPlans[indexPath.row].four,let fourtitle = self.arrPlans[indexPath.row].fourtitle{
+                    self.arrBenifits.append(SubBenifits(title: fourtitle, desc: four , img: self.getSubImageFromTitle(strTitle:fourtitle)))
+                }
+                
+                if let five = self.arrPlans[indexPath.row].five,let fivetitle = self.arrPlans[indexPath.row].fivetitle{
+                    self.arrBenifits.append(SubBenifits(title: fivetitle, desc: five , img: self.getSubImageFromTitle(strTitle:fivetitle)))
+                }
+                
+                if let six = self.arrPlans[indexPath.row].six,let sixtitle = self.arrPlans[indexPath.row].sixtitle{
+                    self.arrBenifits.append(SubBenifits(title: sixtitle, desc: six , img: self.getSubImageFromTitle(strTitle:sixtitle)))
+                }
+                
+                if let seven = self.arrPlans[indexPath.row].seven,let seventitle = self.arrPlans[indexPath.row].seventitle{
+                    self.arrBenifits.append(SubBenifits(title: seventitle, desc: seven , img: self.getSubImageFromTitle(strTitle:seventitle)))
+                }
+                
+                if let eight = self.arrPlans[indexPath.row].eight,let eighttitle = self.arrPlans[indexPath.row].eighttitle{
+                    self.arrBenifits.append(SubBenifits(title: eighttitle, desc: eight , img: self.getSubImageFromTitle(strTitle:eighttitle)))
+                }
+                self.tblProperties.reloadData()
             }
         }
     }
+    
+    func getSubImageFromTitle(strTitle:String) -> String{
+        let title = strTitle.lowercased().trimmingCharacters(in: .whitespaces)
+        switch title{
+        case "chat":
+            return PTImages.subChat
+        case "unlimited":
+            return PTImages.subUnlimited
+        case "seo":
+            return PTImages.subSeo
+        case "price prediction":
+            return PTImages.subPricePredicition
+        case "search rank":
+            return PTImages.subSerachRank
+        case "insights":
+            return PTImages.subInsights
+        case "global visibility":
+            return PTImages.subGlobalVisibility
+        case "affiliate":
+            return PTImages.subAffiliate
+        default:
+            return PTImages.subChat
+        }
+    }
 }
+
+extension ViewSubscriptionsVC: UITableViewDelegate, UITableViewDataSource{
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return arrBenifits.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SubcriptionPropertiesTVC", for: indexPath)as! SubcriptionPropertiesTVC
+        cell.imgIcon.image = UIImage(named: arrBenifits[indexPath.row].Img)
+        cell.lblTitle.text = arrBenifits[indexPath.row].Title
+        cell.lblDesc.text = arrBenifits[indexPath.row].Desc
+        return cell
+    }
+    
+}
+

@@ -1,0 +1,20 @@
+query getcategoryListcount($listId:Int) {
+getcategoryListcount(listId: $listId) {
+status
+errorMessage
+results {
+categoryList {
+categoryName
+categoryCount
+photoCategoryId
+}
+photoList {
+name
+id
+photoCategoryId
+}
+}
+}
+}
+
+
