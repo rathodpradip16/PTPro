@@ -275,6 +275,32 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
         }
     }
     
+    func uploadPhotoCategoryId()
+    {
+        if Utility.shared.isConnectedToNetwork(){
+            let getlistingStep2query = PTProAPI.GetListingDetailsStep2Query(listId:"\(String(describing: showListingstepArray?.listId!))", preview: true)
+            Network.shared.apollo_headerClient.fetch(query: getlistingStep2query,cachePolicy:.fetchIgnoringCacheData){ response in
+                switch response {
+                case .success(let result):
+                    guard (result.data?.getListingDetails?.results) != nil else{
+                        print("Missing Data")
+                        self.showlistingPhotosAPICall()
+                        return
+                    }
+                    self.getListingStep2Array = (result.data?.getListingDetails?.results)!
+                    Utility.shared.host_step2_isfromEdit = true
+                    self.showlistingPhotosAPICall()
+                case .failure(_): break
+            }
+                
+                
+            }
+        }
+        else{
+            self.offlineviewShow()
+        }
+    }
+    
     func getListingDetailsStep2()
     {
         if Utility.shared.isConnectedToNetwork(){
@@ -978,7 +1004,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
             let BaseUrl = URL(string: LISTINGIMAGE_UPLOAD)
             print("BASE URL : \(LISTINGIMAGE_UPLOAD)")
             let header = ["auth": "\(Utility.shared.getCurrentUserToken()!)"]
-            let parameters = ["listId": "\(showListingstepArray?.listId ?? 0)"]
+            let parameters = ["listId": "\(showListingstepArray?.listId ?? 0)", "photoCategoryId" : "2"]
             
             
             AF.upload(multipartFormData: { (multipartFormData) in

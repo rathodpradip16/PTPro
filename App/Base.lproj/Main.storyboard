@@ -7115,7 +7115,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                                                         <rect key="frame" x="0.0" y="0.0" width="414" height="105"/>
                                                                         <subviews>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Promo Code Name" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8fg-Hv-UFW">
-                                                                                <rect key="frame" x="16" y="25" width="138" height="19"/>
+                                                                                <rect key="frame" x="16" y="25" width="139" height="20.5"/>
                                                                                 <fontDescription key="fontDescription" name="Circular-Medium" family="Circular" pointSize="16"/>
                                                                                 <color key="textColor" red="0.40784313729999999" green="0.40784313729999999" blue="0.40784313729999999" alpha="1" colorSpace="calibratedRGB"/>
                                                                                 <nil key="highlightedColor"/>
@@ -7146,7 +7146,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                                                         <rect key="frame" x="0.0" y="105" width="414" height="105"/>
                                                                         <subviews>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Promo Code Discount" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b0o-2o-5Xb">
-                                                                                <rect key="frame" x="16" y="25" width="159" height="19"/>
+                                                                                <rect key="frame" x="16" y="25" width="160.5" height="20.5"/>
                                                                                 <fontDescription key="fontDescription" name="Circular-Medium" family="Circular" pointSize="16"/>
                                                                                 <color key="textColor" red="0.40784313729999999" green="0.40784313729999999" blue="0.40784313729999999" alpha="1" colorSpace="calibratedRGB"/>
                                                                                 <nil key="highlightedColor"/>
@@ -7200,7 +7200,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                                                         <rect key="frame" x="0.0" y="210" width="414" height="105"/>
                                                                         <subviews>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Code Start Date" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bmf-SS-NB9">
-                                                                                <rect key="frame" x="16" y="25" width="116" height="19"/>
+                                                                                <rect key="frame" x="16" y="25" width="118.5" height="20.5"/>
                                                                                 <fontDescription key="fontDescription" name="Circular-Medium" family="Circular" pointSize="16"/>
                                                                                 <color key="textColor" red="0.40784313729999999" green="0.40784313729999999" blue="0.40784313729999999" alpha="1" colorSpace="calibratedRGB"/>
                                                                                 <nil key="highlightedColor"/>
@@ -7248,7 +7248,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                                                         <rect key="frame" x="0.0" y="315" width="414" height="105"/>
                                                                         <subviews>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Code End Date" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6cG-EG-ca4">
-                                                                                <rect key="frame" x="16" y="25" width="109.5" height="19"/>
+                                                                                <rect key="frame" x="16" y="25" width="110.5" height="20.5"/>
                                                                                 <fontDescription key="fontDescription" name="Circular-Medium" family="Circular" pointSize="16"/>
                                                                                 <color key="textColor" red="0.40784313729999999" green="0.40784313729999999" blue="0.40784313729999999" alpha="1" colorSpace="calibratedRGB"/>
                                                                                 <nil key="highlightedColor"/>
@@ -7294,7 +7294,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                                                         <rect key="frame" x="0.0" y="420" width="414" height="193.5"/>
                                                                         <subviews>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Promo Code Description" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DeC-Hs-nGy">
-                                                                                <rect key="frame" x="16" y="25" width="177" height="20.5"/>
+                                                                                <rect key="frame" x="16" y="25" width="180.5" height="20.5"/>
                                                                                 <fontDescription key="fontDescription" name="Circular-Medium" family="Circular" pointSize="16"/>
                                                                                 <color key="textColor" red="0.40784313729999999" green="0.40784313729999999" blue="0.40784313729999999" alpha="1" colorSpace="calibratedRGB"/>
                                                                                 <nil key="highlightedColor"/>
@@ -7920,18 +7920,18 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                 <rect key="frame" x="0.0" y="48" width="414" height="48"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bedroom" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="87S-Bs-O27">
-                                        <rect key="frame" x="30" y="10" width="364" height="28"/>
+                                        <rect key="frame" x="60" y="10" width="334" height="28"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name="Circular-Medium" family="Circular" pointSize="24"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DtS-NK-YSh">
-                                        <rect key="frame" x="0.0" y="6" width="30" height="40"/>
+                                        <rect key="frame" x="0.0" y="6" width="50" height="40"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="4Sb-f1-f9x"/>
-                                            <constraint firstAttribute="width" constant="30" id="E26-YM-vL6"/>
+                                            <constraint firstAttribute="width" constant="50" id="E26-YM-vL6"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" image="back_black"/>
@@ -7948,7 +7948,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="87S-Bs-O27" secondAttribute="trailing" constant="20" id="1bE-IO-edH"/>
                                     <constraint firstAttribute="bottom" secondItem="87S-Bs-O27" secondAttribute="bottom" constant="10" id="2J6-VN-uKv"/>
-                                    <constraint firstItem="87S-Bs-O27" firstAttribute="leading" secondItem="Ipc-hg-ic2" secondAttribute="leading" constant="30" id="T3o-II-83c"/>
+                                    <constraint firstItem="87S-Bs-O27" firstAttribute="leading" secondItem="Ipc-hg-ic2" secondAttribute="leading" constant="60" id="T3o-II-83c"/>
                                     <constraint firstItem="DtS-NK-YSh" firstAttribute="top" secondItem="Ipc-hg-ic2" secondAttribute="top" constant="6" id="YZp-JX-bNF"/>
                                     <constraint firstItem="DtS-NK-YSh" firstAttribute="leading" secondItem="Ipc-hg-ic2" secondAttribute="leading" id="aRg-PE-bz6"/>
                                     <constraint firstAttribute="height" constant="48" id="fbb-Xh-AXw"/>
@@ -8002,14 +8002,14 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sleeping arrangements" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HMb-yy-JWH">
-                                <rect key="frame" x="20" y="214" width="248.5" height="28"/>
+                                <rect key="frame" x="20" y="214" width="250" height="30.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="Circular-Book" family="Circular" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Required information" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gvk-kq-b7u">
-                                <rect key="frame" x="20" y="250" width="159" height="21"/>
+                                <rect key="frame" x="20" y="252.5" width="159" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="H7j-I1-Im4"/>
                                 </constraints>
@@ -8018,7 +8018,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Iew-zv-Evy">
-                                <rect key="frame" x="20" y="281" width="374" height="565"/>
+                                <rect key="frame" x="20" y="283.5" width="374" height="562.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="AddMoreBedTVC" rowHeight="152" id="fr1-7X-pH1" customClass="AddMoreBedTVC" customModule="App" customModuleProvider="target">
@@ -8029,7 +8029,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="i5l-q3-FTx" customClass="DropDown" customModule="App" customModuleProvider="target">
-                                                    <rect key="frame" x="30" y="19" width="278" height="34"/>
+                                                    <rect key="frame" x="20" y="19" width="288" height="34"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
@@ -8093,7 +8093,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                                 <constraint firstItem="IHl-q5-Of8" firstAttribute="centerY" secondItem="3fB-1s-0qo" secondAttribute="centerY" id="MtG-40-7hP"/>
                                                 <constraint firstItem="eUs-Yl-n6q" firstAttribute="leading" secondItem="IHl-q5-Of8" secondAttribute="trailing" constant="8" id="Q7B-KY-DVh"/>
                                                 <constraint firstItem="IHl-q5-Of8" firstAttribute="leading" secondItem="3fB-1s-0qo" secondAttribute="trailing" constant="8" id="SVR-hN-Ot6"/>
-                                                <constraint firstItem="i5l-q3-FTx" firstAttribute="leading" secondItem="Jhb-vn-J8V" secondAttribute="leadingMargin" constant="10" id="YnH-FS-Ber"/>
+                                                <constraint firstItem="i5l-q3-FTx" firstAttribute="leading" secondItem="Jhb-vn-J8V" secondAttribute="leadingMargin" id="YnH-FS-Ber"/>
                                                 <constraint firstItem="3fB-1s-0qo" firstAttribute="top" secondItem="hsy-Hd-zzv" secondAttribute="bottom" constant="8" id="gbL-7q-R43"/>
                                                 <constraint firstItem="hsy-Hd-zzv" firstAttribute="top" secondItem="i5l-q3-FTx" secondAttribute="bottom" constant="8" id="hP0-MM-xQ6"/>
                                                 <constraint firstItem="Y4n-zH-69Q" firstAttribute="top" secondItem="Jhb-vn-J8V" secondAttribute="top" constant="8" id="qXn-nX-9Of"/>
@@ -8497,7 +8497,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
             <size key="intrinsicContentSize" width="33" height="34"/>
         </designable>
         <designable name="PR4-ab-Hyv">
-            <size key="intrinsicContentSize" width="48.5" height="34"/>
+            <size key="intrinsicContentSize" width="49" height="34"/>
         </designable>
         <designable name="Qpz-YN-qf2">
             <size key="intrinsicContentSize" width="21" height="20.5"/>
@@ -8512,7 +8512,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
             <size key="intrinsicContentSize" width="33" height="34"/>
         </designable>
         <designable name="ew4-ED-eWL">
-            <size key="intrinsicContentSize" width="34" height="34"/>
+            <size key="intrinsicContentSize" width="33" height="34"/>
         </designable>
         <designable name="fzk-6O-6Vh">
             <size key="intrinsicContentSize" width="33" height="34"/>
@@ -8524,7 +8524,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
             <size key="intrinsicContentSize" width="32" height="34"/>
         </designable>
         <designable name="ibD-Md-dOq">
-            <size key="intrinsicContentSize" width="125.5" height="34"/>
+            <size key="intrinsicContentSize" width="128" height="34"/>
         </designable>
         <designable name="j2L-ch-iSi">
             <size key="intrinsicContentSize" width="33" height="34"/>
@@ -8554,7 +8554,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
             <size key="intrinsicContentSize" width="33" height="34"/>
         </designable>
         <designable name="rSZ-Qk-O2e">
-            <size key="intrinsicContentSize" width="34" height="34"/>
+            <size key="intrinsicContentSize" width="33" height="34"/>
         </designable>
         <designable name="vB8-lp-F58">
             <size key="intrinsicContentSize" width="33" height="34"/>

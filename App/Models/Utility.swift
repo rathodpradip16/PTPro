@@ -242,6 +242,9 @@ public class Utility: NSObject {
     var getListSettingsArray : PTProAPI.GetListingSettingQuery.Data.GetListingSettings.Results?
     
     var countrylist = [PTProAPI.GetCountrycodeQuery.Data.GetCountries.Result]()
+    var photoCategoryList : PTProAPI.GetphotoCategoryQuery.Data.GetphotoCategory.Results?
+    
+    var arrPhotoCategorysType = [PTProAPI.GetphotoCategoryQuery.Data.GetphotoCategory.Results.PhotoCategorysType]()
 
     var ProfileAPIArray : PTProAPI.GetProfileQuery.Data.UserAccount.Result?
     var isPhonenumberCountrycode : Bool = false

@@ -132,10 +132,9 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
             }
         }
         else {
-
             setUpUI()
         }
-       
+        self.GetPhotosCategory()
         setdropdown()
         registerCells()
      //   setUpUI()
@@ -175,6 +174,22 @@ class BaseHostTableviewController: UIViewController, UITableViewDelegate, UITabl
                     return
                 }
                 Utility.shared.countrylist =  ((result.data?.getCountries?.results)!) as! [PTProAPI.GetCountrycodeQuery.Data.GetCountries.Result]
+            case .failure(let error):
+                self.view.makeToast(error.localizedDescription)
+            }
+        }
+    }
+    
+    func GetPhotosCategory()
+    {
+        let getphotoCategoryQuery = PTProAPI.GetphotoCategoryQuery()
+        Network.shared.apollo_headerClient.fetch(query: getphotoCategoryQuery,cachePolicy: .fetchIgnoringCacheData){ response in
+            switch response {
+            case .success(let result):
+                guard (result.data?.getphotoCategory?.results?.photoCategorysTypes) != nil else{
+                    return
+                }
+                Utility.shared.arrPhotoCategorysType = (result.data?.getphotoCategory?.results?.photoCategorysTypes!) as! [PTProAPI.GetphotoCategoryQuery.Data.GetphotoCategory.Results.PhotoCategorysType]
             case .failure(let error):
                 self.view.makeToast(error.localizedDescription)
             }
