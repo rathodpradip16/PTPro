@@ -10,6 +10,12 @@ import UIKit
 
 class AddMoreBedTVC: UITableViewCell {
 
+    @IBOutlet weak var lblBedCount: UILabel!
+    @IBOutlet weak var btnBedPlus: UIButton!
+    @IBOutlet weak var btnBedMinus: UIButton!
+    @IBOutlet weak var dropDownSelectBedType: DropDown!
+    @IBOutlet weak var btnDelete: UIButton!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

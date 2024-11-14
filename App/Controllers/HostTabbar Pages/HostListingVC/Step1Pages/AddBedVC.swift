@@ -10,7 +10,13 @@ import UIKit
 
 class AddBedVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    @IBOutlet weak var lblSleepingArragements: UILabel!
+    @IBOutlet weak var lblReqInfo2: UILabel!
+    @IBOutlet weak var lblReqInfo1: UILabel!
+    @IBOutlet weak var lblMainTitle: UILabel!
+    @IBOutlet weak var lblRoomName: CustomUITextField!
     @IBOutlet weak var tblBedList: UITableView!
+    @IBOutlet weak var btnDeleteBedType: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,8 +109,27 @@ class AddBedVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AddMoreBedTVC", for: indexPath)as! AddMoreBedTVC
-        
+        cell.btnBedPlus.tag = indexPath.row
+        cell.btnBedMinus.tag = indexPath.row
+        cell.btnBedPlus.addTarget(self, action: #selector(onClickBedCountPlus(_:)), for: .touchUpInside)
+        cell.btnBedMinus.addTarget(self, action: #selector(onClickBedCountMinus(_:)), for: .touchUpInside)
         return cell
+    }
+    
+    // Action functions for the buttons
+    @objc func onClickBedCountPlus(_ sender: UIButton) {
+        // Find the cell based on the sender's tag or position
+        if let cell = tblBedList.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? AddMoreBedTVC {
+
+        }
+    }
+    
+    // Action functions for the buttons
+    @objc func onClickBedCountMinus(_ sender: UIButton) {
+        // Find the cell based on the sender's tag or position
+        if let cell = tblBedList.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? AddMoreBedTVC {
+
+        }
     }
     
     @IBAction func onClickBack(_ sender: Any) {

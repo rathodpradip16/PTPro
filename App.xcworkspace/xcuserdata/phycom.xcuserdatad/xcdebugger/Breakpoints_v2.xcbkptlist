@@ -1136,8 +1136,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/Step1Pages/BedsListingViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
             landmarkName = "setDropdownList()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1152,8 +1152,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/Step1Pages/BedsListingViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "351"
-            endingLineNumber = "351"
+            startingLineNumber = "352"
+            endingLineNumber = "352"
             landmarkName = "saveAndExitAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1168,8 +1168,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/Step1Pages/BedsListingViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "201"
-            endingLineNumber = "201"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
             landmarkName = "setDropdownList()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2709,22 +2709,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "31C15866-EF81-4DC1-BC14-BF27165421A0"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "App/Controllers/HostTabbar Pages/HostListingVC/Step1Pages/BedBathListVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
-            landmarkName = "goToBathDetailsPage()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "055F29AC-ED8C-4A62-BA3C-E78CCD3E8A78"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -2732,8 +2716,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/StepTwoVC/StepTwoVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1003"
-            endingLineNumber = "1003"
+            startingLineNumber = "1040"
+            endingLineNumber = "1040"
             landmarkName = "uploadProfilePic(profileimage:onSuccess:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2748,40 +2732,10 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/StepTwoVC/StepTwoVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "893"
-            endingLineNumber = "893"
+            startingLineNumber = "930"
+            endingLineNumber = "930"
             landmarkName = "assetsPicker(controller:selected:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "AD094A0A-C4C3-4CFF-B34D-EFF9917CA1BE - eaa90cb4394db223"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable () -&gt; () in App.StepTwoVC.assetsPicker(controller: AssetsPickerViewController.AssetsPickerViewController, selected: Swift.Array&lt;__C.PHAsset&gt;) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/PT/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/StepTwoVC/StepTwoVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "893"
-                  endingLineNumber = "893">
-               </Location>
-               <Location
-                  uuid = "AD094A0A-C4C3-4CFF-B34D-EFF9917CA1BE - bc0560dba7f2308d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (__C.NSDictionary) -&gt; () in closure #1 @Sendable () -&gt; () in App.StepTwoVC.assetsPicker(controller: AssetsPickerViewController.AssetsPickerViewController, selected: Swift.Array&lt;__C.PHAsset&gt;) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/PT/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/StepTwoVC/StepTwoVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "894"
-                  endingLineNumber = "894">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2826,8 +2780,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/StepTwoVC/StepTwoVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1079"
-            endingLineNumber = "1079"
+            startingLineNumber = "1116"
+            endingLineNumber = "1116"
             landmarkName = "checkUploadStatus(rseposneData:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2842,40 +2796,10 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/StepTwoVC/StepTwoVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1029"
-            endingLineNumber = "1029"
+            startingLineNumber = "1066"
+            endingLineNumber = "1066"
             landmarkName = "uploadProfilePic(profileimage:onSuccess:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "08F09A9B-B4E2-4DFA-A7D9-21BD592CF839 - 6e74c1bb6bd2f392"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in App.StepTwoVC.uploadProfilePic(profileimage: Swift.Array&lt;Foundation.Data&gt;, onSuccess: (__C.NSDictionary) -&gt; ()) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/PT/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/StepTwoVC/StepTwoVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1004"
-                  endingLineNumber = "1004">
-               </Location>
-               <Location
-                  uuid = "08F09A9B-B4E2-4DFA-A7D9-21BD592CF839 - d432edca15bdc17a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.StepTwoVC.uploadProfilePic(profileimage: Swift.Array&lt;Foundation.Data&gt;, onSuccess: (__C.NSDictionary) -&gt; ()) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/PT/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/StepTwoVC/StepTwoVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1040"
-                  endingLineNumber = "1040">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2888,40 +2812,10 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/StepTwoVC/StepTwoVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1026"
-            endingLineNumber = "1026"
+            startingLineNumber = "1063"
+            endingLineNumber = "1063"
             landmarkName = "uploadProfilePic(profileimage:onSuccess:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "A0D18F08-817B-409E-824F-3FDD4E42C0DC - 6e74c1bb6bd2f3d0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in App.StepTwoVC.uploadProfilePic(profileimage: Swift.Array&lt;Foundation.Data&gt;, onSuccess: (__C.NSDictionary) -&gt; ()) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/PT/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/StepTwoVC/StepTwoVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1002"
-                  endingLineNumber = "1002">
-               </Location>
-               <Location
-                  uuid = "A0D18F08-817B-409E-824F-3FDD4E42C0DC - d432edca15bdc17a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "App.StepTwoVC.uploadProfilePic(profileimage: Swift.Array&lt;Foundation.Data&gt;, onSuccess: (__C.NSDictionary) -&gt; ()) -&gt; ()"
-                  moduleName = "App"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/phycom/Documents/PT/PTPro/App/Controllers/HostTabbar%20Pages/HostListingVC/StepTwoVC/StepTwoVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1040"
-                  endingLineNumber = "1040">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2934,8 +2828,8 @@
             filePath = "App/Controllers/HostTabbar Pages/HostListingVC/StepTwoVC/StepTwoVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1083"
-            endingLineNumber = "1083"
+            startingLineNumber = "1120"
+            endingLineNumber = "1120"
             landmarkName = "checkUploadStatus(rseposneData:)"
             landmarkType = "7">
          </BreakpointContent>

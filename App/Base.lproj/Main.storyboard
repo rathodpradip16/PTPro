@@ -7996,7 +7996,7 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <outlet property="delegate" destination="d5q-Ua-QKE" id="PnI-Qe-iF5"/>
+                                            <outlet property="delegate" destination="Knq-zH-rL5" id="3gC-ev-umP"/>
                                         </connections>
                                     </textField>
                                 </subviews>
@@ -8101,6 +8101,13 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                                                 <constraint firstItem="hsy-Hd-zzv" firstAttribute="leading" secondItem="Jhb-vn-J8V" secondAttribute="leadingMargin" constant="10" id="yJ9-JN-rUm"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="btnBedMinus" destination="3fB-1s-0qo" id="wQY-gW-6fr"/>
+                                            <outlet property="btnBedPlus" destination="eUs-Yl-n6q" id="iRB-bK-wTu"/>
+                                            <outlet property="btnDelete" destination="Y4n-zH-69Q" id="pcj-eG-L7m"/>
+                                            <outlet property="dropDownSelectBedType" destination="i5l-q3-FTx" id="V9b-AO-QrR"/>
+                                            <outlet property="lblBedCount" destination="IHl-q5-Of8" id="35B-cn-95Z"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -8131,6 +8138,11 @@ Q2FyaW50aGlhIExha2Ugc2VlC0JyZWFrZmFzdCBsaXN0aW5nA
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="lblMainTitle" destination="87S-Bs-O27" id="MHg-eb-Rud"/>
+                        <outlet property="lblReqInfo1" destination="HoX-Kr-vld" id="H9m-xC-hVJ"/>
+                        <outlet property="lblReqInfo2" destination="Gvk-kq-b7u" id="bhj-07-bbi"/>
+                        <outlet property="lblRoomName" destination="r0a-Kb-bcR" id="vch-Br-ve5"/>
+                        <outlet property="lblSleepingArragements" destination="HMb-yy-JWH" id="uCz-Nd-73C"/>
                         <outlet property="tblBedList" destination="Iew-zv-Evy" id="Rnv-i4-98d"/>
                     </connections>
                 </viewController>

@@ -53,6 +53,7 @@ class BedsListingViewController: BaseHostTableviewController {
     @IBOutlet weak var stepTitleTopConstaraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.view.backgroundColor = UIColor(named: "becomeAHostStep_Color")
         tableView.backgroundColor =  UIColor(named: "colorController")
         bottomView.backgroundColor =  UIColor(named: "colorController")

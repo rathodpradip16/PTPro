@@ -156,8 +156,8 @@ step3
 listing {
 id
 isReady
-listApprovalStatus
 isPublished
+listApprovalStatus
 user {
 userBanStatus
 }

@@ -407,6 +407,9 @@
 		768CAE582B6AA9E2004CD8EC /* AffiliateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768CAE562B6AA9E2004CD8EC /* AffiliateCell.swift */; };
 		768CAE592B6AA9E2004CD8EC /* AffiliateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 768CAE572B6AA9E2004CD8EC /* AffiliateCell.xib */; };
 		7690ECA42B0DBB0000CF4CD9 /* Locator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7690ECA32B0DBB0000CF4CD9 /* Locator.swift */; };
+		769FE07C2CE62EC20004F064 /* GetdynamicbedbathQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769FE07B2CE62EC20004F064 /* GetdynamicbedbathQuery.graphql.swift */; };
+		769FE07E2CE62F3F0004F064 /* GetdynamicbedtypelistQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769FE07D2CE62F3F0004F064 /* GetdynamicbedtypelistQuery.graphql.swift */; };
+		769FE0802CE62F6A0004F064 /* DynamicBedBathMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769FE07F2CE62F6A0004F064 /* DynamicBedBathMutation.graphql.swift */; };
 		76A8EFD52CC7890200D280CD /* AddMoreBedTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A8EFD42CC7890200D280CD /* AddMoreBedTVC.swift */; };
 		76C1A5232ACFBF790031BE76 /* AffiliateSearchLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2EAD12ACAC473000E73FC /* AffiliateSearchLinkVC.swift */; };
 		76C1A5242ACFBFAE0031BE76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7602D0AD2ABCA4FF00635A6D /* Main.storyboard */; };
@@ -1417,6 +1420,9 @@
 		768CAE562B6AA9E2004CD8EC /* AffiliateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateCell.swift; sourceTree = "<group>"; };
 		768CAE572B6AA9E2004CD8EC /* AffiliateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AffiliateCell.xib; sourceTree = "<group>"; };
 		7690ECA32B0DBB0000CF4CD9 /* Locator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locator.swift; sourceTree = "<group>"; };
+		769FE07B2CE62EC20004F064 /* GetdynamicbedbathQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetdynamicbedbathQuery.graphql.swift; sourceTree = "<group>"; };
+		769FE07D2CE62F3F0004F064 /* GetdynamicbedtypelistQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetdynamicbedtypelistQuery.graphql.swift; sourceTree = "<group>"; };
+		769FE07F2CE62F6A0004F064 /* DynamicBedBathMutation.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicBedBathMutation.graphql.swift; sourceTree = "<group>"; };
 		76A8EFD42CC7890200D280CD /* AddMoreBedTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoreBedTVC.swift; sourceTree = "<group>"; };
 		76B34D312BE90A920005991A /* Cancelmembership.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cancelmembership.graphql; sourceTree = "<group>"; };
 		76C3F64E2C624213007CCC68 /* SubcriptionPropertiesTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubcriptionPropertiesTVC.swift; sourceTree = "<group>"; };
@@ -2199,6 +2205,7 @@
 		766C06352AFFE0CA00E68E60 /* Mutations */ = {
 			isa = PBXGroup;
 			children = (
+				769FE07F2CE62F6A0004F064 /* DynamicBedBathMutation.graphql.swift */,
 				76C46DB12CE488AC003795FE /* CustomAmenitiesMutation.graphql.swift */,
 				76C46DAF2CE48892003795FE /* UpdatephotoMutation.graphql.swift */,
 				765DFEB02B60297000F1B800 /* CreateSearchlistMutation.graphql.swift */,
@@ -2262,6 +2269,8 @@
 		766C06682AFFE0CA00E68E60 /* Queries */ = {
 			isa = PBXGroup;
 			children = (
+				769FE07D2CE62F3F0004F064 /* GetdynamicbedtypelistQuery.graphql.swift */,
+				769FE07B2CE62EC20004F064 /* GetdynamicbedbathQuery.graphql.swift */,
 				76C46DB52CE48920003795FE /* GetcategoryListcountQuery.graphql.swift */,
 				76C46DB32CE488E9003795FE /* Step2ListDetailsQuery.graphql.swift */,
 				76C46DAD2CE48293003795FE /* GetphotoCategoryQuery.graphql.swift */,
@@ -4696,6 +4705,7 @@
 				766D9C6F2CE1E9B40068FD3E /* HouseRules.graphql.swift in Sources */,
 				766C07812AFFE0CB00E68E60 /* GetDefaultSettingQuery.graphql.swift in Sources */,
 				B589DAF7282E25C600950037 /* TripsLocationCell.swift in Sources */,
+				769FE07C2CE62EC20004F064 /* GetdynamicbedbathQuery.graphql.swift in Sources */,
 				766C07C32AFFE0CB00E68E60 /* EmailToken.graphql.swift in Sources */,
 				766D9C9B2CE1EADA0068FD3E /* Results1Type.graphql.swift in Sources */,
 				766C07372AFFE0CB00E68E60 /* SendMessageMutation.graphql.swift in Sources */,
@@ -4830,6 +4840,7 @@
 				76DE9F782AB4BA98003191ED /* Network.swift in Sources */,
 				B574A0D9281A65F000D20E5B /* EditFirstLastName.swift in Sources */,
 				766C07522AFFE0CB00E68E60 /* VerifyPhoneNumberMutation.graphql.swift in Sources */,
+				769FE0802CE62F6A0004F064 /* DynamicBedBathMutation.graphql.swift in Sources */,
 				B5713812261F309C006DE6AD /* PaymentSelectionPage.swift in Sources */,
 				766E6D462AEBCF4600B93FE4 /* CustomXAxisValueFormatter.swift in Sources */,
 				766C07C22AFFE0CB00E68E60 /* User.graphql.swift in Sources */,
@@ -5156,6 +5167,7 @@
 				766C07792AFFE0CB00E68E60 /* GetStep1ListingDetailsQuery.graphql.swift in Sources */,
 				B51F80D72240E3A200E437C1 /* Utility.swift in Sources */,
 				766C08042AFFE0CB00E68E60 /* UserProfile.graphql.swift in Sources */,
+				769FE07E2CE62F3F0004F064 /* GetdynamicbedtypelistQuery.graphql.swift in Sources */,
 				B545163922AF6B51006D7009 /* inboxListingcellTableViewCell.swift in Sources */,
 				76C3F64F2C624213007CCC68 /* SubcriptionPropertiesTVC.swift in Sources */,
 				B54ED840241B80FD00487C20 /* CCZoomAnimatedTransitioning.swift in Sources */,

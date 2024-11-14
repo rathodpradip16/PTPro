@@ -29,7 +29,7 @@ class ListingDescriptionVC: BaseHostTableviewController,UITextViewDelegate {
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var progressBGView: UIView!
     @IBOutlet weak var currentProgressView: UIView!
-    var getListingStep2Array : PTProAPI.GetListingDetailsStep2Query.Data.GetListingDetails.Results?
+    var getListingStep2Array : PTProAPI.Step2ListDetailsQuery.Data.GetListingDetails.Results?
     var showListingstepArray : PTProAPI.ShowListingStepsQuery.Data.ShowListingSteps.Results?
     var saveexit_Activated = String()
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!

@@ -8,7 +8,7 @@ extension PTProAPI {
     static let operationName: String = "manageListingSteps"
     static let operationDocument: Apollo.OperationDocument = .init(
       definition: .init(
-        #"mutation manageListingSteps($listId: String!, $currentStep: Int!) { ManageListingSteps(listId: $listId, currentStep: $currentStep) { __typename results { __typename id listId step1 step2 step3 listing { __typename id isReady listApprovalStatus isPublished user { __typename userBanStatus } } } status errorMessage } }"#
+        #"mutation manageListingSteps($listId: String!, $currentStep: Int!) { ManageListingSteps(listId: $listId, currentStep: $currentStep) { __typename results { __typename id listId step1 step2 step3 listing { __typename id isReady isPublished listApprovalStatus user { __typename userBanStatus } } } status errorMessage } }"#
       ))
 
     public var listId: String
@@ -97,15 +97,15 @@ extension PTProAPI {
               .field("__typename", String.self),
               .field("id", Int?.self),
               .field("isReady", Bool?.self),
-              .field("listApprovalStatus", String?.self),
               .field("isPublished", Bool?.self),
+              .field("listApprovalStatus", String?.self),
               .field("user", User?.self),
             ] }
 
             var id: Int? { __data["id"] }
             var isReady: Bool? { __data["isReady"] }
-            var listApprovalStatus: String? { __data["listApprovalStatus"] }
             var isPublished: Bool? { __data["isPublished"] }
+            var listApprovalStatus: String? { __data["listApprovalStatus"] }
             var user: User? { __data["user"] }
 
             /// ManageListingSteps.Results.Listing.User

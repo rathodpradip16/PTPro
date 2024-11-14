@@ -47,13 +47,13 @@ type Query {
   dateAvailability(listId: Int!, startDate: String!, endDate: String!): DateAvailabilityType
   getListingSettingsCommon(step: String): listingSettingCommonTypes
   getAllReservation(userType: String, currentPage: Int, dateFilter: String): AllReservation
-  getBillingCalculation(userId: String, listId: Int!, startDate: String!, endDate: String!, guests: Int!, convertCurrency: String!): AllBillingType
+  getBillingCalculation(listId: Int!, startDate: String!, endDate: String!, guests: Int!, convertCurrency: String!): AllBillingType
   getCurrencies: AllCurrenciesType
   Currency: Currency
   siteSettings(type: String): SiteSettingsCommon
   getSearchSettings: AllSearchSettingsType
   getDateAvailability(listId: Int!, startDate: String!, endDate: String!): ContactHostAvailability
-  getReservation(userId: String, reservationId: Int!, convertCurrency: String): Reservationlist
+  getReservation(reservationId: Int!, convertCurrency: String): Reservationlist
   getUnReadCount: UnreadThreadsCount
   getUnReadThreadCount(threadId: Int): UnreadThreadsCount
   getAllThreads(threadType: String, threadId: Int, currentPage: Int): AllThreads
@@ -1491,6 +1491,11 @@ type Reservationlist {
   convertedTotalNightsAmount: Float
   convertedGuestServicefee: Float
   convertedHostServiceFee: Float
+  taxPercentage: Float
+  texTypeId: Int
+  conveniencefees: Int
+  petFee: Int
+  taxAmount: Int
   convertTotalWithGuestServiceFee: Float
   convertedCleaningPrice: Float
   convertedDiscount: Float

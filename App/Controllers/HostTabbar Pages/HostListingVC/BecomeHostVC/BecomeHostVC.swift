@@ -38,7 +38,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     var ispublishenable:Bool = false
     var siteSettingArray = [PTProAPI.SiteSettingsQuery.Data.SiteSettings.Result]()
     
-    var getListingStep2Array : PTProAPI.GetListingDetailsStep2Query.Data.GetListingDetails.Results?
+    var getListingStep2Array : PTProAPI.Step2ListDetailsQuery.Data.GetListingDetails.Results?
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -755,7 +755,7 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     func getListingDetailsStep2()
 {
     print("\(showListingstepArray?.listId ?? 0)")
-    let getlistingStep2query = PTProAPI.GetListingDetailsStep2Query(listId:"\(showListingstepArray?.listId ?? 0)", preview: true)
+    let getlistingStep2query = PTProAPI.Step2ListDetailsQuery(listId:"\(showListingstepArray?.listId ?? 0)", listIdInt: showListingstepArray?.listId ?? 0, preview: true)
     Network.shared.apollo_headerClient.fetch(query: getlistingStep2query,cachePolicy:.fetchIgnoringCacheData){ response in
         switch response {
         case .success(let result):

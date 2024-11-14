@@ -265,8 +265,7 @@ public class Utility: NSObject {
             }
         }
     }
-    
-    
+        
     //MARK: - Configure  App Language
     func configureCurrency()
     {

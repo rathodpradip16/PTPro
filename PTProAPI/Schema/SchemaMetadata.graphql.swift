@@ -183,6 +183,8 @@ extension PTProAPI {
       case "BathroomdataType": return PTProAPI.Objects.BathroomdataType
       case "BedroomdataType": return PTProAPI.Objects.BedroomdataType
       case "BeddataType": return PTProAPI.Objects.BeddataType
+      case "getdynamicbedtypelist": return PTProAPI.Objects.Getdynamicbedtypelist
+      case "getdynamicbedtype": return PTProAPI.Objects.Getdynamicbedtype
       case "AllReservation": return PTProAPI.Objects.AllReservation
       case "AffiliateUserverificationwebType": return PTProAPI.Objects.AffiliateUserverificationwebType
       case "ReviewResponse": return PTProAPI.Objects.ReviewResponse

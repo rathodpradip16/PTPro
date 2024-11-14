@@ -51,8 +51,8 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     }()
      var imagesData = [Data]()
     var showListingstepArray : PTProAPI.ShowListingStepsQuery.Data.ShowListingSteps.Results?
-    var showListPhotosArray = [PTProAPI.ShowListPhotosQuery.Data.ShowListPhotos.Result]()
-    var getListingStep2Array : PTProAPI.GetListingDetailsStep2Query.Data.GetListingDetails.Results?
+    var showListPhotosArray = [PTProAPI.Step2ListDetailsQuery.Data.ShowListPhotos.Result]()
+    var getListingStep2Array : PTProAPI.Step2ListDetailsQuery.Data.GetListingDetails.Results?
     
     var multiimages_Selected:Bool = false
     var multiimages_count:Int = 0
@@ -237,7 +237,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
                         self.collectionView.reloadData()
                         return
                     }
-                    self.showListPhotosArray = (result.data?.showListPhotos?.results)! as! [PTProAPI.ShowListPhotosQuery.Data.ShowListPhotos.Result]
+//                    self.showListPhotosArray = (result.data?.showListPhotos?.results)! as! [PTProAPI.ShowListPhotosQuery.Data.ShowListPhotos.Result]
                     if(self.showListPhotosArray.count > 0)
                     {
                         self.skipBtn.isHidden = true
@@ -278,20 +278,39 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     func uploadPhotoCategoryId()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let getlistingStep2query = PTProAPI.GetListingDetailsStep2Query(listId:"\(String(describing: showListingstepArray?.listId!))", preview: true)
+            let getlistingStep2query = PTProAPI.Step2ListDetailsQuery(listId:"\(String(describing: showListingstepArray?.listId!))", listIdInt: showListingstepArray?.listId! ?? 0, preview: true)
             Network.shared.apollo_headerClient.fetch(query: getlistingStep2query,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
                     guard (result.data?.getListingDetails?.results) != nil else{
                         print("Missing Data")
-                        self.showlistingPhotosAPICall()
+                        self.skipBtn.isHidden = false
+                        self.nextBtn.isHidden = true
+                        self.collectionView.reloadData()
                         return
                     }
                     self.getListingStep2Array = (result.data?.getListingDetails?.results)!
+                    
+                    self.showListPhotosArray = (result.data?.showListPhotos?.results)! as! [PTProAPI.Step2ListDetailsQuery.Data.ShowListPhotos.Result]
+                    if(self.showListPhotosArray.count > 0)
+                    {
+                        self.skipBtn.isHidden = true
+                        self.nextBtn.isHidden = false
+                    }else {
+                        self.skipBtn.isHidden = false
+                        self.nextBtn.isHidden = true
+                    }
+                    
+                    if(!self.isdelete_API_call)
+                    {
+                        self.collectionView.reloadData()
+                        self.scrollToBottom()
+                    }else {
+                        self.collectionView.reloadData()
+                    }
                     Utility.shared.host_step2_isfromEdit = true
-                    self.showlistingPhotosAPICall()
                 case .failure(_): break
-            }
+                }
                 
                 
             }
@@ -304,18 +323,37 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     func getListingDetailsStep2()
     {
         if Utility.shared.isConnectedToNetwork(){
-            let getlistingStep2query = PTProAPI.GetListingDetailsStep2Query(listId:"\(String(describing: showListingstepArray?.listId!))", preview: true)
+            let getlistingStep2query = PTProAPI.Step2ListDetailsQuery(listId:"\(String(describing: showListingstepArray?.listId!))", listIdInt: showListingstepArray?.listId! ?? 0, preview: true)
             Network.shared.apollo_headerClient.fetch(query: getlistingStep2query,cachePolicy:.fetchIgnoringCacheData){ response in
                 switch response {
                 case .success(let result):
                     guard (result.data?.getListingDetails?.results) != nil else{
                         print("Missing Data")
-                        self.showlistingPhotosAPICall()
+                        self.skipBtn.isHidden = false
+                        self.nextBtn.isHidden = true
+                        self.collectionView.reloadData()
                         return
                     }
                     self.getListingStep2Array = (result.data?.getListingDetails?.results)!
                     Utility.shared.host_step2_isfromEdit = true
-                    self.showlistingPhotosAPICall()
+                    
+                    self.showListPhotosArray = (result.data?.showListPhotos?.results)! as! [PTProAPI.Step2ListDetailsQuery.Data.ShowListPhotos.Result]
+                    if(self.showListPhotosArray.count > 0)
+                    {
+                        self.skipBtn.isHidden = true
+                        self.nextBtn.isHidden = false
+                    }else {
+                        self.skipBtn.isHidden = false
+                        self.nextBtn.isHidden = true
+                    }
+                    
+                    if(!self.isdelete_API_call)
+                    {
+                        self.collectionView.reloadData()
+                        self.scrollToBottom()
+                    }else {
+                        self.collectionView.reloadData()
+                    }
                 case .failure(_): break
             }
                 
@@ -337,7 +375,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
                 case .success(let result):
                     if let data = result.data?.removeListPhotos?.status,data == 200 {
                         self.isdelete_API_call = true
-                        self.showlistingPhotosAPICall()
+                        self.getListingDetailsStep2()
                         
                     } else {
                         if(result.data?.removeListPhotos?.errorMessage != "filename not exist")
@@ -384,8 +422,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
         if Utility.shared.isConnectedToNetwork(){
             self.nextBtn.isHidden = true
             self.offlinView.isHidden = true
-             self.showlistingPhotosAPICall()
-            
+             self.getListingDetailsStep2()
         }
     }
     

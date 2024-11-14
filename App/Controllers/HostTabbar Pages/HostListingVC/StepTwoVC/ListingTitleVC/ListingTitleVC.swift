@@ -46,7 +46,7 @@ class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
     
     var placeholderLabel : UILabel!
     var placeholderLabel1 : UILabel!
-    var getListingStep2Array : PTProAPI.GetListingDetailsStep2Query.Data.GetListingDetails.Results?
+    var getListingStep2Array : PTProAPI.Step2ListDetailsQuery.Data.GetListingDetails.Results?
     var saveexit_Activated = String()
     var showListingstepArray : PTProAPI.ShowListingStepsQuery.Data.ShowListingSteps.Results?
     

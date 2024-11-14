@@ -27,3 +27,15 @@ bedsize
 }
 }
 }
+
+query getdynamicbedtypelist{
+getdynamicbedtypelist {
+results {
+id
+typeId
+itemName
+}
+status
+errorMessage
+}
+}
