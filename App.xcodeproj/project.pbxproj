@@ -410,6 +410,8 @@
 		769FE07C2CE62EC20004F064 /* GetdynamicbedbathQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769FE07B2CE62EC20004F064 /* GetdynamicbedbathQuery.graphql.swift */; };
 		769FE07E2CE62F3F0004F064 /* GetdynamicbedtypelistQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769FE07D2CE62F3F0004F064 /* GetdynamicbedtypelistQuery.graphql.swift */; };
 		769FE0802CE62F6A0004F064 /* DynamicBedBathMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769FE07F2CE62F6A0004F064 /* DynamicBedBathMutation.graphql.swift */; };
+		769FE0822CE639CF0004F064 /* Getdynamicbedtypelist.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769FE0812CE639CF0004F064 /* Getdynamicbedtypelist.graphql.swift */; };
+		769FE0842CE639E80004F064 /* Getdynamicbedtype.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769FE0832CE639E70004F064 /* Getdynamicbedtype.graphql.swift */; };
 		76A8EFD52CC7890200D280CD /* AddMoreBedTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A8EFD42CC7890200D280CD /* AddMoreBedTVC.swift */; };
 		76C1A5232ACFBF790031BE76 /* AffiliateSearchLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2EAD12ACAC473000E73FC /* AffiliateSearchLinkVC.swift */; };
 		76C1A5242ACFBFAE0031BE76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7602D0AD2ABCA4FF00635A6D /* Main.storyboard */; };
@@ -421,6 +423,8 @@
 		76C46DB42CE488E9003795FE /* Step2ListDetailsQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C46DB32CE488E9003795FE /* Step2ListDetailsQuery.graphql.swift */; };
 		76C46DB62CE48921003795FE /* GetcategoryListcountQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C46DB52CE48920003795FE /* GetcategoryListcountQuery.graphql.swift */; };
 		76C50E182ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */; };
+		76C6603B2CE7507300A3E26E /* BedroomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C660392CE7507300A3E26E /* BedroomType.swift */; };
+		76C6603C2CE7507300A3E26E /* BathroomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C6603A2CE7507300A3E26E /* BathroomType.swift */; };
 		76CEB1E52B36A5DB00C057AC /* YouMayLikeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CEB1E42B36A5DB00C057AC /* YouMayLikeVC.swift */; };
 		76CEB1EA2B36B37100C057AC /* HostSuggested.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CEB1E92B36B37100C057AC /* HostSuggested.graphql.swift */; };
 		76D113862BFCD1490092E1FD /* BasePriceTipCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D113842BFCD1490092E1FD /* BasePriceTipCell.swift */; };
@@ -1423,6 +1427,8 @@
 		769FE07B2CE62EC20004F064 /* GetdynamicbedbathQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetdynamicbedbathQuery.graphql.swift; sourceTree = "<group>"; };
 		769FE07D2CE62F3F0004F064 /* GetdynamicbedtypelistQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetdynamicbedtypelistQuery.graphql.swift; sourceTree = "<group>"; };
 		769FE07F2CE62F6A0004F064 /* DynamicBedBathMutation.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicBedBathMutation.graphql.swift; sourceTree = "<group>"; };
+		769FE0812CE639CF0004F064 /* Getdynamicbedtypelist.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Getdynamicbedtypelist.graphql.swift; sourceTree = "<group>"; };
+		769FE0832CE639E70004F064 /* Getdynamicbedtype.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Getdynamicbedtype.graphql.swift; sourceTree = "<group>"; };
 		76A8EFD42CC7890200D280CD /* AddMoreBedTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMoreBedTVC.swift; sourceTree = "<group>"; };
 		76B34D312BE90A920005991A /* Cancelmembership.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cancelmembership.graphql; sourceTree = "<group>"; };
 		76C3F64E2C624213007CCC68 /* SubcriptionPropertiesTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubcriptionPropertiesTVC.swift; sourceTree = "<group>"; };
@@ -1433,6 +1439,8 @@
 		76C46DB32CE488E9003795FE /* Step2ListDetailsQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Step2ListDetailsQuery.graphql.swift; sourceTree = "<group>"; };
 		76C46DB52CE48920003795FE /* GetcategoryListcountQuery.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetcategoryListcountQuery.graphql.swift; sourceTree = "<group>"; };
 		76C50E172ACE719C00B518D2 /* AffiliateSearchLinkCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateSearchLinkCVC.swift; sourceTree = "<group>"; };
+		76C660392CE7507300A3E26E /* BedroomType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BedroomType.swift; sourceTree = "<group>"; };
+		76C6603A2CE7507300A3E26E /* BathroomType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BathroomType.swift; sourceTree = "<group>"; };
 		76CD62982C64A01F0088AF10 /* membershipplanbenefits.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = membershipplanbenefits.graphql; sourceTree = "<group>"; };
 		76CEB1E42B36A5DB00C057AC /* YouMayLikeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouMayLikeVC.swift; sourceTree = "<group>"; };
 		76CEB1E92B36B37100C057AC /* HostSuggested.graphql.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HostSuggested.graphql.swift; sourceTree = "<group>"; };
@@ -2360,6 +2368,8 @@
 		766C06A72AFFE0CA00E68E60 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				769FE0832CE639E70004F064 /* Getdynamicbedtype.graphql.swift */,
+				769FE0812CE639CF0004F064 /* Getdynamicbedtypelist.graphql.swift */,
 				766D9C9E2CE1EAEE0068FD3E /* PhotoCategorylistdataType.graphql.swift */,
 				766D9C9C2CE1EAE20068FD3E /* PhotoCategorylistType.graphql.swift */,
 				766D9C9A2CE1EADA0068FD3E /* Results1Type.graphql.swift */,
@@ -3023,6 +3033,8 @@
 		B54D913D223F9F63003A4589 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				76C6603A2CE7507300A3E26E /* BathroomType.swift */,
+				76C660392CE7507300A3E26E /* BedroomType.swift */,
 				B53772E22248A93300F5976C /* Theme.swift */,
 				B54D913E223F9FEA003A4589 /* Constants.swift */,
 				B51F80D62240E3A200E437C1 /* Utility.swift */,
@@ -4806,6 +4818,7 @@
 				765BB7212AD066B60091E718 /* SearchPlaceVC.swift in Sources */,
 				766C08192AFFE0CB00E68E60 /* ShowListingSteps.graphql.swift in Sources */,
 				766C07942AFFE0CB00E68E60 /* SocialLoginQuery.graphql.swift in Sources */,
+				769FE0822CE639CF0004F064 /* Getdynamicbedtypelist.graphql.swift in Sources */,
 				766C081F2AFFE0CB00E68E60 /* SchemaConfiguration.swift in Sources */,
 				766C07582AFFE0CB00E68E60 /* CreateCustomPlanRequestMutation.graphql.swift in Sources */,
 				766C07FD2AFFE0CB00E68E60 /* SearchListing.graphql.swift in Sources */,
@@ -4952,6 +4965,7 @@
 				766C07DC2AFFE0CB00E68E60 /* AllBillingType.graphql.swift in Sources */,
 				B521407228054E4C00BDE3CA /* UpdatedSearchCell.swift in Sources */,
 				766C07D32AFFE0CB00E68E60 /* ListingSettingsTypes.graphql.swift in Sources */,
+				76C6603C2CE7507300A3E26E /* BathroomType.swift in Sources */,
 				766C07402AFFE0CB00E68E60 /* RemoveAffiliateDocumentListMutation.graphql.swift in Sources */,
 				761FD1AB2B0FBA820082D2C6 /* TransactionType.graphql.swift in Sources */,
 				B5B91A6A24208EFE008AC5CB /* popularcollectionCell.swift in Sources */,
@@ -5044,6 +5058,7 @@
 				766D9C742CE1E9E50068FD3E /* Events.graphql.swift in Sources */,
 				760C657F2C9ACA8A00E882EF /* ResultsType.graphql.swift in Sources */,
 				76F2EAD42ACAC48B000E73FC /* AffiliateOverviewVC.swift in Sources */,
+				76C6603B2CE7507300A3E26E /* BedroomType.swift in Sources */,
 				2CB6C078237926F30017C80F /* EmailGoogleFBViewController.swift in Sources */,
 				766C07662AFFE0CB00E68E60 /* UserLanguageQuery.graphql.swift in Sources */,
 				7602D0BC2ABCA50F00635A6D /* AffiliateRegistrationDocument.swift in Sources */,
@@ -5084,6 +5099,7 @@
 				B53BDF032851C053004E298A /* BecomeStepCV.swift in Sources */,
 				766C074E2AFFE0CB00E68E60 /* CreateReportUserMutation.graphql.swift in Sources */,
 				766C07AE2AFFE0CB00E68E60 /* GetClicks.graphql.swift in Sources */,
+				769FE0842CE639E80004F064 /* Getdynamicbedtype.graphql.swift in Sources */,
 				B5918A4A22CC858900919CEF /* WhishlistPageVC.swift in Sources */,
 				B5EAE9AD229F941B00EFAAC3 /* BookingthreeCell.swift in Sources */,
 				766C07C62AFFE0CB00E68E60 /* BillingType.graphql.swift in Sources */,

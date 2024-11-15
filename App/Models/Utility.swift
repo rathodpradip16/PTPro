@@ -239,6 +239,9 @@ public class Utility: NSObject {
     var bedcount = 1
     var bathcount = 1
     
+    var arrBathroomType = [PTProAPI.GetdynamicbedbathQuery.Data.Getdynamicbedbath.Results.BathroomType]()
+    var arrBedroomType = [PTProAPI.GetdynamicbedbathQuery.Data.Getdynamicbedbath.Results.BedroomType]()
+
     var getListSettingsArray : PTProAPI.GetListingSettingQuery.Data.GetListingSettings.Results?
     
     var countrylist = [PTProAPI.GetCountrycodeQuery.Data.GetCountries.Result]()
