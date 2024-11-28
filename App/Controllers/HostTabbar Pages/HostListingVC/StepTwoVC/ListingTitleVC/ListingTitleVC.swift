@@ -49,7 +49,8 @@ class ListingTitleVC: BaseHostTableviewController,UITextViewDelegate {
     var getListingStep2Array : PTProAPI.Step2ListDetailsQuery.Data.GetListingDetails.Results?
     var saveexit_Activated = String()
     var showListingstepArray : PTProAPI.ShowListingStepsQuery.Data.ShowListingSteps.Results?
-    
+    var showListPhotosArray = [PTProAPI.Step2ListDetailsQuery.Data.ShowListPhotos.Result]()
+
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
     @IBOutlet weak var stepTitleHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var stepTitleTopConstraint: NSLayoutConstraint!
@@ -528,6 +529,7 @@ extension ListingTitleVC: stepsUpdateProtocol{
                 Utility.shared.host_step2_title = titleTV.text
                 listingDescriptionObj.saveexit_Activated = saveexit_Activated
                 listingDescriptionObj.getListingStep2Array = getListingStep2Array
+                listingDescriptionObj.showListPhotosArray = self.showListPhotosArray
                 listingDescriptionObj.showListingstepArray = showListingstepArray
                    listingDescriptionObj.modalPresentationStyle = .fullScreen
                 self.present(listingDescriptionObj, animated:false, completion: nil)

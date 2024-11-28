@@ -31,13 +31,13 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     @IBOutlet weak var errorCode404Lbl: UILabel!
     
     var lottieView: LottieAnimationView!
+    var showListPhotosArray = [PTProAPI.Step2ListDetailsQuery.Data.ShowListPhotos.Result]()
     var showListingstepArray : PTProAPI.ShowListingStepsQuery.Data.ShowListingSteps.Results?
     var step1ListingDetails : PTProAPI.GetStep1ListingDetailsQuery.Data.GetListingDetails.Results?
     var step3ListingDetails : PTProAPI.GetListingDetailsStep3Query.Data.GetListingDetails.Results?
     var listID = String()
     var ispublishenable:Bool = false
     var siteSettingArray = [PTProAPI.SiteSettingsQuery.Data.SiteSettings.Result]()
-    
     var getListingStep2Array : PTProAPI.Step2ListDetailsQuery.Data.GetListingDetails.Results?
     override func viewDidLoad() {
         
@@ -778,6 +778,10 @@ class BecomeHostVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
                 StepTwoObj.saveexit_Activated = "false"
             }
             
+            if let arr = result.data?.showListPhotos?.results as? [PTProAPI.Step2ListDetailsQuery.Data.ShowListPhotos.Result]{
+                StepTwoObj.showListPhotosArray = arr
+            }
+
             if (result.data?.getListingDetails?.results?.title != nil) { Utility.shared.step2ValuesInfo.updateValue((result.data?.getListingDetails?.results?.title!)!, forKey: "title")
                 
             }else {

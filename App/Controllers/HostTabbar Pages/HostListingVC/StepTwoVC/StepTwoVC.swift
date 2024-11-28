@@ -539,7 +539,8 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
             }
         listTitleObj.saveexit_Activated = saveexit_Activated
         listTitleObj.getListingStep2Array = getListingStep2Array
-            listTitleObj.showListingstepArray = showListingstepArray
+        listTitleObj.showListPhotosArray = self.showListPhotosArray
+        listTitleObj.showListingstepArray = showListingstepArray
         self.view.window?.backgroundColor = UIColor.white
       //  self.view?.layer.add(presentrightAnimation()!, forKey: kCATransition)
         listTitleObj.modalPresentationStyle = .fullScreen
@@ -582,16 +583,16 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        if(indexPath.section == 0)
-//        {
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "addPhotosCell", for: indexPath)as! addPhotosCell
-//            cell.addphotoBtn.tag = indexPath.row
-//            cell.selectionStyle = .none
-//            cell.addphotoBtn.addTarget(self, action: #selector(addbtnTapped), for: .touchUpInside)
-//            return cell
-//        }
-//        else
-//        {
+        if(indexPath.section == 0)
+        {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "addPhotosCell", for: indexPath)as! addPhotosCell
+            cell.addphotoBtn.tag = indexPath.row
+            cell.selectionStyle = .none
+            cell.addphotoBtn.addTarget(self, action: #selector(addbtnTapped), for: .touchUpInside)
+            return cell
+        }
+        else
+        {
             let cellIdentifier = "cellIdentifier"
             var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)
             if cell == nil {
@@ -661,15 +662,15 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
             cell?.contentView.addSubview(contentview)
             return cell!
             
-//        }
+       }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-//        if(indexPath.section == 0)
-//        {
-//            return 255
-//        }
-//        else{
+        if(indexPath.section == 0)
+        {
+            return 255
+        }
+        else{
             if(showListPhotosArray.count > 0)
             {
                 if(!multiimages_Selected)
@@ -686,7 +687,7 @@ class StepTwoVC: BaseHostTableviewController,UICollectionViewDelegate,UICollecti
                 }
             }
             return 0
-//        }
+        }
         
         
     }
@@ -1158,6 +1159,7 @@ extension StepTwoVC: stepsUpdateProtocol{
                 listTitleObj.saveexit_Activated = saveexit_Activated
                 listTitleObj.getListingStep2Array = getListingStep2Array
                 listTitleObj.showListingstepArray = showListingstepArray
+                listTitleObj.showListPhotosArray = self.showListPhotosArray
                 self.view.window?.backgroundColor = UIColor.white
                 listTitleObj.modalPresentationStyle = .fullScreen
                 self.present(listTitleObj, animated:false, completion: nil)
@@ -1170,6 +1172,7 @@ extension StepTwoVC: stepsUpdateProtocol{
                 listingDescriptionObj.saveexit_Activated = saveexit_Activated
                 listingDescriptionObj.getListingStep2Array = getListingStep2Array
                 listingDescriptionObj.showListingstepArray = showListingstepArray
+                listingDescriptionObj.showListPhotosArray = self.showListPhotosArray
                    listingDescriptionObj.modalPresentationStyle = .fullScreen
                 self.present(listingDescriptionObj, animated:false, completion: nil)
                 break

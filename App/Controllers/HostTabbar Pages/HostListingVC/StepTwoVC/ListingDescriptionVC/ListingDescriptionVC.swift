@@ -30,6 +30,7 @@ class ListingDescriptionVC: BaseHostTableviewController,UITextViewDelegate {
     @IBOutlet weak var progressBGView: UIView!
     @IBOutlet weak var currentProgressView: UIView!
     var getListingStep2Array : PTProAPI.Step2ListDetailsQuery.Data.GetListingDetails.Results?
+    var showListPhotosArray = [PTProAPI.Step2ListDetailsQuery.Data.ShowListPhotos.Result]()
     var showListingstepArray : PTProAPI.ShowListingStepsQuery.Data.ShowListingSteps.Results?
     var saveexit_Activated = String()
     @IBOutlet weak var stepsTitleView: BecomeStepCollectionView!
@@ -99,6 +100,7 @@ class ListingDescriptionVC: BaseHostTableviewController,UITextViewDelegate {
                 Utility.shared.step2_Title = ""
                 Utility.shared.step2_Description = ""
                 StepTwoObj.showListingstepArray = self.showListingstepArray
+                StepTwoObj.showListPhotosArray = self.showListPhotosArray
                 StepTwoObj.getListingDetailsStep2()
                 StepTwoObj.modalPresentationStyle = .fullScreen
                 self.present(StepTwoObj, animated:false, completion: nil)
@@ -379,6 +381,7 @@ extension ListingDescriptionVC: stepsUpdateProtocol{
                 Utility.shared.step2_Title = ""
                 Utility.shared.step2_Description = ""
                 StepTwoObj.showListingstepArray = self.showListingstepArray
+                StepTwoObj.showListPhotosArray = self.showListPhotosArray
                 StepTwoObj.getListingDetailsStep2()
                 StepTwoObj.modalPresentationStyle = .fullScreen
                 self.present(StepTwoObj, animated:false, completion: nil)
@@ -389,6 +392,7 @@ extension ListingDescriptionVC: stepsUpdateProtocol{
                 listTitleObj.saveexit_Activated = saveexit_Activated
                 listTitleObj.getListingStep2Array = getListingStep2Array
                 listTitleObj.showListingstepArray = showListingstepArray
+                listTitleObj.showListPhotosArray = self.showListPhotosArray
                 self.view.window?.backgroundColor = UIColor.white
                 listTitleObj.modalPresentationStyle = .fullScreen
                 self.present(listTitleObj, animated:false, completion: nil)

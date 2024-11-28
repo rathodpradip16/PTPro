@@ -46,7 +46,7 @@ class AddBathVC: UIViewController {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AddMoreBathTVC", for: indexPath)as! AddMoreBathTVC
-        cell.lblTitle.text = arrBathroomammenities[indexPath.row]
+     //   cell.lblTitle.text = arrBathroomammenities[indexPath.row]
         return cell
     }
     
