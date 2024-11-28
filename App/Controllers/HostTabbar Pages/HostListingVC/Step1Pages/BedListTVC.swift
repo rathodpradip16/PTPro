@@ -12,7 +12,7 @@ class BedListTVC: UITableViewCell {
 
     @IBOutlet weak var btnDelete: UIButton!
     @IBOutlet weak var addDetails: UIButton!
-    @IBOutlet weak var txtDescription: UITextView!
+    @IBOutlet weak var lblDescription: UILabel!
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var imgIcon: UIButton!
     override func awakeFromNib() {

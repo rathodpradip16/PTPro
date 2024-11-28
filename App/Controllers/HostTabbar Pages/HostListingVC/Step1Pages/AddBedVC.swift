@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddBedVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class AddBedVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate{
     
     @IBOutlet weak var lblSleepingArragements: UILabel!
     @IBOutlet weak var lblReqInfo2: UILabel!
@@ -18,14 +18,29 @@ class AddBedVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var tblBedList: UITableView!
     @IBOutlet weak var btnDeleteBedType: UIButton!
     
+    var arrImage = [String]()
+    var selectedIndex = 0
+    var arrBedType = [BedType]()
+    var bedroomName = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeFooterView()
+        initialize()
+        tblBedList.reloadData()
+    }
+    
+    func initialize(){
+        arrImage.removeAll()
+        lblRoomName.text = bedroomName
+        for _ in Utility.shared.arrBedtypelist{
+            arrImage.append("ic_bed")
+        }
     }
     
     func initializeFooterView(){
         // Create a footer view
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: tblBedList.frame.width, height: 80))
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: tblBedList.frame.width, height: 100))
         footerView.backgroundColor = .white
         
         // Add the "Add Another Bed Type" button
@@ -81,58 +96,116 @@ class AddBedVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     // Action functions for the buttons
     @objc func addButtonTapped() {
+        if self.arrBedType.count >= 6{
+            return
+        }
+        var bedname = "Single"
+        var bedId = "1"
+        if arrBedType.count > 0{
+            bedname = Utility.shared.arrBedtypelist[0].itemName ?? ""
+            bedId = "\(Utility.shared.arrBedtypelist[0].typeId ?? 1)"
+        }
         print("Add Another Bed Type button tapped")
+        self.arrBedType.append(BedType(bedCount: "1", bedname: bedname, bedId: bedId, bedtype: bedname, bedsize: "") )
+        tblBedList.reloadData()
         // Add your logic here for the "Add Another Bed Type" action
     }
     
-    @objc func cancelButtonTapped() {
-        print("Cancel button tapped")
-        // Add your logic here for the "Cancel" action
-    }
-    
-    @objc func saveButtonTapped() {
-        print("Save button tapped")
-        // Add your logic here for the "Save" action
-    }
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return self.arrBedType.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 140
     }
     
     //    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-    //        return UITableView.automaticDimension
-    //    }
+    //  return UITableView.automaticDimension
+    //  }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AddMoreBedTVC", for: indexPath)as! AddMoreBedTVC
         cell.btnBedPlus.tag = indexPath.row
         cell.btnBedMinus.tag = indexPath.row
+        cell.lblBedCount.text = self.arrBedType[indexPath.row].bedCount
+        cell.btnBedPlus.setTitle("", for: .normal)
+        cell.btnBedMinus.setTitle("", for: .normal)
         cell.btnBedPlus.addTarget(self, action: #selector(onClickBedCountPlus(_:)), for: .touchUpInside)
         cell.btnBedMinus.addTarget(self, action: #selector(onClickBedCountMinus(_:)), for: .touchUpInside)
+      
+        cell.btnDelete.tag = indexPath.row
+        cell.btnDelete.addTarget(self, action: #selector(onClickDelete(_:)), for: .touchUpInside)
+
+        cell.dropDownSelectBedType.optionArray = Utility.shared.arrBedtypelist.compactMap{ $0.itemName }
+        cell.dropDownSelectBedType.optionIds = Utility.shared.arrBedtypelist.compactMap{ $0.typeId }
+        cell.dropDownSelectBedType.optionImageArray = arrImage
+        cell.dropDownSelectBedType.tag = indexPath.row
+        cell.dropDownSelectBedType.rowHeight = 40
+        cell.dropDownSelectBedType.listHeight = 200
+        cell.dropDownSelectBedType.delegate = self
+        cell.dropDownSelectBedType.text = self.arrBedType[indexPath.row].bedname
+        cell.dropDownSelectBedType.selectedIndex = Utility.shared.arrBedtypelist.firstIndex(where: { $0.itemName == self.arrBedType[indexPath.row].bedname})
+        cell.dropDownSelectBedType.didSelect { selectedText, index, id in
+            cell.dropDownSelectBedType.text = selectedText
+            self.arrBedType[indexPath.row].bedname = selectedText
+        }
         return cell
+    }
+    
+    @objc func goToTripsPage(){
+        
+    }
+    
+    @objc func cancelButtonTapped() {
+        print("Cancel button tapped")
+        self.navigationController?.popViewController(animated: true)
+        // Add your logic here for the "Cancel" action
+    }
+    
+    @objc func saveButtonTapped() {
+        Utility.shared.arrBedTypes[selectedIndex].bedType = self.arrBedType
+        Utility.shared.arrBedTypes[selectedIndex].bedroomName = self.bedroomName
+        self.dismiss(animated: true)
+        print("Save button tapped")
+        // Add your logic here for the "Save" action
+    }
+    
+    @objc func onClickDelete(_ sender: UIButton) {
+        self.arrBedType.remove(at: sender.tag)
+        tblBedList.reloadData()
     }
     
     // Action functions for the buttons
     @objc func onClickBedCountPlus(_ sender: UIButton) {
-        // Find the cell based on the sender's tag or position
-        if let cell = tblBedList.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? AddMoreBedTVC {
-
-        }
+        let count = (Int(self.arrBedType[sender.tag].bedCount) ?? 0) + 1
+        self.arrBedType[sender.tag].bedCount = "\(count)"
+        tblBedList.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .none)
     }
     
     // Action functions for the buttons
     @objc func onClickBedCountMinus(_ sender: UIButton) {
-        // Find the cell based on the sender's tag or position
-        if let cell = tblBedList.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? AddMoreBedTVC {
-
+        var count = Int(self.arrBedType[sender.tag].bedCount) ?? 0
+        if count >= 2{
+            count = count - 1
         }
+        self.arrBedType[sender.tag].bedCount = "\(count)"
+        tblBedList.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .none)
     }
     
     @IBAction func onClickBack(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        bedroomName = textField.text ?? ""
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == lblRoomName{
+            return true
+        }
+        return false
     }
 }

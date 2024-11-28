@@ -46,18 +46,18 @@ struct BedroomType: Codable{
 
 struct BedType : Codable{
     var bedCount: String = ""
-    var bedName: String = ""
+    var bedname: String = ""
     var bedId: String = ""
-    var bedType: String = ""
-    var bedSize: String = ""
+    var bedtype: String = ""
+    var bedsize: String = ""
 
     // Custom initializer
-    init(bedCount: String, bedName: String, bedId: String, bedType: String, bedSize: String) {
+    init(bedCount: String, bedname: String, bedId: String, bedtype: String, bedsize: String) {
         self.bedCount = bedCount
-        self.bedName = bedName
+        self.bedname = bedname
         self.bedId = bedId
-        self.bedType = bedType
-        self.bedSize = bedSize
+        self.bedtype = bedtype
+        self.bedsize = bedsize
     }
 //    // Method to convert instance to JSON string
 //    func toJsonString() -> String? {

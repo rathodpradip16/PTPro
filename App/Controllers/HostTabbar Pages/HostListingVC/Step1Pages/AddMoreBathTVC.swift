@@ -10,6 +10,8 @@ import UIKit
 
 class AddMoreBathTVC: UITableViewCell {
 
+    @IBOutlet weak var lblTitle: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

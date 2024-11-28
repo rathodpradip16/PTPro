@@ -98,6 +98,7 @@ public class Utility: NSObject {
 //    var mostListingArray = [GetDefaultSettingQuery.Data.GetMostViewedListing.Result]()
     var GetAffiliateUserStep: PTProAPI.GetAffiliateUserStepQuery.Data.GetAffiliateUserStep?
     var utManageListingArray = [PTProAPI.ManageListingsQuery.Data.ManageListings.Result]()
+    var arrBedtypelist = [PTProAPI.GetdynamicbedtypelistQuery.Data.Getdynamicbedtypelist.Result]()
 
     //MARK: - Receipt Page
     var isreceiptAccepted : Bool = false
@@ -239,9 +240,12 @@ public class Utility: NSObject {
     var bedcount = 1
     var bathcount = 1
     
-    var arrBathroomType = [PTProAPI.GetdynamicbedbathQuery.Data.Getdynamicbedbath.Results.BathroomType]()
-    var arrBedroomType = [PTProAPI.GetdynamicbedbathQuery.Data.Getdynamicbedbath.Results.BedroomType]()
+//    var arrBathroomType = [PTProAPI.GetdynamicbedbathQuery.Data.Getdynamicbedbath.Results.BathroomType]()
+//    var arrBedroomType = [PTProAPI.GetdynamicbedbathQuery.Data.Getdynamicbedbath.Results.BedroomType]()
 
+    var arrBedTypes = [BedroomType]()
+    var arrBathTypes = [BathroomType]()
+    
     var getListSettingsArray : PTProAPI.GetListingSettingQuery.Data.GetListingSettings.Results?
     
     var countrylist = [PTProAPI.GetCountrycodeQuery.Data.GetCountries.Result]()

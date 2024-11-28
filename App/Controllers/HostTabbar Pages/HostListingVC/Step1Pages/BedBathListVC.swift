@@ -17,8 +17,6 @@ class BedBathListVC: UIViewController,UITableViewDelegate,UITableViewDataSource{
     var bed_id = [Int]()
     var bed_type_id = [Int]()
     var array_Count = [Int]()
-    var arrBedTypes = [BedroomType]()
-    var arrBathTypes = [BathroomType]()
 
     @IBOutlet weak var tblBathList: UITableView!
     @IBOutlet weak var tblBedList: UITableView!
@@ -31,19 +29,26 @@ class BedBathListVC: UIViewController,UITableViewDelegate,UITableViewDataSource{
         tblBedList.dataSource = self
         tblBathList.dataSource = self
         if(Utility.shared.createId == 0){
+            Utility.shared.arrBedTypes.removeAll()
+            Utility.shared.arrBathTypes.removeAll()
             for i in 0..<Utility.shared.bedcount {
-                let bedType = BedroomType(isBedroom: true, bedroomName: "Bedroom \(i)", bedroomId: "\(i)", bedType:[])
-                self.arrBedTypes.append(bedType)
+                let bedType = BedroomType(isBedroom: true, bedroomName: "Bedroom \(i+1)", bedroomId: "\(i+1)", bedType:[])
+                Utility.shared.arrBedTypes.append(bedType)
             }
             for j in 0..<Utility.shared.bathcount {
-                let bathType = BathroomType(isBathroom: true, bathroomName: "Bathroom \(j)", bathroomId: "\(j)", bathroomType: "Full", bathroomAmenities: "")
-                self.arrBathTypes.append(bathType)
+                let bathType = BathroomType(isBathroom: true, bathroomName: "Bathroom \(j+1)", bathroomId: "\(j+1)", bathroomType: "Full", bathroomAmenities: "")
+                Utility.shared.arrBathTypes.append(bathType)
             }
-            tblBedList.reloadData()
-            tblBathList.reloadData()
         }else{
             GetdynamicbedbathQuery()
         }
+        GetbathListQuery()
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tblBedList.reloadData()
+        tblBathList.reloadData()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -52,9 +57,9 @@ class BedBathListVC: UIViewController,UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView.tag == 0 {
-            return arrBedTypes.count
+            return Utility.shared.arrBedTypes.count
         }else{
-            return arrBathTypes.count
+            return Utility.shared.arrBathTypes.count
         }
     }
     
@@ -62,11 +67,18 @@ class BedBathListVC: UIViewController,UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView.tag == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "BedListTVC", for: indexPath) as! BedListTVC
-            cell.addDetails.addTarget(self, action: #selector(goToBedDetailsPage), for: .touchUpInside)
-            cell.lblTitle.text = arrBedTypes[indexPath.row].bedroomName
+            cell.addDetails.tag = indexPath.row
+            cell.addDetails.addTarget(self, action: #selector(goToBedDetailsPage(_ :)), for: .touchUpInside)
+            cell.lblTitle.text = Utility.shared.arrBedTypes[indexPath.row].bedroomName
+            if let arrBedType = Utility.shared.arrBedTypes[indexPath.row].bedType{
+                cell.lblDescription.text = arrBedType.map{ "• \($0.bedCount) \($0.bedname) Bed" }.joined(separator: "\n" )
+            }else{
+                cell.lblDescription.text = ""
+            }
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "BathListTVC", for: indexPath) as! BathListTVC
+            cell.addDetails.tag = indexPath.row
             cell.addDetails.addTarget(self, action: #selector(goToBathDetailsPage), for: .touchUpInside)
             return cell
         }
@@ -78,23 +90,28 @@ class BedBathListVC: UIViewController,UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 180
+        return 200
     }
     
     @IBAction func onClickBack(_ sender: Any) {
         self.dismiss(animated: true)
     }
     
-    @objc func goToBedDetailsPage(){
+    
+    @objc func goToBedDetailsPage(_ sender: UIButton){
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let addBedVC = mainStoryboard.instantiateViewController(withIdentifier: "AddBedVC") as! AddBedVC
+        addBedVC.selectedIndex = sender.tag
+        addBedVC.arrBedType = Utility.shared.arrBedTypes[sender.tag].bedType ?? []
+        addBedVC.bedroomName = Utility.shared.arrBedTypes[sender.tag].bedroomName
         addBedVC.modalPresentationStyle = .fullScreen
         self.present(addBedVC, animated: false, completion: nil)
     }
     
-    @objc func goToBathDetailsPage(){
+    @objc func goToBathDetailsPage(_ sender: UIButton){
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let addBathVC = mainStoryboard.instantiateViewController(withIdentifier: "AddBathVC") as! AddBathVC
+        addBathVC.selectedIndex = sender.tag
         addBathVC.modalPresentationStyle = .fullScreen
         self.present(addBathVC, animated: false, completion: nil)
     }
@@ -108,10 +125,12 @@ class BedBathListVC: UIViewController,UITableViewDelegate,UITableViewDataSource{
             case .success(let result):
                 if let status = result.data?.getdynamicbedbath?.status,status == 200 {
                     if let data = result.data,let getdynamicbedbath = data.getdynamicbedbath,let results = getdynamicbedbath.results{
+                        Utility.shared.arrBedTypes.removeAll()
+                        Utility.shared.arrBathTypes.removeAll()
+
                         if let arrBathroomTypes =  results.bathroomTypes as? [PTProAPI.GetdynamicbedbathQuery.Data.Getdynamicbedbath.Results.BathroomType]{
-                            Utility.shared.arrBathroomType = arrBathroomTypes
                             for dicData in arrBathroomTypes{
-                                self.arrBathTypes.append(BathroomType(isBathroom: dicData.isBathroom ?? true, bathroomName: dicData.bathroomname ?? "", bathroomId: dicData.bathroomId ?? "", bathroomType: dicData.bathroomtype ?? "", bathroomAmenities: dicData.bathroomamenities ?? ""))
+                                Utility.shared.arrBathTypes.append(BathroomType(isBathroom: dicData.isBathroom ?? true, bathroomName: dicData.bathroomname ?? "", bathroomId: dicData.bathroomId ?? "", bathroomType: dicData.bathroomtype ?? "", bathroomAmenities: dicData.bathroomamenities ?? ""))
                             }
                         }
                         if let arrBedroomTypes =  results.bedroomTypes as? [PTProAPI.GetdynamicbedbathQuery.Data.Getdynamicbedbath.Results.BedroomType]{
@@ -120,12 +139,11 @@ class BedBathListVC: UIViewController,UITableViewDelegate,UITableViewDataSource{
                                 var arrBedType = [BedType]()
                                 if let bedType = dicData.bedType{
                                     for dicBedType in bedType{
-                                        arrBedType.append(BedType(bedCount: dicBedType?.bedCount ?? "", bedName: dicBedType?.bedname ?? "", bedId: dicBedType?.bedId ?? "", bedType: dicBedType?.bedtype ?? "", bedSize: dicBedType?.bedsize ?? ""))
+                                        arrBedType.append(BedType(bedCount: dicBedType?.bedCount ?? "", bedname: dicBedType?.bedname ?? "", bedId: dicBedType?.bedId ?? "", bedtype: dicBedType?.bedtype ?? "", bedsize: dicBedType?.bedsize ?? ""))
                                     }
                                 }
-                                self.arrBedTypes.append(BedroomType(isBedroom: dicData.isbedroom ?? true, bedroomName: dicData.bedroomname ?? "", bedroomId: dicData.bedroomId ?? "" , bedType: arrBedType ))
+                                Utility.shared.arrBedTypes.append(BedroomType(isBedroom: dicData.isbedroom ?? true, bedroomName: dicData.bedroomname ?? "", bedroomId: dicData.bedroomId ?? "" , bedType: arrBedType ))
                             }
-                            Utility.shared.arrBedroomType = arrBedroomTypes
                         }
                     }
                 } else {
@@ -133,6 +151,25 @@ class BedBathListVC: UIViewController,UITableViewDelegate,UITableViewDataSource{
                 }
                 self.tblBedList.reloadData()
                 self.tblBathList.reloadData()
+            case .failure(let error):
+                break
+            }
+        }
+    }
+    
+    func GetbathListQuery(){
+        let getdynamicbedtypelistQuery = PTProAPI.GetdynamicbedtypelistQuery()
+        
+        Network.shared.apollo_headerClient.fetch(query: getdynamicbedtypelistQuery, cachePolicy: .fetchIgnoringCacheData) { response in
+            switch response{
+            case .success(let result):
+                if let status = result.data?.getdynamicbedtypelist?.status,status == 200 {
+                    if let data = result.data,let getdynamicbedbath = data.getdynamicbedtypelist,let results = getdynamicbedbath.results as? [PTProAPI.GetdynamicbedtypelistQuery.Data.Getdynamicbedtypelist.Result]{
+                        Utility.shared.arrBedtypelist = results
+                    }
+                } else {
+
+                }
             case .failure(let error):
                 break
             }

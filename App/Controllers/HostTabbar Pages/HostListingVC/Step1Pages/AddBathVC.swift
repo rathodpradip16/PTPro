@@ -11,6 +11,17 @@ import UIKit
 class AddBathVC: UIViewController {
 
     @IBOutlet weak var tblBathTypeList: UITableView!
+    var selectedIndex = 0
+    
+    var arrBathroomammenities = [
+        ["title":"Bathtub or Shower","selected":false],
+        ["title":"Toilet","selected":false],
+        ["title": "Shower only","selected":false],
+        ["title":"Bathtub","selected":false],
+        ["title":"Jetted bathtub","selected":false],
+        ["title":"Bidet","selected":false],
+        ["title":"Towels provided","selected":false],
+        ["title":"Hair dryer","selected":false]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +33,7 @@ class AddBathVC: UIViewController {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return arrBathroomammenities.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -35,7 +46,7 @@ class AddBathVC: UIViewController {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AddMoreBathTVC", for: indexPath)as! AddMoreBathTVC
-        
+        cell.lblTitle.text = arrBathroomammenities[indexPath.row]
         return cell
     }
     
